@@ -79,7 +79,7 @@ if __name__ == '__main__':
     ))
 
     args_to_parse.add_argument('--scale-factor', choices=(10, 100, 300, 1000), type=int, default=None,
-                               required='--check-correctness' or 'tpcds' in sys.argv, help=(
+                               required=(any(arg in ['--check-correctness','tpcds'] for arg in sys.argv)), help=(
         'Scale Factor of correctness result to compare with the query output.'
     ))
 
