@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+
+
+import argparse
+import logging
+import os
+import sys
+
+from logging.config import fileConfig
+from s64da_benchmark_toolkit.streams import Streams, Benchmark
+
+fileConfig('logging.ini')
+logger = logging.getLogger()
+
+if __name__ == '__main__':
+    py_version_info = sys.version_info
+    if py_version_info < (3, 6):
+        logger.error('Your python version does not match the requirements.')
+        sys.exit()
+
+    args_to_parse = argparse.ArgumentParser(argument_default=argparse.SUPPRESS)
+
+    args_to_parse.add_argument('--dsn', required=True, help=(
+        'The PostgreSQL DSN to connect to. Supply with DB, e.g. '
+        'postgresql://postgres@localhost/dbname'
+    ))
+
+    args_to_parse.add_argument('--config', required=False, default=None, help=(
+        'Optional YAML override configuration file to be applied before running. '
+        'Supply a full path to the file.'
+    ))
+
+    benchmarks = []
+    benchmarks_dir = 'benchmarks'
+    try:
+        for directory in os.listdir('benchmarks'):
+            base_dir = os.path.join(benchmarks_dir, directory)
+            benchmarks.append(Benchmark(name=directory, base_dir=base_dir))
+    except FileNotFoundError:
+        pass
+
+    benchmark_names = sorted([benchmark.name for benchmark in benchmarks])
+    args_to_parse.add_argument('--benchmark', required=True, choices=benchmark_names, help=(
+        'Which benchmark to run.'
+    ))
+
+    args_to_parse.add_argument('--timeout', default=None, help=(
+        'Statement timeout to be used. If there is a timeout in the override '
+        'configuration that one will take precedence.'
+    ))
+
+    args_to_parse.add_argument('--streams', type=int, default=0, help=(
+        'How many streams (virtual users) to run in parallel for the selected benchmark. '
+        'Pass "0" to run a single stream. The default is "0".'
+    ))
+
+    args_to_parse.add_argument('--stream-offset', type=int, default=1, help=(
+        'With which stream to start if running multiple streams. Defaults to "1".'
+    ))
+
+    args_to_parse.add_argument('--netdata-output-file', default=None, help=(
+        'File to write netdata stats into. Requires "netdata" key to be '
+        'present in configuration.'
+    ))
+
+    args_to_parse.add_argument('--output', choices=['csv', 'print'], default='print', nargs='+',
+        help=('How the results output should look like. '
+              'Multiple options possible, separated by space')
+    )
+
+    args_to_parse.add_argument('--csv-file', default='results.csv', help=(
+        'Where to save the csv file, if csv output is selected. '
+        'The default is results.csv in the current directory.'
+    ))
+
+    args_to_parse.add_argument('--check-correctness', action='store_true', default=False, help=(
+        'Flag to check correctness.'
+        'Additionally, each query output will be stored in the query_results folder.'
+    ))
+
+    args_to_parse.add_argument('--scale-factor', choices=(10, 100, 300, 1000), type=int, default=None,
+                               required='--check-correctness' or 'tpcds' in sys.argv, help=(
+        'Scale Factor of correctness result to compare with the query output.'
+    ))
+
+    args_to_parse.add_argument('--explain-analyze', action='store_true', default=False, help=(
+        'Whether to run EXPLAIN ANALYZE. Will save plans into the "plan" directory.'
+    ))
+
+    args = args_to_parse.parse_args()
+    for benchmark in benchmarks:
+        if benchmark.name == args.benchmark:
+            benchmark_to_run = benchmark
+            break
+
+    Streams(args, benchmark_to_run).run()

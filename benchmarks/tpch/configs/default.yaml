@@ -1,0 +1,4 @@
+timeout: 15min
+ignore:
+  - 18
+  - 21
