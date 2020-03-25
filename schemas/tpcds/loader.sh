@@ -5,7 +5,9 @@ cd ../../
 
 source ./scripts/functions.sh
 
-./prepare_benchmark \
+check_and_set_python
+
+${PYTHON} prepare_benchmark \
     --dsn=postgresql://postgres@${DB_HOST}:${DB_PORT}/${DB} \
     --scale-factor=${SCALE_FACTOR} \
     --schema=${SCHEMA} \
