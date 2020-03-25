@@ -17,6 +17,7 @@ DB_PORT=5432
 NUM_PARTITIONS=32
 CHUNKS=10
 MAX_JOBS=8
+PYTHON="python3"
 
 function print_help {
 echo "
@@ -114,6 +115,23 @@ function check_and_fail {
 check_and_fail DB "--dbname"
 check_and_fail SCHEMA "--schema"
 check_and_fail SCALE_FACTOR "--scale-factor"
+
+function check_and_set_python {
+    python_minor=$(python3 -c 'import sys; print(sys.version_info[1])')
+    bin_path="/usr/bin"
+
+    if [ $python_minor -lt 6 ]; then
+        echo "${bin_path}/python3 points to a non-supported version. Python >= 3.6 is required."
+        echo "Will try to use python3.6 directly."
+        if [ -f ${bin_path}/python3.6 ]; then
+            echo "Found ${bin_path}/python3.6"
+            PYTHON="python3.6"
+        else
+            echo "Could not find ${bin_path}/python3.6 - Exit"
+            exit 1
+        fi
+    fi
+}
 
 function check_program_and_fail {
     PROGRAM=$1
