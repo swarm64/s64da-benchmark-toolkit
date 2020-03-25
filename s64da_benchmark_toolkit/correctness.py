@@ -103,7 +103,7 @@ class Correctness:
 
         # Reading Benchmark results
         try:
-            result = pd.read_csv(benchmark_path)
+            result = pd.read_csv(benchmark_path, float_precision='round_trip')
         except pd.errors.EmptyDataError:
             LOG.debug(f'{stream_id}_{query_number}.csv empty in benchmark results.')
             result = pd.DataFrame(columns=['col'])
