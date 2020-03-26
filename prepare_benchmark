@@ -59,13 +59,16 @@ if __name__ == '__main__':
         'Limit the overall parallelism to this amount of jobs.'
     ))
 
+    args_to_parse.add_argument('--check-diskspace-of-directory', help=(
+        'If flag is present, a disk space check on the passed storage directory will be performed prior ingestion.'
+    ))
+
     args = args_to_parse.parse_args()
     for benchmark in benchmarks:
         if benchmark.name == args.benchmark:
             benchmark_to_run = benchmark
             break
 
-#    Streams(args, benchmark_to_run).run()
     spec = importlib.util.spec_from_file_location(
         's64da_benchmark_toolkit.prepare',
         os.path.join(benchmark_to_run.base_dir, 'prepare.py'))
