@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a1d7618f3235e9634c2d193f16fd5a9ceab9ac2836b27d4786b5314ec28de725
-size 9289
+30 days,31-60,61-90,91-120,>120 days,s_city,s_company_id,s_county,s_state,s_store_name,s_street_name,s_street_number,s_street_type,s_suite_number,s_zip
+1348,1000,637,674,1206,Lakeside,1,Jefferson Davis Parish,LA,able,Seventh ,110,Blvd,Suite 220,79532
+1246,931,656,634,1283,Midway,1,Pennington County,MN,able,Park North,12,Street,Suite 270,51904
+1285,1022,651,672,1301,Shady Grove,1,Bronx County,NY,able,Laurel North,14,Road,Suite 490,12812
+1213,1046,672,661,1291,Lakeside,1,Fairfield County,SC,able,North Broadway,155,Wy,Suite 390,29532
+1268,1066,645,630,1290,Fairfield,1,Williamson County,TN,able,Elm ,170,Pkwy,Suite 340,36192
+1307,949,674,637,1271,Five Points,1,Gogebic County,MI,able,Fifth ,185,Ct.,Suite Q,46098
+1302,1002,618,631,1220,Concord,1,Wadena County,MN,able,Locust Ridge,212,Ln,Suite K,54107
+1310,1002,646,593,1277,Pine Grove,1,Walker County,AL,able,10th Hill,22,Wy,Suite J,34593
+1307,1009,664,610,1218,Providence,1,Levy County,FL,able,Elm Main,22,Ln,Suite E,36614
+1327,1011,659,647,1273,Stringtown,1,Gogebic County,MI,able,Lincoln Park,221,Dr.,Suite S,40162
+1308,976,633,593,1298,Greenwood,1,Dauphin County,PA,able,Main ,221,Drive,Suite 460,18828
+1370,985,608,618,1285,Concord,1,San Miguel County,NM,able,Lake Valley,225,Wy,Suite S,84107
+1379,1027,652,672,1275,New Hope,1,Fairfield County,SC,able,Meadow ,24,Court,Suite D,29431
+1287,1067,652,653,1350,Pleasant Hill,1,San Miguel County,NM,able,9th 12th,244,Blvd,Suite 490,83604
+1279,1049,723,616,1294,Lakeview,1,Marshall County,IN,able,Maple Spring,251,Parkway,Suite J,48579
+1359,999,638,592,1271,Oak Hill,1,Jackson County,NC,able,Jackson 5th,257,Ave,Suite 320,27838
+1282,952,591,639,1315,Glendale,1,Walker County,AL,able,Pine ,269,Ave,Suite A,33951
+1300,1074,669,670,1206,Glenwood,1,Mesa County,CO,able,Spring ,327,Street,Suite 80,83511
+1313,988,623,649,1249,Oak Hill,1,Gogebic County,MI,able,Willow Oak,354,Drive,Suite 400,47838
+1280,1009,642,617,1306,Spring Valley,1,Dauphin County,PA,able,Hill ,359,Dr.,Suite 50,16060
+1352,1074,596,648,1290,Spring Valley,1,Huron County,MI,able,Elm ,369,Cir.,Suite 450,46060
+1289,1034,653,631,1332,Spring Valley,1,Jackson County,NC,able,Elevnth Oak,423,Blvd,Suite N,26060
+1308,1044,641,659,1308,Georgetown,1,Mobile County,AL,able,Green Madison,439,Ct.,Suite 50,37057
+1287,986,644,705,1247,Cedar Grove,1,Barrow County,GA,able,Lakeview ,452,Circle,Suite Y,30411
+1263,951,652,647,1329,Hillcrest,1,Ziebach County,SD,able,Broadway Elm,517,Ct.,Suite 350,53003
+1327,956,631,696,1252,Union,1,Ziebach County,SD,able,Fifth 1st,518,Wy,Suite S,58721
+1261,1012,662,685,1261,Midway,1,Barrow County,GA,able,East Seventh,519,Ln,Suite 390,31904
+1328,979,639,656,1266,Wildwood,1,Huron County,MI,able,11th Third,520,Drive,Suite 120,46871
+1266,1008,620,614,1314,Hillcrest,1,Franklin Parish,LA,able,14th ,526,Ave,Suite 260,73003
+1291,1013,618,672,1220,Harmony,1,Wadena County,MN,able,Spruce ,535,Lane,Suite 50,55804
+1295,932,654,628,1247,Five Points,1,Oglethorpe County,GA,able,Park Pine,540,RD,Suite 230,36098
+1335,1038,601,640,1295,Glendale,1,Gage County,NE,able,Elm ,566,Road,Suite 400,63951
+1351,1012,654,634,1187,Lakeside,1,Dauphin County,PA,able,West ,570,ST,Suite I,19532
+1366,995,676,660,1309,Buena Vista,1,Marshall County,IN,able,Sycamore ,582,Ln,Suite 180,45752
+1256,1001,669,670,1293,Hopewell,1,Daviess County,MO,able,4th ,588,Ave,Suite 70,60587
+1303,1048,644,677,1286,Georgetown,1,Huron County,MI,able,Center ,605,Ave,Suite F,47057
+1280,1032,666,651,1292,Midway,1,Pennington County,MN,able,Ash Laurel,641,ST,Suite 490,51904
+1282,1018,641,645,1256,Midway,1,Daviess County,MO,able,Main ,649,Parkway,Suite 430,61904
+1304,1044,682,597,1271,New Hope,1,Bronx County,NY,able,Lakeview Birch,657,Wy,Suite 430,19431
+1306,931,640,662,1308,Walnut Grove,1,Gage County,NE,able,Ash ,679,Drive,Suite 480,67752
+1306,980,631,669,1290,Antioch,1,Franklin Parish,LA,able,4th ,681,Lane,Suite 30,78605
+1301,999,589,620,1240,Riverview,1,Jefferson Davis Parish,LA,able,Main ,699,RD,Suite 0,79003
+1376,991,645,610,1285,Friendship,1,Franklin Parish,LA,able,Willow Sunset,703,Wy,Suite X,74536
+1334,1022,634,640,1278,Glendale,1,Huron County,MI,able,Williams 9th,708,Street,Suite 270,43951
+1296,990,641,635,1248,Lakeview,1,Gage County,NE,able,3rd ,740,Parkway,Suite 320,68579
+1275,960,648,644,1309,Salem,1,Levy County,FL,able,1st 5th,742,Cir.,Suite L,38048
+1299,1009,622,640,1269,Antioch,1,Barrow County,GA,able,Hill ,751,Pkwy,Suite 370,38605
+1306,1019,631,652,1264,Liberty,1,Walker County,AL,able,Center ,774,RD,Suite 60,33451
+1259,986,651,621,1359,Five Points,1,Fairfield County,SC,able,Lincoln Fourteenth,776,RD,Suite T,26098
+1325,944,655,651,1307,Glenwood,1,Mobile County,AL,able,Cedar ,789,Circle,Suite A,33511
+1309,1045,620,643,1328,Glendale,1,Williamson County,TN,able,Church Church,791,Way,Suite 330,33951
+1364,1000,669,616,1234,Friendship,1,Kittitas County,WA,able,Third Washington,817,Ave,Suite O,94536
+1254,934,605,617,1370,Concord,1,Wadena County,MN,able,5th ,822,Ct.,Suite N,54107
+1285,1047,646,637,1257,Shady Grove,1,Oglethorpe County,GA,able,Madison ,824,Way,Suite 430,32812
+1294,1044,588,640,1335,Cedar Grove,1,Fairfield County,SC,able,3rd ,848,Wy,Suite N,20411
+1324,1021,614,605,1295,Riverview,1,Oglethorpe County,GA,able,7th Poplar,850,Pkwy,Suite W,39003
+1287,986,614,693,1337,Glendale,1,Kittitas County,WA,able,Madison ,865,Ct.,Suite 340,93951
+1256,1033,651,658,1291,Stringtown,1,Levy County,FL,able,Pine ,875,Street,Suite Q,30162
+1253,1037,671,626,1229,Spring Valley,1,Marshall County,IN,able,3rd Second,883,Boulevard,Suite 350,46060
+1345,1023,672,648,1291,New Hope,1,Franklin Parish,LA,able,Cedar ,890,ST,Suite U,79431
+1384,1003,632,599,1266,Centerville,1,Barrow County,GA,able,10th 6th,910,Dr.,Suite G,30059
+1355,984,628,601,1264,Sunnyside,1,Oglethorpe County,GA,able,College ,938,Way,Suite U,31952
+1247,1017,646,618,1317,Georgetown,1,Raleigh County,WV,able,Oak Smith,953,Dr.,Suite L,27057
+1239,972,634,600,1287,Pine Grove,1,Fairfield County,SC,able,Hillcrest ,955,Road,Suite 130,24593
+1319,1060,646,619,1257,Harmony,1,Jefferson Davis Parish,LA,able,13th ,975,ST,Suite 200,75804
+1332,1017,614,652,1336,Friendship,1,Ziebach County,SD,able,13th ,984,Ave,Suite 260,54536
+1211,1004,613,628,1231,Highland,1,Huron County,MI,able,Miller Lincoln,988,Circle,Suite 380,49454
+1336,988,615,675,1286,Pleasant Valley,1,Richland County,OH,anti,Hill ,162,Road,Suite 460,42477
+1285,966,669,616,1210,Riverview,1,Levy County,FL,anti,Miller Main,162,Cir.,Suite R,39003
+1282,1007,622,620,1245,Cedar Grove,1,Raleigh County,WV,anti,East Sycamore,189,Blvd,Suite P,20411
+1354,1025,597,652,1247,Fairview,1,Raleigh County,WV,anti,Madison ,288,Blvd,Suite T,25709
+1266,969,669,679,1280,Lakewood,1,Bronx County,NY,anti,Williams ,405,Ave,Suite 30,18877
+1308,990,600,677,1221,Stringtown,1,Bronx County,NY,anti,14th River,438,RD,Suite 200,10162
+1339,1044,619,636,1364,Mount Pleasant,1,Mesa County,CO,anti,Seventh Central,457,Cir.,Suite 180,81933
+1290,1033,654,641,1247,Lakeside,1,Raleigh County,WV,anti,Church Williams,48,Ave,Suite 110,29532
+1366,1021,624,648,1225,Mount Zion,1,Jackson County,NC,anti,Lincoln ,557,Blvd,Suite 280,28054
+1281,986,629,622,1340,Hopewell,1,Mesa County,CO,anti,Sixth ,578,Street,Suite 240,80587
+1261,1025,654,651,1265,Lakewood,1,San Miguel County,NM,anti,Highland 2nd,59,Road,Suite K,88877
+1331,1003,598,706,1281,Mount Olive,1,Fairfield County,SC,anti,Main First,6,Way,Suite U,28059
+1272,1020,603,727,1243,Shady Grove,1,Huron County,MI,anti,Hill ,628,Ln,Suite M,42812
+1349,1033,636,655,1302,Pine Grove,1,Huron County,MI,anti,Cherry Mill,632,Lane,Suite 250,44593
+1326,996,660,600,1284,Liberty,1,Oglethorpe County,GA,anti,5th ,645,Wy,Suite 130,33451
+1300,1040,633,635,1232,Lakewood,1,Jackson County,NC,anti,Woodland ,703,Ct.,Suite 60,28877
+1282,906,674,645,1249,Midway,1,Jefferson Davis Parish,LA,anti,Lee ,727,ST,Suite 400,71904
+1343,1015,689,651,1212,Spring Hill,1,Levy County,FL,anti,Lincoln Railroad,736,Lane,Suite Y,36787
+1301,1012,688,634,1337,Shady Grove,1,Huron County,MI,anti,Twelfth ,762,Avenue,Suite J,42812
+1334,1063,636,666,1253,Stringtown,1,San Miguel County,NM,anti,Highland ,777,Lane,Suite O,80162
+1361,1026,683,613,1273,Providence,1,Ziebach County,SD,anti,College ,818,Way,Suite M,56614
+1368,983,644,588,1298,Lakewood,1,Fairfield County,SC,anti,Johnson ,818,Avenue,Suite 260,28877
+1258,946,646,688,1278,Bethel,1,Levy County,FL,anti,Main Meadow,826,Street,Suite 280,35281
+1250,1028,640,629,1284,Pleasant Grove,1,Maverick County,TX,anti,5th ,880,Wy,Suite 110,74136
+1252,983,684,633,1361,Fairview,1,Bronx County,NY,anti,East Fifteenth,904,Ave,Suite 450,15709
+1280,989,661,597,1312,Highland Park,1,Pennington County,MN,anti,Madison ,91,Lane,Suite R,56534
+1263,1004,686,607,1241,Oakland,1,Franklin Parish,LA,anti,Park Main,917,Wy,Suite L,79843
+1368,1019,655,626,1299,Oakdale,1,Ziebach County,SD,anti,8th Woodland,923,Ln,Suite 300,59584
+1300,1003,565,649,1188,Buena Vista,1,Franklin Parish,LA,anti,Sunset ,931,Circle,Suite M,75752
+1334,1015,615,614,1246,Springfield,1,Pennington County,MN,anti,13th ,944,ST,Suite K,59303
+1292,956,655,636,1287,Mount Pleasant,1,Huron County,MI,anti,4th Park,953,Blvd,Suite 10,41933
+1215,1013,652,666,1334,Buena Vista,1,Huron County,MI,anti,Laurel ,974,Parkway,Suite Q,45752
+1230,1034,615,679,1265,Union,1,Richland County,OH,ation,Cedar Forest,106,Boulevard,Suite B,48721

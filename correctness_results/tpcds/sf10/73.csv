@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a2106ff15013eeda068f064d7df94a688bae08790c2ed23003b75143c278e6dc
-size 1298
+c_first_name,c_last_name,c_preferred_cust_flag,c_salutation,cnt,ss_ticket_number
+Marian,Anderson,N,Ms.,5,1561225
+Robert,Arias,Y,Mr.,5,1496569
+George,Brim,N,Dr.,5,2376264
+William,Brooks,Y,Mr.,5,764128
+Monica,Carter,N,Miss,5,396010
+Dolly,Conley,N,Dr.,5,780287
+Lawrence,Cruz,Y,Dr.,5,2223863
+Michael,Dickerson,N,Dr.,5,2147574
+Doris,Flowers,Y,Ms.,5,1917813
+Allan,Gandy,N,Sir,5,402493
+Eric,Gonzalez,Y,Mr.,5,185432
+Rosa,Grimes,N,Ms.,5,180386
+Ryan,Gutierrez,Y,Dr.,5,2157132
+Jeremy,Hartley,N,Mr.,5,2187652
+Louis,Hickson,Y,Mr.,5,133123
+Michael,Hoover,N,Dr.,5,309621
+James,Johnson,N,Dr.,5,1482852
+Princess,Lyons,Y,Miss,5,1039605
+Matthew,Michaud,N,Dr.,5,1494707
+Micheal,Miller,N,Dr.,5,874352
+Richard,Moore,Y,Dr.,5,1896085
+Lynda,Morgan,Y,Dr.,5,565579
+Wanda,Moss,Y,Mrs.,5,1604564
+John,Perez,N,Sir,5,1817970
+Helen,Rodriquez,N,Dr.,5,384557
+Bryant,Saavedra,N,Dr.,5,232061
+Margaret,Siegel,Y,Ms.,5,2177246
+Warren,Simmons,Y,Sir,5,977799
+Martha,Taylor,N,Miss,5,371618
+Terry,Thao,N,Dr.,5,734131
+Walter,Tucker,Y,Dr.,5,1185756
+Cheryl,Vargas,N,Ms.,5,468106
+Michael,Walker,N,Mr.,5,1614861
+,,N,Ms.,5,91423
+Jeremy,,Y,,5,786245
+Robert,Beaudoin,N,Sir,4,937019
+James,Brown,N,Sir,4,430636
+Dorothy,Gunn,N,Miss,4,1239874
+Annie,Hansen,Y,Mrs.,4,1151094
+Lawrence,Johnson,N,Mr.,4,436901
+,,,Sir,4,1177533
+Allison,Hedrick,N,Mrs.,3,279799

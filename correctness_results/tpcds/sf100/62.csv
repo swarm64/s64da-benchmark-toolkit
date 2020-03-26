@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:98b06e56df28d0e5105f8d4744b5f2a77de3ac284a7b2bd6223da356178c7905
-size 5677
+30 days,31-60,61-90,91-120,>120 days,sm_type,substr,web_name
+10918,9033,7316,6074,0,EXPRESS,About slight way,site_0
+10839,9038,7318,6068,0,EXPRESS,About slight way,site_1
+10805,8934,7370,5922,0,EXPRESS,About slight way,site_2
+10880,8994,7122,5955,0,EXPRESS,About slight way,site_3
+8116,6680,5416,4478,0,LIBRARY,About slight way,site_0
+8302,6737,5426,4479,0,LIBRARY,About slight way,site_1
+8260,6673,5514,4607,0,LIBRARY,About slight way,site_2
+8182,6722,5569,4462,0,LIBRARY,About slight way,site_3
+10943,9059,7258,5894,0,NEXT DAY,About slight way,site_0
+10890,8897,7156,6092,0,NEXT DAY,About slight way,site_1
+10740,8994,7339,6000,0,NEXT DAY,About slight way,site_2
+10796,8925,7297,5877,0,NEXT DAY,About slight way,site_3
+8013,6612,5502,4408,0,OVERNIGHT,About slight way,site_0
+8136,6625,5423,4444,0,OVERNIGHT,About slight way,site_1
+8005,6587,5584,4527,0,OVERNIGHT,About slight way,site_2
+8002,6670,5497,4546,0,OVERNIGHT,About slight way,site_3
+8293,6725,5504,4503,0,REGULAR,About slight way,site_0
+8170,6782,5414,4599,0,REGULAR,About slight way,site_1
+8120,6749,5446,4334,0,REGULAR,About slight way,site_2
+8218,6741,5394,4428,0,REGULAR,About slight way,site_3
+8259,6572,5544,4473,0,TWO DAY,About slight way,site_0
+8162,6625,5317,4425,0,TWO DAY,About slight way,site_1
+8336,6607,5540,4494,0,TWO DAY,About slight way,site_2
+8196,6600,5536,4441,0,TWO DAY,About slight way,site_3
+10823,8886,7143,6007,0,EXPRESS,Both obvious tic,site_0
+10898,8797,7411,5952,0,EXPRESS,Both obvious tic,site_1
+10860,8954,7320,5903,0,EXPRESS,Both obvious tic,site_2
+10800,9000,7409,6043,0,EXPRESS,Both obvious tic,site_3
+8064,6595,5404,4624,0,LIBRARY,Both obvious tic,site_0
+8134,6698,5515,4607,0,LIBRARY,Both obvious tic,site_1
+8343,6811,5558,4441,0,LIBRARY,Both obvious tic,site_2
+8071,6685,5520,4629,0,LIBRARY,Both obvious tic,site_3
+11025,8867,7179,6010,0,NEXT DAY,Both obvious tic,site_0
+10845,8851,7432,5994,0,NEXT DAY,Both obvious tic,site_1
+11000,8835,7290,5889,0,NEXT DAY,Both obvious tic,site_2
+10923,8956,7321,6017,0,NEXT DAY,Both obvious tic,site_3
+8056,6522,5313,4505,0,OVERNIGHT,Both obvious tic,site_0
+8269,6677,5518,4452,0,OVERNIGHT,Both obvious tic,site_1
+8090,6681,5424,4374,0,OVERNIGHT,Both obvious tic,site_2
+8265,6633,5508,4487,0,OVERNIGHT,Both obvious tic,site_3
+8271,6684,5561,4582,0,REGULAR,Both obvious tic,site_0
+8208,6598,5601,4519,0,REGULAR,Both obvious tic,site_1
+8045,6680,5520,4423,0,REGULAR,Both obvious tic,site_2
+8260,6506,5288,4460,0,REGULAR,Both obvious tic,site_3
+8168,6728,5460,4479,0,TWO DAY,Both obvious tic,site_0
+8058,6835,5572,4529,0,TWO DAY,Both obvious tic,site_1
+8230,6661,5528,4533,0,TWO DAY,Both obvious tic,site_2
+8181,6680,5436,4598,0,TWO DAY,Both obvious tic,site_3
+10860,9023,7196,5934,0,EXPRESS,Especially oversea,site_0
+10829,8979,7377,5937,0,EXPRESS,Especially oversea,site_1
+10728,9035,7242,5920,0,EXPRESS,Especially oversea,site_2
+10810,8995,7371,5824,0,EXPRESS,Especially oversea,site_3
+8025,6730,5402,4676,0,LIBRARY,Especially oversea,site_0
+8038,6676,5509,4600,0,LIBRARY,Especially oversea,site_1
+8130,6741,5665,4420,0,LIBRARY,Especially oversea,site_2
+8211,6712,5481,4555,0,LIBRARY,Especially oversea,site_3
+10968,8628,7415,6006,0,NEXT DAY,Especially oversea,site_0
+10968,8730,7272,6007,0,NEXT DAY,Especially oversea,site_1
+10871,8894,7248,5821,0,NEXT DAY,Especially oversea,site_2
+11037,8946,7344,5960,0,NEXT DAY,Especially oversea,site_3
+7972,6631,5454,4494,0,OVERNIGHT,Especially oversea,site_0
+8189,6682,5541,4569,0,OVERNIGHT,Especially oversea,site_1
+8057,6742,5396,4595,0,OVERNIGHT,Especially oversea,site_2
+8036,6813,5449,4530,0,OVERNIGHT,Especially oversea,site_3
+8167,6667,5682,4325,0,REGULAR,Especially oversea,site_0
+8127,6517,5458,4478,0,REGULAR,Especially oversea,site_1
+8148,6776,5389,4439,0,REGULAR,Especially oversea,site_2
+8149,6730,5579,4450,0,REGULAR,Especially oversea,site_3
+8164,6683,5516,4514,0,TWO DAY,Especially oversea,site_0
+8162,6671,5660,4408,0,TWO DAY,Especially oversea,site_1
+8084,6582,5506,4462,0,TWO DAY,Especially oversea,site_2
+8139,6684,5415,4451,0,TWO DAY,Especially oversea,site_3
+10911,8795,7286,5960,0,EXPRESS,Famous skills enact.,site_0
+10879,8933,7252,5936,0,EXPRESS,Famous skills enact.,site_1
+10799,8933,7454,5997,0,EXPRESS,Famous skills enact.,site_2
+10775,9018,7379,6018,0,EXPRESS,Famous skills enact.,site_3
+8159,6642,5503,4541,0,LIBRARY,Famous skills enact.,site_0
+7973,6709,5493,4544,0,LIBRARY,Famous skills enact.,site_1
+8093,6768,5552,4433,0,LIBRARY,Famous skills enact.,site_2
+8295,6746,5435,4521,0,LIBRARY,Famous skills enact.,site_3
+10819,8723,7411,6062,0,NEXT DAY,Famous skills enact.,site_0
+10896,8892,7333,5980,0,NEXT DAY,Famous skills enact.,site_1
+10731,8907,7320,6008,0,NEXT DAY,Famous skills enact.,site_2
+10911,8670,7299,6020,0,NEXT DAY,Famous skills enact.,site_3
+8032,6556,5504,4551,0,OVERNIGHT,Famous skills enact.,site_0
+8207,6560,5541,4511,0,OVERNIGHT,Famous skills enact.,site_1
+8183,6672,5452,4453,0,OVERNIGHT,Famous skills enact.,site_2
+8226,6609,5520,4376,0,OVERNIGHT,Famous skills enact.,site_3
+8143,6708,5563,4503,0,REGULAR,Famous skills enact.,site_0
+8064,6667,5567,4655,0,REGULAR,Famous skills enact.,site_1
+8150,6694,5442,4405,0,REGULAR,Famous skills enact.,site_2
+8205,6592,5479,4521,0,REGULAR,Famous skills enact.,site_3
+8200,6815,5475,4601,0,TWO DAY,Famous skills enact.,site_0
+8189,6632,5590,4533,0,TWO DAY,Famous skills enact.,site_1
+8233,6739,5535,4553,0,TWO DAY,Famous skills enact.,site_2
+8153,6715,5343,4434,0,TWO DAY,Famous skills enact.,site_3
+11059,8634,7379,5960,0,EXPRESS,Full cards mi,site_0
+11114,8794,7395,5906,0,EXPRESS,Full cards mi,site_1
+11030,8803,7216,5916,0,EXPRESS,Full cards mi,site_2
+11000,8895,7237,5937,0,EXPRESS,Full cards mi,site_3

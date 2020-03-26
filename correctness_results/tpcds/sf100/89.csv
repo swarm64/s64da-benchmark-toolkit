@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3558d83c5ee6a71d276c8120e3b94ce97ad703a66960babf22ed0f9ccd09e9ed
-size 7206
+avg_monthly_sales,d_moy,i_brand,i_category,i_class,s_company_name,s_store_name,sum_sales
+384548.5808333333,2,amalgimporto #2,Men,accessories,Unknown,able,208277.13
+381930.2375,2,edu packamalg #2,Women,swimwear,Unknown,able,206338.09
+381930.2375,6,edu packamalg #2,Women,swimwear,Unknown,able,209686.0
+383745.24083333334,2,amalgimporto #2,Men,accessories,Unknown,ese,211631.04
+375700.2108333333,2,amalgscholar #2,Music,rock,Unknown,able,203671.92
+372722.595,2,amalgscholar #2,Music,rock,Unknown,ese,201778.01
+367239.1583333333,2,edu packamalg #2,Women,swimwear,Unknown,cally,196677.42
+378749.2766666667,2,edu packamalg #2,Women,swimwear,Unknown,bar,208849.47
+374092.67833333334,2,amalgscholar #2,Music,rock,Unknown,bar,204395.1
+381628.68333333335,2,amalgimporto #2,Men,accessories,Unknown,bar,211976.3
+378749.2766666667,6,edu packamalg #2,Women,swimwear,Unknown,bar,210073.3
+368384.7733333333,2,amalgimporto #2,Men,accessories,Unknown,eing,200563.63
+381930.2375,7,edu packamalg #2,Women,swimwear,Unknown,able,214489.04
+374092.67833333334,6,amalgscholar #2,Music,rock,Unknown,bar,206764.36
+384548.5808333333,4,amalgimporto #2,Men,accessories,Unknown,able,217234.76
+369197.2675,2,amalgimporto #2,Men,accessories,Unknown,cally,202050.08
+384548.5808333333,6,amalgimporto #2,Men,accessories,Unknown,able,217620.2
+372722.595,6,amalgscholar #2,Music,rock,Unknown,ese,206216.39
+383745.24083333334,4,amalgimporto #2,Men,accessories,Unknown,ese,218073.1
+376433.27,2,edu packamalg #2,Women,swimwear,Unknown,ese,210842.3
+375700.2108333333,4,amalgscholar #2,Music,rock,Unknown,able,210742.56
+381930.2375,3,edu packamalg #2,Women,swimwear,Unknown,able,217091.92
+376433.27,4,edu packamalg #2,Women,swimwear,Unknown,ese,211704.53
+367458.86666666664,2,edu packamalg #2,Women,swimwear,Unknown,eing,203366.0
+381628.68333333335,6,amalgimporto #2,Men,accessories,Unknown,bar,219072.49
+384548.5808333333,7,amalgimporto #2,Men,accessories,Unknown,able,222164.25
+381930.2375,4,edu packamalg #2,Women,swimwear,Unknown,able,219869.63
+378749.2766666667,3,edu packamalg #2,Women,swimwear,Unknown,bar,216729.54
+381628.68333333335,3,amalgimporto #2,Men,accessories,Unknown,bar,220109.93
+375700.2108333333,6,amalgscholar #2,Music,rock,Unknown,able,214221.25
+381628.68333333335,4,amalgimporto #2,Men,accessories,Unknown,bar,220305.11
+383745.24083333334,6,amalgimporto #2,Men,accessories,Unknown,ese,222479.99
+383745.24083333334,7,amalgimporto #2,Men,accessories,Unknown,ese,222582.21
+367458.86666666664,4,edu packamalg #2,Women,swimwear,Unknown,eing,206454.05
+376433.27,6,edu packamalg #2,Women,swimwear,Unknown,ese,215907.43
+375700.2108333333,3,amalgscholar #2,Music,rock,Unknown,able,215243.74
+378749.2766666667,4,edu packamalg #2,Women,swimwear,Unknown,bar,218612.7
+369197.2675,4,amalgimporto #2,Men,accessories,Unknown,cally,209218.72
+359519.8325,2,amalgscholar #2,Music,rock,Unknown,cally,199919.6
+381930.2375,5,edu packamalg #2,Women,swimwear,Unknown,able,222567.66
+361665.9141666667,4,amalgscholar #2,Music,rock,Unknown,eing,202540.32
+367239.1583333333,6,edu packamalg #2,Women,swimwear,Unknown,cally,208263.0
+361665.9141666667,2,amalgscholar #2,Music,rock,Unknown,eing,203978.38
+376433.27,3,edu packamalg #2,Women,swimwear,Unknown,ese,218817.84
+381628.68333333335,7,amalgimporto #2,Men,accessories,Unknown,bar,224128.08
+369197.2675,6,amalgimporto #2,Men,accessories,Unknown,cally,211822.2
+367458.86666666664,7,edu packamalg #2,Women,swimwear,Unknown,eing,210102.51
+381628.68333333335,5,amalgimporto #2,Men,accessories,Unknown,bar,224282.23
+368384.7733333333,6,amalgimporto #2,Men,accessories,Unknown,eing,211040.23
+368384.7733333333,3,amalgimporto #2,Men,accessories,Unknown,eing,211142.27
+374092.67833333334,7,amalgscholar #2,Music,rock,Unknown,bar,216861.09
+372722.595,4,amalgscholar #2,Music,rock,Unknown,ese,215612.33
+361665.9141666667,6,amalgscholar #2,Music,rock,Unknown,eing,204650.44
+374092.67833333334,4,amalgscholar #2,Music,rock,Unknown,bar,217092.91
+378749.2766666667,5,edu packamalg #2,Women,swimwear,Unknown,bar,221795.33
+359519.8325,6,amalgscholar #2,Music,rock,Unknown,cally,202609.32
+383745.24083333334,5,amalgimporto #2,Men,accessories,Unknown,ese,226920.23
+369197.2675,3,amalgimporto #2,Men,accessories,Unknown,cally,212812.64
+372722.595,5,amalgscholar #2,Music,rock,Unknown,ese,216347.82
+368384.7733333333,5,amalgimporto #2,Men,accessories,Unknown,eing,212426.97
+367239.1583333333,4,edu packamalg #2,Women,swimwear,Unknown,cally,211352.08
+376433.27,5,edu packamalg #2,Women,swimwear,Unknown,ese,220609.57
+376433.27,7,edu packamalg #2,Women,swimwear,Unknown,ese,221053.46
+368384.7733333333,4,amalgimporto #2,Men,accessories,Unknown,eing,213088.75
+384548.5808333333,3,amalgimporto #2,Men,accessories,Unknown,able,229292.6
+383745.24083333334,3,amalgimporto #2,Men,accessories,Unknown,ese,228501.89
+375700.2108333333,5,amalgscholar #2,Music,rock,Unknown,able,221252.85
+374092.67833333334,3,amalgscholar #2,Music,rock,Unknown,bar,220078.98
+374092.67833333334,5,amalgscholar #2,Music,rock,Unknown,bar,220197.08
+359519.8325,4,amalgscholar #2,Music,rock,Unknown,cally,205865.31
+367458.86666666664,6,edu packamalg #2,Women,swimwear,Unknown,eing,214101.47
+375700.2108333333,7,amalgscholar #2,Music,rock,Unknown,able,222368.1
+369197.2675,7,amalgimporto #2,Men,accessories,Unknown,cally,216656.76
+359519.8325,3,amalgscholar #2,Music,rock,Unknown,cally,207493.01
+372722.595,3,amalgscholar #2,Music,rock,Unknown,ese,221265.25
+367239.1583333333,5,edu packamalg #2,Women,swimwear,Unknown,cally,216124.29
+361665.9141666667,5,amalgscholar #2,Music,rock,Unknown,eing,210601.06
+372722.595,7,amalgscholar #2,Music,rock,Unknown,ese,221708.27
+367239.1583333333,7,edu packamalg #2,Women,swimwear,Unknown,cally,216427.27
+359519.8325,5,amalgscholar #2,Music,rock,Unknown,cally,208989.65
+367458.86666666664,3,edu packamalg #2,Women,swimwear,Unknown,eing,217102.52
+378749.2766666667,7,edu packamalg #2,Women,swimwear,Unknown,bar,228525.37
+361665.9141666667,7,amalgscholar #2,Music,rock,Unknown,eing,212330.56
+384548.5808333333,5,amalgimporto #2,Men,accessories,Unknown,able,235228.88
+368384.7733333333,7,amalgimporto #2,Men,accessories,Unknown,eing,219954.14
+367239.1583333333,3,edu packamalg #2,Women,swimwear,Unknown,cally,219376.3
+369197.2675,5,amalgimporto #2,Men,accessories,Unknown,cally,221671.44
+359519.8325,7,amalgscholar #2,Music,rock,Unknown,cally,212164.15
+367458.86666666664,5,edu packamalg #2,Women,swimwear,Unknown,eing,222353.25
+361665.9141666667,3,amalgscholar #2,Music,rock,Unknown,eing,217150.33
+383745.24083333334,1,amalgimporto #2,Men,accessories,Unknown,ese,248553.39
+381628.68333333335,1,amalgimporto #2,Men,accessories,Unknown,bar,246461.0
+384548.5808333333,1,amalgimporto #2,Men,accessories,Unknown,able,251387.62
+375700.2108333333,1,amalgscholar #2,Music,rock,Unknown,able,246646.28
+378749.2766666667,1,edu packamalg #2,Women,swimwear,Unknown,bar,249879.33
+368384.7733333333,1,amalgimporto #2,Men,accessories,Unknown,eing,240505.36
+381930.2375,1,edu packamalg #2,Women,swimwear,Unknown,able,255162.62
+376433.27,1,edu packamalg #2,Women,swimwear,Unknown,ese,251458.07
+367458.86666666664,1,edu packamalg #2,Women,swimwear,Unknown,eing,242983.26
+361665.9141666667,1,amalgscholar #2,Music,rock,Unknown,eing,237972.78

@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:654c4fc555cd74d6306ff50e7df5097d92efac21f9d288be7a98132d553b3c07
-size 9091
+30 days,31-60,61-90,91-120,>120 days,s_city,s_company_id,s_county,s_state,s_store_name,s_street_name,s_street_number,s_street_type,s_suite_number,s_zip
+313,266,154,135,316,Bethel,1,Williamson County,TN,able,Elm ,170,Pkwy,Suite 340,35281
+309,262,164,157,308,Five Points,1,Luce County,MI,able,Locust Ridge,212,Ln,Suite K,46098
+300,238,135,152,318,Pleasant Hill,1,Ziebach County,SD,able,9th 12th,244,Blvd,Suite 490,53604
+346,229,163,181,320,Mount Pleasant,1,Williamson County,TN,able,Maple Spring,251,Parkway,Suite J,31933
+315,231,180,148,299,Oak Grove,1,Richland County,OH,able,Jackson 5th,257,Ave,Suite 320,48370
+351,243,170,146,331,Bethel,1,Walker County,AL,able,Pine ,269,Ave,Suite A,35281
+334,254,165,164,320,Centerville,1,Franklin Parish,LA,able,Spring ,327,Street,Suite 80,70059
+327,235,172,162,313,Liberty,1,Walker County,AL,able,Elm ,369,Cir.,Suite 450,33451
+300,227,174,166,328,Union,1,Ziebach County,SD,able,Fifth 1st,518,Wy,Suite S,58721
+320,282,169,152,315,Midway,1,Barrow County,GA,able,East Seventh,519,Ln,Suite 390,31904
+312,233,175,128,313,Shady Grove,1,Franklin Parish,LA,able,14th ,526,Ave,Suite 260,72812
+338,273,143,157,301,Greenwood,1,Luce County,MI,able,Spruce ,535,Lane,Suite 50,48828
+362,278,178,173,305,Five Points,1,Barrow County,GA,able,Park Pine,540,RD,Suite 230,36098
+285,222,145,145,297,Bethel,1,Daviess County,MO,able,Elm ,566,Road,Suite 400,65281
+313,279,149,139,278,Midway,1,Williamson County,TN,able,Sycamore ,582,Ln,Suite 180,31904
+341,277,161,173,320,Midway,1,Ziebach County,SD,able,Ash Laurel,641,ST,Suite 490,51904
+344,232,171,159,335,Midway,1,Daviess County,MO,able,Main ,649,Parkway,Suite 430,61904
+340,259,169,139,300,Centerville,1,Franklin Parish,LA,able,4th ,681,Lane,Suite 30,70059
+347,271,132,148,298,Shady Grove,1,Williamson County,TN,able,Main ,699,RD,Suite 0,32812
+365,265,161,135,331,Bethel,1,Walker County,AL,able,Williams 9th,708,Street,Suite 270,35281
+338,262,159,171,304,Mount Pleasant,1,Daviess County,MO,able,3rd ,740,Parkway,Suite 320,61933
+323,208,158,156,292,Centerville,1,Barrow County,GA,able,Hill ,751,Pkwy,Suite 370,30059
+327,227,156,158,315,Liberty,1,Franklin Parish,LA,able,Third Washington,817,Ave,Suite O,73451
+310,246,153,167,324,Shady Grove,1,Barrow County,GA,able,Madison ,824,Way,Suite 430,32812
+296,270,148,179,322,Liberty,1,Williamson County,TN,able,3rd Second,883,Boulevard,Suite 350,33451
+315,258,159,176,304,New Hope,1,Franklin Parish,LA,able,Cedar ,890,ST,Suite U,79431
+333,238,152,153,290,Greenwood,1,Williamson County,TN,able,13th ,975,ST,Suite 200,38828
+316,280,151,171,314,Pleasant Grove,1,Richland County,OH,anti,14th River,438,RD,Suite 200,44136
+328,220,147,148,310,New Hope,1,Franklin Parish,LA,anti,Sixth ,578,Street,Suite 240,79431
+364,242,158,165,321,Oakland,1,Ziebach County,SD,anti,Highland 2nd,59,Road,Suite K,59843
+318,244,160,140,314,Pleasant Grove,1,Fairfield County,SC,anti,Main First,6,Way,Suite U,24136
+334,272,187,145,298,Midway,1,Walker County,AL,anti,Cherry Mill,632,Lane,Suite 250,31904
+322,262,162,147,304,Liberty,1,Barrow County,GA,anti,5th ,645,Wy,Suite 130,33451
+292,228,188,161,335,Oakland,1,Richland County,OH,anti,Woodland ,703,Ct.,Suite 60,49843
+325,219,157,161,320,Pleasant Valley,1,Walker County,AL,anti,Lincoln Railroad,736,Lane,Suite Y,32477
+309,266,163,145,317,Shady Grove,1,Walker County,AL,anti,Twelfth ,762,Avenue,Suite J,32812
+290,239,142,150,316,Pleasant Valley,1,Ziebach County,SD,anti,College ,818,Way,Suite M,52477
+314,210,152,150,305,New Hope,1,Ziebach County,SD,anti,8th Woodland,923,Ln,Suite 300,59431
+309,243,153,151,328,Mount Pleasant,1,Walker County,AL,anti,4th Park,953,Blvd,Suite 10,31933
+305,224,146,160,304,Midway,1,Walker County,AL,anti,Laurel ,974,Parkway,Suite Q,31904
+320,229,146,164,307,Salem,1,Franklin Parish,LA,ation,Davis Center,116,Road,Suite M,78048
+343,244,160,156,301,Oakland,1,Franklin Parish,LA,ation,Lincoln 11th,130,Court,Suite C,79843
+309,271,171,168,324,Midway,1,Richland County,OH,ation,Ash Williams,196,Boulevard,Suite 290,41904
+326,248,145,177,345,Fairview,1,Williamson County,TN,ation,Jefferson ,364,Road,Suite 80,35709
+327,238,190,156,310,Oak Grove,1,Fairfield County,SC,ation,Central ,420,Ct.,Suite 270,28370
+339,252,154,159,357,Oakland,1,Williamson County,TN,ation,View Miller,431,Ave,Suite Y,39843
+332,269,155,146,312,Salem,1,Barrow County,GA,ation,10th ,434,Parkway,Suite W,38048
+302,301,162,147,284,Pleasant Valley,1,Luce County,MI,ation,Third ,435,Drive,Suite R,42477
+295,260,138,163,340,New Hope,1,Barrow County,GA,ation,13th Railroad,510,Ave,Suite K,39431
+297,238,173,146,308,Pleasant Grove,1,Fairfield County,SC,ation,2nd ,52,Road,Suite K,24136
+334,256,172,165,297,Fairview,1,Walker County,AL,ation,4th 14th,87,Way,Suite P,35709
+348,246,165,154,311,Shady Grove,1,Luce County,MI,ation,Main East,888,RD,Suite 100,42812
+339,269,180,137,297,Bethel,1,Barrow County,GA,ation,Davis First,927,Way,Suite 220,35281
+347,273,175,185,330,Oakland,1,Walker County,AL,ation,Miller 1st,958,Blvd,Suite 360,39843
+329,261,156,168,294,Centerville,1,Luce County,MI,bar,13th Jackson,231,RD,Suite M,40059
+352,246,149,163,346,Greenwood,1,Williamson County,TN,bar,Franklin 2nd,307,Dr.,Suite 270,38828
+317,241,153,152,304,New Hope,1,Richland County,OH,bar,Lake ,349,Court,Suite U,49431
+373,231,146,147,310,Liberty,1,Richland County,OH,bar,Main ,38,Avenue,Suite 240,43451
+333,248,178,156,289,Pleasant Hill,1,Franklin Parish,LA,bar,Valley ,383,Court,Suite G,73604
+319,262,169,157,298,Salem,1,Franklin Parish,LA,bar,Walnut Jackson,43,Wy,Suite B,78048
+321,224,148,162,298,Greenwood,1,Ziebach County,SD,bar,Church Central,463,Wy,Suite B,58828
+299,257,183,152,283,Pleasant Valley,1,Barrow County,GA,bar,Railroad Oak,488,ST,Suite 280,32477
+331,256,168,152,336,Liberty,1,Richland County,OH,bar,Ash Fourth,507,Blvd,Suite I,43451
+316,251,154,187,297,Riverside,1,Richland County,OH,bar,View ,594,Ave,Suite 120,49231
+344,277,149,171,313,Union,1,Franklin Parish,LA,bar,Park ,608,Blvd,Suite S,78721
+333,292,136,159,328,Pleasant Hill,1,Williamson County,TN,bar,Smith Walnut,624,Street,Suite 250,33604
+339,237,177,156,358,Shady Grove,1,Luce County,MI,bar,Valley Johnson,631,Ct.,Suite D,42812
+369,303,128,182,313,Riverside,1,Ziebach County,SD,bar,4th Smith,709,RD,Suite 410,59231
+296,218,161,155,312,Riverside,1,Franklin Parish,LA,bar,Pine ,71,Road,Suite 210,79231
+331,260,150,155,301,New Hope,1,Franklin Parish,LA,bar,Birch ,743,Avenue,Suite 330,79431
+305,236,131,158,347,Pleasant Hill,1,Luce County,MI,bar,View ,752,Wy,Suite 160,43604
+327,230,192,158,300,Five Points,1,Williamson County,TN,bar,Sunset ,764,Ave,Suite 410,36098
+322,271,180,155,324,Mount Pleasant,1,Walker County,AL,bar,Second Main,766,Court,Suite 140,31933
+342,263,144,161,310,Greenwood,1,Luce County,MI,bar,3rd Valley,825,Boulevard,Suite 340,48828
+356,259,157,169,361,Mount Pleasant,1,Daviess County,MO,bar,14th Pine,872,Street,Suite 340,61933
+357,227,159,160,329,Mount Pleasant,1,Luce County,MI,bar,1st Meadow,899,Ct.,Suite 290,41933
+338,244,148,151,333,New Hope,1,Williamson County,TN,bar,6th ,904,ST,Suite W,39431
+317,256,140,175,333,Pleasant Grove,1,Williamson County,TN,bar,1st ,92,Cir.,Suite X,34136
+336,261,171,142,300,Centerville,1,Franklin Parish,LA,bar,View Valley,943,Pkwy,Suite 270,70059
+347,284,140,145,334,Salem,1,Fairfield County,SC,bar,Lake ,952,Boulevard,Suite F,28048
+345,241,179,183,321,Greenwood,1,Ziebach County,SD,bar,Valley Ridge,982,ST,Suite 380,58828
+326,245,142,177,328,Centerville,1,Richland County,OH,cally,Highland Ridge,113,Street,Suite K,40059
+345,238,184,161,314,Greenwood,1,Williamson County,TN,cally,Ninth ,116,Street,Suite 480,38828
+301,243,193,150,319,Midway,1,Fairfield County,SC,cally,Willow ,121,Ave,Suite 250,21904
+290,251,150,146,355,Greenwood,1,Ziebach County,SD,cally,Sixth ,126,Street,Suite H,58828
+284,276,168,143,328,Salem,1,Daviess County,MO,cally,Fourth Fifth,140,Court,Suite 180,68048
+330,229,167,145,329,Pleasant Grove,1,Ziebach County,SD,cally,Wilson North,18,Pkwy,Suite K,54136
+327,255,149,158,350,Pleasant Valley,1,Ziebach County,SD,cally,Ash Laurel,19,Ct.,Suite I,52477
+320,255,172,142,305,Oak Grove,1,Franklin Parish,LA,cally,Hillcrest Adams,253,Avenue,Suite 410,78370
+334,261,160,149,294,Five Points,1,Williamson County,TN,cally,Poplar ,260,Ave,Suite Y,36098
+311,238,156,148,348,Fairview,1,Fairfield County,SC,cally,Elevnth 10th,344,Court,Suite 440,25709
+362,253,145,146,311,Union,1,Daviess County,MO,cally,Main ,355,ST,Suite 240,68721
+333,251,159,148,347,Salem,1,Ziebach County,SD,cally,Green Poplar,387,Drive,Suite 180,58048
+336,252,151,173,332,Liberty,1,Luce County,MI,cally,13th ,426,Wy,Suite V,43451
+332,293,161,149,328,Five Points,1,Franklin Parish,LA,cally,Elevnth Seventh,468,Parkway,Suite O,76098
+310,209,170,155,313,Greenwood,1,Luce County,MI,cally,Main ,502,Boulevard,Suite I,48828
+303,260,128,135,322,Union,1,Walker County,AL,cally,Center Spruce,617,Drive,Suite I,38721
+326,256,164,150,306,Oakland,1,Fairfield County,SC,cally,9th ,620,Pkwy,Suite 10,29843
+285,241,150,164,292,Liberty,1,Fairfield County,SC,cally,Mill Forest,640,Way,Suite 470,23451
+345,246,165,147,321,Riverside,1,Daviess County,MO,cally,Third Ash,706,Pkwy,Suite 170,69231

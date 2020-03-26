@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:aac3366abd9f026fa658d9088aadc2528efa65ffa561c028c9238509c51ec4c6
-size 1084
+call_center,call_center_name,manager,returns_loss
+AAAAAAAAIAAAAAAA,California,Samuel Mccoy,4531.22
+AAAAAAAAGBAAAAAA,Hawaii/Alaska_1,Richard Gray,3055.0
+AAAAAAAAHAAAAAAA,Pacific Northwest,Kevin Lester,2315.76
+AAAAAAAAKAAAAAAA,Hawaii/Alaska,Robt Ridley,2127.28
+AAAAAAAAABAAAAAA,North Midwest_1,Thomas Keith,1881.02
+AAAAAAAAEBAAAAAA,California_1,Paul Meyers,1285.92
+AAAAAAAAOAAAAAAA,Mid Atlantic_1,Christopher Mosley,1267.09
+AAAAAAAADBAAAAAA,Pacific Northwest_1,Steven Parker,959.0
+AAAAAAAAGBAAAAAA,Hawaii/Alaska_1,Richard Gray,815.2
+AAAAAAAAEAAAAAAA,North Midwest,David Gabriel,536.69
+AAAAAAAABAAAAAAA,NY Metro,Bradley Kelly,479.15
+AAAAAAAAABAAAAAA,North Midwest_1,Thomas Keith,394.38
+AAAAAAAAEAAAAAAA,North Midwest,David Gabriel,368.91
+AAAAAAAABAAAAAAA,NY Metro,Bradley Kelly,298.35
+AAAAAAAAEBAAAAAA,California_1,Paul Meyers,290.02
+AAAAAAAAKAAAAAAA,Hawaii/Alaska,Robt Ridley,251.58
+AAAAAAAACAAAAAAA,Mid Atlantic,Peter Jones,214.67
+AAAAAAAAIAAAAAAA,California,Samuel Mccoy,157.3
+AAAAAAAANAAAAAAA,NY Metro_1,Chauncey Hurt,152.76
+AAAAAAAAOAAAAAAA,Mid Atlantic_1,Christopher Mosley,108.13

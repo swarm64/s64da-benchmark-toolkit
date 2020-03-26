@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:cd8efdaae901c899b8fe18fd86730c1fccf0d58a66a0eb9b65cccf408c7adfcc
-size 6402
+i_brand,i_category,i_class,i_product_name,qoh
+importoexporti #1,Children,infants,ablecallybarableantiable,456.5753694581281
+importoexporti #1,,infants,ablecallybarableantiable,456.5753694581281
+importoexporti #1,,,ablecallybarableantiable,456.5753694581281
+,,,ablecallybarableantiable,456.5753694581281
+brandmaxi #8,Books,reference,oughtoughtationableanti,461.8882235528942
+brandmaxi #8,,reference,oughtoughtationableanti,461.8882235528942
+brandmaxi #8,,,oughtoughtationableanti,461.8882235528942
+,,,oughtoughtationableanti,461.8882235528942
+brandnameless #5,Sports,hockey,eseantieseeingn stought,462.1199207135778
+brandnameless #5,,hockey,eseantieseeingn stought,462.1199207135778
+brandnameless #5,,,eseantieseeingn stought,462.1199207135778
+,,,eseantieseeingn stought,462.1199207135778
+edu packamalg #1,Women,swimwear,ableablen stoughtableought,462.2546705998033
+edu packamalg #1,,swimwear,ableablen stoughtableought,462.2546705998033
+edu packamalg #1,,,ableablen stoughtableought,462.2546705998033
+,,,ableablen stoughtableought,462.2546705998033
+edu packbrand #6,Home,curtains/drapes,antiablecallyablebarought,465.044731610338
+edu packbrand #6,,curtains/drapes,antiablecallyablebarought,465.044731610338
+edu packbrand #6,,,antiablecallyablebarought,465.044731610338
+,,,antiablecallyablebarought,465.044731610338
+corpmaxi #3,Books,parenting,eseantioughtablecallyable,465.30723488602575
+corpmaxi #3,,parenting,eseantioughtablecallyable,465.30723488602575
+corpmaxi #3,,,eseantioughtablecallyable,465.30723488602575
+,,,eseantioughtablecallyable,465.30723488602575
+brandunivamalg #13,Electronics,personal,priantin stcallybarable,465.3201189296333
+brandunivamalg #13,,personal,priantin stcallybarable,465.3201189296333
+brandunivamalg #13,,,priantin stcallybarable,465.3201189296333
+,,,priantin stcallybarable,465.3201189296333
+importoamalg #2,Women,fragrances,n stationantiantieing,465.53923541247485
+importoamalg #2,,fragrances,n stationantiantieing,465.53923541247485
+importoamalg #2,,,n stationantiantieing,465.53923541247485
+,,,n stationantiantieing,465.53923541247485
+scholaramalgamalg #13,Electronics,portable,oughtbarbarcallypri,465.609
+scholaramalgamalg #13,,portable,oughtbarbarcallypri,465.609
+scholaramalgamalg #13,,,oughtbarbarcallypri,465.609
+,,,oughtbarbarcallypri,465.609
+corpunivamalg #9,Books,mystery,eingbaroughtablepri,465.65583756345177
+corpunivamalg #9,,mystery,eingbaroughtablepri,465.65583756345177
+corpunivamalg #9,,,eingbaroughtablepri,465.65583756345177
+,,,eingbaroughtablepri,465.65583756345177
+importounivamalg #9,Books,home repair,esebaroughtn stantiought,465.90060240963857
+importounivamalg #9,,home repair,esebaroughtn stantiought,465.90060240963857
+importounivamalg #9,,,esebaroughtn stantiought,465.90060240963857
+,,,esebaroughtn stantiought,465.90060240963857
+exportiamalgamalg #13,Electronics,stereo,n stantiationprieingable,466.1466535433071
+exportiamalgamalg #13,,stereo,n stantiationprieingable,466.1466535433071
+exportiamalgamalg #13,,,n stantiationprieingable,466.1466535433071
+,,,n stantiationprieingable,466.1466535433071
+exportiunivamalg #8,Books,self-help,antiprieingbaroughtable,466.27005870841487
+exportiunivamalg #8,,self-help,antiprieingbaroughtable,466.27005870841487
+exportiunivamalg #8,,,antiprieingbaroughtable,466.27005870841487
+,,,antiprieingbaroughtable,466.27005870841487
+scholarcorp #1,Jewelry,earings,barableoughtbaroughtought,466.4371909000989
+scholarcorp #1,,earings,barableoughtbaroughtought,466.4371909000989
+scholarcorp #1,,,barableoughtbaroughtought,466.4371909000989
+,,,barableoughtbaroughtought,466.4371909000989
+importounivamalg #9,Books,home repair,callyn stationn stought,466.5836653386454
+importounivamalg #9,,home repair,callyn stationn stought,466.5836653386454
+importounivamalg #9,,,callyn stationn stought,466.5836653386454
+,,,callyn stationn stought,466.5836653386454
+scholarmaxi #8,Books,history,ationcallycallyoughtbarable,466.5966303270565
+scholarmaxi #8,,history,ationcallycallyoughtbarable,466.5966303270565
+scholarmaxi #8,,,ationcallycallyoughtbarable,466.5966303270565
+,,,ationcallycallyoughtbarable,466.5966303270565
+univnameless #3,Home,flatware,ableationeingprieingought,466.643495531281
+univnameless #3,,flatware,ableationeingprieingought,466.643495531281
+univnameless #3,,,ableationeingprieingought,466.643495531281
+,,,ableationeingprieingought,466.643495531281
+exportibrand #1,Home,kids,baroughtprioughtbarable,466.6777996070727
+exportibrand #1,,kids,baroughtprioughtbarable,466.6777996070727
+exportibrand #1,,,baroughtprioughtbarable,466.6777996070727
+,,,baroughtprioughtbarable,466.6777996070727
+exportinameless #5,Home,wallpaper,esebarationesecallyought,466.8160804020101
+exportinameless #5,,wallpaper,esebarationesecallyought,466.8160804020101
+exportinameless #5,,,esebarationesecallyought,466.8160804020101
+,,,esebarationesecallyought,466.8160804020101
+edu packamalg #1,Women,swimwear,esen stcallyoughtn st,466.8222003929273
+edu packamalg #1,,swimwear,esen stcallyoughtn st,466.8222003929273
+edu packamalg #1,,,esen stcallyoughtn st,466.8222003929273
+,,,esen stcallyoughtn st,466.8222003929273
+edu packexporti #1,Children,school-uniforms,ableoughteingeingeingought,466.8832335329341
+edu packexporti #1,,school-uniforms,ableoughteingeingeingought,466.8832335329341
+edu packexporti #1,,,ableoughteingeingeingought,466.8832335329341
+,,,ableoughteingeingeingought,466.8832335329341
+importonameless #1,Sports,baseball,barcallyableeingought,466.9620758483034
+importonameless #1,,baseball,barcallyableeingought,466.9620758483034
+importonameless #1,,,barcallyableeingought,466.9620758483034
+,,,barcallyableeingought,466.9620758483034
+amalgunivamalg #8,Books,cooking,antiationeingn stoughtought,467.0178217821782
+amalgunivamalg #8,,cooking,antiationeingn stoughtought,467.0178217821782
+amalgunivamalg #8,,,antiationeingn stoughtought,467.0178217821782
+,,,antiationeingn stoughtought,467.0178217821782
+exportiedu pack #1,Shoes,kids,ableoughteseationeing,467.02297702297705
+exportiedu pack #1,,kids,ableoughteseationeing,467.02297702297705
+exportiedu pack #1,,,ableoughteseationeing,467.02297702297705
+,,,ableoughteseationeing,467.02297702297705
+edu packscholar #1,Music,classical,eingcallyanticallyableought,467.20675944333993
+edu packscholar #1,,classical,eingcallyanticallyableought,467.20675944333993
+edu packscholar #1,,,eingcallyanticallyableought,467.20675944333993
+,,,eingcallyanticallyableought,467.20675944333993

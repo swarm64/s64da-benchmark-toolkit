@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0d2b2d0f0d2de676fb56df7f5484d9f341a192a033e0765f159a106a12f9b294
-size 5759
+30 days,31-60,61-90,91-120,>120 days,cc_name,sm_type,substr
+1467,1191,1008,0,0,California,EXPRESS,About slight way
+1484,1203,1048,0,0,California_1,EXPRESS,About slight way
+1318,1208,1010,0,0,Hawaii/Alaska,EXPRESS,About slight way
+1358,1141,999,0,0,Hawaii/Alaska_1,EXPRESS,About slight way
+1409,1170,978,0,0,Mid Atlantic,EXPRESS,About slight way
+1410,1177,972,0,0,Mid Atlantic_1,EXPRESS,About slight way
+1404,1204,969,0,0,North Midwest,EXPRESS,About slight way
+1317,1217,1004,0,0,North Midwest_1,EXPRESS,About slight way
+1500,1199,979,0,0,NY Metro,EXPRESS,About slight way
+1396,1192,989,0,0,NY Metro_1,EXPRESS,About slight way
+1368,1188,999,0,0,Pacific Northwest,EXPRESS,About slight way
+1349,1177,988,0,0,Pacific Northwest_1,EXPRESS,About slight way
+1091,918,764,0,0,California,LIBRARY,About slight way
+1063,868,712,0,0,California_1,LIBRARY,About slight way
+1052,940,763,0,0,Hawaii/Alaska,LIBRARY,About slight way
+1040,842,730,0,0,Hawaii/Alaska_1,LIBRARY,About slight way
+1049,944,775,0,0,Mid Atlantic,LIBRARY,About slight way
+1100,921,702,0,0,Mid Atlantic_1,LIBRARY,About slight way
+1030,867,707,0,0,North Midwest,LIBRARY,About slight way
+1061,889,750,0,0,North Midwest_1,LIBRARY,About slight way
+1101,898,738,0,0,NY Metro,LIBRARY,About slight way
+1070,933,753,0,0,NY Metro_1,LIBRARY,About slight way
+1047,887,700,0,0,Pacific Northwest,LIBRARY,About slight way
+1051,938,775,0,0,Pacific Northwest_1,LIBRARY,About slight way
+1398,1260,943,0,0,California,NEXT DAY,About slight way
+1397,1125,969,0,0,California_1,NEXT DAY,About slight way
+1354,1176,966,0,0,Hawaii/Alaska,NEXT DAY,About slight way
+1419,1205,945,0,0,Hawaii/Alaska_1,NEXT DAY,About slight way
+1458,1151,957,0,0,Mid Atlantic,NEXT DAY,About slight way
+1431,1229,971,0,0,Mid Atlantic_1,NEXT DAY,About slight way
+1436,1173,930,0,0,North Midwest,NEXT DAY,About slight way
+1440,1231,933,0,0,North Midwest_1,NEXT DAY,About slight way
+1404,1194,985,0,0,NY Metro,NEXT DAY,About slight way
+1328,1186,979,0,0,NY Metro_1,NEXT DAY,About slight way
+1385,1195,911,0,0,Pacific Northwest,NEXT DAY,About slight way
+1325,1154,928,0,0,Pacific Northwest_1,NEXT DAY,About slight way
+1087,906,746,0,0,California,OVERNIGHT,About slight way
+1089,918,715,0,0,California_1,OVERNIGHT,About slight way
+1077,873,755,0,0,Hawaii/Alaska,OVERNIGHT,About slight way
+1053,956,699,0,0,Hawaii/Alaska_1,OVERNIGHT,About slight way
+1014,906,742,0,0,Mid Atlantic,OVERNIGHT,About slight way
+1101,915,748,0,0,Mid Atlantic_1,OVERNIGHT,About slight way
+1051,933,686,0,0,North Midwest,OVERNIGHT,About slight way
+1089,911,703,0,0,North Midwest_1,OVERNIGHT,About slight way
+1034,973,732,0,0,NY Metro,OVERNIGHT,About slight way
+1067,948,727,0,0,NY Metro_1,OVERNIGHT,About slight way
+1050,891,707,0,0,Pacific Northwest,OVERNIGHT,About slight way
+1076,904,746,0,0,Pacific Northwest_1,OVERNIGHT,About slight way
+1125,915,791,0,0,California,REGULAR,About slight way
+1052,878,741,0,0,California_1,REGULAR,About slight way
+1096,872,749,0,0,Hawaii/Alaska,REGULAR,About slight way
+1060,910,757,0,0,Hawaii/Alaska_1,REGULAR,About slight way
+1044,881,763,0,0,Mid Atlantic,REGULAR,About slight way
+1070,916,753,0,0,Mid Atlantic_1,REGULAR,About slight way
+1015,862,754,0,0,North Midwest,REGULAR,About slight way
+1056,933,721,0,0,North Midwest_1,REGULAR,About slight way
+1065,894,766,0,0,NY Metro,REGULAR,About slight way
+1063,919,711,0,0,NY Metro_1,REGULAR,About slight way
+1030,901,707,0,0,Pacific Northwest,REGULAR,About slight way
+998,899,721,0,0,Pacific Northwest_1,REGULAR,About slight way
+1058,941,747,0,0,California,TWO DAY,About slight way
+1102,881,762,0,0,California_1,TWO DAY,About slight way
+1014,894,771,0,0,Hawaii/Alaska,TWO DAY,About slight way
+1067,858,683,0,0,Hawaii/Alaska_1,TWO DAY,About slight way
+1034,929,698,0,0,Mid Atlantic,TWO DAY,About slight way
+1104,866,772,0,0,Mid Atlantic_1,TWO DAY,About slight way
+1064,888,741,0,0,North Midwest,TWO DAY,About slight way
+1022,898,714,0,0,North Midwest_1,TWO DAY,About slight way
+1008,886,705,0,0,NY Metro,TWO DAY,About slight way
+1008,887,725,0,0,NY Metro_1,TWO DAY,About slight way
+1016,857,718,0,0,Pacific Northwest,TWO DAY,About slight way
+1076,892,706,0,0,Pacific Northwest_1,TWO DAY,About slight way
+1396,1208,1044,0,0,California,EXPRESS,Both obvious tic
+1470,1175,994,0,0,California_1,EXPRESS,Both obvious tic
+1379,1222,979,0,0,Hawaii/Alaska,EXPRESS,Both obvious tic
+1439,1254,971,0,0,Hawaii/Alaska_1,EXPRESS,Both obvious tic
+1398,1242,974,0,0,Mid Atlantic,EXPRESS,Both obvious tic
+1430,1229,1013,0,0,Mid Atlantic_1,EXPRESS,Both obvious tic
+1407,1205,990,0,0,North Midwest,EXPRESS,Both obvious tic
+1387,1232,921,0,0,North Midwest_1,EXPRESS,Both obvious tic
+1419,1169,970,0,0,NY Metro,EXPRESS,Both obvious tic
+1326,1208,990,0,0,NY Metro_1,EXPRESS,Both obvious tic
+1421,1135,984,0,0,Pacific Northwest,EXPRESS,Both obvious tic
+1377,1191,971,0,0,Pacific Northwest_1,EXPRESS,Both obvious tic
+1078,906,764,0,0,California,LIBRARY,Both obvious tic
+1101,894,705,0,0,California_1,LIBRARY,Both obvious tic
+1056,856,757,0,0,Hawaii/Alaska,LIBRARY,Both obvious tic
+1023,927,707,0,0,Hawaii/Alaska_1,LIBRARY,Both obvious tic
+1054,932,762,0,0,Mid Atlantic,LIBRARY,Both obvious tic
+1065,864,761,0,0,Mid Atlantic_1,LIBRARY,Both obvious tic
+1125,906,698,0,0,North Midwest,LIBRARY,Both obvious tic
+1047,903,700,0,0,North Midwest_1,LIBRARY,Both obvious tic
+1004,961,710,0,0,NY Metro,LIBRARY,Both obvious tic
+1038,859,683,0,0,NY Metro_1,LIBRARY,Both obvious tic
+1022,886,753,0,0,Pacific Northwest,LIBRARY,Both obvious tic
+1054,921,734,0,0,Pacific Northwest_1,LIBRARY,Both obvious tic
+1428,1200,989,0,0,California,NEXT DAY,Both obvious tic
+1398,1209,979,0,0,California_1,NEXT DAY,Both obvious tic
+1448,1183,993,0,0,Hawaii/Alaska,NEXT DAY,Both obvious tic
+1357,1243,965,0,0,Hawaii/Alaska_1,NEXT DAY,Both obvious tic

@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:15fbe3a5c619eaf4a1099c06109b0d4185ff72764be85ef73ea6b91b1f226fe5
-size 3431
+brand,brand_id,ext_price
+importoexporti #2,3002002,761409.8
+exportiamalg #2,1003002,658788.91
+exportischolar #2,5003002,619313.16
+amalgscholar #2,5001002,617869.3
+amalgimporto #2,2001002,573669.47
+edu packexporti #2,3004002,547036.76
+exportiexporti #2,3003002,525591.02
+amalgamalg #2,1001002,524851.28
+amalgedu pack #2,4001002,516607.72
+amalgexporti #2,3001002,516274.34
+exportiimporto #2,2003002,512919.87
+importoscholar #2,5002002,483180.98
+edu packedu pack #2,4004002,479129.17
+importoedu pack #2,4002002,475253.99
+edu packamalg #2,1004002,428928.44
+importoamalg #2,1002002,426342.89
+importoimporto #2,2002002,423585.21
+edu packimporto #2,2004002,387091.6
+exportiedu pack #2,4003002,376515.12
+edu packscholar #2,5004002,260384.77
+edu packnameless #10,8004010,141225.64
+namelessbrand #6,7008006,139054.11
+maximaxi #8,9009008,138054.44
+corpunivamalg #7,10006007,136781.11
+importonameless #4,8002004,134260.32
+importonameless #2,7012002,124375.55
+univnameless #2,7010002,122448.89
+amalgscholar #2,2003001,115031.78
+amalgmaxi #2,9001002,100063.74
+importonameless #10,7012010,99224.32
+edu packcorp #8,6004008,98329.85
+scholaramalgamalg #11,10015011,98279.65
+edu packmaxi #2,8014002,98239.48
+importonameless #2,8002002,98000.55
+univmaxi #8,8010008,96637.27
+maxicorp #2,6009002,95386.78
+importobrand #4,6012004,94060.58
+namelessbrand #2,7008002,93579.16
+maxinameless #4,8009004,88885.39
+corpunivamalg #6,9016006,88867.13
+amalgbrand #4,7001004,88019.74
+namelessnameless #4,8008004,87502.25
+scholarnameless #4,7015004,87407.35
+exportiimporto #2,4001001,86487.82
+maximaxi #4,9009004,82687.86
+amalgmaxi #8,8011008,81805.35
+importoedu pack #2,6009005,79894.87
+maxibrand #8,7009008,79214.04
+univmaxi #6,8010006,79109.38
+scholarcorp #2,6005002,77915.66
+scholarcorp #8,10013017,77795.58
+edu packmaxi #6,8014006,77706.56
+scholarmaxi #10,8015010,75000.31
+maxibrand #4,7009004,74689.79
+maxibrand #10,7009010,73416.01
+amalgbrand #4,6011004,71973.42
+edu packbrand #8,7004008,71382.76
+univamalgamalg #4,10010004,71003.84
+corpnameless #8,7016008,70880.38
+corpcorp #2,6006002,70790.43
+corpmaxi #10,1004001,70672.12
+scholarnameless #2,7015002,70196.62
+importobrand #6,6012006,69640.35
+exportiimporto #2,2003001,69225.98
+scholarunivamalg #6,2004001,69000.83
+scholarcorp #8,6005008,68041.8
+exportiedu pack #2,8003003,67770.19
+scholarbrand #4,6015004,67598.76
+importoimporto #2,1004001,67362.79
+exportiunivamalg #3,10003003,67316.57
+edu packunivamalg #10,3004001,65576.35
+corpamalgamalg #3,10016003,65480.2
+scholarcorp #6,6005006,65097.92
+corpunivamalg #15,10006015,64238.7
+edu packnameless #8,7014008,64043.24
+amalgbrand #6,5001001,63714.18
+univunivamalg #6,9010006,63366.02
+edu packamalgamalg #6,10014006,63097.32
+corpbrand #10,7006010,62233.38
+amalgnameless #4,7011004,61789.23
+importomaxi #2,9002002,61133.11
+edu packnameless #4,7014004,60600.0
+importounivamalg #13,9011003,60378.48
+amalgmaxi #10,2002001,60292.82
+corpcorp #4,6006004,60237.11
+exportimaxi #12,3004001,59969.35
+brandnameless #6,8007006,59956.28
+exportinameless #2,8003002,59911.28
+scholaramalgamalg #14,10015014,59794.83
+corpunivamalg #10,10006010,59629.69
+exportiedu pack #2,9006011,59029.91
+edu packbrand #8,6003007,57979.24
+amalgexporti #2,2002001,57977.91
+importobrand #4,7002004,57580.59
+corpunivamalg #1,10006001,57331.18
+corpmaxi #4,8016004,57265.81
+maxicorp #4,6009004,57028.04
+univunivamalg #12,9010012,57004.13
+edu packbrand #6,6014006,56945.95
+amalgbrand #6,8005003,56881.02

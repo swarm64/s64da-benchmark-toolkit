@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bd46b7aca2ea43ef043381fd7b8fceba7860fd41d0077d84775dfd0ee598e10c
-size 644
+lochierarchy,rank_within_parent,s_county,s_state,total_sum
+2,1,,,-43316506132.66
+1,1,,AL,-3672251047.96
+1,2,,MO,-3680289730.05
+1,3,,SD,-4104814663.62
+1,4,,OH,-4551556151.53
+1,5,,SC,-4973586774.59
+1,6,,MI,-4979682690.05
+1,7,,GA,-5199951413.91
+1,8,,TN,-5637301337.3
+1,9,,LA,-6517072323.65
+0,1,Walker County,AL,-3672251047.96
+0,1,Barrow County,GA,-5199951413.91
+0,1,Franklin Parish,LA,-6517072323.65
+0,1,Luce County,MI,-4979682690.05
+0,1,Daviess County,MO,-3680289730.05
+0,1,Richland County,OH,-4551556151.53
+0,1,Fairfield County,SC,-4973586774.59
+0,1,Ziebach County,SD,-4104814663.62
+0,1,,TN,-219772514.62
+0,2,Williamson County,TN,-5417528822.68

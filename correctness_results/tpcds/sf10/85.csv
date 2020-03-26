@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6c5c46c95f5817cdf4327759deefd104465a911a55845cdc003f69385014b9ee
-size 573
+avg1,avg2,avg3,col1
+4.0,37.21,48.83,Did not like the war
+52.0,4237.06,54.58,Does not work with a
+73.0,1050.76,11.59,duplicate purchase
+10.0,18.34,55.09,Found a better price
+2.0,4.01,19.9,Package was damaged
+18.0,132.1,17.21,reason 28
+47.5,1236.075,32.34,reason 29
+8.0,179.06,12.13,reason 32
+7.0,169.51,8.39,reason 33
+41.0,2365.5,79.52,reason 34
+3.0,74.14,27.6,reason 38
+11.0,15.13,25.95,reason 39
+3.0,168.255,70.765,reason 41
+1.0,118.07,83.39,reason 43
+21.0,462.27,18.29,reason 44
+4.0,123.12,85.47,unauthoized purchase
+17.333333333333332,89.16666666666667,58.71,Wrong size

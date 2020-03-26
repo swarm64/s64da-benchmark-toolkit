@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4dc1b2e322403deeffb13cf4661b0aa48fedd335476f74d1ba9fdf8c133d8926
-size 286
+d_year,i_category,i_category_id,sum
+2000,Shoes,4,3637122.76
+2000,Books,9,3539491.91
+2000,Men,2,3394880.79
+2000,Children,3,3163314.13
+2000,Jewelry,6,3141633.62
+2000,Home,7,3107735.48
+2000,Music,5,3004529.96
+2000,Sports,8,2981197.15
+2000,Electronics,10,2734159.05
+2000,Women,1,2644245.28

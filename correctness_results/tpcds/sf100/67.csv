@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:88acd8f096e2c931c8add3e0479e4548e32a49b2c3dfd550299775cb94efdc72
-size 5001
+d_moy,d_qoy,d_year,i_brand,i_category,i_class,i_product_name,rk,s_store_id,sumsales
+,,,amalgmaxi #11,Books,arts,,36,,115185757.42
+,,,amalgmaxi #2,Books,arts,,71,,101743699.53
+,,,amalgmaxi #3,Books,arts,,47,,108561480.11
+,,,amalgmaxi #5,Books,arts,,89,,97294493.65
+,,,amalgmaxi #8,Books,arts,,41,,112657044.29
+,,,amalgmaxi #9,Books,arts,,50,,107399865.68
+,,,,Books,arts,,4,,642842340.68
+,,,importomaxi #11,Books,business,,74,,100935524.67
+,,,importomaxi #2,Books,business,,77,,100345046.38
+,,,importomaxi #3,Books,business,,19,,125182357.45
+,,,importomaxi #5,Books,business,,46,,108846233.36
+,,,importomaxi #8,Books,business,,23,,120504547.57
+,,,importomaxi #9,Books,business,,49,,107594601.68
+,,,,Books,business,,2,,663408311.11
+,,,exportimaxi #11,Books,computers,,78,,100076090.6
+,,,exportimaxi #2,Books,computers,,86,,98258573.26
+,,,exportimaxi #3,Books,computers,,42,,112617447.57
+,,,exportimaxi #5,Books,computers,,25,,119739824.21
+,,,exportimaxi #8,Books,computers,,35,,115313261.88
+,,,exportimaxi #9,Books,computers,,98,,93499983.18
+,,,,Books,computers,,5,,641546308.75
+,,,amalgunivamalg #2,Books,cooking,,37,,114010405.47
+,,,amalgunivamalg #3,Books,cooking,,65,,104162012.38
+,,,amalgunivamalg #8,Books,cooking,,33,,116491547.1
+,,,amalgunivamalg #9,Books,cooking,,20,,121880661.5
+,,,,Books,cooking,,6,,640646009.46
+,,,edu packmaxi #11,Books,entertainments,,81,,99288517.69
+,,,edu packmaxi #2,Books,entertainments,,26,,119471701.99
+,,,edu packmaxi #3,Books,entertainments,,38,,113787586.52
+,,,edu packmaxi #5,Books,entertainments,,90,,97192636.33
+,,,edu packmaxi #8,Books,entertainments,,55,,106224432.92
+,,,edu packmaxi #9,Books,entertainments,,75,,100924972.17
+,,,,Books,entertainments,,7,,636889847.62
+,,,scholarunivamalg #11,Books,fiction,,18,,126625856.13
+,,,scholarunivamalg #2,Books,fiction,,92,,96825467.04
+,,,scholarunivamalg #3,Books,fiction,,61,,104836798.68
+,,,scholarunivamalg #5,Books,fiction,,40,,113529301.76
+,,,scholarunivamalg #9,Books,fiction,,22,,121097641.8
+,,,,Books,fiction,,3,,647066536.65
+,,,scholarmaxi #11,Books,history,,73,,101007470.29
+,,,scholarmaxi #2,Books,history,,58,,105731394.23
+,,,scholarmaxi #8,Books,history,,21,,121695327.25
+,,,scholarmaxi #9,Books,history,,72,,101521739.68
+,,,,Books,history,,13,,613737742.33
+,,,importounivamalg #11,Books,home repair,,99,,93221219.9
+,,,importounivamalg #3,Books,home repair,,29,,118646378.82
+,,,importounivamalg #5,Books,home repair,,84,,98620253.83
+,,,importounivamalg #8,Books,home repair,,56,,105945964.45
+,,,importounivamalg #9,Books,home repair,,85,,98275098.11
+,,,,Books,home repair,,16,,605647161.21
+,,,corpunivamalg #11,Books,mystery,,24,,119786662.13
+,,,corpunivamalg #2,Books,mystery,,43,,110744811.27
+,,,corpunivamalg #3,Books,mystery,,52,,106900314.85
+,,,corpunivamalg #5,Books,mystery,,91,,97047400.36
+,,,corpunivamalg #9,Books,mystery,,44,,109939188.21
+,,,,Books,mystery,,8,,632903998.58
+,,,corpmaxi #11,Books,parenting,,76,,100633069.17
+,,,corpmaxi #2,Books,parenting,,27,,119167602.71
+,,,corpmaxi #3,Books,parenting,,51,,107012679.24
+,,,corpmaxi #5,Books,parenting,,53,,106419988.99
+,,,corpmaxi #8,Books,parenting,,100,,92498330.1
+,,,corpmaxi #9,Books,parenting,,68,,103265643.36
+,,,,Books,parenting,,9,,628997313.57
+,,,brandmaxi #11,Books,reference,,48,,108520450.31
+,,,brandmaxi #2,Books,reference,,54,,106282229.78
+,,,brandmaxi #3,Books,reference,,30,,118618072.62
+,,,brandmaxi #8,Books,reference,,57,,105782978.88
+,,,,Books,reference,,10,,623358739.12
+,,,namelessmaxi #11,Books,romance,,82,,98987599.0
+,,,namelessmaxi #2,Books,romance,,88,,97671467.08
+,,,namelessmaxi #3,Books,romance,,64,,104330293.87
+,,,namelessmaxi #5,Books,romance,,59,,105674037.17
+,,,namelessmaxi #9,Books,romance,,34,,115572817.83
+,,,,Books,romance,,15,,606783274.07
+,,,maximaxi #11,Books,science,,62,,104754384.86
+,,,maximaxi #2,Books,science,,60,,105192160.3
+,,,maximaxi #3,Books,science,,80,,99919827.1
+,,,maximaxi #5,Books,science,,79,,99987226.4
+,,,maximaxi #8,Books,science,,95,,94316343.73
+,,,maximaxi #9,Books,science,,31,,117510848.6
+,,,,Books,science,,11,,621680790.99
+,,,exportiunivamalg #11,Books,self-help,,83,,98677313.54
+,,,exportiunivamalg #2,Books,self-help,,93,,96094695.46
+,,,exportiunivamalg #3,Books,self-help,,63,,104365599.04
+,,,exportiunivamalg #5,Books,self-help,,87,,98153490.77
+,,,exportiunivamalg #8,Books,self-help,,45,,109366148.16
+,,,exportiunivamalg #9,Books,self-help,,96,,94079342.12
+,,,,Books,self-help,,17,,600736589.09
+,,,edu packunivamalg #11,Books,sports,,39,,113627333.31
+,,,edu packunivamalg #3,Books,sports,,32,,117081266.04
+,,,edu packunivamalg #5,Books,sports,,70,,102814875.23
+,,,,Books,sports,,14,,606969852.7
+,,,univunivamalg #11,Books,travel,,66,,104030273.95
+,,,univunivamalg #2,Books,travel,,69,,102851194.46
+,,,univunivamalg #3,Books,travel,,67,,103919910.47
+,,,univunivamalg #5,Books,travel,,97,,93613003.92
+,,,univunivamalg #8,Books,travel,,28,,118845902.12
+,,,univunivamalg #9,Books,travel,,94,,95080990.44
+,,,,Books,travel,,12,,618341275.36
+,,,,Books,,,1,,10048268805.82
