@@ -380,3 +380,29 @@ def test_correctness_full_equal_text_shuffled(correctness):
 
     mismatch_idx = correctness._check_correctness_impl(truth, result)
     assert mismatch_idx == []
+
+
+def test_tpch_trailing_zeros(correctness):
+    # result has a number with trailing zeros: 5579227.675000000000
+    resultstr = '''i_category,d_year,d_moy,avg_monthly_sales,sum_sales,psum,nsum
+Women,2001,2,5579227.675000000000,2986084.99,3556172.43,3192346.92
+    '''
+
+    # truth hasn't trailing zeros: 5579227.675
+    truthstr = '''avg_monthly_sales,d_moy,d_year,i_category,nsum,psum,sum_sales
+5579227.675,2,2001,Women,3192346.92,3556172.43,2986084.99
+    '''
+
+    truth = pandas.read_csv(StringIO(truthstr))
+    # with float_precision='round_trip' option test passes
+    result = pandas.read_csv(StringIO(resultstr), float_precision='round_trip')
+    mismatch_idx = correctness._check_correctness_impl(truth, result)
+
+    assert mismatch_idx == []
+
+    truth = pandas.read_csv(StringIO(truthstr))
+    # without float_precision='round_trip' option, there is a mismatch
+    result = pandas.read_csv(StringIO(resultstr))
+    mismatch_idx = correctness._check_correctness_impl(truth, result)
+
+    assert mismatch_idx != []
