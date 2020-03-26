@@ -26,6 +26,19 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         'store_sales',
     )
 
+    PrepareBenchmarkFactory.SIZING_FACTORS = {
+        's64da': {
+            10: 0.75,
+            100: 0.85,
+            1000: 0.75,
+        },
+        'psql': {
+            10: 6.0,
+            100: 3.5,
+            1000: 3.0,
+        }
+    }
+
     def _stream_to_db(self, table):
         return (f"grep ^{table} | sed -r 's/^'{table}' (.*)/\\1/' | "
                 f"psql {self.args.dsn} -c \"COPY {table} FROM STDIN "
