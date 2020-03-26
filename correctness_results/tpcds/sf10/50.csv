@@ -1,3 +1,52 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:95ca9e08b478f2c62b56e137e74cdccd26b4233bc8454ca7997fcb322eea90b8
-size 4585
+30 days,31-60,61-90,91-120,>120 days,s_city,s_company_id,s_county,s_state,s_store_name,s_street_name,s_street_number,s_street_type,s_suite_number,s_zip
+138,95,65,66,131,Oak Grove,1,Williamson County,TN,able,Elm ,170,Pkwy,Suite 340,38370
+142,87,60,65,131,Oak Grove,1,Walker County,AL,able,Pine ,269,Ave,Suite A,38370
+143,107,64,73,144,Pleasant Hill,1,Walker County,AL,able,Spruce ,535,Lane,Suite 50,33604
+135,85,58,62,111,Oak Grove,1,Williamson County,TN,able,Elm ,566,Road,Suite 400,38370
+121,78,55,70,128,Midway,1,Williamson County,TN,able,Sycamore ,582,Ln,Suite 180,31904
+123,99,74,66,137,Midway,1,Williamson County,TN,able,3rd ,740,Parkway,Suite 320,31904
+115,122,69,59,128,Pleasant Hill,1,Williamson County,TN,able,3rd Second,883,Boulevard,Suite 350,33604
+129,102,70,65,135,Pleasant Hill,1,Ziebach County,SD,anti,5th ,645,Wy,Suite 130,53604
+120,111,55,54,133,Fairview,1,Ziebach County,SD,anti,Woodland ,703,Ct.,Suite 60,55709
+139,71,71,69,124,Midway,1,Walker County,AL,anti,4th Park,953,Blvd,Suite 10,31904
+128,104,65,61,129,Fairview,1,Walker County,AL,ation,Lincoln 11th,130,Court,Suite C,35709
+109,92,59,58,119,Fairview,1,Williamson County,TN,ation,Jefferson ,364,Road,Suite 80,35709
+128,96,65,61,107,Midway,1,Walker County,AL,ation,Third ,435,Drive,Suite R,31904
+142,88,55,58,132,Five Points,1,Williamson County,TN,ation,2nd ,52,Road,Suite K,36098
+118,95,74,69,108,Pleasant Hill,1,Williamson County,TN,bar,Franklin 2nd,307,Dr.,Suite 270,33604
+115,96,61,54,116,Pleasant Hill,1,Ziebach County,SD,bar,Church Central,463,Wy,Suite B,53604
+139,107,76,51,133,Riverside,1,Walker County,AL,bar,Park ,608,Blvd,Suite S,39231
+145,104,62,59,108,Riverside,1,Walker County,AL,bar,Valley Johnson,631,Ct.,Suite D,39231
+138,91,75,61,119,Pleasant Hill,1,Walker County,AL,bar,View ,752,Wy,Suite 160,33604
+130,106,62,57,108,Midway,1,Walker County,AL,bar,Second Main,766,Court,Suite 140,31904
+143,110,64,57,133,Pleasant Hill,1,Ziebach County,SD,bar,Valley Ridge,982,ST,Suite 380,53604
+124,86,66,74,122,Pleasant Hill,1,Williamson County,TN,cally,Ninth ,116,Street,Suite 480,33604
+126,94,65,63,110,Midway,1,Williamson County,TN,cally,Willow ,121,Ave,Suite 250,31904
+145,99,63,72,127,Fairview,1,Williamson County,TN,cally,9th ,620,Pkwy,Suite 10,35709
+139,95,52,71,118,Riverside,1,Williamson County,TN,cally,Third Ash,706,Pkwy,Suite 170,39231
+140,96,49,65,124,Midway,1,Walker County,AL,cally,Meadow Oak,82,Dr.,Suite A,31904
+146,103,64,52,97,Pleasant Hill,1,Walker County,AL,cally,2nd Locust,823,Ave,Suite 220,33604
+151,106,58,53,105,Riverside,1,Walker County,AL,eing,Park 9th,132,Lane,Suite 250,39231
+124,108,63,74,118,Midway,1,Walker County,AL,eing,Forest ,174,Lane,Suite 100,31904
+103,118,60,75,120,Fairview,1,Walker County,AL,eing,8th Hillcrest,392,Cir.,Suite 250,35709
+136,112,60,67,101,Riverside,1,Walker County,AL,eing,6th View,481,Parkway,Suite O,39231
+128,86,57,66,114,Fairview,1,Ziebach County,SD,eing,Meadow ,666,Road,Suite X,55709
+141,96,76,51,121,Riverside,1,Ziebach County,SD,eing,14th ,839,Court,Suite Q,59231
+133,119,78,80,132,Pleasant Hill,1,Walker County,AL,eing,Church West,893,Cir.,Suite A,33604
+145,108,73,55,120,Oak Grove,1,Walker County,AL,ese,Sycamore ,36,Ave,Suite 170,38370
+136,91,73,65,144,Oak Grove,1,Ziebach County,SD,ese,7th ,385,Boulevard,Suite 390,58370
+148,74,64,48,137,Midway,1,Williamson County,TN,ese,Sunset Pine,410,Ct.,Suite 390,31904
+103,104,56,81,146,Five Points,1,Ziebach County,SD,ese,Park ,504,Street,Suite 280,56098
+128,96,52,72,120,Riverside,1,Williamson County,TN,ese,Hill Hill,555,ST,Suite G,39231
+128,112,65,66,115,Oak Grove,1,Ziebach County,SD,ese,Lake Fifth,628,Lane,Suite V,58370
+122,88,72,71,139,Pleasant Hill,1,Williamson County,TN,ese,Elm North,761,Street,Suite 250,33604
+134,131,55,73,128,Riverside,1,Walker County,AL,n st,Sixth ,191,RD,Suite B,39231
+127,106,59,68,116,Midway,1,Williamson County,TN,n st,7th 11th,618,Boulevard,Suite 330,31904
+122,108,52,62,128,Riverside,1,Walker County,AL,n st,Cedar Spring,87,Lane,Suite 420,39231
+131,118,47,76,149,Oak Grove,1,Ziebach County,SD,ought,Center ,139,Dr.,Suite I,58370
+114,113,73,55,127,Riverside,1,Ziebach County,SD,ought,Ninth Hillcrest,332,Court,Suite 350,59231
+108,94,69,71,133,Oak Grove,1,Ziebach County,SD,ought,Lincoln ,427,Road,Suite O,58370
+125,91,68,60,100,Fairview,1,Ziebach County,SD,ought,Davis Birch,892,Way,Suite I,55709
+133,91,52,73,122,Oak Grove,1,Williamson County,TN,pri,Washington ,174,Drive,Suite W,38370
+102,95,63,73,120,Midway,1,Walker County,AL,pri,View Maple,652,Parkway,Suite P,31904
+118,89,54,60,99,Midway,1,Williamson County,TN,pri,Oak Washington,998,Boulevard,Suite W,31904

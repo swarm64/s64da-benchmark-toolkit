@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d595842ef1e60a5ec53fd7f8d5479b08041d97a4d47d8e0b309b7ed7f071ccee
-size 5879
+amt,bought_city,c_first_name,c_last_name,ca_city,profit,ss_ticket_number
+2306.56,Wilson,Agnes,Aaron,Stringtown,-5916.89,413721
+2634.67,Springfield,Carolyn,Aaron,Enterprise,-6614.32,960036
+1861.32,Pleasant Valley,Danny,Aaron,Belmont,-8380.97,646334
+9.01,Spring Hill,Dora,Aaron,Unionville,-1219.67,144162
+1.78,Pleasant Hill,Gladys,Aaron,Springfield,-1537.5,604607
+2218.08,Valley View,Ian,Aaron,Deerfield,-8221.66,2058206
+2745.92,Altamont,Julia,Aaron,Union,-11053.34,1114562
+0.0,Mountain View,Mike,Aaron,Hillcrest,-511.81,889443
+1461.01,Jenkins,Murray,Aaron,Five Forks,-13184.29,1544582
+4684.52,Oak Hill,Valerie,Aaron,Oakwood,-16211.28,978295
+1761.6,Liberty,Alexander,Abbott,Riverview,-5294.91,2324950
+4811.65,Silver Creek,Bruce,Abbott,Plainview,-13709.04,1306457
+0.0,Oak Ridge,Camille,Abbott,Five Points,-262.28,1114193
+4663.84,Summerfield,Charles,Abbott,Cedar Grove,-6341.38,405437
+1320.21,Shady Grove,Charles,Abbott,Concord,-12147.85,2075250
+0.0,Centerville,Charles,Abbott,Hamilton,-1508.52,634581
+0.0,Riverdale,Charles,Abbott,Highland,1825.17,667226
+167.8,Pleasant Valley,Clarence,Abbott,Bridgeport,714.95,1068567
+3568.2,Springdale,Clarence,Abbott,Bridgeport,-5668.12,1985904
+871.87,New Hope,Donna,Abbott,Granite,-19907.01,1188978
+183.52,Waterloo,Dwayne,Abbott,Liberty,-18257.86,799190
+13533.74,Plainview,Eva,Abbott,White Oak,-18789.33,909532
+2416.41,Red Hill,Fabian,Abbott,Antioch,-6160.55,685906
+1820.76,Hamilton,Jacob,Abbott,Wilson,-19964.07,1640375
+254.49,Woodlawn,Jeffrey,Abbott,Summit,-4827.21,2033280
+0.0,Cedar Grove,Jerry,Abbott,Lebanon,-5958.14,917555
+4439.37,Clearwater,Jerry,Abbott,Oak Grove,-25313.88,2004256
+485.48,Lakewood,Johanna,Abbott,Shady Grove,-5705.0,1465491
+632.19,Oak Hill,John,Abbott,Forest Hills,-3526.04,687089
+1949.91,Newport,John,Abbott,Springfield,-12234.46,2122454
+4007.52,Centerville,Joyce,Abbott,Hillcrest,-9318.28,629162
+872.93,Forest Hills,Joyce,Abbott,Hillcrest,-6448.63,942042
+1543.87,Spring Valley,Karen,Abbott,Crossroads,-11935.86,1716630
+137.82,Jackson,Margaret,Abbott,Plainview,-10867.42,117003
+3162.08,Bethel,Mercy,Abbott,Springfield,-12611.5,551121
+45.77,Franklin,Pansy,Abbott,Spring Valley,-19782.96,1759501
+44.08,Pleasant Valley,Phyllis,Abbott,Florence,-10783.53,1421297
+306.43,Oak Hill,Sheila,Abbott,Pine Grove,-6138.42,546545
+1942.83,Harmony,Theresa,Abbott,Edgewood,-6150.51,1876657
+4587.72,Buena Vista,Timothy,Abbott,Riverdale,-13321.48,2374437
+7800.76,Riverview,Timothy,Abbott,Riverdale,-10310.26,85422
+2770.35,Ashland,Vicki,Abbott,Hopewell,-19326.98,1790676
+0.0,Arlington,Wilbert,Abbott,Fairview,-16694.09,1852542
+2402.87,Valley View,Gilbert,Abel,Georgetown,-34135.77,489246
+0.0,Pleasant Valley,James,Abel,Cedar Grove,-5930.94,880583
+3874.75,Oak Grove,Julie,Abel,Buena Vista,-12421.66,473415
+1963.66,Fairview,Pedro,Abel,Woodland,-12948.93,756847
+3056.69,Floyd,Alberta,Abell,Union,-7780.97,1288442
+691.32,Oakland,Heriberto,Abell,Shady Grove,-14146.03,1602926
+542.61,Five Points,Mark,Abell,Highland Park,-14210.19,429135
+116.04,Mount Olive,Terry,Abell,Lakewood,-8159.78,1823592
+6115.34,Clinton,Christian,Abernathy,Forest Hills,-5705.24,1440861
+2939.68,Greenville,Christian,Abernathy,Forest Hills,-6571.96,871430
+7465.6,Union Hill,Jeanette,Abernathy,Georgetown,-10904.91,1251548
+2300.37,Newtown,Rita,Abernathy,Macedonia,-20793.19,2307069
+164.3,Mount Pleasant,Robert,Abernathy,Spring Hill,-6057.54,2382841
+2078.48,Silver Creek,Rodney,Abernathy,Oak Ridge,-7711.31,2361903
+4283.21,Valley View,William,Abernathy,Buena Vista,-7111.74,1632077
+26.96,Woodland,Jay,Abner,Lincoln,-6085.19,543506
+2170.05,Hillcrest,Yvette,Abner,Union Hill,-5848.74,947682
+4583.09,Riverdale,Yvette,Abner,Union Hill,-11331.88,1447600
+21.72,Bunker Hill,Zachary,Abner,Arthur,-1705.09,2103468
+2735.95,White Oak,Andria,Abney,Union,-25091.48,711755
+4087.94,Cedar Grove,Florine,Abney,Whitney,-4646.45,2266090
+772.14,Spring Valley,Francisca,Abney,Dallas,-5487.47,1068688
+182.72,Empire,Gary,Abney,Crystal,-14517.61,1714151
+0.0,Green Acres,Gary,Abney,Crystal,-5312.9,627557
+3540.46,Bridgeport,Robert,Abney,Lebanon,-18424.79,1083315
+4680.51,Brookwood,Ruth,Abney,Midway,-6213.64,1495966
+3741.22,Unionville,Tarah,Abney,Globe,-9658.83,2040587
+5458.56,Fairview,Alan,Abraham,Jackson,-13520.69,695434
+1285.68,California,Angela,Abraham,Edgewood,-13615.86,1660261
+2039.64,Woodville,Anthony,Abraham,Lakeside,1248.38,1454834
+5962.85,Georgetown,Barbara,Abraham,Plainview,-6161.24,538403
+20.05,Five Forks,Carolyn,Abraham,Brownsville,-5455.38,926566
+11238.88,Glenwood,Catherine,Abraham,Four Points,-9617.61,71855
+2458.36,Hardy,Douglas,Abraham,Hopewell,-5858.47,98305
+1402.35,Riverdale,Edwin,Abraham,Oak Ridge,-8559.24,254777
+410.28,Oak Ridge,Jeffrey,Abraham,Salem,-7244.27,2240366
+98.24,Forest Hills,Michael,Abraham,Valley View,-11658.36,2105463
+1681.02,Union Hill,Peter,Abraham,Highland Park,-10980.46,1998990
+7.59,Oak Hill,Salvador,Abraham,Woodlawn,-4605.42,1134264
+291.78,Bethel,Alyson,Abrams,Waterloo,-11619.0,2089623
+1270.35,Oak Grove,Helen,Abrams,Red Hill,-5570.99,1686673
+2551.64,Sulphur Springs,Jeffery,Abrams,Woodlawn,-2841.53,434064
+708.62,Stringtown,Jerry,Abrams,Ashland,-10789.04,1965069
+0.0,Buena Vista,John,Abrams,Five Points,-10978.91,1990824
+5209.46,Five Forks,John,Abrams,Five Points,-15540.53,2384212
+2405.62,Oakland,John,Abrams,Lakeview,-6070.46,1290550
+22.6,Lakeview,Laurie,Abrams,Louisville,-3416.71,544076
+1073.63,Wilson,Lela,Abrams,Farmington,-4444.52,1096711
+1380.35,Enterprise,Melissa,Abrams,Greenfield,-6331.98,1292440
+598.71,Riverview,Patsy,Abrams,Newport,-4225.84,1416048
+0.0,Glendale,Robert,Abrams,Enterprise,-12350.36,1935818
+66.5,Freeport,Stanley,Abrams,Plainview,-4635.1,2382728
+3545.78,Tanglewood,Carlos,Abreu,Salem,-10627.88,1998143
+1701.3,Kingston,Charlie,Abreu,Five Points,-13851.77,1661658
+0.0,Bridgeport,Gerald,Abreu,Deerfield,-257.5,460875
+1049.49,Florence,Linda,Abreu,Oak Hill,6759.18,219556
+2376.96,Texas,Rolland,Abreu,Concord,-3280.29,2039714

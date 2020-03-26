@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:58df5eec46fa7cbfc731445c37f12c10f02d8819bf9d209f522cfba53e5e0bcc
-size 4862
+cd_credit_rating,cd_dep_college_count,cd_dep_count,cd_dep_employed_count,cd_education_status,cd_gender,cd_marital_status,cd_purchase_estimate,cnt1,cnt2,cnt3,cnt4,cnt5,cnt6
+Good,5,0,4,2 yr Degree,F,D,500,1,1,1,1,1,1
+Good,4,2,0,2 yr Degree,F,D,500,1,1,1,1,1,1
+Good,5,5,0,2 yr Degree,F,D,500,1,1,1,1,1,1
+Good,3,6,3,2 yr Degree,F,D,500,1,1,1,1,1,1
+High Risk,3,0,4,2 yr Degree,F,D,500,1,1,1,1,1,1
+High Risk,3,2,2,2 yr Degree,F,D,500,1,1,1,1,1,1
+High Risk,2,4,3,2 yr Degree,F,D,500,1,1,1,1,1,1
+High Risk,1,4,5,2 yr Degree,F,D,500,1,1,1,1,1,1
+High Risk,1,5,3,2 yr Degree,F,D,500,1,1,1,1,1,1
+High Risk,0,6,4,2 yr Degree,F,D,500,1,1,1,1,1,1
+Low Risk,5,2,6,2 yr Degree,F,D,500,1,1,1,1,1,1
+Low Risk,2,4,1,2 yr Degree,F,D,500,1,1,1,1,1,1
+Low Risk,6,4,3,2 yr Degree,F,D,500,1,1,1,1,1,1
+Low Risk,6,4,5,2 yr Degree,F,D,500,1,1,1,1,1,1
+Low Risk,6,4,6,2 yr Degree,F,D,500,1,1,1,1,1,1
+Low Risk,0,6,5,2 yr Degree,F,D,500,1,1,1,1,1,1
+Unknown,3,0,3,2 yr Degree,F,D,500,1,1,1,1,1,1
+Unknown,6,2,1,2 yr Degree,F,D,500,1,1,1,1,1,1
+Unknown,2,3,1,2 yr Degree,F,D,500,1,1,1,1,1,1
+Unknown,4,6,3,2 yr Degree,F,D,500,1,1,1,1,1,1
+Unknown,2,6,4,2 yr Degree,F,D,500,1,1,1,1,1,1
+Good,6,0,0,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Good,5,0,1,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Good,5,0,5,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Good,4,2,1,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Good,1,5,1,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Good,0,6,4,2 yr Degree,F,D,1000,1,1,1,1,1,1
+High Risk,2,0,6,2 yr Degree,F,D,1000,1,1,1,1,1,1
+High Risk,4,2,1,2 yr Degree,F,D,1000,1,1,1,1,1,1
+High Risk,0,3,3,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Low Risk,3,0,1,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Low Risk,5,2,4,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Low Risk,4,4,6,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Unknown,1,0,4,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Unknown,4,1,0,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Unknown,5,1,5,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Unknown,6,1,6,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Unknown,4,4,2,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Unknown,0,4,3,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Unknown,0,5,4,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Unknown,1,5,6,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Unknown,6,6,4,2 yr Degree,F,D,1000,1,1,1,1,1,1
+Good,4,1,0,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Good,3,4,3,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Good,5,4,3,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Good,3,5,1,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Good,1,6,6,2 yr Degree,F,D,1500,1,1,1,1,1,1
+High Risk,3,0,4,2 yr Degree,F,D,1500,1,1,1,1,1,1
+High Risk,5,1,5,2 yr Degree,F,D,1500,1,1,1,1,1,1
+High Risk,5,2,2,2 yr Degree,F,D,1500,1,1,1,1,1,1
+High Risk,5,3,6,2 yr Degree,F,D,1500,1,1,1,1,1,1
+High Risk,5,4,2,2 yr Degree,F,D,1500,1,1,1,1,1,1
+High Risk,0,5,6,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Low Risk,6,1,5,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Low Risk,4,2,0,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Low Risk,3,4,0,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Low Risk,4,4,0,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Unknown,3,0,3,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Unknown,5,0,3,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Unknown,6,2,2,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Unknown,2,3,4,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Unknown,6,3,5,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Unknown,2,3,6,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Unknown,3,4,1,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Unknown,4,5,6,2 yr Degree,F,D,1500,1,1,1,1,1,1
+Good,1,0,4,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Good,0,1,6,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Good,0,6,6,2 yr Degree,F,D,2000,1,1,1,1,1,1
+High Risk,3,3,5,2 yr Degree,F,D,2000,1,1,1,1,1,1
+High Risk,2,4,1,2 yr Degree,F,D,2000,1,1,1,1,1,1
+High Risk,1,4,3,2 yr Degree,F,D,2000,1,1,1,1,1,1
+High Risk,4,5,1,2 yr Degree,F,D,2000,1,1,1,1,1,1
+High Risk,0,5,3,2 yr Degree,F,D,2000,1,1,1,1,1,1
+High Risk,1,6,2,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Low Risk,6,1,1,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Low Risk,0,2,1,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Low Risk,2,2,2,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Low Risk,1,5,4,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Low Risk,1,6,2,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Unknown,4,1,0,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Unknown,6,1,5,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Unknown,6,2,1,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Unknown,5,3,4,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Unknown,4,4,1,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Unknown,6,5,0,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Unknown,2,5,3,2 yr Degree,F,D,2000,1,1,1,1,1,1
+Good,0,1,6,2 yr Degree,F,D,2500,1,1,1,1,1,1
+Good,6,4,1,2 yr Degree,F,D,2500,1,1,1,1,1,1
+Good,1,4,3,2 yr Degree,F,D,2500,1,1,1,1,1,1
+Good,6,4,4,2 yr Degree,F,D,2500,1,1,1,1,1,1
+High Risk,0,0,2,2 yr Degree,F,D,2500,1,1,1,1,1,1
+High Risk,0,3,3,2 yr Degree,F,D,2500,1,1,1,1,1,1
+High Risk,0,4,0,2 yr Degree,F,D,2500,1,1,1,1,1,1
+High Risk,1,4,4,2 yr Degree,F,D,2500,1,1,1,1,1,1
+High Risk,6,5,0,2 yr Degree,F,D,2500,1,1,1,1,1,1
+High Risk,6,6,2,2 yr Degree,F,D,2500,1,1,1,1,1,1
+High Risk,2,6,5,2 yr Degree,F,D,2500,1,1,1,1,1,1
+Low Risk,1,0,4,2 yr Degree,F,D,2500,1,1,1,1,1,1
+Low Risk,6,1,5,2 yr Degree,F,D,2500,1,1,1,1,1,1
+Low Risk,2,2,0,2 yr Degree,F,D,2500,1,1,1,1,1,1

@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:cb40992cbf73ef5e3a713336a7390fac1be0e4572241d4e5115e985d3166092c
-size 4834
+amt,c_first_name,c_last_name,profit,ss_ticket_number,substr
+1333.17,Abraham,Aaron,-6033.41,184139411,Glendale
+5112.77,Abraham,Aaron,-10530.94,28874082,Mount Olive
+0.0,Adam,Aaron,-4734.73,175243455,Wildwood
+2550.32,Adele,Aaron,-6607.69,71800800,Highland
+4678.63,Agnes,Aaron,-18076.15,98668608,Highland
+4691.63,Ahmad,Aaron,-15482.66,221764986,Buena Vista
+317.22,Ahmad,Aaron,-4269.45,40733758,Highland
+686.47,Ahmad,Aaron,-9779.7,199491179,Oakdale
+1328.92,Alan,Aaron,-8889.02,225198937,Harmony
+,Alan,Aaron,3.68,225198937,Harmony
+1571.67,Alan,Aaron,-3264.97,196239344,Union
+7228.83,Alana,Aaron,-10817.39,147101417,Antioch
+755.5,Alana,Aaron,-6674.6,62135729,Buena Vista
+9550.98,Alana,Aaron,-15393.36,84019325,Lakewood
+1302.18,Alana,Aaron,-14507.86,152692491,Mount Pleasant
+4345.98,Albert,Aaron,-11191.25,202659866,Fairview
+,Albert,Aaron,150.4,202659866,Fairview
+2361.54,Albert,Aaron,-14179.39,117159042,Friendship
+0.0,Albert,Aaron,-3501.99,237569863,Lakeside
+1984.7,Albert,Aaron,-21039.08,95150507,New Hope
+174.34,Albert,Aaron,-4445.04,239135467,Oakdale
+933.74,Albert,Aaron,-2847.23,23021574,Providence
+1474.03,Alexander,Aaron,-10340.02,193036876,Georgetown
+417.69,Alexander,Aaron,-5166.81,34908963,Stringtown
+1851.38,Alexis,Aaron,-6268.99,188255443,Georgetown
+0.0,Allen,Aaron,-3776.49,54210389,New Hope
+754.41,Allen,Aaron,-2117.21,145594995,Oakdale
+3743.25,Allen,Aaron,-3279.36,192687737,Union
+1203.37,Allene,Aaron,-4906.19,23772839,Shady Grove
+2381.49,Allene,Aaron,-12545.52,58056575,Spring Hill
+4410.66,Allison,Aaron,-14798.81,125146884,Mount Pleasant
+0.0,Allison,Aaron,,125146884,Mount Pleasant
+3668.03,Alta,Aaron,-4301.26,204845348,Salem
+207.6,Alta,Aaron,4087.76,147411707,Salem
+2975.43,Alvin,Aaron,-9502.29,163717583,Pleasant Valley
+283.05,Alyssa,Aaron,-10797.21,157748939,Centerville
+183.48,Alyssa,Aaron,2671.18,60375778,Glenwood
+282.19,Alyssa,Aaron,-8238.0,164569328,Woodlawn
+0.0,Amanda,Aaron,-6728.29,182512966,Bethel
+11006.25,Amanda,Aaron,-12294.15,147542186,Five Points
+0.0,Amanda,Aaron,2521.64,77193163,Five Points
+1089.5,Amanda,Aaron,-11627.9,195549086,Greenville
+4847.49,Amanda,Aaron,-8593.93,60382244,Lakeside
+2613.63,Amanda,Aaron,-13695.79,117465202,Oakdale
+0.0,Amanda,Aaron,-13220.61,3791925,Salem
+223.85,Amanda,Aaron,-15400.43,155238434,Walnut Grove
+549.33,Amanda,Aaron,-9155.65,66092683,Wildwood
+0.0,Amber,Aaron,-7769.82,116069456,Highland
+11285.96,Amy,Aaron,-11845.2,63695621,Lakeside
+2599.58,Andrea,Aaron,-8607.93,94922250,New Hope
+4666.17,Andrea,Aaron,-9401.21,2278523,Oak Hill
+2083.44,Andrea,Aaron,-19012.87,219508674,Woodlawn
+0.0,Andrew,Aaron,-744.38,192874062,Buena Vista
+2923.24,Andrew,Aaron,-8292.33,169240140,Concord
+444.56,Andrew,Aaron,-10748.07,190536610,Oakdale
+10029.27,Angel,Aaron,-10346.31,76163304,Cedar Grove
+0.0,Angel,Aaron,-1294.38,76163304,Cedar Grove
+271.71,Angel,Aaron,-5169.47,109446419,Georgetown
+314.89,Angela,Aaron,-1614.94,228980669,Highland
+159.94,Ann,Aaron,-14107.03,238907574,Bethel
+1590.0,Ann,Aaron,-10171.19,19548118,Bethel
+0.0,Ann,Aaron,-16574.3,4403458,Glendale
+23.62,Ann,Aaron,-4361.73,123570218,Liberty
+134.84,Ann,Aaron,417.86,163116013,Pine Grove
+120.42,Ann,Aaron,-13835.17,211211059,Providence
+0.0,Anna,Aaron,-1958.45,13939458,Fairfield
+677.48,Anna,Aaron,-761.49,190983709,Lakewood
+3750.23,Anna,Aaron,-25660.46,95334983,Pleasant Hill
+380.04,Anna,Aaron,-22524.83,108763388,Shiloh
+37.4,Anna,Aaron,-7724.13,67656921,Woodlawn
+176.9,Annabel,Aaron,-4017.38,834135,Riverview
+844.69,Anne,Aaron,-11800.79,63520924,Pine Grove
+640.41,Annette,Aaron,-12835.56,144185672,Friendship
+0.0,Annice,Aaron,-2916.86,170398526,Glenwood
+22.6,Annie,Aaron,2114.18,218026922,Glenwood
+1038.58,Annie,Aaron,-8088.44,152578608,Lakeside
+0.0,Antonia,Aaron,-1626.49,192449485,Friendship
+4944.55,Antonia,Aaron,-3607.29,2005683,Glendale
+4903.22,Antonia,Aaron,-5476.9,186490776,Stringtown
+891.5,Antonio,Aaron,-6613.08,220713670,Bethel
+575.6,Antonio,Aaron,-9594.83,107424066,Highland Park
+6057.72,April,Aaron,-14030.22,38469350,Pleasant Hill
+318.59,April,Aaron,-259.38,62963982,Riverview
+1043.75,April,Aaron,-190.61,7090710,Salem
+6152.07,Apryl,Aaron,-15032.94,45915341,Mount Pleasant
+2697.69,Armand,Aaron,-7301.27,171042282,Providence
+2177.24,Armand,Aaron,-2044.37,125694233,Springfield
+9291.01,Arnold,Aaron,-6310.57,34238140,Greenville
+226.81,Arthur,Aaron,-1132.5,33171995,Midway
+465.04,Arthur,Aaron,566.09,234880393,Mount Olive
+329.15,Arthur,Aaron,-12005.83,147659694,Spring Valley
+4614.32,Ashley,Aaron,-15204.07,98943129,Buena Vista
+6060.57,Ashley,Aaron,-1571.56,32742774,Glendale
+1244.55,Ashley,Aaron,-2675.88,165703703,Greenville
+164.12,Ashley,Aaron,-14996.53,150169501,Greenwood
+3707.3,Ashley,Aaron,-3417.79,68227256,Harmony
+8269.91,Ashley,Aaron,-13395.33,180119581,Highland
+160.92,Ashley,Aaron,-12715.5,211545612,Pleasant Valley
+80.48,Ashley,Aaron,-9730.57,18296915,Union
+14.49,Ashley,Aaron,5171.6,100616465,Union

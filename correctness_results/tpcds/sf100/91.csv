@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:75d93a907206a333b882ddce076d4675858c1a9b671cb562956f8a25b41d0078
-size 1643
+call_center,call_center_name,manager,returns_loss
+AAAAAAAAABAAAAAA,North Midwest_1,Thomas Keith,14946.42
+AAAAAAAAKAAAAAAA,Hawaii/Alaska,Robt Ridley,12963.43
+AAAAAAAADBAAAAAA,Pacific Northwest_1,Steven Parker,12178.8
+AAAAAAAAJBAAAAAA,NY Metro_2,Charles Martinez,7981.06
+AAAAAAAAABAAAAAA,North Midwest_1,Thomas Keith,7960.66
+AAAAAAAAEBAAAAAA,California_1,Paul Meyers,7852.52
+AAAAAAAAHAAAAAAA,Pacific Northwest,Kevin Lester,7575.58
+AAAAAAAAIAAAAAAA,California,Samuel Mccoy,5607.27
+AAAAAAAAEAAAAAAA,North Midwest,David Gabriel,5574.25
+AAAAAAAAEBAAAAAA,California_1,Paul Meyers,5458.82
+AAAAAAAANAAAAAAA,NY Metro_1,Chauncey Hurt,5440.05
+AAAAAAAAMBAAAAAA,North Midwest_2,Charles Coleman,5432.03
+AAAAAAAABAAAAAAA,NY Metro,Bradley Kelly,4842.02
+AAAAAAAAKBAAAAAA,Mid Atlantic_2,Jason Spooner,4779.39
+AAAAAAAAEAAAAAAA,North Midwest,David Gabriel,4396.68
+AAAAAAAACAAAAAAA,Mid Atlantic,Peter Jones,4242.96
+AAAAAAAABAAAAAAA,NY Metro,Bradley Kelly,4220.44
+AAAAAAAAGBAAAAAA,Hawaii/Alaska_1,Richard Gray,4115.14
+AAAAAAAAIAAAAAAA,California,Samuel Mccoy,3871.71
+AAAAAAAADBAAAAAA,Pacific Northwest_1,Steven Parker,3708.18
+AAAAAAAACAAAAAAA,Mid Atlantic,Peter Jones,2959.34
+AAAAAAAAHAAAAAAA,Pacific Northwest,Kevin Lester,2843.48
+AAAAAAAAMBAAAAAA,North Midwest_2,Charles Coleman,2787.11
+AAAAAAAAOAAAAAAA,Mid Atlantic_1,Christopher Mosley,2593.31
+AAAAAAAAGBAAAAAA,Hawaii/Alaska_1,Richard Gray,2577.05
+AAAAAAAAJBAAAAAA,NY Metro_2,Charles Martinez,2546.77
+AAAAAAAANAAAAAAA,NY Metro_1,Chauncey Hurt,2110.2
+AAAAAAAAOAAAAAAA,Mid Atlantic_1,Christopher Mosley,1518.9
+AAAAAAAAKBAAAAAA,Mid Atlantic_2,Jason Spooner,1385.45
+AAAAAAAAKAAAAAAA,Hawaii/Alaska,Robt Ridley,248.01

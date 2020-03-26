@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2d559491e98ee3fa7fb46fa8a39b0a077f88f67612f75cbc8d11000b1129941b
-size 121
+s_address,s_name,s_phone,s_suppkey,total_revenue
+R2cF71XV0oAoAQph,Supplier#000245945,14-277-614-2075,245945,2592162.6405

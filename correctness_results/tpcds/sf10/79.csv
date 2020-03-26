@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:834777c41f295f7e6eac91af3eeed92a966795d57c8afd424ab82f63f2e31c0b
-size 4707
+amt,c_first_name,c_last_name,profit,ss_ticket_number,substr
+276.22,Bethann,Aaron,-2486.46,464439,Fairview
+4.01,Clarence,Aaron,-1545.58,1722631,Five Points
+2324.11,Danny,Aaron,-14405.66,674967,Pleasant Hill
+5937.39,Floy,Aaron,-17570.75,2183451,Midway
+3383.34,Gene,Aaron,-13650.55,120980,Midway
+0.0,Gregory,Aaron,-4088.69,1245588,Oak Grove
+3295.23,Gregory,Aaron,-13313.05,15020,Riverside
+49.28,Jon,Aaron,-1937.1,1348396,Oak Grove
+641.02,Joseph,Aaron,-9908.17,180595,Pleasant Hill
+592.81,Kenneth,Aaron,-18586.57,1423656,Midway
+169.4,Kenny,Aaron,1437.15,859798,Riverside
+850.26,Logan,Aaron,-9421.85,1409637,Midway
+363.3,Logan,Aaron,-2970.95,1740414,Pleasant Hill
+692.19,Manuel,Aaron,-674.86,1450219,Riverside
+0.0,Sandra,Aaron,1461.7,1030647,Riverside
+60.08,Travis,Aaron,-10417.38,814323,Midway
+407.51,Valerie,Aaron,-3855.12,413139,Midway
+1784.94,Warren,Aaron,-1484.86,596298,Fairview
+3281.68,Wilbert,Aaron,-10240.76,641690,Midway
+433.2,William,Aaron,-10584.73,510190,Midway
+5509.36,Alexander,Abbott,-11853.64,696104,Oak Grove
+3332.0,Alfred,Abbott,-10988.17,33078,Pleasant Hill
+3458.51,Bill,Abbott,479.45,689822,Fairview
+948.87,Bruce,Abbott,-11950.72,492591,Fairview
+3842.49,Camille,Abbott,-5874.77,998576,Fairview
+6974.5,Carolyn,Abbott,-18829.89,1814716,Midway
+4522.3,Charles,Abbott,-11553.33,515463,Midway
+1331.93,David,Abbott,-6796.43,2114765,Fairview
+0.0,David,Abbott,-1155.06,2114765,Fairview
+2087.12,Dexter,Abbott,-18508.83,767521,Riverside
+1318.51,Donald,Abbott,-4002.39,877880,Riverside
+2431.39,Edmund,Abbott,114.81,364955,Midway
+570.29,Edmund,Abbott,-13647.99,1715519,Riverside
+356.2,Edmund,Abbott,-5574.67,1133410,Riverside
+1264.52,Garnet,Abbott,-1174.14,178249,Riverside
+650.02,Gerald,Abbott,-13283.27,651887,Oak Grove
+3402.17,Guillermo,Abbott,-17406.45,1614317,Midway
+3921.11,Harold,Abbott,-3056.7,1951551,Riverside
+5939.22,Henry,Abbott,-12199.61,2003655,Riverside
+5663.72,Jacqueline,Abbott,-10544.75,21931,Riverside
+73.91,James,Abbott,-6857.52,983191,Fairview
+6244.61,James,Abbott,-23473.87,1639764,Midway
+8371.6,James,Abbott,-18706.47,1212523,Oak Grove
+0.0,Janet,Abbott,-6057.43,1260186,Oak Grove
+524.67,Joyce,Abbott,-2547.3,1345688,Oak Grove
+520.32,Julie,Abbott,-2024.98,736904,Oak Grove
+0.0,Karen,Abbott,-4002.67,1537918,Riverside
+2672.91,Kimberly,Abbott,-16500.23,1343616,Oak Grove
+322.16,Lillian,Abbott,-7972.42,2064986,Fairview
+0.0,Margaret,Abbott,4124.83,1362309,Riverside
+969.24,Marianne,Abbott,-13053.63,1558305,Fairview
+9916.57,Mercy,Abbott,-12170.24,367071,Riverside
+334.17,Mitchell,Abbott,-10715.41,2257941,Oak Grove
+3801.43,Mose,Abbott,-6736.3,2352894,Fairview
+1075.03,Myrtle,Abbott,-10337.83,1233856,Riverside
+1138.64,Nancy,Abbott,-12309.73,768053,Oak Grove
+4180.39,Noah,Abbott,-18156.96,260047,Oak Grove
+3102.44,Noah,Abbott,-5452.91,1252586,Riverside
+22.01,Pamela,Abbott,-973.95,803029,Pleasant Hill
+741.8,Raleigh,Abbott,-15427.52,1479830,Riverside
+640.75,Raul,Abbott,-4661.84,461238,Riverside
+304.7,Ricardo,Abbott,-5762.61,1095567,Midway
+634.09,Robert,Abbott,-10071.93,2048816,Midway
+2012.28,Robert,Abbott,-6701.27,1848166,Midway
+,Robert,Abbott,,1848166,Midway
+2030.47,Robert,Abbott,-8264.02,353321,Oak Grove
+717.12,Sandra,Abbott,-8532.55,352880,Riverside
+36.88,Scott,Abbott,-15471.43,2259370,Fairview
+3260.05,Scott,Abbott,-6350.67,2188027,Fairview
+3889.44,Sherry,Abbott,-15034.12,1443368,Five Points
+151.78,Steven,Abbott,-3330.25,1643579,Fairview
+3984.17,Todd,Abbott,-9627.18,745655,Fairview
+248.94,Valencia,Abbott,-6468.4,1740138,Midway
+482.64,Victoria,Abbott,-4560.99,1338065,Oak Grove
+6.73,William,Abbott,-1808.34,1905845,Fairview
+6039.49,Zachary,Abbott,-14292.48,779655,Five Points
+5404.02,Ashley,Abel,-24243.28,967363,Midway
+780.13,Ashley,Abel,-5867.16,289316,Riverside
+970.84,Debra,Abel,-3940.28,1148362,Pleasant Hill
+0.0,Douglas,Abel,5936.86,1323867,Fairview
+450.86,Frederick,Abel,-8786.4,378543,Midway
+72.97,Gregory,Abel,8916.53,1645811,Fairview
+125.79,Harold,Abel,-2906.5,504565,Midway
+565.4,Hugo,Abel,-16515.93,660712,Pleasant Hill
+347.96,Janet,Abel,-3320.5,1919425,Riverside
+14706.07,Jason,Abel,-10901.99,42600,Midway
+586.97,Meagan,Abel,-8960.63,616220,Midway
+180.06,Mickey,Abel,-12363.91,1222308,Riverside
+1489.97,Nancy,Abel,-11665.57,1307198,Midway
+1473.01,Robert,Abel,-20485.24,1201672,Pleasant Hill
+1255.58,Robert,Abel,-10446.81,2070715,Riverside
+1379.12,,Abel,-6732.27,1519643,Midway
+0.0,Alberta,Abell,4470.21,1934451,Pleasant Hill
+2740.22,Ana,Abell,-5511.21,1241046,Pleasant Hill
+1038.6,Barbara,Abell,-2643.89,854702,Midway
+1835.87,Barbara,Abell,-6552.97,1658426,Pleasant Hill
+913.16,Caroyln,Abell,-12301.48,1148771,Midway
+1233.66,Gladys,Abell,-13104.85,1764522,Riverside
+1750.14,James,Abell,-9361.33,1149233,Fairview
+0.0,Jeanette,Abell,-18639.04,2387053,Riverside

@@ -1,3 +1,574 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:930cb6a503d2794a754dc174ba82266f402d729a3b451329fbce5489e259bf3e
-size 78891
+b_city,b_street_name,b_street_number,b_zip,c_city,c_street_name,c_street_number,c_zip,cnt,cnt2,cs1_year,cs2_year,product_name,s11,s12,s21,s22,s31,s32,store_name,store_zip
+Shiloh,Spring ,797,49275,Five Forks,,,52293,1,1,2000,2001,antiablen steingable,78.78,68.77,130.77,107.28,1750.9,0.0,able,31933
+Shiloh,Spring ,797,49275,Five Forks,,,52293,1,1,2000,2001,antiablen steingable,78.78,83.28,130.77,125.75,1750.9,0.0,able,31933
+Woodland,Ash Main,647,74854,Georgetown,College ,58,47057,1,1,2000,2001,antiablen steingable,82.14,94.3,121.56,128.24,0.0,1569.48,able,61933
+Bridgeport,4th ,123,35817,Pleasant Valley,7th ,970,62477,1,1,2000,2001,antiablen steingable,59.26,73.79,110.81,126.18,0.0,0.0,bar,43451
+Mount Pleasant,Hill 1st,447,71933,Springdale,12th Oak,67,38883,1,1,2000,2001,antiablen steingable,78.7,96.61,106.24,181.62,0.0,5614.2,eing,30059
+Silver Springs,Jefferson Sunset,655,24843,Shiloh,Fourth ,703,69275,1,1,2000,2001,antiablen steingable,97.04,7.42,117.41,12.91,3373.15,0.0,eing,71933
+Silver Springs,Jefferson Sunset,655,24843,Shiloh,Fourth ,703,69275,1,1,2000,2001,antiablen steingable,97.04,77.66,117.41,114.93,3373.15,0.0,eing,71933
+Oakdale,Spring Oak,609,79584,Concord,Wilson ,774,54107,1,1,2000,2001,antiablen steingable,64.11,8.36,98.08,10.95,0.0,0.0,ought,39431
+Oakdale,Spring Oak,609,79584,Concord,Wilson ,774,54107,1,1,2000,2001,antiablen steingable,64.11,30.67,98.08,45.39,0.0,0.0,ought,39431
+Deerfield,Fifth ,637,59840,Fairview,Franklin Second,361,06309,1,1,2000,2001,antiablen steingable,15.26,27.05,21.21,36.51,457.88,0.0,pri,39231
+Ridgeville,Willow Park,247,89306,Clinton,Poplar ,483,78222,1,1,2000,2001,antiablepriableought,53.99,2.13,53.99,3.28,0.0,0.0,eing,48721
+Ridgeville,Willow Park,247,89306,Clinton,Poplar ,483,78222,1,1,2000,2001,antiablepriableought,53.99,14.22,53.99,28.44,0.0,0.0,eing,48721
+Summit,2nd 3rd,742,10499,White Oak,Railroad 1st,612,46668,1,1,2000,2001,antiablepriableought,91.26,57.02,104.03,72.41,0.0,0.0,eing,35281
+Walnut Grove,15th Center,766,77752,Farmington,Spruce ,30,29145,1,1,2000,2001,antiablepriableought,48.98,49.96,66.12,51.95,0.0,0.0,ese,28048
+Clifton,Main Locust,373,58014,Five Forks,7th Fourth,709,72293,1,1,2000,2001,antiablepriableought,72.35,49.96,143.97,51.95,2795.39,0.0,ese,28048
+Walnut Grove,8th ,651,87752,Clinton,West Hill,527,68222,1,1,2000,2001,antiablepriableought,67.08,20.03,83.17,36.85,0.0,0.0,n st,52477
+Cedar,Cedar ,816,51229,Hamilton,4th Sycamore,968,32808,1,1,2000,2001,antiantiableantipri,3.95,95.56,6.08,103.2,0.0,0.0,able,73451
+Buena Vista,College ,863,65752,Lenox,Lake Church,836,21143,1,1,2000,2001,antiantiableantipri,13.18,85.07,19.24,142.91,229.5,1873.89,able,33451
+Sulphur Springs,Valley Williams,540,18354,Oak Hill,Sunset ,397,47838,1,1,2000,2001,antiantiableantipri,34.59,21.63,38.39,40.88,2254.12,0.0,able,31904
+Sulphur Springs,Valley Williams,540,18354,Oak Hill,Sunset ,397,47838,1,1,2000,2001,antiantiableantipri,34.59,82.1,38.39,110.01,2254.12,0.0,able,31904
+Pine Grove,East Oak,326,74593,Oakdale,Madison Park,461,69584,1,1,2000,2001,antiantiableantipri,26.6,25.43,41.76,36.11,0.0,0.0,anti,44136
+Spring Valley,Spring Hill,383,66060,Friendship,Jackson ,339,74536,1,1,2000,2001,antiantiableantipri,38.53,9.13,43.53,13.96,118.75,0.0,cally,32477
+Spring Valley,Spring Hill,383,66060,Friendship,Jackson ,339,74536,1,1,2000,2001,antiantiableantipri,38.53,58.27,43.53,89.73,118.75,0.0,cally,32477
+Mount Olive,Park ,682,78059,Shiloh,7th First,911,69275,1,1,2000,2001,antiantiableantipri,74.83,39.15,129.45,43.45,0.0,0.0,cally,58048
+Guilford,Washington ,671,84408,Florence,Jefferson 3rd,398,63394,1,1,2000,2001,antiantiableantipri,94.33,67.19,139.6,88.01,0.0,0.0,cally,52477
+Waterloo,Cedar ,205,41675,Concord,Ninth North,615,44107,1,1,2000,2001,antiantiableantipri,54.84,43.13,79.51,79.35,0.0,325.15,eing,79231
+,11th ,319,48605,,,,38482,1,1,2000,2001,antiantiableantipri,5.92,64.08,5.92,128.16,191.84,0.0,ese,58048
+Glendale,Chestnut Broadway,195,23951,Concord,College ,568,34107,1,1,2000,2001,antiantiableantipri,13.94,62.37,19.23,101.66,0.0,0.0,ese,35281
+Mount Olive,North 2nd,942,28059,Wildwood,Sycamore Laurel,519,76871,1,1,2000,2001,antiantiableantipri,26.11,3.47,50.65,4.85,0.0,110.95,ese,33451
+Mount Olive,North 2nd,942,28059,Wildwood,Sycamore Laurel,519,76871,1,1,2000,2001,antiantiableantipri,26.11,26.52,50.65,36.33,0.0,0.0,ese,33451
+Fisher,15th ,269,72819,Oak Hill,Ash ,72,47838,1,1,2000,2001,antiantiableantipri,61.87,30.96,122.5,59.44,0.0,1000.73,ese,36098
+Fisher,15th ,269,72819,Oak Hill,Ash ,72,47838,1,1,2000,2001,antiantiableantipri,61.87,90.17,122.5,173.12,0.0,0.0,ese,36098
+Lincoln,West Ash,747,81289,Pleasant Valley,Sixth Hickory,277,22477,1,1,2000,2001,antiantiableantipri,82.27,30.96,120.93,59.44,0.0,1000.73,ese,36098
+Lincoln,West Ash,747,81289,Pleasant Valley,Sixth Hickory,277,22477,1,1,2000,2001,antiantiableantipri,82.27,90.17,120.93,173.12,0.0,0.0,ese,36098
+Wildwood,Elm ,342,66871,Stringtown,,910,,1,1,2000,2001,antiantiableantipri,47.23,45.86,64.7,54.57,0.0,0.0,ought,22477
+,Jefferson West,394,,Antioch,Lincoln ,763,38605,1,1,2000,2001,antiantieseoughtese,57.65,27.47,95.12,50.54,0.0,0.0,ation,35709
+,Jefferson West,394,,Antioch,Lincoln ,763,38605,1,1,2000,2001,antiantieseoughtese,57.65,33.37,95.12,44.38,0.0,0.0,ation,35709
+Sunnyside,Willow ,325,71952,Sulphur Springs,2nd ,611,88354,1,1,2000,2001,antiantieseoughtese,70.91,27.47,75.16,50.54,0.0,0.0,ation,35709
+Sunnyside,Willow ,325,71952,Sulphur Springs,2nd ,611,88354,1,1,2000,2001,antiantieseoughtese,70.91,33.37,75.16,44.38,0.0,0.0,ation,35709
+Union,Jefferson 4th,423,78721,Marion,13th Lake,887,50399,1,1,2000,2001,antiantieseoughtese,92.18,11.15,152.09,15.05,0.0,169.4,bar,58828
+Wilson,3rd Hill,351,56971,Bridgeport,9th ,148,65817,1,1,2000,2001,antiantieseoughtese,46.69,42.72,78.9,57.24,1906.22,0.0,cally,32477
+Wilson,3rd Hill,351,56971,Bridgeport,9th ,148,65817,1,1,2000,2001,antiantieseoughtese,46.69,69.23,78.9,96.22,1906.22,0.0,cally,32477
+Quincy,Lake North,672,83868,Fox,Main Fifth,338,60631,1,1,2000,2001,antiantieseoughtese,42.01,22.36,63.01,32.19,0.0,0.0,ese,48721
+Harmony,Oak Cedar,684,45804,Pleasant Valley,Lake 4th,932,62477,1,1,2000,2001,antiantieseoughtese,85.61,39.73,134.4,76.28,0.0,0.0,ese,36098
+Deerfield,Mill Second,620,79840,Enterprise,Forest ,605,51757,1,1,2000,2001,antiantieseoughtese,3.93,92.19,6.4,153.95,0.0,0.0,pri,28048
+Springdale,Elm ,980,78883,Springfield,5th ,393,89303,1,1,2000,2001,antiationoughtantiationought,46.4,16.7,62.17,29.39,0.0,0.0,able,35281
+Phoenix,Valley ,638,62276,Oak Ridge,Oak Main,392,48371,1,1,2000,2001,antiationoughtantiationought,51.44,27.31,94.64,48.61,436.92,0.0,anti,44136
+Antioch,13th ,627,48605,Friendship,Madison ,499,84536,1,1,2000,2001,antiationoughtantiationought,62.93,78.27,122.08,147.14,0.0,0.0,bar,78048
+Midway,Thirteenth ,310,41904,Bethel,College ,719,45281,1,1,2000,2001,antiationoughtantiationought,41.87,97.79,72.43,115.39,0.0,0.0,cally,38370
+Hopewell,Laurel ,585,20587,Sunnyside,Park 2nd,406,61952,1,1,2000,2001,antiationoughtantiationought,15.22,2.82,26.02,5.16,346.58,0.0,eing,45709
+Belmont,Lee ,908,40191,Sunnyside,Valley ,622,51952,1,1,2000,2001,antiationoughtantiationought,54.68,72.14,89.12,128.4,0.0,0.0,ese,48721
+Youngstown,Smith Pine,737,30001,Oak Ridge,10th Mill,46,58371,1,1,2000,2001,antiationoughtantiationought,99.77,62.63,135.68,102.71,0.0,0.0,n st,78721
+Mount Pleasant,1st 3rd,442,71933,Georgetown,East 5th,169,77057,1,1,2000,2001,anticallyanticallyn st,9.54,87.73,12.59,121.94,0.0,0.0,anti,31904
+Riverside,Cherry ,378,79231,Oakdale,Pine ,106,59584,1,1,2000,2001,anticallyanticallyn st,42.55,78.08,57.86,83.54,0.0,0.0,bar,43451
+Woodlawn,5th Lakeview,884,44098,Post Oak,View Park,341,28567,1,1,2000,2001,anticallyanticallyn st,9.35,82.81,12.99,121.73,1.87,5845.7,cally,32477
+Franklin,Cedar Washington,629,79101,Greenville,8th ,823,61387,1,1,2000,2001,anticallyanticallyn st,12.99,82.81,20.0,121.73,0.0,5845.7,cally,32477
+Enterprise,Sixth Spring,795,41757,Union Hill,Park ,414,67746,1,1,2000,2001,anticallyanticallyn st,40.6,2.22,57.24,4.39,0.0,0.0,cally,21904
+Brownsville,Oak Center,859,79310,Greenville,6th Park,404,21387,1,1,2000,2001,anticallyanticallyn st,37.31,26.49,45.14,36.29,0.0,0.0,pri,38828
+Providence,Maple 12th,658,36614,Mountain View,Forest Lake,860,74466,1,1,2000,2001,antieingbarbarpri,69.53,91.83,87.6,181.82,1618.8,0.0,able,48828
+,11th Fifth,327,,Woodlawn,Locust 1st,476,74098,1,1,2000,2001,antieingbarbarpri,42.41,36.04,83.54,63.07,0.0,0.0,anti,79431
+Woodland,Green ,787,54854,Clifton,Hillcrest ,328,58014,1,1,2000,2001,antieingbarbarpri,43.31,4.87,80.12,5.01,0.0,0.0,eing,79231
+Woodland,Green ,787,54854,Clifton,Hillcrest ,328,58014,1,1,2000,2001,antieingbarbarpri,43.31,46.84,80.12,70.72,0.0,0.0,eing,79231
+Nichols,Lincoln Hill,284,27940,Mechanicsburg,Smith ,753,32219,1,1,2000,2001,antieingbarbarpri,85.1,6.53,131.9,8.03,0.0,311.23,eing,73604
+Five Points,4th Spruce,720,36098,Florence,Poplar ,834,33394,1,1,2000,2001,antieseprioughtation,40.85,63.27,69.03,74.02,0.0,0.0,ation,42477
+Pleasant Valley,12th 1st,52,32477,Mount Zion,Cherry ,439,58054,1,1,2000,2001,antieseprioughtation,44.65,51.82,67.86,72.54,0.0,0.0,bar,78721
+Plainview,1st Maple,329,33683,Clifton,10th Cedar,289,78014,1,1,2000,2001,antieseprioughtation,42.47,60.29,50.96,67.52,605.91,0.0,eing,78048
+Woodlawn,14th ,346,74098,Mount Olive,5th Smith,981,28059,1,1,2000,2001,antieseprioughtation,46.1,85.81,81.13,145.87,0.0,0.0,eing,35281
+,Washington ,,79431,Hillcrest,Davis Pine,909,53003,1,1,2000,2001,antieseprioughtation,52.82,85.81,76.58,145.87,0.0,0.0,eing,35281
+Lakeview,7th ,415,98579,Bunker Hill,8th Mill,342,70150,1,1,2000,2001,antieseprioughtation,74.43,45.61,84.1,70.69,0.0,0.0,eing,49231
+Spring Hill,Davis ,454,56787,Unionville,Poplar ,631,41711,1,1,2000,2001,antieseprioughtation,99.91,29.29,104.9,52.13,0.0,0.0,ese,33604
+Kingston,Third ,574,74975,Liberty,Hill Green,304,73451,1,1,2000,2001,antieseprioughtation,13.98,92.09,19.01,93.93,0.0,0.0,ought,63604
+,1st ,,67292,Pine Grove,Railroad Valley,362,24593,1,1,2000,2001,antin stn stableought,10.34,5.18,17.88,8.85,0.0,0.0,ation,39431
+White Oak,Maple ,387,56668,Fairfield,6th ,345,56192,1,1,2000,2001,antin stn stableought,75.46,19.14,122.24,23.35,7913.81,0.0,bar,61933
+White Oak,Maple ,387,56668,Fairfield,6th ,345,56192,1,1,2000,2001,antin stn stableought,75.46,68.6,122.24,91.23,7913.81,0.0,bar,61933
+Fairview,Madison Miller,854,15709,Five Points,1st 15th,292,26098,1,1,2000,2001,antin stn stableought,84.51,37.77,121.69,70.25,234.54,0.0,bar,58828
+Edgewater,Oak ,408,50635,Salem,8th ,446,28048,1,1,2000,2001,antin stn stableought,21.35,61.52,28.18,91.04,0.0,0.0,cally,32477
+Valley View,Maple ,892,65124,,6th 2nd,669,,1,1,2000,2001,antin stn stableought,51.64,28.92,78.49,50.03,0.0,96.28,ese,48721
+Valley View,Maple ,892,65124,,6th 2nd,669,,1,1,2000,2001,antin stn stableought,51.64,66.59,78.49,80.57,0.0,0.0,ese,48721
+Walnut Grove,Maple ,807,67752,Union,5th ,587,28721,1,1,2000,2001,antin stn stableought,87.86,45.73,138.81,64.47,12.25,0.0,ese,36098
+Collinsville,View Green,670,62459,Mount Zion,Fourth Broadway,51,88054,1,1,2000,2001,antin stn stableought,42.14,73.96,54.36,86.53,78.72,0.0,n st,42812
+Providence,Cherry ,215,96614,Maple Grove,Hill ,498,68252,1,1,2000,2001,antin stn stableought,3.39,39.21,4.64,54.1,0.0,0.0,pri,38828
+Salem,First Washington,886,28048,Oakdale,Seventh ,270,29584,1,1,2000,2001,antioughtcallyantically,70.63,43.11,89.7,65.52,0.0,0.0,able,35281
+Salem,First Washington,886,28048,Oakdale,Seventh ,270,29584,1,1,2000,2001,antioughtcallyantically,70.63,71.46,89.7,72.17,0.0,0.0,able,35281
+Sulphur Springs,3rd ,936,78354,Macedonia,2nd Maple,436,41087,1,1,2000,2001,antioughtcallyantically,43.85,59.82,77.17,61.61,0.0,0.0,ation,35709
+Shady Grove,Willow Lincoln,,,Buena Vista,First Johnson,347,55752,1,1,2000,2001,antioughtcallyantically,45.45,44.01,47.26,69.09,0.0,0.0,bar,43604
+Franklin,Washington Main,700,29101,Glenwood,West Hill,208,23511,1,1,2000,2001,antioughtcallyantically,33.38,41.88,63.08,62.82,0.0,395.55,cally,72477
+Riverdale,Sycamore ,896,19391,New Hope,Highland Cedar,165,99431,1,1,2000,2001,antioughtcallyantically,72.34,79.95,100.55,80.74,0.0,0.0,eing,35709
+Greenville,Oak Main,900,31387,Riverdale,Spring 1st,746,19391,1,1,2000,2001,antiprin stationeseought,74.2,18.63,76.42,19.18,47.31,260.47,able,46098
+Greenville,Oak Main,900,31387,Riverdale,Spring 1st,746,19391,1,1,2000,2001,antiprin stationeseought,74.2,37.19,76.42,42.76,47.31,0.0,able,46098
+Jackson,Second ,978,09583,Friendship,Miller Mill,145,44536,1,1,2000,2001,antiprin stationeseought,87.41,4.0,166.95,5.04,0.0,0.0,able,35281
+Plainview,Cedar Fourth,821,63683,Ogden,Oak ,171,70193,1,1,2000,2001,antiprin stationeseought,89.67,4.0,112.98,5.04,0.0,0.0,able,35281
+Pine Grove,Maple ,503,64593,Deerfield,College Washington,307,49840,1,1,2000,2001,antiprin stationeseought,48.21,44.39,92.08,72.35,1007.93,783.4,anti,32477
+Jamestown,Main ,954,96867,Union,Meadow 1st,105,68721,1,1,2000,2001,antiprin stationeseought,48.12,79.93,51.96,133.48,0.0,3710.48,bar,58828
+Gravel Hill,Locust Second,924,91944,Glendale,South ,804,23951,1,1,2000,2001,antiprin stationeseought,93.11,6.71,134.07,12.34,0.0,0.0,bar,32477
+Gravel Hill,Locust Second,924,91944,Glendale,South ,804,23951,1,1,2000,2001,antiprin stationeseought,93.11,11.27,134.07,15.66,0.0,0.0,bar,32477
+Gravel Hill,Locust Second,924,91944,Glendale,South ,804,23951,1,1,2000,2001,antiprin stationeseought,93.11,67.55,134.07,76.33,0.0,0.0,bar,32477
+Lawrenceville,Third ,240,74462,Spring Valley,Fifth Third,366,86060,1,1,2000,2001,antiprin stationeseought,62.96,58.43,105.14,99.91,34.34,0.0,eing,62812
+Newport,Spruce ,261,31521,Waterloo,View ,213,41675,1,1,2000,2001,antiprin stationeseought,66.66,62.05,70.65,76.32,0.0,0.0,n st,42812
+Kingston,1st 11th,631,34975,Ashland,Main ,303,24244,1,1,2000,2001,antiprin stationeseought,17.37,40.65,18.75,78.45,514.8,0.0,ought,38828
+Woodland,View Jefferson,734,64854,Hillcrest,Hickory Dogwood,693,33003,1,1,2000,2001,antipripriationeing,15.89,32.4,30.66,33.04,0.0,0.0,able,61904
+Arlington,Meadow 5th,80,46557,Sulphur Springs,Cherry ,535,68354,1,1,2000,2001,antipripriationeing,99.26,72.53,141.94,105.16,0.0,0.0,able,36098
+Marion,Hill Washington,296,20399,Unionville,First ,528,41711,1,1,2000,2001,antipripriationeing,48.05,80.96,82.16,131.96,0.0,0.0,anti,31904
+Crossroads,First ,831,50534,Mount Olive,Washington ,609,78059,1,1,2000,2001,antipripriationeing,24.43,38.04,26.14,48.31,0.0,41.03,bar,39431
+Crossroads,First ,831,50534,Mount Olive,Washington ,609,78059,1,1,2000,2001,antipripriationeing,24.43,58.78,26.14,80.52,0.0,0.0,bar,39431
+Pleasant Hill,Pine Birch,809,13604,King,Poplar Lake,763,60008,1,1,2000,2001,antipripriationeing,43.57,25.02,83.65,41.78,1233.9,0.0,bar,36098
+Pleasant Hill,Pine Birch,809,13604,King,Poplar Lake,763,60008,1,1,2000,2001,antipripriationeing,43.57,25.23,83.65,47.68,1233.9,0.0,bar,36098
+Red Hill,West Hill,267,44338,Monterey,4th Main,221,94106,1,1,2000,2001,antipripriationeing,82.54,94.97,161.77,124.41,0.0,0.0,bar,42812
+Pleasant Valley,Poplar Oak,699,52477,Farmington,Highland ,324,29145,1,1,2000,2001,antipripriationeing,55.43,21.21,98.11,41.14,0.0,885.5,eing,40059
+Shiloh,Center ,871,59275,Newtown,Lake 2nd,703,71749,1,1,2000,2001,antipripriationeing,41.01,40.48,75.04,75.69,4.72,0.0,n st,48370
+Franklin,9th Cedar,658,39101,Five Forks,Third ,16,52293,1,1,2000,2001,antipripriationeing,84.3,96.75,148.36,138.35,0.0,0.0,n st,42812
+Quincy,Oak Jackson,616,43868,Salem,Church Walnut,108,58048,1,1,2000,2001,antipriprieingation,18.94,67.71,32.38,116.46,0.0,0.0,able,51904
+Jamestown,5th ,747,96867,Rankin,Ninth ,341,52621,1,1,2000,2001,antipriprieingation,22.64,63.96,38.94,108.73,0.0,229.63,able,35281
+White Oak,3rd ,750,66668,Plainview,Park ,742,83683,1,1,2000,2001,antipriprieingation,64.73,28.94,128.81,35.3,0.0,0.0,anti,31904
+,,,26798,Bunker Hill,Pine Cherry,310,00750,1,1,2000,2001,antipriprieingation,86.55,99.58,112.51,126.46,0.0,0.0,ation,41904
+Providence,Walnut First,554,16614,Lakeside,South ,790,69532,1,1,2000,2001,antipriprieingation,4.98,13.73,5.52,20.59,0.0,0.0,cally,38828
+Lakeview,9th ,779,68579,,,884,,1,1,2000,2001,ationantioughtbarn st,91.08,93.62,132.06,170.38,0.0,0.0,anti,32477
+Oak Hill,2nd ,392,67838,Winslow,Chestnut ,268,68525,1,1,2000,2001,ationantioughtbarn st,5.67,69.1,8.1,70.48,0.0,1585.96,cally,38370
+Pleasant Hill,4th ,798,33604,Hopewell,Franklin ,47,20587,1,1,2000,2001,ationantioughtbarn st,26.76,27.75,41.47,53.55,0.0,0.0,cally,32477
+Five Forks,Ridge Jackson,309,22293,Unionville,Sunset ,30,02311,1,1,2000,2001,ationantioughtbarn st,26.87,55.8,50.51,68.63,333.9,0.0,eing,48721
+Arlington,Pine ,229,46557,Maple Grove,Elm ,306,48252,1,1,2000,2001,ationantioughtbarn st,69.53,7.29,92.47,12.83,844.11,0.0,eing,45709
+Liberty,South ,792,23451,Lakewood,5th ,20,68877,1,1,2000,2001,ationantioughtbarn st,84.99,75.71,150.43,125.67,0.0,0.0,ese,33604
+Woodland,Lee ,650,84854,,East ,886,35281,1,1,2000,2001,ationantioughtbarn st,29.37,34.5,45.52,41.4,523.8,0.0,ought,78048
+Woodland,Lee ,650,84854,,East ,886,35281,1,1,2000,2001,ationantioughtbarn st,29.37,44.97,45.52,47.66,523.8,0.0,ought,78048
+Red Hill,6th ,557,44338,Sleepy Hollow,Maple ,416,53592,1,1,2000,2001,ationationcallycallyanti,49.32,23.9,70.03,37.76,0.0,0.0,anti,59843
+Five Forks,12th Elm,18,32293,Oakland,Washington ,107,29843,1,1,2000,2001,ationationcallycallyanti,28.93,5.99,50.62,6.52,0.0,80.1,ation,39843
+Pleasant Valley,Davis ,588,12477,Woodville,Adams ,91,84289,1,1,2000,2001,ationationcallycallyanti,72.07,35.42,85.04,47.1,25.2,0.0,bar,31933
+Marion,Third ,47,50399,Plainview,Chestnut ,742,53683,1,1,2000,2001,ationationcallycallyanti,82.3,6.04,87.23,6.88,0.0,0.0,bar,43451
+Marion,Third ,47,50399,Plainview,Chestnut ,742,53683,1,1,2000,2001,ationationcallycallyanti,82.3,53.27,87.23,74.04,0.0,1614.9,bar,43451
+Union Hill,Second ,14,27746,Sunnyside,Second ,810,11952,1,1,2000,2001,ationationcallycallyanti,16.5,89.38,24.75,144.79,0.0,0.0,cally,68721
+Mountain View,Elm ,465,05066,Providence,Hickory Main,293,07214,1,1,2000,2001,ationationcallycallyanti,69.5,89.89,108.42,131.23,0.0,0.0,cally,73604
+Oak Hill,Hickory Spring,386,67838,Riverside,Cedar ,196,29231,1,1,2000,2001,ationationcallycallyanti,58.62,46.29,103.75,91.19,0.0,0.0,ese,74136
+Wildwood,Second ,787,26871,Sulphur Springs,Jackson Woodland,413,08954,1,1,2000,2001,ationationcallycallyanti,69.28,66.93,108.07,104.41,0.0,0.0,ese,33451
+Oak Grove,Sixth ,514,98370,White City,Park Birch,286,66704,1,1,2000,2001,ationbarn steingn stought,12.99,65.39,16.36,128.16,0.0,4594.65,able,35281
+Hubbard,Park 2nd,742,06891,White Oak,Central ,896,56668,1,1,2000,2001,ationbarn steingn stought,21.69,65.39,28.19,128.16,494.81,4594.65,able,35281
+Five Forks,Dogwood Cedar,870,42293,Antioch,Fourteenth Oak,8,78605,1,1,2000,2001,ationbarn steingn stought,51.03,27.76,56.64,43.58,0.0,0.0,able,53604
+Oakland,Cedar ,943,99843,Crossroads,Dogwood ,86,70534,1,1,2000,2001,ationbarn steingn stought,87.75,65.39,128.11,128.16,0.0,4594.65,able,35281
+Florence,Williams ,839,73394,Oakwood,Smith Hickory,8,60169,1,1,2000,2001,ationbarn steingn stought,20.3,89.53,36.74,130.71,332.52,0.0,ation,39431
+,,,95423,Walnut,2nd ,125,16245,1,1,2000,2001,ationbarn steingn stought,52.16,88.85,99.1,175.92,0.0,0.0,ation,39843
+Glenwood,Locust ,968,53511,Lakeview,Ridge ,329,78579,1,1,2000,2001,ationbarn steingn stought,57.53,88.85,74.21,175.92,0.0,0.0,ation,39843
+Antioch,Adams ,675,78605,Oakwood,Sycamore ,607,80169,1,1,2000,2001,ationbarn steingn stought,55.63,77.97,108.47,128.65,1299.44,0.0,bar,73604
+Acme,2nd ,365,70164,Red Hill,Cherry 10th,317,04938,1,1,2000,2001,ationbarn steingn stought,88.47,41.26,168.97,56.11,0.0,0.0,bar,58828
+Stringtown,Ridge ,758,20162,Spring Valley,North ,760,56060,1,1,2000,2001,ationbarn steingn stought,29.67,47.87,45.39,63.18,0.0,0.0,cally,32477
+Brownsville,4th ,768,79310,Glenwood,Lee Park,547,33511,1,1,2000,2001,ationbarn steingn stought,69.69,22.23,82.93,42.9,0.0,0.0,ese,25281
+Brownsville,4th ,768,79310,Glenwood,Lee Park,547,33511,1,1,2000,2001,ationbarn steingn stought,69.69,36.2,82.93,48.14,0.0,0.0,ese,25281
+Hamilton,Williams ,414,72808,Salem,West Lake,21,38048,1,1,2000,2001,ationbarn steingn stought,96.24,38.83,112.6,49.31,0.0,0.0,n st,61933
+Hamilton,Williams ,414,72808,Salem,West Lake,21,38048,1,1,2000,2001,ationbarn steingn stought,96.24,85.1,112.6,154.88,0.0,47.83,n st,61933
+Newtown,Franklin ,420,21749,Newport,Hill Center,857,21521,1,1,2000,2001,ationcallybarablebarought,4.42,72.5,7.29,91.35,0.0,0.0,able,65281
+Lakeside,3rd Main,986,49532,Enterprise,View ,6,31757,1,1,2000,2001,ationcallybarablebarought,39.42,15.65,57.15,25.19,0.0,0.0,able,32812
+Oak Hill,Laurel ,471,77838,Liberty,Sycamore ,435,73451,1,1,2000,2001,ationcallybarablebarought,46.89,35.72,67.52,44.29,0.0,0.0,anti,31904
+Bridgeport,6th ,375,85817,White Oak,Pine ,996,96668,1,1,2000,2001,ationcallybarablebarought,40.48,5.83,71.24,10.37,0.0,0.0,eing,79231
+Ashland,9th ,110,64244,Lakeview,Elm ,462,48579,1,1,2000,2001,ationcallybarablebarought,58.74,59.1,115.71,102.83,0.0,0.0,eing,73604
+Florence,Sunset Ridge,994,73394,Belmont,Sycamore ,312,20191,1,1,2000,2001,ationcallybarablebarought,67.62,59.1,133.88,102.83,0.0,0.0,eing,73604
+Springfield,4th ,546,19303,Bethel,Hillcrest ,824,35281,1,1,2000,2001,ationcallybarablebarought,21.93,62.96,39.47,67.36,0.0,0.0,ese,48721
+Five Points,Fourth Jefferson,849,36098,Sulphur Springs,1st Park,262,38354,1,1,2000,2001,ationcallybarablebarought,30.35,62.96,49.47,67.36,0.0,0.0,ese,48721
+Greenwood,Pine ,695,48828,Hillcrest,5th ,397,33003,1,1,2000,2001,ationcallybarablebarought,47.75,57.51,85.47,70.73,0.0,2811.06,ese,68721
+Hillcrest,Park ,696,23003,Cedar Grove,Poplar ,727,40411,1,1,2000,2001,ationeingeseesen st,35.92,34.19,41.3,46.84,0.0,0.0,able,35281
+Deerfield,14th ,601,59840,Hamilton,Church ,803,42808,1,1,2000,2001,ationeingeseesen st,46.74,62.73,63.09,86.56,0.0,0.0,anti,32812
+Friendship,Sixth Third,726,74536,Greenwood,Main Hill,703,98828,1,1,2000,2001,ationeingeseesen st,58.86,59.45,93.58,98.68,0.0,0.0,bar,28048
+Shiloh,Spring Main,757,69275,Lebanon,Pine Lakeview,508,42898,1,1,2000,2001,ationeingeseesen st,29.67,48.25,59.34,85.4,0.0,0.0,cally,76098
+Arlington,Lakeview ,104,46557,Pleasant Hill,6th Main,477,23604,1,1,2000,2001,ationeingeseesen st,33.9,32.46,58.98,46.41,0.0,0.0,cally,38828
+White Oak,3rd ,539,76668,Jamestown,View ,439,16867,1,1,2000,2001,ationeingeseesen st,10.52,76.72,11.04,93.59,0.0,0.0,ese,49843
+Mount Vernon,East ,844,48482,Riverside,Sycamore ,,,1,1,2000,2001,ationeingeseesen st,19.08,44.76,19.46,89.52,0.0,0.0,n st,20059
+Lenox,Miller ,891,31143,Friendship,12th ,570,74536,1,1,2000,2001,ationesepribarationought,34.7,50.22,45.45,61.77,0.0,0.0,bar,58828
+Lenox,Miller ,891,31143,Friendship,12th ,570,74536,1,1,2000,2001,ationesepribarationought,34.7,56.9,45.45,104.69,0.0,0.0,bar,58828
+Newtown,Walnut Sixth,37,71749,Oak Hill,Birch ,189,47838,1,1,2000,2001,ationesepribarationought,25.92,98.0,35.76,143.08,0.0,2458.95,eing,29231
+Summit,Park Maple,425,50499,Bear Creek,Lakeview ,118,33075,1,1,2000,2001,ationesepribarationought,42.09,76.03,74.49,120.12,0.0,0.0,ese,33451
+Ashland,College Seventh,834,74244,Bethel,Washington North,231,65281,1,1,2000,2001,ationesepribarationought,11.45,82.49,15.45,107.23,0.0,4394.41,pri,31933
+Fairfield,,104,96192,Maple Grove,Cherry ,449,68252,1,1,2000,2001,ationn stbaroughtbarable,72.62,23.21,87.14,33.42,0.0,0.0,anti,79431
+Belfast,Cedar 13th,563,80125,Oak Ridge,Laurel ,313,88371,1,1,2000,2001,ationn stbaroughtbarable,50.93,62.09,100.84,93.13,0.0,0.0,bar,58828
+Belfast,Cedar 13th,563,80125,Oak Ridge,Laurel ,313,88371,1,1,2000,2001,ationn stbaroughtbarable,50.93,75.18,100.84,148.1,0.0,219.03,bar,58828
+Red Hill,Lincoln ,860,24338,White Oak,Railroad Forest,314,86668,1,1,2000,2001,ationn stbaroughtbarable,11.48,61.55,19.86,96.63,0.0,0.0,cally,32477
+Red Hill,Lincoln ,860,24338,White Oak,Railroad Forest,314,86668,1,1,2000,2001,ationn stbaroughtbarable,11.48,67.83,19.86,95.64,0.0,0.0,cally,32477
+Clifton,4th ,730,48014,Harmony,South College,66,06404,1,1,2000,2001,ationn stbaroughtbarable,42.77,16.44,55.17,23.83,0.0,858.01,cally,68721
+Deerfield,Maple ,529,29840,Altamont,Lake West,460,79387,1,1,2000,2001,ationn stbaroughtbarable,48.35,58.88,76.39,70.06,0.0,0.0,cally,38721
+Deerfield,Park Cherry,722,79840,Andover,Highland ,518,71639,1,1,2000,2001,ationn stbaroughtbarable,80.28,56.19,133.26,66.3,0.0,0.0,cally,23451
+Oakdale,Poplar ,604,29584,Farmington,Center ,,,1,1,2000,2001,ationn stbaroughtbarable,96.91,98.54,174.43,153.72,16083.74,0.0,ese,75709
+Newport,Wilson Poplar,374,71521,Richville,Mill Maple,185,75945,1,1,2000,2001,ationn stbaroughtbarable,28.27,53.3,38.16,69.82,0.0,0.0,pri,35709
+Spring Valley,1st ,712,56060,Riverside,Spring ,562,49231,1,1,2000,2001,ationoughtantiablecallyought,20.44,27.58,33.52,38.61,0.0,386.3,able,72812
+Spring Valley,1st ,712,56060,Riverside,Spring ,562,49231,1,1,2000,2001,ationoughtantiablecallyought,20.44,59.56,33.52,77.42,0.0,0.0,able,72812
+Greenville,View ,790,21387,Jamestown,4th ,568,86867,1,1,2000,2001,ationoughtantiablecallyought,25.75,66.16,26.78,118.42,0.0,384.75,able,51904
+Arlington,Park College,190,56557,Woodland,Sixth ,203,34854,1,1,2000,2001,ationoughtantiablecallyought,35.27,54.0,57.13,102.6,0.0,0.0,able,35281
+Mount Zion,Sycamore ,242,48054,,View Washington,192,,1,1,2000,2001,ationoughtantiablecallyought,43.2,54.0,49.68,102.6,2985.83,0.0,able,35281
+Enterprise,Pine Highland,150,71757,Jackson,1st 7th,742,79583,1,1,2000,2001,ationoughtantiablecallyought,45.62,54.0,57.02,102.6,0.0,0.0,able,35281
+Highland,Lincoln Green,70,59454,Centerville,View View,26,50059,1,1,2000,2001,ationoughtantiablecallyought,79.59,69.95,114.6,132.2,0.0,0.0,able,65281
+Highland Park,Sycamore Main,640,36534,Shiloh,Washington ,800,79275,1,1,2000,2001,ationoughtantiablecallyought,95.55,23.83,138.54,39.79,0.0,112.91,anti,59431
+Bridgeport,1st ,489,25817,Kingston,Park Washington,326,74975,1,1,2000,2001,ationoughtantiablecallyought,55.98,80.65,64.93,103.23,0.0,0.0,ation,39843
+Newtown,Meadow 5th,231,02349,Deerfield,Maple ,752,19840,1,1,2000,2001,ationoughtantiablecallyought,77.42,80.65,150.19,103.23,5828.18,0.0,ation,39843
+Riverdale,6th Ash,658,39391,Mountain View,Chestnut ,698,54466,1,1,2000,2001,ationoughtantiablecallyought,98.27,15.17,116.94,15.77,0.0,0.0,ation,39431
+Antioch,Chestnut ,823,58605,Plainview,Cherry Cedar,99,73683,1,1,2000,2001,ationoughtantiablecallyought,28.95,44.27,45.74,88.09,0.0,0.0,cally,68048
+Brownsville,Dogwood ,697,39310,Walnut Grove,Main Main,898,97752,1,1,2000,2001,ationoughtantiablecallyought,37.18,41.12,60.23,45.64,1717.69,0.0,eing,29231
+Spring Hill,Sycamore ,140,46787,Providence,Davis ,810,86614,1,1,2000,2001,ationoughtantiablecallyought,50.83,41.12,86.41,45.64,0.0,0.0,eing,29231
+Enterprise,13th 12th,421,81757,Tracy,Smith ,744,56340,1,1,2000,2001,ationoughtantiablecallyought,8.77,50.8,14.47,78.23,252.59,897.9,ese,33604
+Jenkins,4th Hickory,43,47292,Mountain View,Smith View,752,64466,1,1,2000,2001,ationoughtantiablecallyought,11.86,56.38,18.85,82.87,0.0,0.0,ese,40059
+Five Points,3rd Oak,571,66098,Riverview,College Forest,999,79003,1,1,2000,2001,ationoughtantiablecallyought,69.79,42.82,120.03,57.37,0.0,0.0,n st,48370
+Glenwood,Third 10th,535,23511,Spring Hill,Sixth Washington,75,56787,1,1,2000,2001,ationoughtbaroughtbarought,12.57,46.61,13.82,80.63,0.0,0.0,able,70059
+Glenwood,Third 10th,535,23511,Spring Hill,Sixth Washington,75,56787,1,1,2000,2001,ationoughtbaroughtbarought,12.57,74.23,13.82,95.01,0.0,0.0,able,70059
+Glenwood,Third 10th,535,23511,Spring Hill,Sixth Washington,75,56787,1,1,2000,2001,ationoughtbaroughtbarought,12.57,93.42,13.82,186.84,0.0,0.0,able,70059
+Springfield,Locust ,678,49303,Clinton,Sixth ,891,58222,1,1,2000,2001,ationoughtbaroughtbarought,18.2,16.14,23.66,25.66,0.0,107.25,able,31933
+Springfield,Locust ,678,49303,Clinton,Sixth ,891,58222,1,1,2000,2001,ationoughtbaroughtbarought,18.2,30.67,23.66,35.27,0.0,0.0,able,31933
+Friendship,12th Mill,76,54536,Union Hill,Oak ,829,87746,1,1,2000,2001,ationoughtbaroughtbarought,40.24,50.65,40.64,72.93,0.0,0.0,bar,38828
+Lakeview,Seventh Maple,412,28579,Bridgeport,Park 2nd,615,25817,1,1,2000,2001,ationoughtbaroughtbarought,34.45,29.32,64.76,34.01,0.0,0.0,eing,79231
+Five Points,Hickory ,453,36098,Wildwood,Elm ,113,56871,1,1,2000,2001,ationoughtbaroughtbarought,51.25,51.92,70.72,57.63,0.0,0.0,eing,33451
+Ashland,College ,713,94244,Belmont,Jackson ,893,60191,1,1,2000,2001,ationoughtbaroughtbarought,80.13,91.81,84.93,175.35,0.0,0.0,ese,58048
+Riverview,Third ,545,69003,,,,54536,1,1,2000,2001,ationoughtbaroughtbarought,9.02,26.01,15.24,45.25,0.0,1042.82,n st,61933
+Georgetown,Ash 6th,180,47057,Woodland,Main ,193,64854,1,1,2000,2001,ationoughtbaroughtbarought,98.57,47.86,179.39,95.72,4858.02,0.0,ought,49843
+Georgetown,Ash 6th,180,47057,Woodland,Main ,193,64854,1,1,2000,2001,ationoughtbaroughtbarought,98.57,89.98,179.39,133.17,4858.02,0.0,ought,49843
+,,,,Pleasant Hill,14th ,261,63604,1,1,2000,2001,ationoughtbaroughtbarought,35.13,78.7,51.28,95.22,343.91,0.0,pri,66098
+Fayetteville,Highland ,921,31732,Greenville,Maple Cedar,390,31387,1,1,2000,2001,ationpriantin stable,98.02,71.68,175.45,77.41,0.0,0.0,able,33451
+Bridgeport,Washington ,426,95817,Georgetown,Ridge ,269,67057,1,1,2000,2001,ationpriantin stable,47.19,19.76,54.26,24.3,9.22,0.0,anti,31933
+Centerville,Railroad ,339,80059,Mount Pleasant,Miller Ninth,230,11933,1,1,2000,2001,ationpriantin stable,48.92,53.25,82.67,53.25,0.0,0.0,anti,24136
+Hillcrest,14th Lee,740,13003,Lincoln,Sunset ,778,81289,1,1,2000,2001,ationpriantin stable,8.85,72.79,15.39,145.58,0.0,0.0,bar,43451
+Spring Hill,Washington Poplar,269,46787,Glenwood,View 14th,271,33511,1,1,2000,2001,ationpriantin stable,50.2,20.51,88.85,33.02,0.0,0.0,bar,43604
+Spring Hill,Washington Poplar,269,46787,Glenwood,View 14th,271,33511,1,1,2000,2001,ationpriantin stable,50.2,76.36,88.85,96.21,0.0,0.0,bar,43604
+Hamilton,Maple River,621,92808,Clinton,Main College,702,78222,1,1,2000,2001,ationpriantin stable,66.39,72.22,118.83,116.99,0.0,0.0,bar,32477
+Fairview,1st Davis,323,15709,Saint Clair,Oak ,956,65294,1,1,2000,2001,ationpriantin stable,95.19,16.4,129.45,24.27,0.0,0.0,ese,33604
+Union Hill,Railroad ,681,57746,Plainview,Spring Woodland,236,04283,1,1,2000,2001,ationpriantin stable,22.66,95.96,37.61,151.61,2.7,0.0,n st,49431
+Woodlawn,Church ,661,34098,Greenfield,North ,218,55038,1,1,2000,2001,ationpriantin stable,77.44,95.96,105.31,151.61,0.0,0.0,n st,49431
+Bayside,6th ,141,29550,Bethel,Cedar Cedar,995,25281,1,1,2000,2001,ationpriantin stable,89.33,95.96,152.75,151.61,0.0,0.0,n st,49431
+Lincoln,Walnut ,640,61289,Valley View,Forest East,908,25124,1,1,2000,2001,ationpricallypriese,26.5,71.28,32.06,94.8,0.0,0.0,ation,39843
+Five Points,West Mill,474,66098,Lakeside,9th Chestnut,230,39532,1,1,2000,2001,ationpricallypriese,71.79,38.74,105.53,67.4,0.0,0.0,bar,34136
+Highland Park,Pine ,173,26534,Friendship,Jefferson Oak,886,44536,1,1,2000,2001,ationpricallypriese,97.32,66.76,137.22,76.1,0.0,975.49,cally,29843
+Hamilton,Elm Spruce,649,62808,Harmony,Main Mill,691,75804,1,1,2000,2001,ationpricallypriese,42.11,32.56,74.95,33.53,0.0,0.0,ese,39843
+Avery,2nd Church,511,70194,Sulphur Springs,Park 1st,508,68354,1,1,2000,2001,ationpricallypriese,58.85,50.26,117.11,56.29,0.0,0.0,n st,38370
+New Hope,3rd ,735,59431,Fairview,Franklin 5th,7,55709,1,1,2000,2001,ationpricallypriese,18.78,44.86,23.85,80.74,0.0,0.0,ought,23604
+Jackson,Davis North,168,49583,Richardson,North Sixth,243,37687,1,1,2000,2001,ationprieseprin st,19.61,58.66,32.55,88.57,0.0,0.0,able,53604
+Arlington,Woodland ,250,56557,Cedar Grove,Park Forest,877,40411,1,1,2000,2001,ationprieseprin st,89.77,47.92,141.83,78.1,0.0,0.0,ation,78048
+Farmington,7th ,245,49145,Wesley,Park ,614,61218,1,1,2000,2001,ationprieseprin st,73.03,54.92,128.53,90.06,0.0,0.0,eing,35709
+Newport,Woodland ,187,91521,Antioch,First Cedar,246,78605,1,1,2000,2001,ationprieseprin st,13.9,7.65,16.81,8.41,0.0,0.0,ese,25281
+Newport,Woodland ,187,91521,Antioch,First Cedar,246,78605,1,1,2000,2001,ationprieseprin st,13.9,28.07,16.81,39.57,0.0,0.0,ese,25281
+Arthur,Willow Cherry,224,15965,Springfield,7th ,68,39303,1,1,2000,2001,ationprieseprin st,70.34,69.6,125.9,129.45,0.0,0.0,ese,31904
+White Oak,Lincoln ,850,66668,Williamsville,Maple ,673,68754,1,1,2000,2001,ationprieseprin st,4.16,2.29,5.11,3.8,0.0,0.0,n st,61933
+Union Hill,Pine ,504,67746,Sutton,Second Pine,502,45413,1,1,2000,2001,ationprieseprin st,15.08,16.63,19.45,32.42,0.0,0.0,ought,63604
+Union Hill,Pine ,504,67746,Sutton,Second Pine,502,45413,1,1,2000,2001,ationprieseprin st,15.08,56.38,19.45,60.89,0.0,0.0,ought,63604
+Bethel,Elm Franklin,308,65281,Greenfield,Valley Mill,,,1,1,2000,2001,n stableantioughtn st,1.1,55.22,1.18,60.18,0.0,0.0,ation,28370
+White Oak,Fourth 15th,607,86668,Lakewood,3rd Broadway,793,28877,1,1,2000,2001,n stableantioughtn st,23.66,55.22,25.07,60.18,0.0,0.0,ation,28370
+Maple Grove,Chestnut Ash,254,58252,Unionville,Oak North,925,71711,1,1,2000,2001,n stableantioughtn st,81.56,51.15,118.26,95.13,0.0,0.0,ation,41904
+Cedar Grove,Jackson 4th,253,50411,Macedonia,Center ,804,61087,1,1,2000,2001,n stableantioughtn st,32.9,57.28,46.06,76.18,0.0,0.0,bar,59231
+Glendale,Park ,539,73951,Midway,Miller ,681,91904,1,1,2000,2001,n stableantioughtn st,97.33,57.28,132.36,76.18,0.0,0.0,bar,59231
+Clifton,Broadway Maple,830,68014,Providence,Fifth ,759,56614,1,1,2000,2001,n stableantioughtn st,32.37,17.48,34.63,30.06,0.0,52.76,cally,32477
+Clifton,Broadway Maple,830,68014,Providence,Fifth ,759,56614,1,1,2000,2001,n stableantioughtn st,32.37,64.4,34.63,84.36,0.0,0.0,cally,32477
+Red Hill,Highland ,917,54338,,,852,,1,1,2000,2001,n stableantioughtn st,73.4,58.06,110.1,88.25,0.0,0.0,eing,45709
+Oak Ridge,Fifth Lake,968,58371,Spring Valley,Broadway ,515,56060,1,1,2000,2001,n stableantioughtn st,52.34,30.22,86.88,36.26,0.0,0.0,ese,48721
+Langdon,7th 2nd,129,70852,Bunker Hill,View 6th,237,20150,1,1,2000,2001,n stableantioughtn st,76.23,17.67,117.39,22.26,0.0,0.0,n st,61933
+Spring Hill,Main ,360,16787,,Fourth ,110,11209,1,1,2000,2001,n stableantioughtn st,87.6,67.7,101.61,92.74,975.36,0.0,n st,42812
+Spring Hill,Main ,360,16787,,Fourth ,110,11209,1,1,2000,2001,n stableantioughtn st,87.6,73.15,101.61,109.72,975.36,0.0,n st,42812
+Harmony,12th 3rd,533,45804,Riverside,River Wilson,921,59231,1,1,2000,2001,n stantiationbaranti,12.39,47.82,16.72,69.81,0.0,0.0,able,61933
+Georgetown,First Lakeview,457,57057,Florence,Ridge Spring,130,63394,1,1,2000,2001,n stantiationbaranti,35.03,91.41,44.83,102.37,0.0,0.0,able,30059
+Oak Grove,Maple ,177,78370,Macedonia,Mill ,533,31087,1,1,2000,2001,n stantiationbaranti,48.6,15.32,57.34,25.89,0.0,0.0,able,31904
+Plainview,College ,646,33683,Sulphur Springs,1st ,455,38354,1,1,2000,2001,n stantiationbaranti,60.73,15.32,105.06,25.89,0.0,0.0,able,31904
+Summit,Railroad ,953,90499,Pleasant Hill,Lee ,968,23604,1,1,2000,2001,n stantiationbaranti,30.01,7.68,52.81,8.83,0.0,0.0,anti,79431
+Harmony,Ridge ,522,25804,Friendship,Madison South,902,54536,1,1,2000,2001,n stantiationbaranti,63.16,80.98,97.26,90.69,0.0,0.0,cally,38370
+Valley View,Jefferson Maple,869,75124,Fairview,Smith ,240,35709,1,1,2000,2001,n stantiationbaranti,51.12,27.16,96.1,46.71,0.0,283.95,eing,48721
+Waterloo,5th Fifth,654,61675,Youngstown,View ,863,90001,1,1,2000,2001,n stantiationbaranti,81.75,87.33,147.15,103.04,0.0,0.0,n st,61933
+Cairo,Miller Park,262,74744,Fairview,Sycamore Dogwood,292,06309,1,1,2000,2001,n stantiationbaranti,90.93,52.16,101.84,99.62,0.0,0.0,pri,31933
+Brownsville,Elm First,299,39310,Macedonia,Jackson 3rd,782,21087,1,1,2000,2001,n stationbarablepriought,33.46,35.31,54.87,59.32,0.0,0.0,bar,33604
+Antioch,10th Forest,36,78605,Maple Grove,Cherry ,400,58252,1,1,2000,2001,n stationbarablepriought,48.89,80.52,59.64,151.37,0.0,0.0,cally,36098
+Lebanon,Maple Davis,595,52898,Woodville,Pine 6th,511,74289,1,1,2000,2001,n stationbarablepriought,80.07,80.52,132.91,151.37,0.0,0.0,cally,36098
+Forest Hills,Maple Elm,416,59237,New Town,River 13th,118,79634,1,1,2000,2001,n stationbarablepriought,92.85,44.79,159.7,64.49,0.0,165.26,eing,79231
+Brownsville,First West,849,39310,Deerfield,5th ,226,59840,1,1,2000,2001,n stationbarablepriought,38.18,57.23,66.05,66.38,0.0,0.0,ese,59431
+Mount Olive,9th 9th,598,28059,Wildwood,2nd Smith,109,86871,1,1,2000,2001,n stationbarablepriought,85.18,57.23,139.69,66.38,0.0,0.0,ese,59431
+Mount Olive,Birch ,831,78059,Newport,Washington Oak,828,61521,1,1,2000,2001,n stationbarablepriought,57.61,16.95,77.77,26.44,0.0,0.0,pri,38828
+Mount Olive,Birch ,831,78059,Newport,Washington Oak,828,61521,1,1,2000,2001,n stationbarablepriought,57.61,21.24,77.77,28.88,0.0,1451.97,pri,38828
+Mount Olive,Birch ,831,78059,Newport,Washington Oak,828,61521,1,1,2000,2001,n stationbarablepriought,57.61,41.16,77.77,68.73,0.0,0.0,pri,38828
+Liberty,River Railroad,441,83451,Lewisburg,Jackson Railroad,291,57538,1,1,2000,2001,n stbarn stprieseought,41.62,4.33,44.11,5.28,751.74,0.0,able,46098
+Pinecrest,Locust Lakeview,244,59981,Forest Hills,5th Sunset,865,29237,1,1,2000,2001,n stbarn stprieseought,98.22,48.3,150.27,56.99,0.0,0.0,able,30059
+Riverdale,Mill ,468,79391,Lincoln,Cedar ,598,11289,1,1,2000,2001,n stbarn stprieseought,24.14,63.5,32.58,89.53,0.0,0.0,anti,49843
+Bethel,Oak ,894,25281,Mount Olive,Laurel ,61,,1,1,2000,2001,n stbarn stprieseought,82.78,63.5,105.95,89.53,0.0,0.0,anti,49843
+Blair,Fourteenth Laurel,692,65465,Lakewood,Ash Elm,979,38877,1,1,2000,2001,n stbarn stprieseought,32.25,92.1,35.47,102.23,147.7,1666.07,ation,38048
+Wildwood,Pine 4th,268,26871,Mount Pleasant,Williams ,815,51933,1,1,2000,2001,n stbarn stprieseought,23.16,94.35,46.32,126.42,0.0,0.0,bar,70059
+New Hope,Ridge 2nd,954,59431,Franklin,West Green,269,39101,1,1,2000,2001,n stbarn stprieseought,60.2,82.77,75.85,115.05,0.0,0.0,ese,35281
+Bunker Hill,Ridge Center,468,70150,Griffin,Green ,748,01804,1,1,2000,2001,n stbarn stprieseought,33.54,44.82,56.68,68.57,0.0,0.0,n st,28370
+Clinton,Locust Willow,946,48222,Belmont,Green ,432,40191,1,1,2000,2001,n stbarn stprieseought,32.52,13.18,53.65,15.55,0.0,0.0,ought,23604
+Pleasant Valley,Davis ,547,32477,Centerville,Sunset ,509,90059,1,1,2000,2001,n steingationoughtcallyought,1.17,49.27,1.68,94.59,0.0,0.0,eing,33451
+Woodland,Forest Spruce,949,54854,Fairview,Railroad Spring,533,65709,1,1,2000,2001,n steingationoughtcallyought,35.98,9.14,69.8,15.81,0.0,0.0,eing,79231
+Pleasant Grove,6th 3rd,222,54136,Fairview,Locust ,207,65709,1,1,2000,2001,n steingationoughtcallyought,93.24,36.34,157.57,38.88,474.78,0.0,ese,68721
+Highland Park,3rd ,617,86534,Sunnyside,Green Jefferson,651,11952,1,1,2000,2001,n stn stationantiable,6.36,4.35,9.22,4.74,0.0,0.0,able,33451
+Mount Zion,View Cherry,437,48054,,College ,,90059,1,1,2000,2001,n stn stationantiable,44.33,7.51,68.26,11.94,0.0,0.0,able,58721
+Maple Grove,Mill 12th,655,78252,Belmont,Center Park,890,20191,1,1,2000,2001,n stn stationantiable,50.43,76.96,99.85,112.36,0.0,0.0,able,35281
+Five Forks,1st Lee,419,42293,Green Acres,View Maple,791,47683,1,1,2000,2001,n stn stationantiable,72.02,33.54,79.94,61.04,0.0,0.0,able,70059
+Five Forks,1st Lee,419,42293,Green Acres,View Maple,791,47683,1,1,2000,2001,n stn stationantiable,72.02,55.49,79.94,107.65,0.0,0.0,able,70059
+Nichols,Lee ,143,37940,Crossroads,6th College,330,40534,1,1,2000,2001,n stn stationantiable,20.85,47.06,32.94,50.35,994.61,0.0,bar,58828
+Mountain View,Cherry ,357,54466,Berea,5th ,790,53804,1,1,2000,2001,n stn stationantiable,31.36,81.05,40.14,102.93,24.26,1170.86,bar,79431
+White Oak,Mill ,802,66668,Farmington,Smith Madison,611,79145,1,1,2000,2001,n stn stationantiable,47.2,65.93,53.8,102.19,0.0,2768.87,bar,32477
+Rutland,River 4th,958,08975,Lakeside,12th ,873,39532,1,1,2000,2001,n stn stationantiable,77.18,18.29,134.29,24.5,0.0,0.0,cally,38828
+Newtown,Poplar Woodland,900,41749,Greenwood,3rd ,98,68828,1,1,2000,2001,n stn stationantiable,6.57,23.13,10.9,34.69,0.0,0.0,eing,79231
+Florence,Fourteenth ,610,03994,Shiloh,Valley ,272,79275,1,1,2000,2001,n stn stationantiable,13.67,29.71,22.0,41.29,64.51,157.94,eing,49231
+Florence,Fourteenth ,610,03994,Shiloh,Valley ,272,79275,1,1,2000,2001,n stn stationantiable,13.67,34.61,22.0,68.52,64.51,0.0,eing,49231
+Oak Grove,Washington Lincoln,765,58370,Riverdale,4th ,420,69391,1,1,2000,2001,n stn stationantiable,30.29,29.71,34.53,41.29,394.12,157.94,eing,49231
+Oak Grove,Washington Lincoln,765,58370,Riverdale,4th ,420,69391,1,1,2000,2001,n stn stationantiable,30.29,34.61,34.53,68.52,394.12,0.0,eing,49231
+Woodlawn,Ash 9th,255,14098,New Hope,3rd West,833,69431,1,1,2000,2001,n stn stationantiable,81.43,29.71,124.58,41.29,781.11,157.94,eing,49231
+Woodlawn,Ash 9th,255,14098,New Hope,3rd West,833,69431,1,1,2000,2001,n stn stationantiable,81.43,34.61,124.58,68.52,781.11,0.0,eing,49231
+Marion,Oak 6th,182,30399,White Oak,Valley ,338,26668,1,1,2000,2001,n stn stationantiable,6.5,19.24,6.82,37.51,0.0,0.0,n st,61933
+Forest Hills,College Elm,414,99237,Waterloo,Elm Locust,428,31675,1,1,2000,2001,n stoughtn stoughtoughtought,40.88,96.61,49.87,104.33,0.0,0.0,able,30059
+Newport,11th ,508,51521,Sulphur Springs,River ,538,38354,1,1,2000,2001,n stoughtn stoughtoughtought,43.54,4.86,46.58,9.18,0.0,0.0,anti,31904
+Newport,11th ,508,51521,Sulphur Springs,River ,538,38354,1,1,2000,2001,n stoughtn stoughtoughtought,43.54,7.47,46.58,12.17,0.0,0.0,anti,31904
+Newport,11th ,508,51521,Sulphur Springs,River ,538,38354,1,1,2000,2001,n stoughtn stoughtoughtought,43.54,28.44,46.58,44.93,0.0,0.0,anti,31904
+Springdale,3rd ,22,78883,Antioch,Elm Miller,988,48605,1,1,2000,2001,n stoughtn stoughtoughtought,69.49,4.86,118.82,9.18,0.0,0.0,anti,31904
+Springdale,3rd ,22,78883,Antioch,Elm Miller,988,48605,1,1,2000,2001,n stoughtn stoughtoughtought,69.49,7.47,118.82,12.17,0.0,0.0,anti,31904
+Springdale,3rd ,22,78883,Antioch,Elm Miller,988,48605,1,1,2000,2001,n stoughtn stoughtoughtought,69.49,28.44,118.82,44.93,0.0,0.0,anti,31904
+Midway,Franklin ,154,91904,Macedonia,Park Franklin,606,71087,1,1,2000,2001,n stoughtn stoughtoughtought,65.28,8.57,114.89,10.79,0.0,0.0,cally,40059
+Midway,Franklin ,154,91904,Macedonia,Park Franklin,606,71087,1,1,2000,2001,n stoughtn stoughtoughtought,65.28,70.53,114.89,130.48,0.0,2795.65,cally,40059
+White Oak,Fourth Railroad,213,26668,Antioch,Jefferson ,84,48605,1,1,2000,2001,n stoughtn stoughtoughtought,65.9,43.76,69.19,86.2,0.0,0.0,eing,33451
+Kelly,Park ,781,92738,Riverview,College Davis,211,49003,1,1,2000,2001,n stpribaranti,49.5,81.48,87.61,150.73,0.0,0.0,able,31904
+Wildwood,2nd Broadway,349,07471,Pioneer,Railroad ,315,50967,1,1,2000,2001,n stpribaranti,22.15,1.05,29.68,1.38,610.89,0.0,n st,39431
+Providence,Railroad ,487,36614,Florence,9th ,207,53394,1,1,2000,2001,oughtableantiationbarought,83.81,81.45,165.94,140.09,0.0,0.0,able,35281
+Green Acres,9th Lakeview,62,67683,Arlington,South Adams,87,36557,1,1,2000,2001,oughtableantiationbarought,27.35,89.2,54.15,152.53,0.0,0.0,bar,58828
+Stringtown,7th Lincoln,460,70162,Whitney,View ,760,28339,1,1,2000,2001,oughtableantiationbarought,51.59,89.2,55.71,152.53,0.0,0.0,bar,58828
+Marion,Twelfth Cedar,689,40399,Harmony,5th ,841,55804,1,1,2000,2001,oughtableantiationbarought,92.96,74.65,173.83,78.38,0.0,0.0,ese,36098
+Oakland,Spruce Smith,364,49843,Ashland,Spring Franklin,989,44244,1,1,2000,2001,oughtableantiationbarought,41.35,35.91,45.48,51.71,0.0,0.0,ought,58370
+Oakland,Spruce Smith,364,49843,Ashland,Spring Franklin,989,44244,1,1,2000,2001,oughtableantiationbarought,41.35,84.08,45.48,89.96,0.0,0.0,ought,58370
+Mount Zion,2nd ,940,48054,,Willow ,,88354,1,1,2000,2001,oughtantianticallyable,84.26,19.57,135.65,28.57,0.0,0.0,anti,44136
+Glenwood,,,53511,,,387,65402,1,1,2000,2001,oughtantianticallyable,27.28,94.04,46.92,176.79,0.0,0.0,bar,58828
+Kimball,Fifth ,524,23595,Oakdale,,110,,1,1,2000,2001,oughtantianticallyable,9.71,68.67,10.29,125.66,0.0,0.0,ese,48721
+Kimball,Fifth ,524,23595,Oakdale,,110,,1,1,2000,2001,oughtantianticallyable,9.71,75.81,10.29,101.58,0.0,0.0,ese,48721
+Hillcrest,Walnut Center,353,63003,Clinton,Ridge ,706,68222,1,1,2000,2001,oughtantianticallyable,23.99,68.67,36.7,125.66,0.0,0.0,ese,48721
+Hillcrest,Walnut Center,353,63003,Clinton,Ridge ,706,68222,1,1,2000,2001,oughtantianticallyable,23.99,75.81,36.7,101.58,0.0,0.0,ese,48721
+Burns,River West,20,65272,Glendale,Highland Park,249,83951,1,1,2000,2001,oughtantianticallyable,29.54,7.03,58.78,8.71,3857.04,21.14,ese,51933
+Burns,River West,20,65272,Glendale,Highland Park,249,83951,1,1,2000,2001,oughtantianticallyable,29.54,81.62,58.78,124.87,3857.04,0.0,ese,51933
+Glendale,5th ,181,43951,Centerville,Chestnut ,877,50059,1,1,2000,2001,oughtantianticallyable,51.58,75.96,91.29,114.69,0.0,0.0,ese,49843
+Glendale,5th ,181,43951,Centerville,Chestnut ,877,50059,1,1,2000,2001,oughtantianticallyable,51.58,92.83,91.29,144.81,0.0,0.0,ese,49843
+,,,,Green Acres,Oak Railroad,803,27683,1,1,2000,2001,oughtantianticallyable,24.84,32.62,42.22,50.56,0.0,0.0,pri,39231
+,,,,Green Acres,Oak Railroad,803,27683,1,1,2000,2001,oughtantianticallyable,24.84,93.66,42.22,119.88,0.0,0.0,pri,39231
+Five Points,Poplar Washington,156,56098,Hamilton,Wilson ,154,72808,1,1,2000,2001,oughtantiationoughtpri,2.51,1.82,4.91,3.13,0.0,4.23,able,61904
+Mountain View,View ,129,54466,Morris,Meadow 7th,76,36696,1,1,2000,2001,oughtantiationoughtpri,39.54,86.39,56.93,113.17,0.0,0.0,bar,78048
+Spring Valley,,,,Marion,Spring ,29,40399,1,1,2000,2001,oughtantiationoughtpri,65.45,86.39,107.99,113.17,0.0,0.0,bar,78048
+Summit,Ash ,181,50499,Carthage,11th ,710,71529,1,1,2000,2001,oughtantiationoughtpri,68.5,86.39,120.56,113.17,0.0,0.0,bar,78048
+,Lincoln ,190,,Shiloh,7th Twelfth,832,49275,1,1,2000,2001,oughtantiationoughtpri,5.96,55.68,9.53,79.62,0.0,0.0,cally,38828
+Forest Hills,Railroad Fourth,370,79237,Springdale,View Park,617,58883,1,1,2000,2001,oughtantiationoughtpri,85.47,89.37,142.73,155.5,0.0,0.0,eing,71933
+Buffalo,Dogwood Third,526,77098,Woodland,Cedar ,19,54854,1,1,2000,2001,oughtantiationoughtpri,24.62,26.35,29.79,29.24,0.0,0.0,ought,58370
+Andover,Central ,130,61639,Providence,Main ,715,16614,1,1,2000,2001,oughtantiationoughtpri,2.8,93.9,3.38,171.83,0.0,0.0,pri,31933
+Parkwood,Mill Hickory,460,71669,Unionville,Walnut ,74,61711,1,1,2000,2001,oughtantiationoughtpri,53.57,93.9,88.39,171.83,0.0,0.0,pri,31933
+Union Hill,Hill Green,731,97746,Bridgeport,Main ,134,55817,1,1,2000,2001,oughtationcallypribarable,47.03,54.52,49.38,78.5,0.0,0.0,able,31904
+Valley View,Ridge Ash,776,55124,Mount Vernon,8th ,516,78482,1,1,2000,2001,oughtationcallypribarable,56.42,58.19,103.81,61.68,0.0,0.0,anti,33451
+Shady Grove,Hill Forest,217,03412,Riverdale,Willow 4th,148,89391,1,1,2000,2001,oughtationcallypribarable,77.13,18.56,133.43,33.4,0.0,0.0,anti,79431
+Shady Grove,Hill Forest,217,03412,Riverdale,Willow 4th,148,89391,1,1,2000,2001,oughtationcallypribarable,77.13,32.64,133.43,63.32,0.0,0.0,anti,79431
+Lebanon,Smith 13th,898,92898,Bethel,Oak 9th,552,65281,1,1,2000,2001,oughtationcallypribarable,88.09,32.12,155.91,45.61,0.0,0.0,anti,52477
+Marion,Fifth 14th,646,20399,Liberty,2nd Fourth,726,53451,1,1,2000,2001,oughtationcallypribarable,84.98,73.17,122.37,103.9,724.47,0.0,bar,40059
+Cedar Grove,Walnut ,70,60411,Cedar Grove,Meadow ,757,20411,1,1,2000,2001,oughtationcallypribarable,14.89,52.31,22.33,75.32,0.0,0.0,ese,25281
+Providence,Lincoln Locust,375,76614,Woodville,4th ,906,94289,1,1,2000,2001,oughtationcallypribarable,65.55,57.02,97.01,85.53,0.0,0.0,ese,31904
+Mount Olive,Church ,77,68059,,College Park,,61933,1,1,2000,2001,oughtationcallypribarable,76.63,18.92,151.72,20.81,172.96,0.0,ese,58048
+Georgetown,Willow ,60,47057,Antioch,Hillcrest Lake,228,88605,1,1,2000,2001,oughtationcallypribarable,78.16,18.92,121.14,20.81,0.0,0.0,ese,58048
+Hillcrest,Central Spring,2,13003,Pleasant Grove,Cedar Washington,856,44136,1,1,2000,2001,oughtationcallypribarable,98.67,81.44,99.65,107.5,1186.17,0.0,n st,49431
+Pleasant Valley,Adams ,330,72477,Argyle,2nd 2nd,915,48722,1,1,2000,2001,oughtationcallypribarable,61.73,7.7,83.33,13.09,0.0,59.34,ought,23604
+Pleasant Valley,Adams ,330,72477,Argyle,2nd 2nd,915,48722,1,1,2000,2001,oughtationcallypribarable,61.73,91.59,83.33,91.59,0.0,4297.26,ought,23604
+Pleasant Valley,Adams ,330,72477,Argyle,2nd 2nd,915,48722,1,1,2000,2001,oughtationcallypribarable,61.73,94.67,83.33,154.31,0.0,0.0,ought,23604
+Rockwood,River Elm,933,31545,Lakeside,Willow ,833,79532,1,1,2000,2001,oughtationcallypribarable,79.7,29.01,80.49,41.48,0.0,0.0,ought,22477
+Union,Ridge ,353,18721,Bunker Hill,Broadway Cedar,86,40150,1,1,2000,2001,oughtationn stprioughtought,22.64,90.14,29.43,100.05,196.44,0.0,bar,48828
+Montpelier,13th ,817,98930,,,,50852,1,1,2000,2001,oughtationn stprioughtought,23.95,90.14,39.51,100.05,0.0,0.0,bar,48828
+Midway,Cherry ,122,61904,Oakland,Railroad 5th,709,09843,1,1,2000,2001,oughtationn stprioughtought,47.58,3.82,74.22,4.24,0.0,0.0,bar,33604
+Midway,Cherry ,122,61904,Oakland,Railroad 5th,709,09843,1,1,2000,2001,oughtationn stprioughtought,47.58,65.75,74.22,87.44,0.0,0.0,bar,33604
+Brownsville,Park 7th,54,39310,Lenox,14th Valley,711,41143,1,1,2000,2001,oughtationn stprioughtought,54.42,71.56,99.04,143.12,0.0,0.0,bar,61933
+Harper,Cedar ,172,15695,Union Hill,Williams Elm,871,87746,1,1,2000,2001,oughtationn stprioughtought,42.79,68.27,61.18,102.4,0.0,0.0,cally,38721
+Mountain View,Madison ,56,54466,Valley View,Elevnth Lake,507,25124,1,1,2000,2001,oughtationn stprioughtought,52.61,94.49,84.17,162.52,0.0,0.0,cally,29843
+Fairfield,Williams Elevnth,563,26192,Union Hill,Hill South,475,87746,1,1,2000,2001,oughtationn stprioughtought,22.63,37.57,41.18,65.74,0.0,0.0,eing,43451
+Fairfield,Williams Elevnth,563,26192,Union Hill,Hill South,475,87746,1,1,2000,2001,oughtationn stprioughtought,22.63,70.31,41.18,121.63,0.0,1996.41,eing,43451
+Lincoln,Spruce ,212,71289,Vance,Maple Lake,309,60268,1,1,2000,2001,oughtationn stprioughtought,49.97,78.64,83.94,134.47,0.0,0.0,eing,26098
+Macon,3rd ,392,30369,Pleasant Valley,First Spruce,473,72477,1,1,2000,2001,oughtationn stprioughtought,58.77,37.57,64.64,65.74,0.0,0.0,eing,43451
+Macon,3rd ,392,30369,Pleasant Valley,First Spruce,473,72477,1,1,2000,2001,oughtationn stprioughtought,58.77,70.31,64.64,121.63,0.0,1996.41,eing,43451
+Five Points,6th ,573,66098,Crossroads,Valley First,316,50534,1,1,2000,2001,oughtationn stprioughtought,21.41,33.34,24.4,56.01,0.0,0.0,ese,25281
+Hamilton,Walnut ,139,22808,Greenville,Adams ,242,81387,1,1,2000,2001,oughtationn stprioughtought,48.13,70.7,60.64,99.68,0.0,0.0,n st,61933
+Cordova,Sycamore Washington,569,56938,Sulphur Springs,Smith Main,205,48354,1,1,2000,2001,oughtationn stprioughtought,72.36,29.9,75.25,30.79,0.0,0.0,n st,39431
+Sawyer,2nd ,25,36045,Elizabeth,Hill Forest,926,72935,1,1,2000,2001,oughtcallyeseantiableought,18.17,1.23,22.53,2.02,0.0,0.0,able,31904
+Sawyer,2nd ,25,36045,Elizabeth,Hill Forest,926,72935,1,1,2000,2001,oughtcallyeseantiableought,18.17,33.53,22.53,66.05,0.0,0.0,able,31904
+Fairview,2nd ,266,25709,Glenwood,Washington Maple,474,73511,1,1,2000,2001,oughtcallyeseantiableought,72.21,7.29,127.08,9.33,0.0,0.0,anti,31904
+Glenwood,Cedar Cherry,134,23511,Woodland,7th ,762,14854,1,1,2000,2001,oughtcallyeseantiableought,10.15,95.91,16.84,129.47,13.24,0.0,ation,39843
+Mount Olive,7th Lake,273,28059,Tracy,Dogwood ,653,96340,1,1,2000,2001,oughtcallyeseantiableought,83.14,48.7,98.1,63.79,22.65,0.0,eing,49231
+Providence,13th ,183,86614,Bridgeport,Mill ,372,45817,1,1,2000,2001,oughtcallyeseantiableought,14.04,15.47,20.63,18.25,0.0,0.0,ese,34136
+Liberty,2nd Washington,703,13451,Lakeside,Ash Mill,384,59532,1,1,2000,2001,oughtcallyeseantiableought,28.63,15.47,50.1,18.25,0.0,0.0,ese,34136
+Pine Grove,Oak ,362,34593,Marion,Ridge ,167,40399,1,1,2000,2001,oughtcallyeseantiableought,63.34,41.09,68.4,76.01,0.0,0.0,ese,23451
+Mount Zion,Cedar Elm,25,28054,Macedonia,Cherry ,951,11087,1,1,2000,2001,oughtcallyeseantiableought,42.9,81.02,76.79,158.79,0.0,0.0,pri,35709
+Cedar Grove,5th ,231,60411,Georgetown,Meadow ,326,47057,1,1,2000,2001,oughtesebarpri,45.92,93.28,84.03,118.46,0.0,0.0,able,48370
+Pleasant Hill,Locust 7th,988,43604,Waterloo,Dogwood ,547,21675,1,1,2000,2001,oughtesebarpri,59.64,62.86,110.93,72.28,806.57,0.0,anti,59843
+Friendship,Center Cedar,570,74536,Mount Olive,4th Wilson,570,38059,1,1,2000,2001,oughtesebarpri,86.07,56.6,126.52,65.65,0.0,778.25,anti,31933
+Pleasant Grove,,429,94136,Red Hill,Valley ,356,74338,1,1,2000,2001,oughtesebarpri,54.2,17.54,86.17,29.29,0.0,506.34,eing,79231
+Wright,8th Smith,391,,Summit,1st Tenth,247,60499,1,1,2000,2001,oughtesebarpri,79.11,1.47,134.48,1.69,0.0,98.55,n st,20059
+Glenwood,Eigth ,806,13511,Glenwood,Washington Walnut,820,73511,1,1,2000,2001,oughtesebarpri,13.88,36.39,23.59,62.22,0.0,0.0,pri,79843
+Glenwood,Spruce 1st,229,83511,Sulphur Springs,10th ,822,68354,1,1,2000,2001,oughtoughtn stable,44.93,90.2,48.07,156.94,0.0,0.0,able,72812
+Fairfield,Fourth Ash,748,56192,Mount Zion,5th ,110,68054,1,1,2000,2001,oughtoughtn stable,84.71,74.28,126.21,135.93,0.0,0.0,anti,31904
+Cedar Grove,Pine Cherry,713,30411,Midway,Lincoln Maple,4,61904,1,1,2000,2001,oughtoughtn stable,61.91,64.82,90.38,99.82,0.0,0.0,bar,28048
+Unionville,10th Main,319,61711,Allison,Ridge ,38,44167,1,1,2000,2001,oughtoughtn stable,96.35,35.79,125.25,46.52,0.0,0.0,eing,45709
+Fairfield,Lake ,347,76192,,13th ,433,,1,1,2000,2001,oughtoughtn stable,66.69,97.9,114.03,130.2,0.0,0.0,ese,48721
+Friendship,Hickory 1st,419,54536,Cedar Grove,Spruce ,359,60411,1,1,2000,2001,oughtoughtn stable,71.66,97.9,116.8,130.2,0.0,0.0,ese,48721
+Spring Hill,5th ,113,26787,,,,,1,1,2000,2001,oughtpribarationoughtought,66.13,74.08,82.66,93.34,0.0,0.0,able,61933
+Enterprise,,31,91757,Newport,Center ,186,41521,1,1,2000,2001,oughtpribarationoughtought,6.72,2.81,11.22,5.02,55.13,0.0,eing,43451
+Pine Grove,Fourth 10th,794,74593,King,Park Hickory,62,70008,1,1,2000,2001,oughtpribarationoughtought,18.06,2.81,29.07,5.02,0.0,0.0,eing,43451
+Jackson,Park Lincoln,736,79583,Green Acres,Lake 5th,509,87683,1,1,2000,2001,oughtpripribarantiought,42.97,50.24,70.04,53.25,0.0,334.1,cally,32477
+Forest Hills,View ,648,69237,Stringtown,Washington Ninth,73,30162,1,1,2000,2001,oughtpripribarantiought,90.16,93.3,106.38,94.23,0.0,0.0,cally,76098
+Allentown,Forest Railroad,207,71838,Golden,Oak ,982,70411,1,1,2000,2001,oughtpripribarantiought,14.19,51.3,15.6,94.39,0.0,0.0,eing,71933
+Macedonia,Hill Maple,80,21087,Sulphur Springs,Church ,921,78354,1,1,2000,2001,oughtpripribarantiought,14.71,97.79,16.03,190.69,0.0,0.0,eing,35709
+Farmington,Lee ,145,49145,Wilson,Cedar ,723,26971,1,1,2000,2001,oughtpripribarantiought,32.4,97.79,59.29,190.69,0.0,0.0,eing,35709
+Mount Vernon,Main ,297,58482,Waterloo,Spruce Hillcrest,23,61675,1,1,2000,2001,oughtpripribarantiought,41.73,97.79,79.28,190.69,0.0,0.0,eing,35709
+Lucas,View ,405,34554,Oak Hill,,,,1,1,2000,2001,oughtpripribarantiought,40.51,93.51,67.24,134.65,2285.83,0.0,ese,74136
+Clinton,South 3rd,323,78222,Highland Park,,,,1,1,2000,2001,oughtpripribarantiought,96.41,9.53,177.39,11.91,1350.88,0.0,ese,48721
+Clinton,South 3rd,323,78222,Highland Park,,,,1,1,2000,2001,oughtpripribarantiought,96.41,49.57,177.39,51.05,1350.88,2149.4,ese,48721
+Bethel,Elm Valley,199,35281,Marion,Green Chestnut,574,60399,1,1,2000,2001,oughtpripribarantiought,98.73,51.41,124.39,78.65,0.0,208.1,ese,63604
+Bethel,Elm Valley,199,35281,Marion,Green Chestnut,574,60399,1,1,2000,2001,oughtpripribarantiought,98.73,71.87,124.39,128.64,0.0,0.0,ese,63604
+New Hope,Cedar Highland,390,59431,Roy,11th ,96,80744,1,1,2000,2001,oughtpripribarantiought,51.54,42.95,71.64,43.37,5286.54,0.0,n st,48370
+Riverside,5th Franklin,722,29231,Shady Grove,Railroad ,362,72812,1,1,2000,2001,oughtpripribarantiought,25.12,18.1,42.45,34.57,0.0,0.0,pri,39231
+Riverside,5th Franklin,722,29231,Shady Grove,Railroad ,362,72812,1,1,2000,2001,oughtpripribarantiought,25.12,36.09,42.45,37.53,0.0,0.0,pri,39231
+Oakdale,Johnson 9th,499,89584,Oakwood,Cedar Oak,703,20169,1,1,2000,2001,oughtpripribarantiought,43.22,98.07,78.66,161.81,0.0,0.0,pri,21904
+Empire,Hill ,718,94145,Providence,Franklin Sunset,198,66614,1,1,2000,2001,oughtpriprieinganti,40.34,97.31,41.95,154.72,0.0,0.0,bar,34136
+Wilson,6th Sycamore,720,36971,Jackson,6th ,374,49583,1,1,2000,2001,oughtpriprieinganti,93.63,21.8,96.43,38.8,0.0,0.0,bar,36098
+Shaw,5th ,568,30618,Oakwood,10th ,893,70169,1,1,2000,2001,oughtpriprieinganti,7.04,90.79,7.04,153.43,0.0,0.0,cally,25709
+Enterprise,Chestnut ,675,51757,Stringtown,Park ,973,50162,1,1,2000,2001,oughtpriprieinganti,35.03,63.26,46.94,89.82,58.47,0.0,cally,73604
+Wildwood,First First,293,36871,Pleasant Hill,10th Park,636,33604,1,1,2000,2001,oughtpriprieinganti,61.76,63.26,102.52,89.82,552.02,0.0,cally,73604
+Hopewell,Franklin 3rd,603,70587,Glendale,Second ,32,23951,1,1,2000,2001,oughtpriprieinganti,22.31,48.01,28.33,92.65,0.0,0.0,eing,73604
+Five Forks,4th ,1000,62293,Five Points,2nd Mill,894,26098,1,1,2000,2001,oughtpriprieinganti,39.32,55.12,64.87,83.78,0.0,0.0,eing,43451
+Five Forks,4th ,1000,62293,Five Points,2nd Mill,894,26098,1,1,2000,2001,oughtpriprieinganti,39.32,83.67,64.87,107.93,0.0,0.0,eing,43451
+Whispering Pines,Lakeview 3rd,917,27609,Walnut Grove,Spring Railroad,48,17752,1,1,2000,2001,oughtpriprieinganti,22.3,52.16,22.74,74.06,0.0,0.0,n st,61933
+Roxbury,9th Ridge,144,65508,Mountain View,4th ,728,64466,1,1,2000,2001,oughtpriprieinganti,23.3,4.82,40.3,7.18,0.0,0.0,pri,35709
+Forest Hills,Elm Highland,400,69237,Lebanon,Miller 7th,378,12898,1,1,2000,2001,oughtpriprioughtantiought,77.13,60.09,137.29,110.56,0.0,0.0,anti,59431
+Red Bank,5th ,382,54975,Greenfield,Pine ,563,35038,1,1,2000,2001,oughtpriprioughtantiought,24.74,80.9,32.16,154.51,0.0,164.69,cally,58828
+Mountain View,Park Maple,562,94466,Belmont,Fifth Eigth,550,40191,1,1,2000,2001,oughtpriprioughtantiought,54.85,57.72,91.59,58.87,0.0,0.0,eing,49231
+Keystone,Woodland ,307,42005,Friendship,River Williams,890,44536,1,1,2000,2001,oughtpriprioughtantiought,72.9,60.75,112.99,82.62,0.0,0.0,ese,48721
+Leon,Sycamore ,89,60913,Edgewater,Jefferson Main,481,90635,1,1,2000,2001,oughtpriprioughtantiought,23.94,36.65,40.93,54.6,0.0,134.18,n st,42812
+Woodville,West Pine,710,44289,White Oak,8th ,302,07268,1,1,2000,2001,priableationoughtantiought,39.08,58.28,70.34,97.32,0.0,917.06,able,32812
+Forest Hills,Willow ,788,49237,Five Points,Third ,165,56098,1,1,2000,2001,priableationoughtantiought,44.4,4.66,75.92,6.33,0.0,0.0,ation,35709
+Wildwood,Poplar ,920,36871,Riverside,5th ,903,59231,1,1,2000,2001,priableationoughtantiought,12.83,59.3,14.62,67.0,0.0,0.0,bar,28048
+Arlington,Maple Dogwood,872,46557,Lakeside,Fifth Chestnut,310,69532,1,1,2000,2001,priableationoughtantiought,12.88,11.86,21.5,21.7,0.0,0.0,cally,23451
+Bridgeport,College Oak,536,55817,Pleasant Grove,Oak Adams,870,54136,1,1,2000,2001,priableationoughtantiought,95.71,79.37,109.1,80.95,0.0,0.0,eing,71904
+Walnut Grove,South ,141,47752,Green Acres,Third ,693,37683,1,1,2000,2001,priableationoughtantiought,35.89,18.95,62.44,34.67,0.0,2.08,ese,51933
+Walnut Grove,South ,141,47752,Green Acres,Third ,693,37683,1,1,2000,2001,priableationoughtantiought,35.89,43.57,62.44,86.7,0.0,0.0,ese,51933
+Newtown,Park ,915,51749,Liberty,Seventh 6th,603,63451,1,1,2000,2001,priableationoughtantiought,58.17,48.52,91.9,97.04,0.0,0.0,ese,36098
+Newtown,Park ,915,51749,Liberty,Seventh 6th,603,63451,1,1,2000,2001,priableationoughtantiought,58.17,93.82,91.9,178.25,0.0,0.0,ese,36098
+Summit,Mill Valley,30,60499,Woodville,7th ,386,34289,1,1,2000,2001,priableationoughtantiought,70.89,68.9,94.28,100.59,0.0,0.0,ese,33451
+Antioch,Main Church,174,88605,Enterprise,14th Wilson,346,81757,1,1,2000,2001,priablepriesecallyought,12.38,20.02,23.89,30.83,0.0,0.0,able,51904
+Lebanon,8th ,28,52898,Greenville,Walnut 3rd,257,61387,1,1,2000,2001,priablepriesecallyought,41.23,20.02,58.13,30.83,0.0,0.0,able,51904
+Stringtown,Lakeview Lake,767,50162,Summit,Hickory Fourteenth,387,30499,1,1,2000,2001,priablepriesecallyought,6.0,26.15,10.02,46.02,0.0,373.44,anti,52477
+Pittsburg,Sycamore Lake,663,74004,Mountain View,Mill ,93,74466,1,1,2000,2001,priablepriesecallyought,92.03,43.52,161.97,73.98,0.0,0.0,cally,68721
+Woodlawn,Sixth ,625,04698,Franklin,Ridge 8th,229,69101,1,1,2000,2001,priablepriesecallyought,6.28,62.84,12.43,67.86,0.0,0.0,eing,49231
+Lakeview,Dogwood ,283,48579,Millbrook,13th ,595,37529,1,1,2000,2001,priablepriesecallyought,12.17,59.86,12.17,110.74,0.0,0.0,ought,49843
+Greenville,College Spring,749,31387,Maple Grove,Hickory Willow,695,68252,1,1,2000,2001,priablepriesecallyought,84.92,48.28,141.81,76.28,367.54,0.0,ought,23604
+Glendale,6th ,94,43951,Highland,Cherry Jefferson,74,49454,1,1,2000,2001,priablepriesecallyought,46.11,64.19,85.76,100.77,0.0,0.0,pri,69843
+Fairfield,Walnut ,159,66192,Stringtown,4th 2nd,507,50162,1,1,2000,2001,priantiablen st,5.99,95.03,9.94,112.13,0.0,0.0,able,31904
+Franklin,Hillcrest Spring,895,79101,Pleasant Grove,Smith ,385,54136,1,1,2000,2001,priantiablen st,25.78,29.37,35.06,57.27,1266.26,0.0,able,70059
+Pleasant Hill,Elevnth ,214,83604,Greenwood,View 14th,84,58828,1,1,2000,2001,priantiablen st,67.29,71.51,105.64,133.0,502.81,40.85,able,35281
+Bunker Hill,3rd ,654,70150,Crossroads,Lakeview ,515,70534,1,1,2000,2001,priantiablen st,41.38,71.05,57.93,90.23,0.0,0.0,anti,59431
+Concord,View ,607,74107,Lakeview,Washington Cedar,551,09179,1,1,2000,2001,priantiablen st,75.82,44.78,148.6,62.24,0.0,0.0,cally,40059
+Walnut Grove,Washington North,294,77752,Summit,Poplar ,114,40499,1,1,2000,2001,priantiablen st,93.98,87.66,173.86,104.31,0.0,0.0,cally,76098
+Pine Grove,Main ,128,74593,Walnut Grove,Spruce ,775,77752,1,1,2000,2001,priantiablen st,91.21,79.23,103.06,146.57,0.0,0.0,eing,48721
+Wildwood,Oak 3rd,565,86871,Belmont,7th North,,70191,1,1,2000,2001,priantiablen st,73.6,35.56,83.9,55.82,0.0,115.79,ese,33451
+Wildwood,Oak 3rd,565,86871,Belmont,7th North,,70191,1,1,2000,2001,priantiablen st,73.6,50.63,83.9,77.46,0.0,404.81,ese,33451
+Wildwood,Oak 3rd,565,86871,Belmont,7th North,,70191,1,1,2000,2001,priantiablen st,73.6,99.22,83.9,139.9,0.0,0.0,ese,33451
+Glendale,Washington ,1000,23951,Oakdale,Center Central,719,89584,1,1,2000,2001,priantiablen st,34.82,17.93,41.43,35.86,0.0,0.0,pri,28048
+Glendale,Washington ,1000,23951,Oakdale,Center Central,719,89584,1,1,2000,2001,priantiablen st,34.82,49.16,41.43,82.09,0.0,0.0,pri,28048
+,Park 4th,,89303,Red Hill,2nd Center,263,44338,1,1,2000,2001,priantiablen st,83.81,17.93,116.49,35.86,0.0,0.0,pri,28048
+,Park 4th,,89303,Red Hill,2nd Center,263,44338,1,1,2000,2001,priantiablen st,83.81,49.16,116.49,82.09,0.0,0.0,pri,28048
+Hamilton,Ridge Hill,601,52808,Crossroads,Poplar Willow,625,80534,1,1,2000,2001,priantiablen st,88.53,43.59,152.27,71.92,0.0,0.0,pri,25709
+Greenville,Broadway ,640,71387,Liberty,Ridge ,806,33451,1,1,2000,2001,priantibareseable,60.49,27.15,76.21,38.01,0.0,0.0,able,32812
+Maple Grove,Cedar ,590,98252,Harmony,7th South,876,,1,1,2000,2001,priantibareseable,94.76,30.58,183.83,33.94,0.0,0.0,able,72812
+Liberty,Locust 4th,173,73451,Greenville,6th 9th,614,41387,1,1,2000,2001,priantibareseable,89.48,4.91,150.32,5.4,0.0,0.0,anti,59431
+,7th ,,37838,Sunnyside,8th ,251,41952,1,1,2000,2001,priantibareseable,17.83,55.27,26.56,85.66,0.0,0.0,eing,71904
+Concord,Davis ,201,74107,Woodland,5th Third,941,24854,1,1,2000,2001,priantibareseable,34.58,66.91,47.02,111.73,0.0,0.0,eing,61904
+Walnut Grove,4th ,225,97752,Spring Hill,Adams ,310,36787,1,1,2000,2001,priantibareseable,91.04,55.27,108.33,85.66,0.0,0.0,eing,71904
+Highland,15th Lee,131,69454,Green Acres,Ash ,59,47683,1,1,2000,2001,priantibareseable,51.45,17.2,79.74,27.69,0.0,147.0,ese,36098
+Oakland,2nd Pine,361,19843,Clifton,Maple ,773,58014,1,1,2000,2001,priantibareseable,82.45,28.73,103.88,48.26,21.63,0.0,ese,28048
+Lincoln,Davis ,425,81289,Florence,Elm ,467,73394,1,1,2000,2001,priantibareseable,51.27,58.93,101.51,79.55,0.0,0.0,pri,38828
+Lincoln,Davis ,425,81289,Florence,Elm ,467,73394,1,1,2000,2001,priantibareseable,51.27,90.01,101.51,106.21,0.0,0.0,pri,38828
+Oakwood,7th ,243,90169,Union,South ,619,58721,1,1,2000,2001,priationablepripriought,13.59,47.59,19.7,78.52,0.0,0.0,able,46098
+Sulphur Springs,11th ,,,Oak Hill,Lincoln ,305,87838,1,1,2000,2001,priationablepripriought,14.67,49.56,18.04,92.18,0.0,0.0,eing,49231
+Oak Ridge,Central ,915,88371,Woodlawn,Mill Lee,707,04698,1,1,2000,2001,priationablepripriought,90.43,21.85,126.6,43.48,0.0,0.0,eing,45709
+Oak Ridge,Central ,915,88371,Woodlawn,Mill Lee,707,04698,1,1,2000,2001,priationablepripriought,90.43,49.56,126.6,57.48,0.0,0.0,eing,45709
+Unionville,Walnut Woodland,12,81711,Centerville,East Mill,508,70059,1,1,2000,2001,priationablepripriought,39.21,12.16,46.65,17.14,1811.72,0.0,ought,63604
+New Hope,Mill Hill,638,49431,Marion,Church ,961,50399,1,1,2000,2001,priationablepripriought,71.15,62.03,73.28,114.13,0.0,0.0,ought,39843
+Riley,Second 15th,816,51692,Stringtown,Lee Sixth,604,70162,1,1,2000,2001,priationablepripriought,37.86,35.57,38.99,35.57,0.0,20.02,pri,38828
+Riley,Second 15th,816,51692,Stringtown,Lee Sixth,604,70162,1,1,2000,2001,priationablepripriought,37.86,59.07,38.99,115.18,0.0,0.0,pri,38828
+Woodlawn,Main ,356,54098,Pine Grove,North ,33,54593,1,1,2000,2001,priationablepripriought,93.9,13.99,175.59,23.92,3820.98,0.0,pri,25709
+Union,Broadway Forest,976,48721,Glenwood,Park Smith,744,43511,1,1,2000,2001,pribarationationn st,37.96,66.3,60.73,73.59,0.0,33.89,able,31904
+Mount Pleasant,13th ,290,71933,Newport,Spring Sycamore,907,61521,1,1,2000,2001,pribarationationn st,42.29,82.42,67.24,145.05,0.0,0.0,able,51904
+Spring Valley,Oak Franklin,524,46060,Unionville,13th Third,78,51711,1,1,2000,2001,pribarationationn st,12.24,8.35,13.46,9.43,0.0,67.43,ation,78048
+Fairview,Broadway ,533,65709,Glenwood,Elm ,317,23511,1,1,2000,2001,pribarationationn st,18.45,8.35,29.52,9.43,0.0,67.43,ation,78048
+Four Points,Elm ,272,51216,Bunker Hill,Davis ,351,40150,1,1,2000,2001,pribarationationn st,33.05,52.41,62.79,63.41,38.98,0.0,bar,28048
+Riceville,Fifth ,833,45867,Greenwood,Pine Miller,557,58828,1,1,2000,2001,pribarationationn st,77.53,79.71,127.14,129.13,0.0,0.0,bar,34136
+Woodville,Highland ,352,54289,Lakeview,10th Green,422,68579,1,1,2000,2001,pribarationationn st,92.01,37.9,137.09,55.71,468.81,0.0,bar,79431
+Plainview,Elm View,323,23683,Jackson,6th ,229,29583,1,1,2000,2001,pribarationationn st,11.48,15.68,13.54,26.02,0.0,0.0,cally,72477
+Georgetown,Church ,423,57057,Macedonia,11th ,309,71087,1,1,2000,2001,pribarationationn st,70.35,87.3,74.57,165.87,0.0,0.0,cally,32477
+Oakland,5th ,668,99843,Shiloh,Johnson West,415,29275,1,1,2000,2001,pribarationationn st,70.57,60.53,88.91,90.18,0.0,0.0,cally,73604
+Cedar,Third ,902,51229,Shady Grove,Hillcrest ,227,72812,1,1,2000,2001,pribarationationn st,83.15,87.3,123.06,165.87,481.99,0.0,cally,32477
+Valley View,Railroad ,107,45124,Valley View,13th ,356,75124,1,1,2000,2001,pribarationationn st,3.57,56.07,5.85,104.85,0.0,0.0,eing,38370
+Valley View,Railroad ,107,45124,Valley View,13th ,356,75124,1,1,2000,2001,pribarationationn st,3.57,71.47,5.85,77.18,0.0,24.39,eing,38370
+Valley View,Pine ,748,55124,Franklin,Hill ,528,39101,1,1,2000,2001,pribarationationn st,59.89,86.87,104.8,172.0,0.0,0.0,eing,71933
+Georgetown,3rd ,164,57057,Union,Spruce ,989,38721,1,1,2000,2001,pribarationationn st,5.52,53.86,6.23,88.86,0.0,3610.49,n st,52477
+Harmony,3rd 5th,168,65804,White Oak,6th ,16,56668,1,1,2000,2001,pribarationationn st,70.93,87.59,102.84,129.63,21.59,0.0,pri,38828
+Lakeview,11th ,268,98579,Farmington,Oak ,380,29145,1,1,2000,2001,pribarationationn st,90.5,92.79,90.5,167.94,118.03,0.0,pri,21904
+Antioch,12th 2nd,490,58605,Greenfield,View ,13,35038,1,1,2000,2001,pribareingeseation,20.63,4.16,32.18,4.99,85.45,0.0,able,32812
+Maywood,Maple ,839,25681,Green Acres,Lake 7th,747,97683,1,1,2000,2001,pribareingeseation,50.93,27.27,79.45,44.45,0.0,0.0,ation,42812
+Wilson,College 9th,595,46971,Riverdale,,,,1,1,2000,2001,pribareingeseation,51.37,69.63,61.64,100.26,0.0,0.0,ation,39431
+Oak Grove,Birch River,526,88370,Five Forks,5th ,773,62293,1,1,2000,2001,pribareingeseation,62.88,68.15,98.72,95.41,0.0,0.0,ation,24136
+Midway,Center ,771,41904,Waterloo,Poplar ,180,41675,1,1,2000,2001,pribareingeseation,77.71,27.27,131.32,44.45,0.0,0.0,ation,42812
+Kingston,Pine Laurel,8,64975,Glenwood,14th ,342,73511,1,1,2000,2001,pribareingeseation,20.59,59.42,37.47,89.13,0.0,0.0,cally,32477
+Florence,Twelfth ,2,63394,Greenfield,Davis Central,338,45038,1,1,2000,2001,pribareingeseation,25.46,59.42,43.79,89.13,0.0,0.0,cally,32477
+Unionville,Mill ,489,51711,Maple Grove,,746,38252,1,1,2000,2001,pribareingeseation,36.96,47.46,60.24,47.46,0.0,0.0,ought,38721
+Arlington,Fourth ,743,76557,Springdale,Broadway ,247,38883,1,1,2000,2001,pribareingeseeing,1.73,61.31,3.23,85.22,0.0,290.7,cally,48828
+Macedonia,Dogwood ,430,31087,Lakeside,Ridge Park,352,39532,1,1,2000,2001,pribareingeseeing,89.95,84.91,168.2,111.23,0.0,888.28,cally,32477
+Friendship,12th ,201,14536,Buena Vista,Main Adams,324,55752,1,1,2000,2001,pribareingeseeing,9.03,31.33,11.46,44.48,0.0,228.15,eing,46098
+Friendship,12th ,201,14536,Buena Vista,Main Adams,324,55752,1,1,2000,2001,pribareingeseeing,9.03,96.9,11.46,163.76,0.0,0.0,eing,46098
+Deerfield,Main 13th,411,69840,Cedar Grove,Sycamore ,703,20411,1,1,2000,2001,pribareingeseeing,78.39,64.18,92.5,124.5,0.0,0.0,eing,45709
+Deerfield,Main 13th,411,69840,Cedar Grove,Sycamore ,703,20411,1,1,2000,2001,pribareingeseeing,78.39,69.83,92.5,131.97,0.0,0.0,eing,45709
+Greenwood,Meadow 5th,420,58828,Valley View,Adams ,253,35124,1,1,2000,2001,pribareingeseeing,87.7,9.29,166.63,14.58,0.0,0.0,eing,48721
+Bethel,12th ,929,55281,Oakdale,7th ,556,69584,1,1,2000,2001,pribareingeseeing,53.66,9.64,84.78,16.58,812.28,344.06,ese,25281
+Brownsville,Jefferson 1st,513,89310,Hopewell,Broadway ,659,60587,1,1,2000,2001,pribareingeseeing,48.42,13.64,90.06,19.23,0.0,0.0,ought,23604
+Belmont,East Davis,430,90191,New Hope,Main ,748,79431,1,1,2000,2001,pribareingeseeing,73.0,65.28,77.38,73.76,0.0,0.0,ought,39431
+,9th Meadow,,32812,Green Acres,Franklin ,123,27683,1,1,2000,2001,pricallycallypripriought,93.81,70.99,170.73,90.86,0.0,0.0,able,38828
+Kingston,Fifth ,197,64975,Riverview,Second ,106,99003,1,1,2000,2001,pricallycallypripriought,13.07,16.1,13.72,17.71,0.0,0.0,bar,78048
+Riverdale,Sunset ,781,79391,Springfield,Sixth ,871,49303,1,1,2000,2001,pricallycallypripriought,43.94,78.32,83.92,115.91,0.0,0.0,eing,35709
+Five Points,8th Willow,416,66098,Five Forks,South ,685,12293,1,1,2000,2001,pricallycallypripriought,48.78,33.46,53.65,55.87,0.0,0.0,ese,58048
+Union Hill,5th ,456,37746,Highland,Laurel ,524,79454,1,1,2000,2001,pricallycallypripriought,61.53,64.61,104.6,106.6,0.0,0.0,ought,38828
+Five Forks,View Maple,464,22293,Stringtown,Hickory Washington,257,40162,1,1,2000,2001,prieingeseesebarought,84.43,2.13,161.26,2.49,0.0,0.0,anti,33451
+Springdale,Jefferson Pine,663,48883,Belleview,Spruce ,123,50492,1,1,2000,2001,prieingeseesebarought,91.32,84.21,129.67,145.68,0.0,0.0,bar,49431
+Gum Springs,Ninth Wilson,605,92106,Antioch,,,38605,1,1,2000,2001,prieingeseesebarought,94.01,61.86,128.79,76.08,0.0,0.0,bar,78048
+Red Hill,4th North,533,24338,Belmont,Railroad Oak,703,20191,1,1,2000,2001,prieingeseesebarought,21.23,34.73,40.33,47.58,0.0,0.0,eing,49231
+Woodlawn,Hill ,20,34098,Riverdale,,609,19391,1,1,2000,2001,prieingeseesebarought,87.35,40.46,165.96,59.47,0.0,1055.41,eing,38370
+Belmont,Mill Hickory,780,70191,Star,8th Park,698,20725,1,1,2000,2001,prieingeseesebarought,72.5,44.46,96.42,71.58,0.0,0.0,n st,78721
+Bridgeport,North ,215,65817,Macedonia,Cherry Smith,1,71087,1,1,2000,2001,prieseantiesepriought,79.49,43.23,98.56,63.54,3851.7,0.0,able,35281
+Bridgeport,North ,215,65817,Macedonia,Cherry Smith,1,71087,1,1,2000,2001,prieseantiesepriought,79.49,52.74,98.56,88.6,3851.7,0.0,able,35281
+Fairfield,6th 15th,186,46192,Lebanon,2nd ,821,82898,1,1,2000,2001,prieseantiesepriought,34.63,98.33,54.71,163.22,0.0,0.0,bar,34136
+,Meadow ,152,20854,Fairview,2nd 4th,412,45709,1,1,2000,2001,prieseantiesepriought,55.27,94.66,80.14,130.63,544.03,0.0,bar,43451
+Shiloh,Willow ,808,29275,Ashland,Jefferson Ridge,392,44244,1,1,2000,2001,prieseantiesepriought,16.44,56.39,30.08,112.21,0.0,2624.12,cally,32477
+Marion,Spruce ,442,40399,Macedonia,Elm Church,,71087,1,1,2000,2001,prieseantiesepriought,7.0,46.43,12.81,61.28,0.0,0.0,eing,26098
+Silver Creek,Cedar ,313,34546,Wilson,Sycamore Smith,450,26971,1,1,2000,2001,prieseantiesepriought,81.76,5.74,161.88,7.86,0.0,0.0,pri,66098
+Silver Creek,Cedar ,313,34546,Wilson,Sycamore Smith,450,26971,1,1,2000,2001,prieseantiesepriought,81.76,58.88,161.88,115.99,0.0,0.0,pri,66098
+,View Oak,,,Highland,River ,580,29454,1,1,2000,2001,prioughtoughtn stanti,30.18,7.3,45.87,13.21,0.0,0.0,ation,39843
+Riverdale,2nd ,5,29391,Brookville,Laurel ,503,23524,1,1,2000,2001,prioughtoughtn stanti,88.78,56.93,94.99,67.74,0.0,0.0,bar,73604
+Salem,,927,58048,Forest Hills,Church ,410,69237,1,1,2000,2001,prioughtoughtn stanti,46.82,60.31,59.92,119.41,0.0,0.0,cally,69231
+Union Hill,Ash ,636,57746,Franklin,Pine ,672,89101,1,1,2000,2001,prioughtoughtn stanti,5.39,22.38,5.44,37.15,141.04,1788.64,eing,61904
+Bethel,Miller Willow,466,55281,Pine Grove,Miller ,242,34593,1,1,2000,2001,prioughtoughtn stanti,11.74,18.04,18.78,26.33,0.0,19.89,eing,71904
+Jamestown,Sycamore ,833,36867,Bunker Hill,Elevnth 9th,738,80150,1,1,2000,2001,prioughtoughtn stanti,52.48,9.2,83.96,10.21,0.0,0.0,eing,33451
+Jamestown,Sycamore ,833,36867,Bunker Hill,Elevnth 9th,738,80150,1,1,2000,2001,prioughtoughtn stanti,52.48,24.07,83.96,42.12,0.0,0.0,eing,33451
+Mountain View,Hillcrest College,815,54466,Stringtown,,827,80162,1,1,2000,2001,prioughtoughtn stanti,70.97,47.02,95.8,84.16,0.0,0.0,eing,78048
+Newtown,,585,,Fairview,Hickory ,733,25709,1,1,2000,2001,prioughtoughtn stanti,98.56,27.61,167.55,45.55,0.0,0.0,ese,58048
+Cedar,Center South,530,61229,Clifton,Wilson Spring,58,98014,1,1,2000,2001,prioughtoughtn stanti,93.8,33.96,106.93,60.44,0.0,0.0,ought,39431
+Mount Olive,Railroad Highland,975,78059,Macedonia,9th ,2,71087,1,1,2000,2001,pripribarn stn stought,37.67,70.13,51.23,103.79,0.0,0.0,able,65281
+Cedar Grove,4th ,736,40411,Florence,1st Washington,228,33394,1,1,2000,2001,pripribarn stn stought,21.61,78.59,22.69,146.17,0.0,0.0,anti,59843
+Brunswick,Hickory ,583,54642,Woodland,Ridge River,303,54854,1,1,2000,2001,pripribarn stn stought,18.0,77.6,24.3,106.31,0.0,0.0,bar,40059
+Clifton,9th Adams,331,48014,Woodbury,Meadow ,718,54489,1,1,2000,2001,pripribarn stn stought,46.14,1.96,80.28,2.7,0.0,0.0,bar,73604
+Belmont,Cherry ,975,60191,Springfield,10th ,604,59303,1,1,2000,2001,pripribarn stn stought,65.69,30.42,81.45,49.58,0.0,0.0,bar,70059
+Franklin,West Oak,532,79101,Rosewood,South ,182,62205,1,1,2000,2001,pripribarn stn stought,72.01,83.84,82.81,154.26,2579.28,0.0,bar,43604
+Plainview,13th ,849,33683,Clifton,Ninth ,631,28014,1,1,2000,2001,pripribarn stn stought,88.13,30.42,88.13,49.58,2573.71,0.0,bar,70059
+Farmington,6th ,765,39145,,Washington Pine,,,1,1,2000,2001,pripribarn stn stought,15.17,46.66,20.47,63.92,0.0,0.0,cally,52477
+Brownsville,Third Walnut,736,59310,Arlington,2nd ,771,16557,1,1,2000,2001,pripribarn stn stought,57.12,2.14,66.83,3.78,0.0,0.0,cally,40059
+Concord,Sixth 2nd,895,34107,Bridgeport,Hill ,314,85817,1,1,2000,2001,pripribarn stn stought,97.94,46.66,157.68,63.92,2380.9,0.0,cally,52477
+Mountain View,Lakeview ,463,74466,Belmont,9th ,465,50191,1,1,2000,2001,pripribarn stn stought,12.68,56.36,19.9,108.77,0.0,0.0,eing,49231
+Deerfield,Cedar Dogwood,65,99840,Farmington,Walnut Lincoln,194,49145,1,1,2000,2001,pripribarn stn stought,65.9,1.05,112.68,1.9,0.0,0.0,eing,79231
+Deerfield,Cedar Dogwood,65,99840,Farmington,Walnut Lincoln,194,49145,1,1,2000,2001,pripribarn stn stought,65.9,12.04,112.68,13.84,0.0,0.0,eing,79231
+Sulphur Springs,North Elm,147,58354,Oakwood,View ,408,70169,1,1,2000,2001,pripribarn stn stought,24.83,34.25,29.54,35.62,0.0,0.0,ese,23451
+Sulphur Springs,North Elm,147,58354,Oakwood,View ,408,70169,1,1,2000,2001,pripribarn stn stought,24.83,70.4,29.54,78.14,0.0,0.0,ese,23451
+Sunnyside,Mill 11th,121,51952,Chestnut Ridge,Second ,72,27334,1,1,2000,2001,pripribarn stn stought,35.94,24.72,55.34,27.19,0.0,0.0,ese,58048
+,Spring 3rd,,,Lincoln,8th ,126,41289,1,1,2000,2001,pripribarn stn stought,44.15,85.3,54.3,86.15,0.0,0.0,n st,42812
+Fairview,8th ,898,85709,Waterloo,Third Sixth,600,51675,1,1,2000,2001,pripribarn stn stought,91.78,85.3,157.86,86.15,0.0,0.0,n st,42812
+Montpelier,South ,552,28930,Sunnyside,9th Spring,470,71952,1,1,2000,2001,pripribarn stn stought,99.72,85.3,132.62,86.15,0.0,0.0,n st,42812
+Woodlawn,Railroad 4th,342,64098,Johnsonville,Oak ,947,87745,1,1,2000,2001,pripribarn stn stought,92.89,79.58,140.26,102.65,0.0,0.0,pri,72477
+Lakeview,1st ,309,38579,Macedonia,Jackson ,906,31087,1,1,2000,2001,priprieseeingable,18.43,25.44,27.09,38.66,0.0,0.0,anti,31904
+Lakeview,1st ,309,38579,Macedonia,Jackson ,906,31087,1,1,2000,2001,priprieseeingable,18.43,57.51,27.09,86.26,0.0,0.0,anti,31904
+Sunnyside,13th 2nd,180,31952,,Washington ,,56971,1,1,2000,2001,priprieseeingable,68.05,43.3,70.77,58.88,0.0,0.0,ation,79843
+Hamilton,3rd ,510,32808,,,,,1,1,2000,2001,priprieseeingable,47.18,64.22,80.67,107.24,0.0,0.0,bar,48828
+Pleasant Valley,Maple Second,187,92477,Mountain View,,,,1,1,2000,2001,priprieseeingable,76.55,68.03,152.33,101.36,0.0,0.0,bar,38828
+Pleasant Valley,Maple Second,187,92477,Mountain View,,,,1,1,2000,2001,priprieseeingable,76.55,82.66,152.33,164.49,0.0,0.0,bar,38828
+Gum Springs,Washington Wilson,190,82106,Wildwood,Washington 7th,811,66871,1,1,2000,2001,priprieseeingable,36.33,95.93,45.04,182.26,0.0,0.0,cally,48828
+Garrison,4th ,962,28767,Salem,5th Miller,219,78048,1,1,2000,2001,priprieseeingable,49.01,23.06,53.42,29.28,0.0,0.0,cally,32477
+Hopewell,Hill Green,568,90587,Mount Vernon,Poplar Madison,78,38482,1,1,2000,2001,priprieseeingable,67.09,1.29,114.05,2.25,248.17,0.0,cally,58828
+Wildwood,Cedar ,784,56871,Crossroads,Poplar Ash,433,60534,1,1,2000,2001,priprieseeingable,47.64,54.69,93.37,88.05,0.0,0.0,ese,33451
+Wildwood,Cedar ,784,56871,Crossroads,Poplar Ash,433,60534,1,1,2000,2001,priprieseeingable,47.64,75.77,93.37,151.54,0.0,0.0,ese,33451
+Walnut Grove,Pine Willow,106,77752,Shady Grove,11th ,573,32812,1,1,2000,2001,priprieseeingable,89.21,80.1,96.34,93.71,0.0,0.0,n st,28370
+Farmington,7th ,621,69145,Oak Grove,Sixth ,649,88370,1,1,2000,2001,priprieseeingable,80.56,9.46,149.84,17.02,636.82,0.0,ought,39843
+Pine Grove,12th Birch,226,84593,Arlington,,755,,1,1,2000,2001,,36.18,18.86,48.48,23.19,0.0,0.0,able,31904
+Spring Valley,Main Willow,496,26060,Woodlawn,Park Lake,220,74098,1,1,2000,2001,,30.03,14.75,33.63,22.12,0.0,0.0,bar,38828
+Spring Valley,Main Willow,496,26060,Woodlawn,Park Lake,220,74098,1,1,2000,2001,,30.03,44.79,33.63,87.78,0.0,0.0,bar,38828
+Liberty,6th View,34,33451,Newport,Oak Ridge,633,41521,1,1,2000,2001,,81.13,12.13,153.33,23.53,860.84,8.74,bar,61933
+Liberty,6th View,34,33451,Newport,Oak Ridge,633,41521,1,1,2000,2001,,81.13,58.41,153.33,60.16,860.84,0.0,bar,61933
+Oakland,Poplar Broadway,984,99843,Belmont,Hill ,616,70191,1,1,2000,2001,,8.4,54.56,11.08,79.11,0.0,0.0,eing,79231
+Glenwood,Ash Fourth,211,43511,Clifton,Lake ,213,78014,1,1,2000,2001,,32.15,98.28,43.4,170.02,0.0,0.0,ese,34136
+Newtown,Mill ,830,71749,Wildwood,,,,1,1,2000,2001,,95.8,19.08,142.74,27.09,0.0,0.0,ought,39843
+Greenville,Spring ,376,21387,Hamilton,Sycamore ,181,42808,1,1,2000,2001,,13.9,13.05,18.62,16.7,0.0,0.0,pri,38828

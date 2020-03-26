@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7695ecb626cc00551acbc80539acfb256c588a990fd69f14729e874160ec1814
-size 50
+num_customers,segment,segment_base
+1,11377,568850

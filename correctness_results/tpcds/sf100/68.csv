@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:58d1a24e72bd369d455da4069c3215b3869c52d128b8a4164c478a2b06b0d85a
-size 6769
+bought_city,c_first_name,c_last_name,ca_city,extended_price,extended_tax,list_price,ss_ticket_number
+Enterprise,Adrian,Abbott,Oakdale,36532.15,1434.88,61490.42,1232043
+Mount Pleasant,Linwood,Abbott,Maple Grove,27991.3,1467.96,47519.4,2590935
+Edgewood,Terrell,Abbott,Ferguson,28214.43,2049.48,40234.69,5728657
+Fairview,Elizabeth,Abbott,Fox,19915.26,1092.32,36560.38,6362580
+Marion,Stanley,Abbott,Franklin,18619.23,642.25,37297.89,6666466
+Pine Grove,Adrienne,Abbott,Summit,19449.46,1044.16,38491.36,6797340
+Liberty,Brenda,Abbott,Walnut Grove,15187.43,833.68,36046.43,7955356
+Spring Valley,Wendy,Abbott,Sulphur Springs,37157.28,2005.94,54619.54,11240232
+Concord,Roy,Abbott,Woodville,21149.76,807.74,48391.94,17052527
+Bridgeport,Larry,Abbott,Summit,29394.39,562.84,41159.52,22577717
+Hillcrest,Carl,Abbott,La Grange,14648.5,631.2,42554.33,23344824
+Lakewood,Earl,Abbott,Glenwood,21002.38,398.17,47579.82,23539554
+Maple Grove,Alexis,Abel,New Hope,23303.44,515.01,63698.81,2010929
+Farmington,Brandon,Abel,Maple Grove,17668.05,764.96,42203.2,5894348
+Ashland,Lee,Abel,Jamestown,22457.48,666.46,34528.9,6526265
+Hamilton,Ethel,Abel,Jamestown,15803.59,1108.97,25795.06,10433655
+Woodville,Donald,Abel,Vista,8367.58,170.06,21333.41,14305905
+Four Points,,Abernathy,Jackson,20377.45,694.28,50851.62,7459984
+Buena Vista,Bryant,Abernathy,Highland Park,20663.63,899.52,48474.5,10932113
+Friendship,Mario,Abernathy,Wilson,25749.24,1686.35,55254.18,14940900
+New Hope,Jamie,Abernathy,Pleasant Valley,19438.21,414.05,40061.27,18780963
+Wilson,Walter,Abner,Harmony,18113.65,367.74,25677.18,5310822
+Sunnyside,Emilia,Abner,Spring Hill,23082.27,880.78,36604.03,17413459
+Oakdale,Sarah,Abner,Shady Grove,19532.79,1120.22,32154.01,19127370
+Wildwood,Stephen,Abney,Providence,32172.44,1790.01,55385.05,540541
+Clinton,Michael,Abney,Mountain View,23386.95,1457.62,53242.38,3682447
+Jackson,Kendra,Abney,Oak Grove,31352.16,1778.17,53382.64,11233064
+Elkton,James,Abraham,Stringtown,24948.48,530.12,44453.99,194820
+Scott,Rachel,Abraham,Highland Park,6881.24,330.1,27918.63,20389914
+White Oak,Ida,Abraham,Lakeview,33831.3,668.31,50697.44,23848644
+Jamestown,Lawrence,Abrams,Spring Hill,19103.06,985.26,39296.0,4318297
+Concord,Kenneth,Abrams,Union Hill,25239.25,947.31,41310.44,10606789
+Centerville,Joseph,Abrams,Buena Vista,23456.84,986.67,48270.36,10630791
+Sunnyside,Jared,Abrams,Valley View,20539.09,1268.3,39556.43,10652117
+Providence,John,Abrams,Friendship,17588.84,493.76,33959.75,11821058
+Highland,Rebecca,Abrams,Maple Grove,23799.17,927.28,36498.23,15520819
+Forest Hills,Juan,Abrams,Lincoln,34331.14,984.99,63471.71,21848945
+Farmington,Michael,Abreu,Langdon,28149.48,1518.51,65261.96,2600028
+Jamestown,Paula,Abreu,Lakeville,18484.71,464.02,51887.02,18247653
+Hillcrest,Melissa,Abreu,Mount Olive,22077.31,663.88,32946.12,23793919
+Five Points,Bruce,Acevedo,Madison,22509.01,1088.94,38022.09,85158
+Farmington,Juan,Acevedo,Oak Ridge,26751.7,1326.32,44407.11,4483011
+Pleasant Valley,Melissa,Acevedo,Newport,19491.87,750.3,43244.43,6863819
+Sunnyside,Angie,Acevedo,Newtown,22123.04,1105.8,38020.24,9392426
+Hamilton,Homer,Acevedo,Shiloh,16107.14,519.85,43816.39,13370447
+Greenfield,Bryant,Acevedo,Shady Grove,60692.51,1873.22,85846.48,13578037
+Mount Olive,Clayton,Acevedo,Lebanon,20766.57,1006.55,54142.95,19087498
+Union,Samuel,Acker,Appleton,25332.79,378.14,46756.86,6850815
+Shady Grove,Bennie,Acker,Fairfield,20715.42,1387.25,44441.62,12857470
+Pleasant Hill,Florence,Ackerman,Kingston,16406.15,358.48,36185.95,4444336
+Oakwood,Antoinette,Acosta,Springfield,11073.91,446.66,40590.63,2618680
+Flatwoods,Susan,Acosta,Riverdale,38214.29,2182.12,61486.84,3995448
+Macedonia,Paulette,Acosta,Pine Grove,15431.73,438.81,33846.51,6536313
+Highland Park,Steven,Acosta,Macedonia,29122.42,1267.53,55657.97,6914941
+Gilmore,Cindy,Acosta,Marion,25135.27,1061.16,35708.61,9191570
+Clinton,Jerry,Acosta,Deerfield,17027.71,605.43,40331.84,15670627
+Springdale,Marcella,Acuna,Crossroads,40492.17,751.2,56091.02,11015143
+Redland,Danny,Acuna,Wilton,27794.66,1267.31,53646.22,16471164
+Union,Alice,Adair,Lincoln,20031.58,715.56,45414.81,19215512
+Glendale,Rhoda,Adam,Five Forks,14519.93,651.21,27830.69,2058163
+Union,Tabitha,Adam,Georgetown,43559.84,1684.65,58721.45,20593114
+Springdale,Gracie,Adame,Centerville,21065.89,816.69,68131.45,1220402
+Concord,Jesse,Adame,Sutton,19281.48,764.79,48261.95,16124611
+Centerville,Harriett,Adame,Highland Park,16272.81,680.76,36217.54,18602694
+Red Hill,Stephanie,Adams,Fowler,21091.95,922.1,35710.52,722040
+Peru,Joseph,Adams,Belmont,11473.55,751.65,28437.52,758179
+Riverside,Renee,Adams,Union Hill,30741.14,1506.13,43193.59,762274
+Pleasant Hill,Larry,Adams,Gladstone,7122.6,412.54,23006.25,892663
+Centerville,Heather,Adams,Edgewood,20548.65,662.56,46797.49,2438166
+Jackson,Annie,Adams,Saint Clair,28143.91,1189.78,44966.65,3856183
+Cherry Valley,Rafael,Adams,Glendale,10740.88,243.92,18845.12,4668692
+Red Hill,Ron,Adams,Hamilton,10521.35,756.38,20933.18,4881562
+Pine Grove,Robert,Adams,Watkins,16620.58,401.66,27823.66,5070322
+Scottsville,Brooke,Adams,Lincoln,18743.08,531.6,40483.22,5522452
+Mount Zion,Katy,Adams,Colonial Heights,24278.78,996.07,33346.06,5601285
+Brownsville,Randall,Adams,Pleasant Valley,9495.0,512.65,19388.72,6042904
+Hopewell,Jesus,Adams,Webb,29406.55,1071.4,62404.81,7205803
+Greenfield,Spencer,Adams,Riverside,16843.7,425.96,32824.95,7672745
+Pleasant Grove,Megan,Adams,Arlington,37460.89,1918.1,62075.37,8393968
+Antioch,Donald,Adams,Sunnyside,18520.56,291.86,33719.15,9268973
+Stringtown,Michelle,Adams,Pleasant Valley,9758.66,304.38,18366.11,9847536
+Georgetown,George,Adams,Farmington,35359.09,1399.49,56742.96,10506440
+Woodville,Gwendolyn,Adams,Leesburg,17903.21,578.53,44377.52,10576964
+Highland,Norman,Adams,Jackson,12485.37,579.47,31578.9,10774652
+Oakland,Clarence,Adams,Marion,18723.53,517.2,28295.42,11014267
+Harmony,Michael,Adams,Bridgeport,9340.27,363.76,26004.08,11369091
+Midway,Isabel,Adams,Sunnyside,47705.08,1242.41,65873.5,12191239
+Macedonia,Joseph,Adams,Watkins,8123.6,275.44,31965.0,12528768
+Riverside,Kevin,Adams,Valley View,26565.47,877.08,51145.4,12545060
+Summit,Christina,Adams,Arlington,18745.3,828.3,41546.17,13469579
+Belmont,Barbara,Adams,Springfield,17431.54,631.96,49338.69,13481864
+Brownsville,Joy,Adams,Oak Ridge,3765.71,189.09,13381.88,15517154
+Macedonia,David,Adams,Greenwood,33908.01,1228.68,59774.65,15936904
+Plainview,Raymond,Adams,Concord,20723.03,1257.7,31801.59,16116427
+Summit,,Adams,Oakdale,19143.34,1169.9,39143.59,16647710
+Riverview,Linda,Adams,Bethel,9439.4,456.36,29175.27,17055819
+Hopewell,Bill,Adams,Mountain View,11528.69,354.92,45622.07,17342432
+Five Forks,,Adams,Flatwoods,23643.76,891.3,45163.65,17543363
+Mountain View,Kenneth,Adams,Lebanon,22582.2,1140.93,50017.71,17854101
+Franklin,Robert,Adams,Clinton,24364.6,1017.84,49984.13,18702012

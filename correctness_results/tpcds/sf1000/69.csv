@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:61d6f9a45b7d08d383d4a18ae58cc70d9460f73e2919b0fb36b13b8ba5a5dfba
-size 3897
+cd_credit_rating,cd_education_status,cd_gender,cd_marital_status,cd_purchase_estimate,cnt1,cnt2,cnt3
+Good,2 yr Degree,F,D,500,37,37,37
+High Risk,2 yr Degree,F,D,500,40,40,40
+Low Risk,2 yr Degree,F,D,500,43,43,43
+Unknown,2 yr Degree,F,D,500,38,38,38
+Good,2 yr Degree,F,D,1000,50,50,50
+High Risk,2 yr Degree,F,D,1000,44,44,44
+Low Risk,2 yr Degree,F,D,1000,32,32,32
+Unknown,2 yr Degree,F,D,1000,33,33,33
+Good,2 yr Degree,F,D,1500,45,45,45
+High Risk,2 yr Degree,F,D,1500,31,31,31
+Low Risk,2 yr Degree,F,D,1500,40,40,40
+Unknown,2 yr Degree,F,D,1500,41,41,41
+Good,2 yr Degree,F,D,2000,40,40,40
+High Risk,2 yr Degree,F,D,2000,40,40,40
+Low Risk,2 yr Degree,F,D,2000,41,41,41
+Unknown,2 yr Degree,F,D,2000,39,39,39
+Good,2 yr Degree,F,D,2500,44,44,44
+High Risk,2 yr Degree,F,D,2500,46,46,46
+Low Risk,2 yr Degree,F,D,2500,39,39,39
+Unknown,2 yr Degree,F,D,2500,32,32,32
+Good,2 yr Degree,F,D,3000,43,43,43
+High Risk,2 yr Degree,F,D,3000,38,38,38
+Low Risk,2 yr Degree,F,D,3000,35,35,35
+Unknown,2 yr Degree,F,D,3000,41,41,41
+Good,2 yr Degree,F,D,3500,37,37,37
+High Risk,2 yr Degree,F,D,3500,39,39,39
+Low Risk,2 yr Degree,F,D,3500,43,43,43
+Unknown,2 yr Degree,F,D,3500,36,36,36
+Good,2 yr Degree,F,D,4000,46,46,46
+High Risk,2 yr Degree,F,D,4000,35,35,35
+Low Risk,2 yr Degree,F,D,4000,42,42,42
+Unknown,2 yr Degree,F,D,4000,42,42,42
+Good,2 yr Degree,F,D,4500,38,38,38
+High Risk,2 yr Degree,F,D,4500,37,37,37
+Low Risk,2 yr Degree,F,D,4500,35,35,35
+Unknown,2 yr Degree,F,D,4500,42,42,42
+Good,2 yr Degree,F,D,5000,35,35,35
+High Risk,2 yr Degree,F,D,5000,41,41,41
+Low Risk,2 yr Degree,F,D,5000,31,31,31
+Unknown,2 yr Degree,F,D,5000,34,34,34
+Good,2 yr Degree,F,D,5500,32,32,32
+High Risk,2 yr Degree,F,D,5500,52,52,52
+Low Risk,2 yr Degree,F,D,5500,51,51,51
+Unknown,2 yr Degree,F,D,5500,36,36,36
+Good,2 yr Degree,F,D,6000,33,33,33
+High Risk,2 yr Degree,F,D,6000,39,39,39
+Low Risk,2 yr Degree,F,D,6000,44,44,44
+Unknown,2 yr Degree,F,D,6000,42,42,42
+Good,2 yr Degree,F,D,6500,33,33,33
+High Risk,2 yr Degree,F,D,6500,33,33,33
+Low Risk,2 yr Degree,F,D,6500,45,45,45
+Unknown,2 yr Degree,F,D,6500,38,38,38
+Good,2 yr Degree,F,D,7000,32,32,32
+High Risk,2 yr Degree,F,D,7000,38,38,38
+Low Risk,2 yr Degree,F,D,7000,35,35,35
+Unknown,2 yr Degree,F,D,7000,34,34,34
+Good,2 yr Degree,F,D,7500,36,36,36
+High Risk,2 yr Degree,F,D,7500,34,34,34
+Low Risk,2 yr Degree,F,D,7500,31,31,31
+Unknown,2 yr Degree,F,D,7500,40,40,40
+Good,2 yr Degree,F,D,8000,31,31,31
+High Risk,2 yr Degree,F,D,8000,42,42,42
+Low Risk,2 yr Degree,F,D,8000,30,30,30
+Unknown,2 yr Degree,F,D,8000,41,41,41
+Good,2 yr Degree,F,D,8500,28,28,28
+High Risk,2 yr Degree,F,D,8500,30,30,30
+Low Risk,2 yr Degree,F,D,8500,43,43,43
+Unknown,2 yr Degree,F,D,8500,39,39,39
+Good,2 yr Degree,F,D,9000,41,41,41
+High Risk,2 yr Degree,F,D,9000,32,32,32
+Low Risk,2 yr Degree,F,D,9000,39,39,39
+Unknown,2 yr Degree,F,D,9000,40,40,40
+Good,2 yr Degree,F,D,9500,46,46,46
+High Risk,2 yr Degree,F,D,9500,30,30,30
+Low Risk,2 yr Degree,F,D,9500,44,44,44
+Unknown,2 yr Degree,F,D,9500,38,38,38
+Good,2 yr Degree,F,D,10000,39,39,39
+High Risk,2 yr Degree,F,D,10000,41,41,41
+Low Risk,2 yr Degree,F,D,10000,43,43,43
+Unknown,2 yr Degree,F,D,10000,39,39,39
+Good,4 yr Degree,F,D,500,33,33,33
+High Risk,4 yr Degree,F,D,500,43,43,43
+Low Risk,4 yr Degree,F,D,500,47,47,47
+Unknown,4 yr Degree,F,D,500,32,32,32
+Good,4 yr Degree,F,D,1000,44,44,44
+High Risk,4 yr Degree,F,D,1000,37,37,37
+Low Risk,4 yr Degree,F,D,1000,48,48,48
+Unknown,4 yr Degree,F,D,1000,41,41,41
+Good,4 yr Degree,F,D,1500,42,42,42
+High Risk,4 yr Degree,F,D,1500,32,32,32
+Low Risk,4 yr Degree,F,D,1500,25,25,25
+Unknown,4 yr Degree,F,D,1500,41,41,41
+Good,4 yr Degree,F,D,2000,42,42,42
+High Risk,4 yr Degree,F,D,2000,41,41,41
+Low Risk,4 yr Degree,F,D,2000,44,44,44
+Unknown,4 yr Degree,F,D,2000,48,48,48
+Good,4 yr Degree,F,D,2500,45,45,45
+High Risk,4 yr Degree,F,D,2500,38,38,38
+Low Risk,4 yr Degree,F,D,2500,34,34,34
+Unknown,4 yr Degree,F,D,2500,37,37,37

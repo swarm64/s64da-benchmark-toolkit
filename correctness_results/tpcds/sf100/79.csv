@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:37b8ac2e8090f3b3f9151c7e3b1415515e8cca4aa596fdd63540ec597d03b7f1
-size 4764
+amt,c_first_name,c_last_name,profit,ss_ticket_number,substr
+850.79,Ahmad,Aaron,-4815.7,19915924,Oak Grove
+346.77,Alexander,Aaron,-16392.72,5407243,Five Points
+2630.31,Ashley,Aaron,-11006.28,16699624,Greenwood
+188.75,Ashley,Aaron,-15996.42,10675523,Riverside
+657.48,Barbara,Aaron,-10116.27,3899203,Fairview
+75.35,Barbara,Aaron,3601.19,5250143,Fairview
+1425.95,Barbara,Aaron,-10148.42,3152579,Midway
+68.87,Barbara,Aaron,-9170.1,11781079,Oakland
+14608.15,Billy,Aaron,-17160.95,15822159,Mount Pleasant
+884.83,Billy,Aaron,-4778.32,18986649,New Hope
+1307.48,Billy,Aaron,-3521.72,21354159,Union
+1009.22,Bobby,Aaron,-9868.03,13024591,Centerville
+169.69,Brandon,Aaron,255.59,9805964,Pleasant Hill
+2497.57,Bridgett,Aaron,-915.0,10208004,Liberty
+835.11,Candance,Aaron,-13525.63,12797730,New Hope
+1608.04,Carolyn,Aaron,-9215.33,7203394,Pleasant Grove
+8232.94,Carrie,Aaron,-16117.89,10485154,Oak Grove
+0.0,Carrie,Aaron,-16218.91,12343167,Shady Grove
+3732.99,Charles,Aaron,-8584.32,13064442,Liberty
+290.07,Christina,Aaron,-3447.77,14043101,Salem
+1674.98,Christopher,Aaron,-6373.21,4107426,Salem
+83.75,Clyde,Aaron,-7732.82,22057606,Midway
+7145.31,Clyde,Aaron,-20232.54,10884969,Pleasant Grove
+1211.4,Conchita,Aaron,-8756.38,16282005,Salem
+85.64,Crystal,Aaron,-7865.37,10189154,Liberty
+132.46,Daniel,Aaron,-5056.44,19890566,Pleasant Hill
+1731.49,Darron,Aaron,5338.09,21794318,Liberty
+156.49,Debra,Aaron,-3972.97,21470083,Liberty
+2901.95,Denise,Aaron,-6327.82,23659903,Riverside
+1732.25,Dora,Aaron,-2063.36,21587056,Liberty
+4005.99,Doris,Aaron,-7343.94,16871877,New Hope
+3839.68,Dorothy,Aaron,2901.78,16601659,Liberty
+,Dorothy,Aaron,,16601659,Liberty
+182.9,Edward,Aaron,-6496.59,15822795,Pleasant Grove
+45.4,Ellen,Aaron,-14956.56,14913800,Mount Pleasant
+630.31,Ellen,Aaron,-7651.58,13067331,Pleasant Hill
+5659.68,Eric,Aaron,-19884.86,10245320,Union
+3401.64,Eugene,Aaron,-12922.18,7720253,Shady Grove
+715.23,Fernando,Aaron,-6073.81,7388393,Mount Pleasant
+90.75,Fernando,Aaron,-3784.5,14746503,Pleasant Hill
+689.72,Florence,Aaron,-4475.86,15003844,Bethel
+13.75,Francis,Aaron,-17102.13,2544311,Bethel
+4449.87,Gary,Aaron,-9294.7,20453794,Oak Grove
+3.47,Gary,Aaron,-11423.18,4690910,Pleasant Valley
+2495.74,George,Aaron,-9607.19,836544,Centerville
+6872.79,Gladys,Aaron,-7216.02,12925305,Greenwood
+0.0,Gregory,Aaron,-4088.69,1245588,Riverside
+423.97,Helen,Aaron,-8938.85,22382009,Oakland
+0.0,Helen,Aaron,-1439.74,4551383,Salem
+1824.38,Henry,Aaron,-6254.68,17950129,Oakland
+1983.33,Herman,Aaron,-17045.43,1743638,Pleasant Hill
+1054.17,Hope,Aaron,-21066.12,9045164,Midway
+459.47,Jackie,Aaron,-26190.66,19700561,Greenwood
+750.32,Jacqueline,Aaron,-14162.7,3009985,Pleasant Valley
+530.31,Janice,Aaron,-55.81,12765512,Bethel
+18.16,Janice,Aaron,,12765512,Bethel
+268.73,Janice,Aaron,-10784.55,14660375,Oakland
+1454.97,Jeffrey,Aaron,-11697.36,6233908,Centerville
+9839.99,Jeffrey,Aaron,-4555.77,23457052,Shady Grove
+0.0,Jennifer,Aaron,-2679.31,6348648,Fairview
+865.08,Jennifer,Aaron,-4557.07,14276553,Liberty
+5255.43,Jerry,Aaron,-13789.27,4376342,Five Points
+13527.99,Jerry,Aaron,-11323.57,8821115,Greenwood
+0.0,Jerry,Aaron,-7991.33,15528029,New Hope
+480.3,Jerry,Aaron,-7887.86,22653143,Oak Grove
+995.24,Joanne,Aaron,-6362.19,444016,Fairview
+2956.42,Joe,Aaron,-3447.33,219940,Oakland
+1992.54,John,Aaron,-16615.47,21441225,Bethel
+0.0,John,Aaron,-7292.02,2263027,Greenwood
+0.0,John,Aaron,-8873.29,2186215,Liberty
+426.54,John,Aaron,-8900.74,22099274,Pleasant Hill
+0.0,Jon,Aaron,-5045.42,23379725,Bethel
+641.02,Joseph,Aaron,-9908.17,180595,Bethel
+8980.54,Joseph,Aaron,-18954.78,23364339,Centerville
+586.0,Joseph,Aaron,-18361.66,20012715,Greenwood
+430.16,Joseph,Aaron,-14651.26,2802017,Liberty
+3000.64,Joseph,Aaron,-11280.65,3022190,Oak Grove
+0.0,Joseph,Aaron,-1978.86,3022190,Oak Grove
+0.0,Joseph,Aaron,-3411.69,875686,Oakland
+2593.39,Josh,Aaron,-5006.16,8764376,Liberty
+2645.29,Judy,Aaron,-7556.14,22925697,New Hope
+856.23,Julia,Aaron,-6682.14,16536559,Fairview
+0.0,Karen,Aaron,-10296.87,6347926,Liberty
+0.0,Karen,Aaron,-182.4,6347926,Liberty
+67.2,Karen,Aaron,-9925.4,4384432,Midway
+0.0,Karen,Aaron,-12546.66,13714358,Mount Pleasant
+0.0,Katharine,Aaron,1224.25,5167498,Fairview
+904.89,Kathleen,Aaron,-461.4,23950611,Riverside
+1721.67,Keith,Aaron,-13052.43,18059225,Midway
+133.36,Keith,Aaron,-10838.55,13645832,Oakland
+6019.19,Kendra,Aaron,-15884.6,601658,Pleasant Hill
+42.62,Kendra,Aaron,-11082.36,9785513,Riverside
+664.56,Kenneth,Aaron,-11822.5,7606619,Greenwood
+3813.55,Kenneth,Aaron,-8466.0,17737287,New Hope
+592.81,Kenneth,Aaron,-18586.57,1423656,Union
+1511.5,Kristine,Aaron,-4188.58,22899679,Centerville
+3489.74,Kristine,Aaron,-17606.33,19724772,Union
+100.16,Latoya,Aaron,-4907.16,10628665,New Hope
+5199.62,Lee,Aaron,-11668.8,9278634,Centerville
+7546.74,Leonard,Aaron,-17299.58,121336,Riverside

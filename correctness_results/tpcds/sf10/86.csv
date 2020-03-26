@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:65fe83ec677739e94de4185528c8d5e7c7d33c16f05310a2aa9a7d97c538647e
-size 3143
+i_category,i_class,lochierarchy,rank_within_parent,total_sum
+,,2,1,3282669369.13
+Men,,1,1,334831208.07
+Sports,,1,2,332162838.81
+Children,,1,3,331933965.45
+Shoes,,1,4,329895499.97
+Jewelry,,1,5,329034053.48
+Books,,1,6,326870098.14
+Electronics,,1,7,326461590.36
+Home,,1,8,324746140.75
+Women,,1,9,319708658.27
+Music,,1,10,318858539.6
+,,1,11,8166776.23
+Books,computers,0,1,22789692.41
+Books,cooking,0,2,21902960.55
+Books,entertainments,0,3,21158141.34
+Books,reference,0,4,20771907.51
+Books,fiction,0,5,20697843.62
+Books,history,0,6,20597621.78
+Books,business,0,7,20390406.88
+Books,travel,0,8,20239199.15
+Books,self-help,0,9,20127842.91
+Books,mystery,0,10,19985522.77
+Books,home repair,0,11,19931476.0
+Books,romance,0,12,19876893.07
+Books,arts,0,13,19662971.7
+Books,sports,0,14,19481960.29
+Books,parenting,0,15,19411642.08
+Books,science,0,16,19299878.97
+Books,,0,17,544137.11
+Children,infants,0,1,85890948.87
+Children,newborn,0,2,82237944.7
+Children,school-uniforms,0,3,81910780.03
+Children,toddlers,0,4,81284277.27
+Children,,0,5,610014.58
+Electronics,stereo,0,1,24703542.19
+Electronics,memory,0,2,21914690.1
+Electronics,scanners,0,3,21135370.99
+Electronics,dvd/vcr players,0,4,20917059.87
+Electronics,musical,0,5,20773046.49
+Electronics,audio,0,6,20678016.75
+Electronics,wireless,0,7,20563604.45
+Electronics,karoke,0,8,20519863.32
+Electronics,monitors,0,9,20413949.56
+Electronics,personal,0,10,19858012.68
+Electronics,disk drives,0,11,19850133.57
+Electronics,portable,0,12,19669295.59
+Electronics,cameras,0,13,19543255.05
+Electronics,televisions,0,14,19125363.35
+Electronics,automotive,0,15,18637851.51
+Electronics,camcorders,0,16,17927107.71
+Electronics,,0,17,231427.18
+Home,paint,0,1,22273611.22
+Home,flatware,0,2,21729837.01
+Home,tables,0,3,21244871.26
+Home,bathroom,0,4,21187802.71
+Home,decor,0,5,21057505.2
+Home,glassware,0,6,20758573.27
+Home,bedding,0,7,20511677.68
+Home,lighting,0,8,20331512.45
+Home,rugs,0,9,20222504.9
+Home,mattresses,0,10,19816368.35
+Home,wallpaper,0,11,19717721.82
+Home,curtains/drapes,0,12,19511513.2
+Home,accent,0,13,19420608.89
+Home,kids,0,14,19268565.31
+Home,furniture,0,15,18750774.98
+Home,blinds/shades,0,16,18653695.59
+Home,,0,17,288996.91
+Jewelry,estate,0,1,23026780.42
+Jewelry,mens watch,0,2,22587117.91
+Jewelry,consignment,0,3,21931243.14
+Jewelry,jewelry boxes,0,4,21570843.05
+Jewelry,gold,0,5,21077107.84
+Jewelry,custom,0,6,20847247.8
+Jewelry,birdal,0,7,20661194.15
+Jewelry,costume,0,8,20515102.03
+Jewelry,earings,0,9,20472656.03
+Jewelry,diamonds,0,10,20397455.56
+Jewelry,loose stones,0,11,20271754.0
+Jewelry,rings,0,12,20065977.79
+Jewelry,bracelets,0,13,20048278.67
+Jewelry,womens watch,0,14,19776781.06
+Jewelry,semi-precious,0,15,18174486.08
+Jewelry,pendants,0,16,17436566.14
+Jewelry,,0,17,173461.81
+Men,shirts,0,1,87809564.28
+Men,sports-apparel,0,2,83993238.31
+Men,accessories,0,3,81719680.93
+Men,pants,0,4,80788681.85
+Men,,0,5,520042.7
+Music,rock,0,1,84368244.69
+Music,classical,0,2,78317416.23
+Music,pop,0,3,77984997.81
+Music,country,0,4,77679228.58
+Music,,0,5,508652.29
+Shoes,mens,0,1,84121523.88
+Shoes,athletic,0,2,82558642.2
+Shoes,kids,0,3,82322904.83
+Shoes,womens,0,4,80632972.91
+Shoes,,0,5,259456.15

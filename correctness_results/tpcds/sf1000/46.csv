@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7f0ad22a052277da461625dacdd8622fc9087b57065a21ad6236b6899943d4f7
-size 5938
+amt,bought_city,c_first_name,c_last_name,ca_city,profit,ss_ticket_number
+476.83,Fairview,Adam,Aaron,Glendale,-12119.77,114959001
+1989.91,Plainview,Alana,Aaron,Lincoln,-15972.2,10954093
+1043.31,Whitney,Alexis,Aaron,Marion,-14547.43,208559617
+4195.26,Union Hill,Andrew,Aaron,Woodland,-20289.21,177529715
+372.31,Littleton,Ann,Aaron,Riverview,-4937.75,23982947
+490.27,Providence,Anna,Aaron,Woodlawn,-6570.2,26144784
+1010.28,Woodruff,Anne,Aaron,Jackson,-4996.42,11820520
+3301.25,Lakewood,Antonio,Aaron,Harmony,-13317.6,191819437
+376.51,Union,Armand,Aaron,Edgewood,-2855.82,38451183
+1584.37,Harmony,Arnold,Aaron,Summit,-6176.4,153587970
+1106.14,Fairview,Arthur,Aaron,Springfield,3491.6,38013270
+2094.03,Lakeside,Ashley,Aaron,Lakeview,-14481.84,188408753
+1063.49,Plainview,Barbara,Aaron,Fairview,213.15,9860725
+6766.55,Phoenix,Beatrice,Aaron,Ashland,-9074.46,187682518
+344.28,Lebanon,Bob,Aaron,Florence,88.83,231229257
+2759.4,Red Hill,Bobby,Aaron,Bethel,-4763.9,65773477
+2481.48,Springdale,Bryan,Aaron,New Hope,-10189.01,11262532
+9841.26,Flatwoods,Caroline,Aaron,Oak Hill,-21779.29,167294454
+1611.53,Hopewell,Carolyn,Aaron,Walnut Grove,-4337.57,68568142
+491.1,Valley View,Charles,Aaron,Enterprise,-9593.53,107712353
+0.0,Providence,Charles,Aaron,Newtown,2007.82,187513545
+2358.91,Woodland,Christina,Aaron,Peru,-8419.88,122819902
+1226.21,Wildwood,Christine,Aaron,Pine Grove,-15067.43,167891889
+822.93,Bridgeport,Christopher,Aaron,Brownsville,-6875.75,24939823
+392.2,Union,Christopher,Aaron,Oakland,-10131.82,86986812
+975.74,Springdale,Clifton,Aaron,Waterloo,-2806.98,111993531
+135.07,Bunker Hill,Clyde,Aaron,Sunnyside,-10613.74,210848423
+404.81,Lincoln,Colleen,Aaron,New Hope,-3673.62,69496914
+44.66,Marion,Danica,Aaron,Bunker Hill,1310.03,176266524
+544.78,Five Forks,David,Aaron,Liberty,-2370.15,137575261
+1070.22,Midway,David,Aaron,Macedonia,-8100.37,227099065
+4942.2,Edgewood,David,Aaron,Spring Valley,-20181.79,196612236
+1070.32,Oakdale,Dennis,Aaron,Riverside,-12426.48,234138536
+1175.56,Greenville,Dolores,Aaron,Louisville,-15927.33,39844708
+698.23,Jackson,Donald,Aaron,Enterprise,-3048.2,71743942
+1430.12,Glendale,Donald,Aaron,Highland Park,-13944.29,229527693
+776.96,Clifton,Dorothy,Aaron,Lakeside,-2694.65,42196059
+4119.76,Fairview,Edward,Aaron,Oak Ridge,-13425.45,152669238
+3139.57,Concord,Elizabeth,Aaron,Union,-3764.95,91020353
+2470.64,Woodville,Eloise,Aaron,Forest Hills,-6745.08,128707949
+1309.44,Woodland,Emma,Aaron,New Hope,-7178.14,115661725
+1909.04,Five Points,Eric,Aaron,Jackson,-9228.94,103844887
+767.75,Five Forks,Estella,Aaron,Spring Hill,-3898.59,129102492
+0.0,Lakewood,Fernando,Aaron,Ashland,-10529.27,237841291
+2.13,Bethel,Francis,Aaron,Brownsville,693.5,1247441
+1613.43,Fayetteville,Francis,Aaron,Lakeside,-3818.7,151616069
+402.24,Woodland,Garry,Aaron,Edgewood,-8025.1,66269063
+2783.76,Crossroads,Heather,Aaron,Springfield,-12276.85,119684002
+565.86,New Hope,Henry,Aaron,Summerfield,-2820.43,131034242
+405.22,Hamilton,Irene,Aaron,Harmony,-2646.98,1963691
+3644.87,Centerville,Jacqueline,Aaron,Macedonia,-10336.93,102039059
+7343.32,Antioch,Jacques,Aaron,Mount Olive,-12384.97,53797972
+1051.37,Valley View,James,Aaron,Maple Grove,-9678.35,85491216
+4070.85,Maple Grove,James,Aaron,Milan,-13823.01,21055406
+1024.98,Longwood,Jeremy,Aaron,Sulphur Springs,-18410.9,1336149
+570.06,Sunnyside,Joanne,Aaron,Walnut,-4464.75,210682530
+3819.75,Mountain View,John,Aaron,Five Forks,-6515.92,102819479
+14.49,Montpelier,John,Aaron,Lakewood,-1441.5,136773590
+2866.63,Farmington,John,Aaron,Mount Pleasant,-3064.06,124546832
+2760.83,Clifton,John,Aaron,Oakdale,-12737.73,171471422
+560.51,Riverdale,John,Aaron,White Oak,-6194.68,76886644
+5676.9,Five Forks,Juan,Aaron,Walnut Grove,-13623.3,7085609
+1634.43,Midway,Judy,Aaron,Brownsville,-7549.89,115084189
+38.88,Belmont,Junior,Aaron,Franklin,2970.17,36430291
+932.78,Macedonia,Keith,Aaron,Shiloh,-11380.28,221481407
+820.0,Oak Ridge,Kenneth,Aaron,Johnsonville,3143.06,57261989
+501.51,Waterloo,Kerry,Aaron,Forest Hills,-13238.88,140262978
+1386.55,Kingston,Kimberly,Aaron,Newtown,-12125.15,229821109
+2107.77,Clifton,Kristin,Aaron,Clearwater,-2436.58,89331693
+10657.22,Spring Hill,Kristin,Aaron,Clearwater,-18467.0,188813451
+135.88,Riverside,Lee,Aaron,Buena Vista,-8937.02,177999021
+8960.38,Pine Grove,Librada,Aaron,Walnut Grove,-3046.39,8161920
+2389.18,Edgewood,Lisa,Aaron,Lakewood,-12053.48,78583622
+5900.96,White Oak,Lloyd,Aaron,Newtown,-6574.14,234809824
+11080.31,Fairview,Lori,Aaron,Oak Hill,-8698.73,111193939
+2203.71,Red Hill,Louann,Aaron,Elkton,-5486.35,90893493
+2167.46,Sulphur Springs,Mable,Aaron,Riverdale,-2879.26,13044530
+1446.1,White Oak,Marlene,Aaron,Springfield,-2765.75,124788413
+1620.14,New Hope,Martha,Aaron,Brownsville,-12999.32,227071379
+1234.52,Franklin,Megan,Aaron,Shiloh,-13676.78,207717827
+0.0,Green Acres,Melvin,Aaron,Lakeside,-9014.65,54486728
+5261.14,Greenfield,Michael,Aaron,Newtown,-15821.27,186620717
+2092.01,Hamilton,Mildred,Aaron,Sunnyside,-5981.08,210388072
+2008.36,Clinton,Ralph,Aaron,Riverdale,-770.14,17360504
+8294.84,Wilson,Ramonita,Aaron,Five Forks,-17924.26,198510673
+1333.43,Walnut Grove,Rebecca,Aaron,Highland Park,-21966.89,190136098
+0.0,Highland Park,Richard,Aaron,Pleasant Grove,2163.77,165704414
+3056.42,Georgetown,Robert,Aaron,Deerfield,-12813.89,177829355
+7795.83,Glenwood,Robert,Aaron,Jackson,-14002.32,1042768
+1414.19,Macedonia,Robert,Aaron,Newport,-4779.98,51640932
+55.37,Clinton,Robert,Aaron,Oakwood,-3330.83,74644452
+1695.36,Providence,Rodney,Aaron,Green Acres,-7149.49,125880422
+3901.09,Liberty,Roger,Aaron,Carpenter,-7796.69,184866915
+863.85,Pleasant Valley,Roosevelt,Aaron,Salem,-6116.81,51925478
+3332.14,Sheffield,Roy,Aaron,Fairview,-9511.46,21506274
+1553.92,Marion,Ruby,Aaron,New Hope,-10982.86,138273916
+215.22,Spring Valley,Sandra,Aaron,Providence,760.28,30215108
+8845.57,Arlington,Sharolyn,Aaron,Greenfield,-14450.64,111894433
+89.24,Oak Ridge,Shawn,Aaron,Pine Grove,-9489.92,216536585
+5558.74,Belmont,Shawn,Aaron,Plainview,-17310.11,40050855

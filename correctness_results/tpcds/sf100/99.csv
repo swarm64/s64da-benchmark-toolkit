@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1fe2c243211d823e9e5b742527922116e973d57f551d9e2dfb6eaa3039c55ed5
-size 5920
+30 days,31-60,61-90,91-120,>120 days,cc_name,sm_type,substr
+7477,6341,5150,0,0,California,EXPRESS,About slight way
+7464,6380,5172,0,0,California_1,EXPRESS,About slight way
+7489,6401,5345,0,0,Hawaii/Alaska,EXPRESS,About slight way
+7425,6488,5191,0,0,Hawaii/Alaska_1,EXPRESS,About slight way
+7582,6390,5263,0,0,Mid Atlantic,EXPRESS,About slight way
+7555,6378,5302,0,0,Mid Atlantic_1,EXPRESS,About slight way
+7593,6453,5255,0,0,Mid Atlantic_2,EXPRESS,About slight way
+7540,6285,5235,0,0,North Midwest,EXPRESS,About slight way
+7356,6340,5234,0,0,North Midwest_1,EXPRESS,About slight way
+7320,6409,5215,0,0,North Midwest_2,EXPRESS,About slight way
+7390,6317,5243,0,0,NY Metro,EXPRESS,About slight way
+7597,6404,5205,0,0,NY Metro_1,EXPRESS,About slight way
+7452,6359,5246,0,0,NY Metro_2,EXPRESS,About slight way
+7480,6391,5182,0,0,Pacific Northwest,EXPRESS,About slight way
+7467,6447,5244,0,0,Pacific Northwest_1,EXPRESS,About slight way
+5735,4748,3859,0,0,California,LIBRARY,About slight way
+5670,4847,3846,0,0,California_1,LIBRARY,About slight way
+5621,4863,3888,0,0,Hawaii/Alaska,LIBRARY,About slight way
+5650,4835,3996,0,0,Hawaii/Alaska_1,LIBRARY,About slight way
+5571,4797,3874,0,0,Mid Atlantic,LIBRARY,About slight way
+5517,4861,3862,0,0,Mid Atlantic_1,LIBRARY,About slight way
+5685,4973,4023,0,0,Mid Atlantic_2,LIBRARY,About slight way
+5698,4696,3948,0,0,North Midwest,LIBRARY,About slight way
+5651,4723,3834,0,0,North Midwest_1,LIBRARY,About slight way
+5566,4799,3863,0,0,North Midwest_2,LIBRARY,About slight way
+5618,4680,3920,0,0,NY Metro,LIBRARY,About slight way
+5523,4762,3982,0,0,NY Metro_1,LIBRARY,About slight way
+5475,4798,3952,0,0,NY Metro_2,LIBRARY,About slight way
+5666,4846,3875,0,0,Pacific Northwest,LIBRARY,About slight way
+5678,4775,3901,0,0,Pacific Northwest_1,LIBRARY,About slight way
+7480,6307,5247,0,0,California,NEXT DAY,About slight way
+7400,6538,5169,0,0,California_1,NEXT DAY,About slight way
+7400,6455,5176,0,0,Hawaii/Alaska,NEXT DAY,About slight way
+7502,6472,5208,0,0,Hawaii/Alaska_1,NEXT DAY,About slight way
+7393,6495,5249,0,0,Mid Atlantic,NEXT DAY,About slight way
+7590,6291,5126,0,0,Mid Atlantic_1,NEXT DAY,About slight way
+7616,6506,5161,0,0,Mid Atlantic_2,NEXT DAY,About slight way
+7364,6291,5176,0,0,North Midwest,NEXT DAY,About slight way
+7417,6357,5215,0,0,North Midwest_1,NEXT DAY,About slight way
+7428,6368,5306,0,0,North Midwest_2,NEXT DAY,About slight way
+7364,6317,5307,0,0,NY Metro,NEXT DAY,About slight way
+7530,6447,5286,0,0,NY Metro_1,NEXT DAY,About slight way
+7365,6494,5310,0,0,NY Metro_2,NEXT DAY,About slight way
+7475,6342,5276,0,0,Pacific Northwest,NEXT DAY,About slight way
+7400,6344,5103,0,0,Pacific Northwest_1,NEXT DAY,About slight way
+5603,4814,3898,0,0,California,OVERNIGHT,About slight way
+5549,4644,3967,0,0,California_1,OVERNIGHT,About slight way
+5665,4793,3832,0,0,Hawaii/Alaska,OVERNIGHT,About slight way
+5717,4797,3852,0,0,Hawaii/Alaska_1,OVERNIGHT,About slight way
+5626,4744,3945,0,0,Mid Atlantic,OVERNIGHT,About slight way
+5634,4839,3872,0,0,Mid Atlantic_1,OVERNIGHT,About slight way
+5660,4806,3955,0,0,Mid Atlantic_2,OVERNIGHT,About slight way
+5530,4879,4045,0,0,North Midwest,OVERNIGHT,About slight way
+5555,4718,3963,0,0,North Midwest_1,OVERNIGHT,About slight way
+5796,4727,3849,0,0,North Midwest_2,OVERNIGHT,About slight way
+5557,4745,3863,0,0,NY Metro,OVERNIGHT,About slight way
+5568,4970,3891,0,0,NY Metro_1,OVERNIGHT,About slight way
+5533,4822,3891,0,0,NY Metro_2,OVERNIGHT,About slight way
+5631,4708,3837,0,0,Pacific Northwest,OVERNIGHT,About slight way
+5543,4872,3922,0,0,Pacific Northwest_1,OVERNIGHT,About slight way
+5484,4947,3931,0,0,California,REGULAR,About slight way
+5704,4798,3990,0,0,California_1,REGULAR,About slight way
+5614,4688,3958,0,0,Hawaii/Alaska,REGULAR,About slight way
+5572,4746,3928,0,0,Hawaii/Alaska_1,REGULAR,About slight way
+5558,4806,3988,0,0,Mid Atlantic,REGULAR,About slight way
+5717,4768,3914,0,0,Mid Atlantic_1,REGULAR,About slight way
+5678,4791,3940,0,0,Mid Atlantic_2,REGULAR,About slight way
+5467,4666,3881,0,0,North Midwest,REGULAR,About slight way
+5661,4735,3882,0,0,North Midwest_1,REGULAR,About slight way
+5554,4812,3819,0,0,North Midwest_2,REGULAR,About slight way
+5689,4634,3776,0,0,NY Metro,REGULAR,About slight way
+5593,4681,3894,0,0,NY Metro_1,REGULAR,About slight way
+5660,4829,3864,0,0,NY Metro_2,REGULAR,About slight way
+5609,4862,3948,0,0,Pacific Northwest,REGULAR,About slight way
+5644,4854,3862,0,0,Pacific Northwest_1,REGULAR,About slight way
+5630,4757,3874,0,0,California,TWO DAY,About slight way
+5634,4633,3979,0,0,California_1,TWO DAY,About slight way
+5620,4764,3945,0,0,Hawaii/Alaska,TWO DAY,About slight way
+5659,4794,3982,0,0,Hawaii/Alaska_1,TWO DAY,About slight way
+5561,4700,3956,0,0,Mid Atlantic,TWO DAY,About slight way
+5661,4696,4093,0,0,Mid Atlantic_1,TWO DAY,About slight way
+5540,4701,3977,0,0,Mid Atlantic_2,TWO DAY,About slight way
+5651,4763,4035,0,0,North Midwest,TWO DAY,About slight way
+5567,4736,3932,0,0,North Midwest_1,TWO DAY,About slight way
+5649,4781,3865,0,0,North Midwest_2,TWO DAY,About slight way
+5613,4708,3930,0,0,NY Metro,TWO DAY,About slight way
+5470,4676,3949,0,0,NY Metro_1,TWO DAY,About slight way
+5637,4812,3917,0,0,NY Metro_2,TWO DAY,About slight way
+5732,4865,4014,0,0,Pacific Northwest,TWO DAY,About slight way
+5637,4687,3920,0,0,Pacific Northwest_1,TWO DAY,About slight way
+7532,6266,5154,0,0,California,EXPRESS,Both obvious tic
+7468,6477,5230,0,0,California_1,EXPRESS,Both obvious tic
+7457,6399,5238,0,0,Hawaii/Alaska,EXPRESS,Both obvious tic
+7389,6400,5246,0,0,Hawaii/Alaska_1,EXPRESS,Both obvious tic
+7529,6288,5217,0,0,Mid Atlantic,EXPRESS,Both obvious tic
+7447,6438,5191,0,0,Mid Atlantic_1,EXPRESS,Both obvious tic
+7575,6372,5309,0,0,Mid Atlantic_2,EXPRESS,Both obvious tic
+7399,6451,5142,0,0,North Midwest,EXPRESS,Both obvious tic
+7591,6347,5233,0,0,North Midwest_1,EXPRESS,Both obvious tic
+7504,6417,5299,0,0,North Midwest_2,EXPRESS,Both obvious tic

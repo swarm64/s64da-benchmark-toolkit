@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e7d26b23cd2efca35f0ba8797d412feffc33d9acca408aab2a7199622f08ff95
-size 2334
+call_center,call_center_name,manager,returns_loss
+AAAAAAAAJBAAAAAA,NY Metro_2,Charles Martinez,66802.82
+AAAAAAAACAAAAAAA,Mid Atlantic,Peter Jones,64546.11
+AAAAAAAAGCAAAAAA,Mid Atlantic_3,Patrick Adams,62930.38
+AAAAAAAAICAAAAAA,North Midwest_3,Anthony Fischer,55852.35
+AAAAAAAAEBAAAAAA,California_1,Paul Meyers,50722.86
+AAAAAAAAICAAAAAA,North Midwest_3,Anthony Fischer,50044.79
+AAAAAAAAHAAAAAAA,Pacific Northwest,Kevin Lester,45627.03
+AAAAAAAAMBAAAAAA,North Midwest_2,Charles Coleman,44815.86
+AAAAAAAAOAAAAAAA,Mid Atlantic_1,Christopher Mosley,44645.39
+AAAAAAAAPBAAAAAA,Pacific Northwest_2,Drew Brantley,44511.03
+AAAAAAAAACAAAAAA,California_2,Donald Everett,44119.5
+AAAAAAAAACAAAAAA,California_2,Donald Everett,43737.12
+AAAAAAAAKBAAAAAA,Mid Atlantic_2,Jason Spooner,43624.7
+AAAAAAAACAAAAAAA,Mid Atlantic,Peter Jones,43457.23
+AAAAAAAABAAAAAAA,NY Metro,Bradley Kelly,43262.51
+AAAAAAAANAAAAAAA,NY Metro_1,Chauncey Hurt,43229.4
+AAAAAAAAPBAAAAAA,Pacific Northwest_2,Drew Brantley,41142.97
+AAAAAAAACCAAAAAA,Hawaii/Alaska_2,Thomas Adkins,41014.33
+AAAAAAAAFCAAAAAA,NY Metro_3,Larry Regan,41006.5
+AAAAAAAAGBAAAAAA,Hawaii/Alaska_1,Richard Gray,40457.99
+AAAAAAAAIAAAAAAA,California,Samuel Mccoy,38742.61
+AAAAAAAAKAAAAAAA,Hawaii/Alaska,Robt Ridley,38551.53
+AAAAAAAAGBAAAAAA,Hawaii/Alaska_1,Richard Gray,37918.09
+AAAAAAAADBAAAAAA,Pacific Northwest_1,Steven Parker,37478.45
+AAAAAAAANAAAAAAA,NY Metro_1,Chauncey Hurt,36818.46
+AAAAAAAABAAAAAAA,NY Metro,Bradley Kelly,36074.04
+AAAAAAAAKBAAAAAA,Mid Atlantic_2,Jason Spooner,36038.26
+AAAAAAAAABAAAAAA,North Midwest_1,Thomas Keith,35665.13
+AAAAAAAAIAAAAAAA,California,Samuel Mccoy,35020.24
+AAAAAAAAOAAAAAAA,Mid Atlantic_1,Christopher Mosley,34804.72
+AAAAAAAAEAAAAAAA,North Midwest,David Gabriel,34132.92
+AAAAAAAAABAAAAAA,North Midwest_1,Thomas Keith,34056.52
+AAAAAAAAKAAAAAAA,Hawaii/Alaska,Robt Ridley,33788.31
+AAAAAAAAEAAAAAAA,North Midwest,David Gabriel,32330.33
+AAAAAAAAEBAAAAAA,California_1,Paul Meyers,31847.61
+AAAAAAAAGCAAAAAA,Mid Atlantic_3,Patrick Adams,31143.67
+AAAAAAAACCAAAAAA,Hawaii/Alaska_2,Thomas Adkins,31005.43
+AAAAAAAAMBAAAAAA,North Midwest_2,Charles Coleman,30873.43
+AAAAAAAADBAAAAAA,Pacific Northwest_1,Steven Parker,30448.76
+AAAAAAAAJBAAAAAA,NY Metro_2,Charles Martinez,29906.89
+AAAAAAAAFCAAAAAA,NY Metro_3,Larry Regan,20872.24
+AAAAAAAAHAAAAAAA,Pacific Northwest,Kevin Lester,18888.19

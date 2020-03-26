@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:98686d4f888c19f0fef7e4ad87e3606ebad39a731386d8f09392c57791f49589
-size 6738
+bought_city,c_first_name,c_last_name,ca_city,extended_price,extended_tax,list_price,ss_ticket_number
+Fox,Felton,Abbott,Oakwood,10625.88,696.59,31192.94,699099
+Centerville,Anna,Abbott,Riverview,22398.33,1059.41,43707.59,2203863
+Kingston,Brian,Abbott,Jamestown,15244.14,529.75,30910.47,2220593
+Greenville,Gregory,Abel,Winchester,10998.51,641.25,27527.03,1815378
+Floyd,Alberta,Abell,Union,25342.1,1290.59,42200.67,1288442
+Greenville,Christian,Abernathy,Forest Hills,13084.54,468.21,28088.11,871430
+Hardy,Douglas,Abraham,Hopewell,10410.58,468.02,22430.24,98305
+Lakeview,Laurie,Abrams,Louisville,14501.42,381.87,28720.06,544076
+Cedar Grove,Steve,Abrams,Harmony,12775.73,502.89,28372.88,1428288
+Hillcrest,Patsy,Abrams,Newport,30620.6,854.79,47543.41,1661290
+Enterprise,Regina,Acevedo,Winslow,11165.92,439.59,22117.13,22567
+Antioch,Shari,Acevedo,Farmington,22607.96,1107.76,47115.81,106170
+Mount Vernon,Bruce,Acevedo,Frogtown,11057.7,346.29,30744.11,1822181
+Mount Pleasant,Harriet,Acker,Concord,24184.72,1384.48,52229.38,1640601
+Friendship,Gerard,Ackerman,Fowler,25137.11,1617.5,34400.56,2025153
+Maple Grove,Jose,Adame,Waterloo,30151.69,958.96,43737.2,938147
+Carpenter,Jana,Adame,Marion,21164.01,553.16,57065.07,1352507
+Pleasant Grove,Aubrey,Adams,Greenwood,40345.53,1142.39,63840.24,245756
+Union Hill,Jovita,Adams,Antioch,8403.42,487.22,24369.29,247336
+Liberty,Wanda,Adams,Riverside,11383.06,662.33,25783.27,308611
+Providence,Randall,Adams,Greenfield,22476.27,1662.21,47648.55,334413
+Green Acres,Juan,Adams,Antioch,11637.82,385.41,40845.13,583413
+Woodville,Jane,Adams,Farmington,16258.75,896.27,24736.75,585871
+Wildwood,Brenda,Adams,Florence,34652.64,1080.35,74975.64,678564
+Mount Zion,Sherri,Adams,Riverside,19513.28,727.18,36564.86,863394
+Jamestown,Rebecca,Adams,Woodland,29923.89,1540.71,77616.68,871046
+Franklin,Samuel,Adams,Guilford,14831.74,644.45,35339.68,901300
+Cross Roads,Cheri,Adams,Friendship,21476.45,1278.28,34667.84,930681
+Marion,Rickey,Adams,Pleasant Valley,23387.61,743.73,46814.2,1203047
+Mount Zion,George,Adams,Harmony,35917.73,1816.18,51811.38,1236543
+Highland Park,Ruth,Adams,Wildwood,32037.31,1226.17,52764.45,1308766
+Sheffield,Carla,Adams,Highland,38000.87,1105.96,55221.23,1465643
+Five Points,Virginia,Adams,Crossroads,30113.5,837.76,82365.01,1485971
+Riverdale,Patrick,Adams,Fairfield,10010.43,633.23,16284.11,1536235
+Lakeview,Ruth,Adams,Friendship,23971.55,645.63,48654.16,1992802
+Oak Hill,John,Adams,White Oak,17040.22,1116.32,33627.89,2144574
+Liberty,Winston,Adams,Stringtown,29424.23,848.13,58030.51,2171156
+Shady Grove,Christopher,Adams,Riverdale,23242.52,477.91,40292.89,2192366
+Lincoln,Jennifer,Adams,Wildwood,31174.16,1692.34,52300.63,2392870
+Bunker Hill,Michael,Addison,Greenville,19831.97,1456.05,42628.76,2341967
+Liberty,Thomas,Adkins,White Oak,25564.46,830.32,53436.1,1453216
+Centerville,Johnathan,Adkins,Unionville,17853.48,432.0,37257.9,2239377
+Shiloh,Marie,Aguiar,Ashland,15431.89,861.58,35239.8,2045320
+Jamestown,Anna,Aguilar,Wildwood,25597.16,1481.32,57461.94,974606
+Belmont,Agnes,Aguilar,Franklin,24351.33,851.11,35611.41,1400137
+Riverdale,Kimberly,Aguilar,Green Acres,23665.79,885.55,44053.2,2384227
+Summit,Olga,Aguirre,Springfield,18746.69,785.9,36975.46,164693
+Point Pleasant,Beverly,Ahmad,Franklin,17986.51,543.52,32562.27,2145675
+Riverside,Audrey,Ahrens,Vance,11559.34,769.32,24568.37,722271
+Riverdale,Ana,Ahrens,Elm Grove,28873.29,914.22,45895.34,1732635
+Lakeside,Charlene,Ainsworth,Newtown,16773.98,597.8,38373.4,1996518
+Buena Vista,James,Akins,Shiloh,15303.68,497.57,26546.08,2377355
+Spring Valley,Dewey,Alaniz,Woodland,36025.42,1089.46,50552.03,1649222
+Hillcrest,Ernest,Albertson,Plainview,19742.25,451.05,50889.72,100095
+Ashland,Lillian,Albertson,Cedar Grove,10859.55,278.4,38727.72,706503
+Springdale,Lillian,Albertson,Cedar Grove,32988.82,2020.93,79105.76,1078561
+Farmington,Jessica,Aldridge,Fairfield,23020.6,1302.65,36118.53,1427754
+Spring Hill,Nancy,Aleman,Buena Vista,10767.38,463.02,23536.05,1023861
+Riverdale,Linda,Alexander,Lakeview,13585.92,645.01,36324.96,106550
+Green Acres,Melvin,Alexander,White Oak,24969.74,845.0,50316.07,312736
+Concord,Karen,Alexander,Lakewood,23611.64,699.85,49936.12,486167
+Spring Valley,Sharon,Alexander,Shady Grove,26528.9,854.18,48881.12,785279
+Leland,Sean,Alexander,Hamilton,27052.44,1067.69,40666.58,849286
+Pleasant Hill,Michael,Alexander,Mount Zion,13019.88,498.69,25631.64,900095
+Jamestown,Breanne,Alexander,Bridgeport,12582.28,650.89,37354.06,1042233
+Bridgeport,Douglas,Alexander,Bunker Hill,18353.98,1047.62,32400.45,1283660
+Roscoe,Laurie,Alexander,Oakwood,10248.98,573.45,17935.07,1497157
+Spring Valley,Willis,Alexander,Bridgeport,8990.42,215.08,25389.79,1736183
+Maple Grove,Juan,Alexander,Ellisville,15169.25,1020.61,35845.7,2145426
+Oak Hill,Frank,Alexander,Edgewood,9727.32,330.11,29105.13,2213222
+Edgewood,Teresa,Alfaro,Oak Hill,17850.27,779.48,31423.74,1480898
+Crossroads,Arlene,Allard,Mount Olive,25737.79,1107.28,42509.48,1648460
+Oakdale,James,Allen,Greenville,34834.51,652.88,55258.82,36220
+Springdale,Luann,Allen,Wilson,46149.1,2456.2,72551.93,94294
+Hopewell,Joseph,Allen,Avoca,51574.62,1250.51,88444.34,204832
+Summit,Cynthia,Allen,Jamestown,31593.81,1664.1,65161.15,320431
+Union Hill,Anna,Allen,Brookville,16334.77,468.2,44403.03,549737
+Pleasant Valley,Sara,Allen,Maple Grove,23662.36,639.84,35627.9,572671
+Spring Hill,Lori,Allen,Mount Olive,20334.3,1063.52,45177.49,584986
+Union,Caroline,Allen,Springfield,13535.17,523.78,23746.24,659771
+Lucas,,Allen,Pleasant Hill,12131.69,466.66,32514.51,947791
+Superior,Wendy,Allen,Edgewood,22385.65,634.78,39992.24,1015344
+Midway,Charles,Allen,Newtown,14018.04,422.13,33244.34,1129703
+Liberty,Theresa,Allen,Farmington,10411.66,431.57,32754.23,1175170
+Shady Grove,Kristen,Allen,Wolf Creek,35559.2,2012.77,74302.93,1223080
+Frogtown,Polly,Allen,Farmington,15448.48,950.24,32123.42,1417389
+Sulphur Springs,James,Allen,Friendship,4700.11,137.3,10601.86,1421916
+Marion,Joyce,Allen,Hillcrest,15152.42,746.6,24316.44,1462957
+Mountain View,Charles,Allen,Newtown,22788.22,1182.67,32693.89,1654081
+Lakeside,Larry,Allen,Lakeview,29367.97,1375.83,48313.81,1701435
+Hillcrest,Joseph,Allen,Avoca,12521.87,474.99,22059.09,1712001
+Georgetown,Amanda,Allen,Lakeview,17187.75,195.95,47453.2,1734731
+Pleasant Valley,Casey,Allen,Florence,20203.86,526.44,25745.32,1871849
+Liberty,Juan,Allen,Clinton,24548.11,607.31,44963.43,1901401
+Deerfield,Flossie,Allen,Salem,30680.68,771.75,52155.89,1936405
+Lakewood,Albert,Allen,Fairfield,26537.05,617.76,49978.4,2132232
+Highland,Patrice,Allen,Sunnyside,6744.24,283.59,12945.78,2224094
+Happy Valley,Rosa,Allen,Amity,14334.11,436.2,43439.41,2248239
+Sulphur Springs,Erica,Allen,Green Acres,29415.8,1381.51,48078.11,2352642
+Hillcrest,Cyndi,Alley,Fairfield,26774.02,1080.03,42994.23,1986095

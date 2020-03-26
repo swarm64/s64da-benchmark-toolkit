@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e85ff89d0572e2532c8f9f2c3a1a79e3a63a810dcff699cfc0e30703b8fea0f5
-size 5171
+30 days,31-60,61-90,91-120,>120 days,sm_type,substr,web_name
+961,797,651,534,0,EXPRESS,About slight way,site_0
+910,777,646,536,0,EXPRESS,About slight way,site_1
+990,759,610,487,0,EXPRESS,About slight way,site_2
+930,774,596,520,0,EXPRESS,About slight way,site_3
+935,774,647,499,0,EXPRESS,About slight way,site_4
+895,764,599,513,0,EXPRESS,About slight way,site_5
+1007,774,618,505,0,EXPRESS,About slight way,site_6
+707,592,471,396,0,LIBRARY,About slight way,site_0
+734,613,498,389,0,LIBRARY,About slight way,site_1
+681,559,473,400,0,LIBRARY,About slight way,site_2
+730,593,500,359,0,LIBRARY,About slight way,site_3
+742,631,482,409,0,LIBRARY,About slight way,site_4
+706,543,503,385,0,LIBRARY,About slight way,site_5
+657,556,467,422,0,LIBRARY,About slight way,site_6
+851,759,613,486,0,NEXT DAY,About slight way,site_0
+907,748,626,510,0,NEXT DAY,About slight way,site_1
+956,803,598,479,0,NEXT DAY,About slight way,site_2
+953,786,635,515,0,NEXT DAY,About slight way,site_3
+933,757,616,529,0,NEXT DAY,About slight way,site_4
+953,771,590,547,0,NEXT DAY,About slight way,site_5
+957,815,654,508,0,NEXT DAY,About slight way,site_6
+676,540,478,404,0,OVERNIGHT,About slight way,site_0
+728,598,460,390,0,OVERNIGHT,About slight way,site_1
+726,603,447,389,0,OVERNIGHT,About slight way,site_2
+636,575,487,389,0,OVERNIGHT,About slight way,site_3
+717,572,482,390,0,OVERNIGHT,About slight way,site_4
+732,614,481,413,0,OVERNIGHT,About slight way,site_5
+677,588,493,371,0,OVERNIGHT,About slight way,site_6
+752,559,448,389,0,REGULAR,About slight way,site_0
+705,525,441,368,0,REGULAR,About slight way,site_1
+714,552,516,397,0,REGULAR,About slight way,site_2
+713,577,443,384,0,REGULAR,About slight way,site_3
+729,614,438,403,0,REGULAR,About slight way,site_4
+664,585,452,405,0,REGULAR,About slight way,site_5
+719,543,432,392,0,REGULAR,About slight way,site_6
+682,518,500,402,0,TWO DAY,About slight way,site_0
+682,578,505,363,0,TWO DAY,About slight way,site_1
+706,531,503,402,0,TWO DAY,About slight way,site_2
+730,571,456,384,0,TWO DAY,About slight way,site_3
+734,580,467,403,0,TWO DAY,About slight way,site_4
+753,568,514,341,0,TWO DAY,About slight way,site_5
+718,592,471,407,0,TWO DAY,About slight way,site_6
+955,714,621,536,0,EXPRESS,Both obvious tic,site_0
+960,750,612,524,0,EXPRESS,Both obvious tic,site_1
+872,745,637,495,0,EXPRESS,Both obvious tic,site_2
+937,768,632,501,0,EXPRESS,Both obvious tic,site_3
+931,766,672,496,0,EXPRESS,Both obvious tic,site_4
+967,814,607,523,0,EXPRESS,Both obvious tic,site_5
+911,746,616,523,0,EXPRESS,Both obvious tic,site_6
+676,607,466,406,0,LIBRARY,Both obvious tic,site_0
+661,589,430,409,0,LIBRARY,Both obvious tic,site_1
+693,613,484,379,0,LIBRARY,Both obvious tic,site_2
+732,552,465,418,0,LIBRARY,Both obvious tic,site_3
+681,535,455,401,0,LIBRARY,Both obvious tic,site_4
+727,564,485,402,0,LIBRARY,Both obvious tic,site_5
+716,576,500,391,0,LIBRARY,Both obvious tic,site_6
+974,752,631,474,0,NEXT DAY,Both obvious tic,site_0
+957,757,593,518,0,NEXT DAY,Both obvious tic,site_1
+911,730,638,519,0,NEXT DAY,Both obvious tic,site_2
+925,744,580,488,0,NEXT DAY,Both obvious tic,site_3
+911,763,654,536,0,NEXT DAY,Both obvious tic,site_4
+974,778,627,528,0,NEXT DAY,Both obvious tic,site_5
+968,765,616,528,0,NEXT DAY,Both obvious tic,site_6
+730,590,495,363,0,OVERNIGHT,Both obvious tic,site_0
+694,555,477,400,0,OVERNIGHT,Both obvious tic,site_1
+734,566,476,407,0,OVERNIGHT,Both obvious tic,site_2
+686,596,472,374,0,OVERNIGHT,Both obvious tic,site_3
+727,569,524,371,0,OVERNIGHT,Both obvious tic,site_4
+651,573,456,396,0,OVERNIGHT,Both obvious tic,site_5
+712,586,508,360,0,OVERNIGHT,Both obvious tic,site_6
+697,586,450,383,0,REGULAR,Both obvious tic,site_0
+702,586,496,400,0,REGULAR,Both obvious tic,site_1
+684,574,505,369,0,REGULAR,Both obvious tic,site_2
+677,550,451,384,0,REGULAR,Both obvious tic,site_3
+723,545,480,392,0,REGULAR,Both obvious tic,site_4
+682,585,459,407,0,REGULAR,Both obvious tic,site_5
+745,589,464,397,0,REGULAR,Both obvious tic,site_6
+730,574,470,410,0,TWO DAY,Both obvious tic,site_0
+699,548,428,414,0,TWO DAY,Both obvious tic,site_1
+664,601,482,390,0,TWO DAY,Both obvious tic,site_2
+695,561,459,379,0,TWO DAY,Both obvious tic,site_3
+685,616,426,349,0,TWO DAY,Both obvious tic,site_4
+732,577,520,405,0,TWO DAY,Both obvious tic,site_5
+649,542,433,388,0,TWO DAY,Both obvious tic,site_6
+971,775,677,523,0,EXPRESS,Famous skills enact.,site_0
+959,758,610,507,0,EXPRESS,Famous skills enact.,site_1
+937,761,614,511,0,EXPRESS,Famous skills enact.,site_2
+944,767,639,515,0,EXPRESS,Famous skills enact.,site_3
+886,707,629,521,0,EXPRESS,Famous skills enact.,site_4
+957,746,655,512,0,EXPRESS,Famous skills enact.,site_5
+1002,772,635,499,0,EXPRESS,Famous skills enact.,site_6
+674,571,447,358,0,LIBRARY,Famous skills enact.,site_0
+708,571,487,399,0,LIBRARY,Famous skills enact.,site_1
+672,593,499,434,0,LIBRARY,Famous skills enact.,site_2
+752,536,485,410,0,LIBRARY,Famous skills enact.,site_3
+653,604,495,348,0,LIBRARY,Famous skills enact.,site_4
+697,571,505,354,0,LIBRARY,Famous skills enact.,site_5
+667,584,483,416,0,LIBRARY,Famous skills enact.,site_6
+973,745,598,515,0,NEXT DAY,Famous skills enact.,site_0
+963,708,659,500,0,NEXT DAY,Famous skills enact.,site_1

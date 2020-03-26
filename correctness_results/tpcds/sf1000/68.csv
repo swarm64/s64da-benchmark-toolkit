@@ -1,3 +1,101 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:27db51faacc1f3297fb210e36e75d1c4fa210c65f1346654dbea1bdd6b2709ea
-size 6792
+bought_city,c_first_name,c_last_name,ca_city,extended_price,extended_tax,list_price,ss_ticket_number
+Sheffield,Roy,Aaron,Fairview,12512.98,352.71,28245.64,21506274
+Belmont,Shawn,Aaron,Plainview,31160.16,895.79,59481.12,40050855
+Oakwood,Jill,Aaron,Brownsville,19366.42,659.96,39108.97,71387176
+Five Points,Eric,Aaron,Jackson,18889.92,792.09,39940.79,103844887
+Oakdale,Virginia,Aaron,Kingston,11787.73,380.49,33770.03,126210294
+Oakland,Jerome,Aaron,Wilton,23391.24,677.84,54820.05,126497065
+Bennett,Lucas,Aaron,Cordova,37834.9,1472.47,57204.11,136796314
+Pinecrest,Robert,Aaron,Wildwood,34009.17,744.35,64963.59,170765756
+Spring Hill,Earl,Aaron,Summit,10425.74,340.86,28750.85,171331137
+Clifton,John,Aaron,Oakdale,17605.24,325.9,41545.8,171471422
+Florence,Dominic,Abbott,Riverdale,16437.13,563.52,51475.72,5462689
+Lakeside,Ron,Abbott,Kingston,18361.93,842.44,42845.92,7784449
+Midway,Scott,Abbott,Centerville,22630.99,635.53,46260.35,8549877
+Belmont,Roger,Abbott,Mount Pleasant,22250.44,1234.89,41481.47,9387365
+Pine Grove,Shelly,Abbott,Springfield,20168.16,822.48,40395.48,10133763
+Cedar Grove,Walter,Abbott,Jamestown,9666.66,526.06,25752.33,14587792
+Arlington,Karen,Abbott,Littleton,27674.03,1171.95,64988.06,29843584
+Harmony,Greg,Abbott,Texas,14332.78,457.64,30223.38,47277382
+Maple Grove,Veronica,Abbott,Pleasant Grove,26335.52,1098.8,35786.15,53011755
+Summit,Lisa,Abbott,Hawthorne,26909.16,870.1,47914.68,58824711
+Wilson,Amy,Abbott,Clifton,22264.53,808.21,55480.52,62606015
+Pleasant Grove,Holly,Abbott,Pine Grove,2078.09,125.46,3594.49,67097693
+Lakeview,Jerry,Abbott,Hartland,9959.31,258.01,21167.59,73962022
+Five Points,Marget,Abbott,Lakeside,17445.41,729.88,28698.06,80397594
+Harmony,Brian,Abbott,Crystal,21473.8,594.71,52044.02,84678754
+Springdale,Jose,Abbott,Crossroads,6562.88,186.47,18261.17,86269873
+Greenfield,Linda,Abbott,Spring Hill,10005.54,264.69,15479.98,89559992
+Fairfield,Ian,Abbott,Sunnyside,11746.95,598.76,26765.44,94273603
+Hopewell,Donna,Abbott,Proctor,21801.58,650.37,48876.19,98025579
+Morris,Darryl,Abbott,Green Acres,24255.34,1081.71,53763.38,102766564
+Union,Luis,Abbott,Kingston,13465.05,429.72,40652.22,106850718
+Glenwood,Catarina,Abbott,Unionville,14181.23,461.43,21324.49,110365400
+Newport,,Abbott,Sunnyside,33434.72,1016.45,54570.33,143871970
+Waterloo,Penny,Abbott,Woodlawn,4820.34,106.92,13289.79,149590221
+Sulphur Springs,Nancy,Abbott,Crossroads,20854.44,1075.77,57442.71,153415585
+Bunker Hill,James,Abbott,Fairview,13459.52,454.46,24446.29,162713383
+Cedar,Rolando,Abbott,Fairview,24607.85,686.46,47113.06,164597638
+Riverside,Kristin,Abbott,Spring Hill,36979.86,1422.71,57521.72,164627445
+Rockwood,Brian,Abbott,Shiloh,31089.07,890.21,64400.12,165237634
+Valley View,Saundra,Abbott,Lincoln,10704.34,233.81,25040.9,170118015
+Peoria,Doris,Abbott,Church Hill,10085.74,597.01,16868.06,171674470
+Shiloh,Arlene,Abbott,Riverdale,16524.57,757.92,35957.57,176655113
+Centerville,Irene,Abbott,Glenwood,14903.34,778.85,35094.82,178964490
+Plainview,Elizabeth,Abbott,Red Hill,19769.18,845.64,44144.04,184787167
+Edgewood,Nancy,Abbott,Mount Pleasant,25385.01,945.61,65563.62,198592667
+Summit,Myrtis,Abbott,Maple Grove,35007.73,2079.14,63215.79,207580212
+Deerfield,Julia,Abbott,Gary,14056.91,527.35,28294.05,208405301
+Gary,Larry,Abbott,Summit,21987.35,475.26,44689.0,209426580
+Georgetown,Andrew,Abbott,Riverview,10819.84,491.01,32517.25,226760350
+Sulphur Springs,Sheila,Abbott,Red Hill,49944.06,2339.19,85204.8,227523607
+Bedford,Eric,Abbott,Ashland,5469.12,237.05,9358.68,229928193
+Oakwood,David,Abbott,Enterprise,23827.52,826.63,46490.83,231267517
+Empire,Joanne,Abel,Mount Zion,6767.24,344.71,13172.98,13567526
+Woodlawn,Bo,Abel,Florence,31411.76,552.19,67080.95,27546609
+Lincoln,Antonio,Abel,Union,36448.37,1459.39,97201.12,31070392
+Spring Hill,Larry,Abel,Edgewood,30189.56,724.12,48208.52,33416518
+Pleasant Hill,John,Abel,Woodlawn,52525.43,2834.7,85840.57,46214681
+Oakland,Wilma,Abel,Florence,34668.77,873.04,68391.57,58256650
+Hopewell,Kendra,Abel,Enterprise,10328.48,454.56,18531.11,69810793
+Fairview,Marsha,Abel,Harmony,17911.37,941.5,36895.52,152092089
+Sunnyside,Peter,Abel,Mount Vernon,14763.16,708.14,34368.68,165691453
+Elizabeth,Suzanna,Abel,Wildwood,11389.34,464.33,24862.14,212656083
+Wilson,Jesus,Abel,Mount Pleasant,27070.0,1088.14,46317.49,225705820
+Bayview,Albert,Abell,Marion,21456.54,969.97,48051.2,16967217
+Springfield,Paul,Abell,Vista,10331.57,319.92,21609.8,31042320
+Waterloo,Preston,Abell,Jamestown,28407.6,1211.83,51921.74,79295569
+Mount Zion,David,Abell,Lakewood,16096.64,810.12,31945.19,99451430
+Pleasant Valley,Gus,Abell,Jackson,8819.12,226.66,28495.09,142552226
+Fairfield,Kathy,Abell,Shiloh,24240.77,842.08,30365.76,182861766
+Arlington,Dwight,Abernathy,Pleasant Valley,21733.25,1397.59,38229.56,16835430
+Springfield,Francisco,Abernathy,Woodlawn,17039.81,1083.33,33860.73,37334414
+Mount Vernon,Ofelia,Abernathy,Enterprise,25737.04,678.42,48727.21,81090228
+Oak Hill,Bennie,Abernathy,Unionville,16333.93,312.97,29033.38,120916300
+Summit,Anthony,Abernathy,Lakeside,31559.74,1577.14,58881.17,143295279
+Arlington,Charles,Abernathy,Plainview,6697.08,260.75,14398.01,191533014
+Crossroads,Mark,Abernathy,Lakeside,10626.29,493.08,33670.57,227367411
+Summit,Alicia,Abner,Valley View,11199.39,635.27,24258.94,66471748
+Lincoln,Bonnie,Abner,Waterloo,24294.32,1421.94,41087.63,135198722
+Osceola,Mildred,Abner,Glenwood,48731.47,2338.59,90112.27,195004131
+Wildwood,Michelle,Abney,Summit,22885.79,914.25,46934.81,12206045
+Springfield,Laura,Abney,Lakeview,20623.39,993.32,39278.52,55394254
+Clifton,Diane,Abney,Greenwood,13066.61,832.12,24641.41,96057050
+Ellisville,Sheryl,Abney,Oakland,23094.72,766.06,43164.18,103823248
+Elkton,Craig,Abney,Lebanon,30101.26,1066.67,37174.07,140465952
+Wildwood,Alice,Abney,Lakeside,24070.46,436.9,36208.62,150693671
+Woodland,Richard,Abney,Willow,22637.06,1185.52,46630.28,212958134
+Woodrow,Cynthia,Abraham,Mount Pleasant,35255.52,1431.83,74825.21,28537996
+Spring Valley,Kristen,Abraham,Lawrenceville,10433.64,358.99,26618.89,36471477
+Franklin,Margaret,Abraham,Valley View,25289.12,668.42,49922.4,55138131
+Watkins,Howard,Abraham,Harmony,18911.75,982.19,56230.51,77352288
+Union,Peter,Abraham,Carpenter,21906.66,789.99,47131.49,83592920
+California,John,Abraham,Superior,28823.16,2127.15,53020.76,129862293
+Plainview,Bruce,Abraham,Woodland,15430.93,309.8,41019.64,135887774
+Freeport,William,Abraham,Montague,18970.66,631.31,55137.12,193037401
+Lakewood,Donna,Abraham,Providence,19126.5,1049.52,27478.68,209109607
+Salem,Barbara,Abrams,Waterloo,28704.77,1027.88,40848.54,2262733
+Oak Grove,Pablo,Abrams,Newtown,36467.57,1832.91,53930.17,2579128
+Montague,Robert,Abrams,Newport,22930.92,596.61,43423.05,5338069
+Mount Vernon,Irving,Abrams,Shady Grove,23203.64,1340.3,41785.58,6583521
+Springdale,Steve,Abrams,Pleasant Valley,8860.95,559.1,22034.87,15606773
