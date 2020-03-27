@@ -159,6 +159,7 @@ class Streams:
             totalstart = time.perf_counter()
             results = self.run_streams()
             totalstop = time.perf_counter()
+            self.totalruntime = round(totalstop - totalstart, 2)
             results_df = self.save_to_dataframe(results)
 
             netdata_config = self.config.get('netdata')
@@ -221,8 +222,8 @@ class Streams:
             if self.scale_factor:
                 self._save_query_output(stream_id, query_id, query_result)
 
-            self.totalruntime = round(timing.stop - timing.start, 2)
-            LOG.info(f'finished {pretext}: {self.totalruntime:7.2f} - {timing.status.name}')
+            runtime = round(timing.stop - timing.start, 2)
+            LOG.info(f'finished {pretext}: {runtime:7.2f} - {timing.status.name}')
 
             timings[query_id] = timing
 
@@ -255,7 +256,7 @@ class Streams:
 
     def save_results_to_html(self, results, correctness_html=None):
 
-        env = Environment(loader=FileSystemLoader(searchpath="recources"))
+        env = Environment(loader=FileSystemLoader(searchpath="resources"))
         tpl = env.get_template('report.tpl.html')
         html = tpl.render(report_datetime=datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
                           totalruntime=self.totalruntime)
