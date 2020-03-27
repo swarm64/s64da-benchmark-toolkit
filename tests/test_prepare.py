@@ -23,7 +23,7 @@ def prepare_mock(mocker):
 
 def test_check_diskspace_ok(mocker, prepare_mock):
     mocker.patch('shutil.disk_usage',
-                 return_value=(150 * 1024 * 1024, 50 * 1024 * 1024, 100 * 1024 * 1024),
+                 return_value=(150 << 30, 50 << 30, 100 << 30),
                  autospec=True)
 
     # Must not raise an AssertionError
@@ -32,7 +32,7 @@ def test_check_diskspace_ok(mocker, prepare_mock):
 
 def test_check_diskspace_not_ok(mocker, prepare_mock):
     mocker.patch('shutil.disk_usage',
-                 return_value=(150 * 1024 * 1024, 100 * 1024 * 1024, 50 * 1024 * 1024),
+                 return_value=(150 << 30, 100 << 30, 50 << 30),
                  autospec=True)
 
     with pytest.raises(AssertionError):
