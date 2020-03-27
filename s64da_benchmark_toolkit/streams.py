@@ -7,6 +7,7 @@ import time
 
 from collections import namedtuple
 from datetime import datetime
+from jinja2 import Environment, FileSystemLoader
 from multiprocessing import Pool
 from natsort import natsorted
 from pandas.io.formats.style import Styler
@@ -69,6 +70,7 @@ class Streams:
         self.query_dir = self._get_query_dir()
 
         self.explain_analyze = args.explain_analyze
+        self.totalruntime = 0
 
     @staticmethod
     def _make_config(args, benchmark):
@@ -219,8 +221,8 @@ class Streams:
             if self.scale_factor:
                 self._save_query_output(stream_id, query_id, query_result)
 
-            runtime = round(timing.stop - timing.start, 2)
-            LOG.info(f'finished {pretext}: {runtime:7.2f} - {timing.status.name}')
+            self.totalruntime = round(timing.stop - timing.start, 2)
+            LOG.info(f'finished {pretext}: {self.totalruntime:7.2f} - {timing.status.name}')
 
             timings[query_id] = timing
 
@@ -253,9 +255,12 @@ class Streams:
 
     def save_results_to_html(self, results, correctness_html=None):
 
-        html = f'<h1> Swarm64 Benchmark Results Report </h1><p>{datetime.now().strftime("%d-%m-%Y %H:%M:%S")}</p>'
+        env = Environment(loader=FileSystemLoader(searchpath="recources"))
+        tpl = env.get_template('report.tpl.html')
+        html = tpl.render(report_datetime=datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+                          totalruntime=self.totalruntime)
 
-        Swarm64Styler = Styler.from_custom_template("resources", "report.tpl")
+        Swarm64Styler = Styler.from_custom_template("resources", "correctness.tpl")
         html += Swarm64Styler(results).render()
 
         if correctness_html:
