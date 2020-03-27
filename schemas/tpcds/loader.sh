@@ -13,4 +13,5 @@ ${PYTHON} prepare_benchmark \
     --schema=${SCHEMA} \
     --chunks=${CHUNKS} \
     --max-jobs=${MAX_JOBS} \
+    --check-diskspace-of-directory=${DISK_SPACE_CHECK_DIR} \
     --benchmark=tpcds

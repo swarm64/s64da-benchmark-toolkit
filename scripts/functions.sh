@@ -18,6 +18,7 @@ NUM_PARTITIONS=32
 CHUNKS=10
 MAX_JOBS=8
 PYTHON="python3"
+DISK_SPACE_CHECK_DIR=""
 
 function print_help {
 echo "
@@ -57,6 +58,10 @@ case $i in
     ;;
     --schema=*)
     SCHEMA="${i#*=}"
+    shift
+    ;;
+    --check-diskspace-of-directory=*)
+    DISK_SPACE_CHECK_DIR="${i#*=}"
     shift
     ;;
     --scale-factor=*)

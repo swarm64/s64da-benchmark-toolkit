@@ -53,9 +53,9 @@ class PrepareBenchmarkFactory:
               f'    Size factor   : {size_factor}')
 
         _, _, free = shutil.disk_usage(diskpace_check_dir)
-        space_needed = scale_factor * 1024 * 1024 * size_factor
+        space_needed = scale_factor * 1024 * 1024 * 1024 * size_factor
         assert space_needed < free, \
-            f'Not enough disk space available. Needed: {space_needed}, free: {free}'
+            f'Not enough disk space available. Needed [Bytes]: {space_needed}, free: {free}'
 
     def run(self):
         diskpace_check_dir = self.args.check_diskspace_of_directory
