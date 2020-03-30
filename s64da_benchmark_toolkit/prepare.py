@@ -1,5 +1,6 @@
 
 import os
+import shutil
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from subprocess import Popen
@@ -10,6 +11,7 @@ from .dbconn import DBConn
 
 class PrepareBenchmarkFactory:
     TABLES = []
+    SIZING_FACTORS = {}
 
     def __init__(self, args, benchmark):
         self.args = args
@@ -32,7 +34,34 @@ class PrepareBenchmarkFactory:
                     for future in futures:
                         future.cancel()
 
+    def _check_diskspace(self, diskpace_check_dir):
+        db_type = os.path.basename(self.schema_dir).split('_')[0]
+        if db_type == 'sdb':
+            db_type = 's64da'
+
+        scale_factor = self.args.scale_factor
+        size_factor = PrepareBenchmarkFactory.SIZING_FACTORS[db_type].get(scale_factor)
+        if not size_factor:
+            print(f'Could not determine size factor. Not checking disk space.')
+            return
+
+        print(f'Checking available diskpace in {diskpace_check_dir} with assumptions:\n'
+              f'    Storage dir   : {diskpace_check_dir}\n'
+              f'    Database type : {db_type}\n'
+              f'    Benchmark     : {self.benchmark.name}\n'
+              f'    Scale factor  : {scale_factor}\n'
+              f'    Size factor   : {size_factor}')
+
+        _, _, free = shutil.disk_usage(diskpace_check_dir)
+        space_needed = int(scale_factor * size_factor) << 30
+        assert space_needed < free, \
+            f'Not enough disk space available. Needed [GBytes]: {space_needed>>30}, free: {free>>30}'
+
     def run(self):
+        diskpace_check_dir = self.args.check_diskspace_of_directory
+        if diskpace_check_dir:
+            self._check_diskspace(diskpace_check_dir)
+
         print('Preparing DB')
         self.prepare_db()
 
