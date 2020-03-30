@@ -13,6 +13,24 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         'supplier'
     )
 
+    PrepareBenchmarkFactory.SIZING_FACTORS = {
+        's64da': {
+            1: 1.0,
+            10: 1.0,
+            100: 1.0,
+            300: 0.75,
+            1000: 0.75,
+            3000: 0.75
+        },
+        'psql': {
+            10: 3.0,
+            100: 2.5,
+            300: 2.5,
+            1000: 2.5,
+            3000: 2.5
+        }
+    }
+
     TABLE_CODES = {
         'region': 'r',
         'customer': 'c',
