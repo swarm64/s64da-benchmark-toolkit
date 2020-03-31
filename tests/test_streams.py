@@ -1,6 +1,5 @@
 
 import pytest
-import pandas as pd
 
 from s64da_benchmark_toolkit import streams
 

@@ -12,7 +12,7 @@ import pandas
 from natsort import index_natsorted, order_by_index
 from tabulate import tabulate
 
-from .correctness import Correctness
+from .correctness import Correctness, CorrectnessResult
 from .netdata import Netdata
 
 
@@ -93,16 +93,13 @@ class Reporting:
             if self.netdata_output_file:
                 netdata.write_stats(df, self.netdata_output_file)
 
-            # For later when writing to the DB
-            # netdata_df = netdata.get_system_stats(df, 5)
-
         if self.scale_factor:
             df = self._check_correctness(df)
 
-        self._print_results(df)
-
         total_runtime = df['timestamp_stop'].max() - df['timestamp_start'].min()
         total_runtime_seconds = total_runtime.total_seconds()
+        self._print_results(df, total_runtime_seconds)
+
         print(f'\nTotal runtime: {total_runtime} ({total_runtime_seconds:.2f}s)')
 
     def _save_explain_plan(self, query_metric):
@@ -138,7 +135,7 @@ class Reporting:
         df = df.reset_index(drop=True)
         return df
 
-    def _print_results(self, df):
+    def _print_results(self, df, total_runtime_seconds):
         df = Reporting._sort_df(df)
 
         if 'print' in self.output:
@@ -148,6 +145,17 @@ class Reporting:
         if 'csv' in self.output:
             if self.csv_file:
                 df.to_csv(self.csv_file, sep=';')
+
+        if 'correctness_check' in df:
+            report_datetime = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+            with open(self.html_output, 'w') as html_output_file:
+                html_output_file.write(f'''
+<h1>Swarm64 Benchmark Results Report</h1>
+<p>{ report_datetime }</p>
+<p>Total runtime: { total_runtime_seconds }s</p>\n''')
+                df.to_html(buf=html_output_file, escape=False, formatters={
+                    'correctness_check': CorrectnessResult.format_html
+                })
 
     def _check_correctness(self, df):
         correctness = Correctness(self.scale_factor, self.benchmark.name)
@@ -159,20 +167,6 @@ class Reporting:
             for index, row in sub_df.iterrows():
                 if row['status'] == 'OK':
                     query_id = row['query_id']
-                    correctness_check = correctness.check_correctness(stream_id, query_id)
-                    df.loc[index, 'correctness_check'] = correctness_check
+                    df.loc[index, 'correctness_check'] = correctness.check_correctness(stream_id, query_id)
 
         return df
-
-#    def save_results_to_html(self, results, correctness_html=None):
-#
-#        html = f'<h1> Swarm64 Benchmark Results Report </h1><p>{datetime.now().strftime("%d-%m-%Y %H:%M:%S")}</p>'
-#
-#        Swarm64Styler = Styler.from_custom_template("resources", "report.tpl")
-#        html += Swarm64Styler(results).render()
-#
-#        if correctness_html:
-#            html += correctness_html
-#
-#        with open(self.html_output, 'w') as f:
-#            f.write(html)
