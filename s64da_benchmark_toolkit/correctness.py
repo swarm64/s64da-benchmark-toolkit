@@ -129,6 +129,6 @@ class Correctness:
 
     @staticmethod
     def to_html(df, table_title):
-        Swarm64Styler = Styler.from_custom_template("resources", "report.tpl")
+        Swarm64Styler = Styler.from_custom_template("resources", "correctness.tpl")
 
         return Swarm64Styler(df).render(table_title=table_title)
