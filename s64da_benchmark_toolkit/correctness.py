@@ -29,6 +29,21 @@ class Correctness:
         return '%.12g' % float('%.2f' % value)
 
     @classmethod
+    def match_double_precision(cls, truth_value, result_value):
+        truth_rounded = cls.round_to_precision(truth_value)
+        result_rounded = cls.round_to_precision(result_value)
+        return truth_rounded == result_rounded or abs(truth_value - result_value) <= 0.01
+
+    def prepare(self, df):
+        # Sort columns
+        df = df.sort_index(axis=1)
+        # Natsort all rows
+        df = df.reindex(index=order_by_index(df.index, index_natsorted(zip(df.to_numpy()))))
+        # Recreate index for comparison later
+        df.reset_index(level=0, drop=True, inplace=True)
+        return df
+
+    @classmethod
     def check_for_mismatches(cls, truth, result):
         merge = truth.merge(result, indicator=True, how='left')
         differences = merge.loc[lambda x: x['_merge'] != 'both']
@@ -47,8 +62,7 @@ class Correctness:
                     elif np.isinf(truth_datum):
                         matches = (np.isinf(result_datum) == True)
                     else:
-                        matches = (
-                            cls.round_to_precision(truth_datum) == cls.round_to_precision(result_datum))
+                        matches = cls.match_double_precision(truth_datum, result_datum)
 
                 elif truth.dtypes[column_name] == 'object':
                     matches = (str(truth_datum) == str(result_datum))
@@ -62,13 +76,6 @@ class Correctness:
         return mismatches
 
     def _check_correctness_impl(self, truth, result):
-        def prepare(df):
-            # Sort columns
-            df = df.sort_index(axis=1)
-            # Natsort all rows
-            df = df.reindex(index=order_by_index(df.index, index_natsorted(zip(df.to_numpy()))))
-            # Recreate index for comparison later
-            return df
 
         if truth.empty != result.empty:
             return list(result.index) if truth.empty else list(truth.index)
@@ -76,8 +83,10 @@ class Correctness:
         if truth.shape != result.shape:
             return list(truth.index)
 
-        truth = prepare(truth)
-        result = prepare(result)
+        truth.drop_duplicates(inplace=True, ignore_index=True)
+        result.drop_duplicates(inplace=True, ignore_index=True)
+        truth = self.prepare(truth)
+        result = self.prepare(result)
 
         # Column names must be same
         if not truth.columns.difference(result.columns).empty:
@@ -116,11 +125,11 @@ class Correctness:
         mismatch_idx = self._check_correctness_impl(truth, result)
         if mismatch_idx:
             self.html += Correctness.to_html(
-                truth.iloc[mismatch_idx],
+                self.prepare(truth).iloc[mismatch_idx],
                 table_title=f'Truth for StreamId={stream_id}, Query={query_number}')
 
             self.html += Correctness.to_html(
-                result.iloc[mismatch_idx],
+                self.prepare(result).iloc[mismatch_idx],
                 table_title=f'Result for StreamId={stream_id}, Query={query_number}')
 
             return 'Mismatch'
