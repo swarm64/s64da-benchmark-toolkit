@@ -421,10 +421,3 @@ Women,2001,2,5579227.675000000000,2986084.99,3556172.43,3192346.92
     assert result_detail == ResultDetail.OK
     assert mismatch_idx == None
 
-    truth = pandas.read_csv(StringIO(truthstr))
-    # without float_precision='round_trip' option, there is a mismatch
-    result = pandas.read_csv(StringIO(resultstr))
-    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
-
-    assert result_detail == ResultDetail.VALUE_MISMATCH
-    assert mismatch_idx != None
