@@ -59,6 +59,8 @@ class Reporting:
         self.all_query_metrics = []
         self.netdata_output_file = args.netdata_output_file
         self.config = config
+        self.df = None
+        self.total_runtime_seconds = 0.0
 
         self.output = args.output
         self.csv_file = args.csv_file
@@ -72,7 +74,7 @@ class Reporting:
                 LOG.exception(f'Could not create directory {self.results_root_dir}')
 
     def run_report(self, reporting_queue):
-        df = pandas.DataFrame(columns=QueryMetric.dataframe_columns)
+        self.df = pandas.DataFrame(columns=QueryMetric.dataframe_columns)
 
         while not reporting_queue.empty():
             query_metric = reporting_queue.get()
@@ -83,24 +85,24 @@ class Reporting:
             if self.scale_factor:
                 self._save_query_output(query_metric)
 
-            df = df.append(query_metric.dataframe)
+            self.df = self.df.append(query_metric.dataframe)
 
-        df = df.reset_index(drop=True)
+        self.df = self.df.reset_index(drop=True)
 
         netdata_config = self.config.get('netdata')
         if netdata_config:
             netdata = Netdata(netdata_config)
             if self.netdata_output_file:
-                netdata.write_stats(df, self.netdata_output_file)
+                netdata.write_stats(self.df, self.netdata_output_file)
 
         if self.scale_factor:
-            df = self._check_correctness(df)
+            self._check_correctness()
 
-        total_runtime = df['timestamp_stop'].max() - df['timestamp_start'].min()
-        total_runtime_seconds = total_runtime.total_seconds()
-        self._print_results(df, total_runtime_seconds)
+        total_runtime = self.df['timestamp_stop'].max() - self.df['timestamp_start'].min()
+        self.total_runtime_seconds = total_runtime.total_seconds()
+        self._print_results()
 
-        print(f'\nTotal runtime: {total_runtime} ({total_runtime_seconds:.2f}s)')
+        print(f'\nTotal runtime: {total_runtime} ({self.total_runtime_seconds:.2f}s)')
 
     def _save_explain_plan(self, query_metric):
         plan_file_name = query_metric.make_file_name('txt')
@@ -128,45 +130,41 @@ class Reporting:
             csvfile.writerow(query_result_header)
             csvfile.writerows(query_result_data)
 
-    @classmethod
-    def _sort_df(cls, df):
-        index_sort = index_natsorted(zip(df['stream_id'], df['query_id']))
-        df = df.reindex(index=order_by_index(df.index, index_sort))
-        df = df.reset_index(drop=True)
-        return df
+    def _sort_df(self):
+        index_sort = index_natsorted(zip(self.df['stream_id'], self.df['query_id']))
+        self.df = self.df.reindex(index=order_by_index(self.df.index, index_sort))
+        self.df = self.df.reset_index(drop=True)
 
-    def _print_results(self, df, total_runtime_seconds):
-        df = Reporting._sort_df(df)
+    def _print_results(self):
+        self._sort_df()
 
         if 'print' in self.output:
             print('\n')
-            print(tabulate(df, headers='keys', tablefmt='github', floatfmt='.2f'))
+            print(tabulate(self.df, headers='keys', tablefmt='github', floatfmt='.2f'))
 
         if 'csv' in self.output:
             if self.csv_file:
-                df.to_csv(self.csv_file, sep=';')
+                self.df.to_csv(self.csv_file, sep=';')
 
-        if 'correctness_check' in df:
+        if 'correctness_check' in self.df:
             report_datetime = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
             with open(self.html_output, 'w') as html_output_file:
                 html_output_file.write(f'''
 <h1>Swarm64 Benchmark Results Report</h1>
 <p>{ report_datetime }</p>
-<p>Total runtime: { total_runtime_seconds }s</p>\n''')
-                df.to_html(buf=html_output_file, escape=False, formatters={
+<p>Total runtime: { self.total_runtime_seconds }s</p>\n''')
+                self.df.to_html(buf=html_output_file, escape=False, formatters={
                     'correctness_check': CorrectnessResult.format_html
                 })
 
-    def _check_correctness(self, df):
+    def _check_correctness(self):
         correctness = Correctness(self.scale_factor, self.benchmark.name)
-        stream_ids = tuple(df['stream_id'].drop_duplicates())
+        stream_ids = tuple(self.df['stream_id'].drop_duplicates())
 
-        df['correctness_check'] = None
+        self.df['correctness_check'] = None
         for stream_id in stream_ids:
-            sub_df = df.loc[df['stream_id'] == stream_id]
+            sub_df = self.df.loc[self.df['stream_id'] == stream_id]
             for index, row in sub_df.iterrows():
                 if row['status'] == 'OK':
                     query_id = row['query_id']
-                    df.loc[index, 'correctness_check'] = correctness.check_correctness(stream_id, query_id)
-
-        return df
+                    self.df.loc[index, 'correctness_check'] = correctness.check_correctness(stream_id, query_id)
