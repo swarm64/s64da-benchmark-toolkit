@@ -154,7 +154,7 @@ class Reporting:
 <p>{ report_datetime }</p>
 <p>Total runtime: { self.total_runtime_seconds }s</p>\n''')
                 self.df.to_html(buf=html_output_file, escape=False, formatters={
-                    'correctness_check': CorrectnessResult.format_html
+                    'correctness_check': lambda v: v.to_html()
                 })
 
     def _check_correctness(self):

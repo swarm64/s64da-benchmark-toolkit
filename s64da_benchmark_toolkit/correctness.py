@@ -35,25 +35,17 @@ class CorrectnessResult:
     def is_mismatch(self):
         return self.status == 'MISMATCH'
 
-    @classmethod
-    def _tuple_to_html(cls, t):
-        html = ''
-        for row in t:
-            html += '<div>' + ' '.join([str(x) for x in row]) + '</div>'
-        return html
+    def to_html(self):
+        if self.is_ok:
+            return self.status
+
+        # HTML here, since it'll be used for reporting to HTML
+        truth_html = self.truth.to_html()
+        result_html = self.result.to_html()
+        return f'{value.status}<br /><div>{truth_html}</div><br /><div>{result_html}</div>'
 
     def __repr__(self):
         return self.status
-
-    @classmethod
-    def format_html(cls, value):
-        if value.is_ok:
-            return value.status
-
-        # HTML here, since it'll be used for reporting to HTML
-        truth_html = value.truth.to_html() # CorrectnessResult._tuple_to_html(value.truth)
-        result_html = value.result.to_html() #CorrectnessResult._tuple_to_html(value.result)
-        return f'{value.status}<br /><div>{truth_html}</div><br /><div>{result_html}</div>'
 
 
 class ResultDetail(Enum):
