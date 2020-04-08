@@ -36,13 +36,14 @@ class CorrectnessResult:
         return self.status == 'MISMATCH'
 
     def to_html(self):
+        status = self.status
         if self.is_ok:
-            return self.status
+            return status
 
         # HTML here, since it'll be used for reporting to HTML
         truth_html = self.truth.to_html()
         result_html = self.result.to_html()
-        return f'{value.status}<br /><div>{truth_html}</div><br /><div>{result_html}</div>'
+        return f'{status}<br /><div>{truth_html}</div><br /><div>{result_html}</div>'
 
     def __repr__(self):
         return self.status
