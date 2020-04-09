@@ -26,7 +26,6 @@ class DB:
         self.dsn = dsn
         dsn_url = urlparse(dsn)
         self.dsn_pg_db = f'{dsn_url.scheme}://{dsn_url.netloc}/postgres'
-        self.plan = ''
 
     def apply_config(self, config):
         with DBConn(self.dsn_pg_db) as conn:
@@ -57,22 +56,22 @@ class DB:
                 else:
                     query_result = None
                 status = Status.OK
-                self.plan = '\n'.join(conn.conn.notices)
+                plan = '\n'.join(conn.conn.notices)
 
             except psycopg2.extensions.QueryCanceledError:
                 status = Status.TIMEOUT
                 query_result = None
-                self.plan = DB.get_explain_output(conn.conn, sql)
+                plan = DB.get_explain_output(conn.conn, sql)
 
             except (psycopg2.InternalError, psycopg2.Error, UnicodeDecodeError):
                 LOG.exception('Ignoring psycopg2 Error')
                 query_result = None
-                self.plan = DB.get_explain_output(conn.conn, sql)
+                plan = DB.get_explain_output(conn.conn, sql)
 
             finally:
                 stop = time.time()
 
-            return Timing(start=start, stop=stop, status=status), query_result
+            return Timing(start=start, stop=stop, status=status), query_result, plan
 
     @staticmethod
     def auto_explain_on(conn):
