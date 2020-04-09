@@ -27,14 +27,6 @@ def monkeypatch_read_csv(monkeypatch):
     monkeypatch.setattr(pd, 'read_csv', read_csv)
 
 
-@pytest.fixture()
-def monkeypatch_to_html(monkeypatch):
-    def no_to_html(*args, **kwargs):
-        return ''
-
-    monkeypatch.setattr(correctness.Correctness, 'to_html', no_to_html)
-
-
 def test_correctness_filepath(cc):
 
     filepath = cc.get_correctness_filepath('1')
@@ -59,10 +51,11 @@ def test_check_correctness_no_correctness_file(cc, mocker):
     mocked_filepath = mocker.patch('s64da_benchmark_toolkit.correctness.Correctness.get_correctness_filepath')
     mocked_filepath.return_value='/nopath/nofile.csv'
 
-    assert cc.check_correctness(1, 1) == 'OK'
+    result = cc.check_correctness(1, 1)
+    assert result.is_ok
 
 
-def test_check_correctness_mismatch(cc, monkeypatch_read_csv, monkeypatch_to_html, mocker):
+def test_check_correctness_mismatch(cc, monkeypatch_read_csv, mocker):
 
     mocked_filepath = mocker.patch('s64da_benchmark_toolkit.correctness.Correctness.get_correctness_filepath')
     mocked_filepath.return_value = 'foo'
@@ -70,10 +63,11 @@ def test_check_correctness_mismatch(cc, monkeypatch_read_csv, monkeypatch_to_htm
     mocked_os_join = mocker.patch('s64da_benchmark_toolkit.correctness.os.path.join')
     mocked_os_join.return_value = 'bar'
 
-    assert cc.check_correctness(1, 1) == 'Mismatch'
+    result = cc.check_correctness(1, 1)
+    assert result.is_mismatch
 
 
-def test_check_correctness_ok(cc, monkeypatch_read_csv, monkeypatch_to_html, mocker):
+def test_check_correctness_ok(cc, monkeypatch_read_csv, mocker):
 
     mocked_filepath = mocker.patch('s64da_benchmark_toolkit.correctness.Correctness.get_correctness_filepath')
     mocked_filepath.return_value = 'foobar'
@@ -81,10 +75,11 @@ def test_check_correctness_ok(cc, monkeypatch_read_csv, monkeypatch_to_html, moc
     mocked_os_join = mocker.patch('s64da_benchmark_toolkit.correctness.os.path.join')
     mocked_os_join.return_value = 'foobar'
 
-    assert cc.check_correctness(1, 1) == 'OK'
+    result = cc.check_correctness(1, 1)
+    assert result.is_ok
 
 
-def test_check_correctness_empty(cc, monkeypatch_read_csv, monkeypatch_to_html, mocker):
+def test_check_correctness_empty(cc, monkeypatch_read_csv, mocker):
 
     mocked_filepath = mocker.patch('s64da_benchmark_toolkit.correctness.Correctness.get_correctness_filepath')
     mocked_filepath.return_value = 'empty'
@@ -92,4 +87,5 @@ def test_check_correctness_empty(cc, monkeypatch_read_csv, monkeypatch_to_html, 
     mocked_os_join = mocker.patch('s64da_benchmark_toolkit.correctness.os.path.join')
     mocked_os_join.return_value = 'empty'
 
-    assert cc.check_correctness(1, 1) == 'OK'
+    result = cc.check_correctness(1, 1)
+    assert result.is_ok
