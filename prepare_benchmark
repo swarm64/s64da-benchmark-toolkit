@@ -59,8 +59,9 @@ if __name__ == '__main__':
         'Limit the overall parallelism to this amount of jobs.'
     ))
 
-    args_to_parse.add_argument('--check-diskspace-of-directory', help=(
-        'If flag is present, a disk space check on the passed storage directory will be performed prior ingestion.'
+    args_to_parse.add_argument('--check-diskspace-of-directory', default=None, help=(
+        'If flag is present, a disk space check on the passed storage directory will be '
+        'performed prior to ingestion.'
     ))
 
     args = args_to_parse.parse_args()
