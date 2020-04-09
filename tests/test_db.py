@@ -59,7 +59,7 @@ def test_db_reset_config(mocker):
 
 def test_db_run_query_ok(mocker):
     mock_cursor = get_mocked_cursor(mocker)
-    result, query_output, _ = db.DB(DSN).run_query('SELECT 1', 0)
+    result, query_output = db.DB(DSN).run_query('SELECT 1', 0)
 
     assert result.status == db.Status.OK
     assert (result.stop - result.start) > 0
@@ -71,7 +71,7 @@ def test_db_run_query_timeout(no_plan, mocker):
     mock_cursor = get_mocked_cursor(mocker)
     mock_cursor.execute.side_effect = psycopg2.extensions.QueryCanceledError('Timeout')
 
-    result, query_output, _ = db.DB(DSN).run_query('SELECT 1', 0)
+    result, query_output = db.DB(DSN).run_query('SELECT 1', 0)
     assert result.status == db.Status.TIMEOUT
     assert (result.stop - result.start) > 0
     assert query_output is None
@@ -82,7 +82,7 @@ def test_db_run_query_error(no_plan, mocker):
     mock_cursor = get_mocked_cursor(mocker)
     mock_cursor.execute.side_effect = psycopg2.InternalError('Error')
 
-    result, query_output, _ = db.DB(DSN).run_query('SELECT 1', 0)
+    result, query_output = db.DB(DSN).run_query('SELECT 1', 0)
     assert result.status == db.Status.ERROR
     assert (result.stop - result.start) > 0
     assert query_output is None

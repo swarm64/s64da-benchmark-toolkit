@@ -4,7 +4,6 @@ import logging
 import requests
 import pandas
 
-from natsort import natsorted
 
 LOG = logging.getLogger()
 
@@ -14,24 +13,15 @@ class Netdata:
         self.metrics = config['metrics']
         self.charts = config['charts']
 
-    def _get_data(self, timerange, resolution):
+    def _get_data(self, timerange):
         data = pandas.DataFrame()
         for chart, dimensions in self.charts.items():
-            response = requests.get(self.url, params={
+            result = requests.get(self.url, params={
                 'chart': chart,
                 'after': timerange[0],
                 'before': timerange[1],
-                'dimensions': ','.join(dimensions),
-                'gtime': resolution
-            })
-
-            status_code = response.status_code
-            if status_code != 200:
-                LOG.warning(f'Netdata response not 200, but {status_code} '
-                            f'for chart {chart}.')
-                continue
-
-            result = response.json()
+                'dimensions': ','.join(dimensions)
+            }).json()
 
             columns = ['time']
             columns.extend([f'{chart}.{dimension}' for dimension in dimensions])
@@ -41,57 +31,18 @@ class Netdata:
             df = df.set_index('time')
             data = pandas.concat([data, df], axis=1)
 
-        data.index = pandas.to_datetime(data.index, unit='s')
-
         return data
 
-    @classmethod
-    def make_timestamp(cls, value):
-        return int(value.timestamp())
-
-    def _get_netdata_per_query(self, df, output):
+    def write_stats(self, results, output):
         data = {}
-
-        for _, row in df.iterrows():
-            timerange = (
-                Netdata.make_timestamp(row['timestamp_start']),
-                Netdata.make_timestamp(row['timestamp_stop'])
-            )
-
-            netdata_df = self._get_data(timerange, 1)
-
-            query_id = row['query_id']
-            data[query_id] = netdata_df.agg(self.metrics)
-
-        return data
-
-    def get_system_stats(self, df, resolution):
-        ts_from = Netdata.make_timestamp(df['timestamp_start'].min())
-        ts_to = Netdata.make_timestamp(df['timestamp_stop'].max())
-        return self._get_data((ts_from, ts_to), resolution).sort_index()
-
-    def _write_stats_per_query(self, df, output):
-        data = self._get_netdata_per_query(df, output)
-        query_ids = natsorted(data.keys())
+        for name, result in results.items():
+            # timerange = (int(result.start), int(result.stop))
+            timerange = (result[0], result[1])
+            df = self._get_data(timerange)
+            data[name] = df.agg(self.metrics)
 
         with open(output, 'w') as output_file:
-            for query_id in query_ids:
-                output_file.write(f'{query_id}')
-                data[query_id].to_csv(output_file)
+            for name, df in data.items():
+                output_file.write(f'{name}')
+                df.to_csv(output_file)
                 output_file.write('\n')
-
-    def _write_stats_no_breakdown(self, df, output):
-        LOG.info('Running more than one stream. Netdata stats are written '
-                 'out without analysis.')
-        netdata_df = self.get_system_stats(df, 1)
-
-        with open(output, 'w') as output_file:
-            output_file.write(f'all')
-            netdata_df.to_csv(output_file)
-            output_file.write('\n')
-
-    def write_stats(self, df, output):
-        if len(df['stream_id'].unique()) == 1:
-            self._write_stats_per_query(df, output)
-        else:
-            self._write_stats_no_breakdown(df, output)
