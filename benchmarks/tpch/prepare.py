@@ -31,6 +31,11 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         }
     }
 
+    PrepareBenchmarkFactory.CLUSTER_SPEC = {
+        'lineitem': 'l_shipdate,l_receiptdate',
+        'orders': 'o_orderdate'
+    }
+
     TABLE_CODES = {
         'region': 'r',
         'customer': 'c',

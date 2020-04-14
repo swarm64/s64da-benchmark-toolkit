@@ -3,7 +3,7 @@ import os
 import shutil
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from subprocess import Popen
+from subprocess import Popen, PIPE
 from urllib.parse import urlparse
 
 from .dbconn import DBConn
@@ -12,6 +12,7 @@ from .dbconn import DBConn
 class PrepareBenchmarkFactory:
     TABLES = []
     SIZING_FACTORS = {}
+    CLUSTER_SPEC = {}
 
     def __init__(self, args, benchmark):
         self.args = args
@@ -19,10 +20,15 @@ class PrepareBenchmarkFactory:
         self.schema_dir = os.path.join(benchmark.base_dir, 'schemas', args.schema)
         assert os.path.isdir(self.schema_dir), 'Schema does not exist'
 
-    def _run_shell_task(self, task):
-        p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash')
+    def _run_shell_task(self, task, return_output=False):
+        p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
+                  stdout=PIPE if return_output else None)
         p.wait()
         assert p.returncode == 0, 'Shell task did not finish with exit code 0'
+
+        if return_output:
+            stdout, _ = p.communicate()
+            return stdout
 
     def _run_tasks_parallel(self, tasks):
         with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
@@ -76,6 +82,10 @@ class PrepareBenchmarkFactory:
         print('Adding indices')
         self.add_indexes()
 
+        if self.supports_cluster():
+            print('Swarm64 DA CLUSTER')
+            self.cluster()
+
         print('VACUUM-ANALYZE')
         self.vacuum_analyze()
 
@@ -116,3 +126,16 @@ class PrepareBenchmarkFactory:
         analyze_tasks = [f'psql {self.args.dsn} -c "ANALYZE {table}"' for table in
                          PrepareBenchmarkFactory.TABLES]
         self._run_tasks_parallel(analyze_tasks)
+
+    def supports_cluster(self):
+        result = self._run_shell_task(
+                # Check if there is a 'cluster' function in the 'swarm64da' namespace
+                f'psql {self.args.dsn} --tuples-only --no-align -c "\dfn swarm64da.cluster"',
+                return_output=True)
+        return result.startswith(b'swarm64da|cluster')
+
+    def cluster(self):
+        cluster_tasks = [
+                f'''psql {self.args.dsn} -c "SELECT swarm64da.cluster('{table}', '{colspec}')"'''
+                for table, colspec in PrepareBenchmarkFactory.CLUSTER_SPEC.items()]
+        self._run_tasks_parallel(cluster_tasks)

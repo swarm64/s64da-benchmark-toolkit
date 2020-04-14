@@ -39,6 +39,12 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         }
     }
 
+    PrepareBenchmarkFactory.CLUSTER_SPEC = {
+        'time_dim': 't_time_sk',
+        'item': 'i_current_price',
+        'catalog_sales': 'cs_net_profit,cs_quantity',
+    }
+
     def _stream_to_db(self, table):
         return (f"grep ^{table} | sed -r 's/^'{table}' (.*)/\\1/' | "
                 f"psql {self.args.dsn} -c \"COPY {table} FROM STDIN "
