@@ -31,7 +31,7 @@ Swarm64 DA and native PostgreSQL.
 
    | Parameter      | Description                                            |
    | -------------- | ------------------------------------------------------ |
-   | `schema`       | The schema to deploy. Schemas are directories in the current working directory and start with either `sdb_` or `psql_`. The schema name equals the directory name. |
+   | `schema`       | The schema to deploy. Schemas are directories the benchmarks/<benchmark>/schemas directory and start with either `sdb_`, `s64da_`, or `psql_`. The schema name equals the directory name. |
    | `scale-factor` | The scale factor to use, such as `10`, `100` or `1000`.      |
    | `dbname`       | The name of the target database. If the database does not exist, it will be created. If it does exist, it will be deleted and recreated.    |
 
