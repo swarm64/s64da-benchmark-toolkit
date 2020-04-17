@@ -132,7 +132,7 @@ function check_and_set_python {
             echo "Found ${bin_path}/python3.6"
             PYTHON="python3.6"
         else
-            echo "Could not find ${bin_path}/python3.6 - Exit"
+            echo "ERROR: Could not find ${bin_path}/python3.6"
             exit 1
         fi
     fi
@@ -142,12 +142,12 @@ function check_program_and_fail {
     PROGRAM=$1
     HINT=$2
     if ! hash $PROGRAM 2> /dev/null; then
-        echo "ERROR:    $PROGRAM    is not installed. $HINT"
+        echo "ERROR: Could not find $PROGRAM. $HINT"
         exit -1
     fi
 }
 
-check_program_and_fail "jinja2" "Did you run 'pip3 install -r requirements.txt'?"
+check_program_and_fail "jinja2" "Did you run 'pip3 install -r requirements.txt'? Is PATH setup properly?"
 check_program_and_fail "psql" "Is it installed? Is PATH setup properly?"
 
 function wait_for_pg {
