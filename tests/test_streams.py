@@ -179,8 +179,7 @@ def test_run(mocker, args, benchmark):
     run_streams_mock = mocker.patch.object(s, 'run_streams')
     s.run()
 
-    assert db_mock.reset_config.call_count == 2
-    db_mock.apply_config.assert_called_once_with({})
+    assert db_mock.reset_config.call_count == 0
     run_streams_mock.assert_called_once()
 
 
@@ -190,6 +189,5 @@ def test_run_keyboard_interrupt(mocker, args, benchmark):
     run_streams_mock = mocker.patch.object(s, 'run_streams', side_effect=KeyboardInterrupt('Ctrl-C!'))
     s.run()
 
-    assert db_mock.reset_config.call_count == 2
-    db_mock.apply_config.assert_called_once_with({})
+    assert db_mock.reset_config.call_count == 0
     run_streams_mock.assert_called_once()

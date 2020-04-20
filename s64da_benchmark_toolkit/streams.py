@@ -81,12 +81,14 @@ class Streams:
         return sql
 
     def run(self):
+        dbconfig = self.config.get('dbconfig')
         try:
             mp_manager = Manager()
             reporting_queue = mp_manager.Queue()
 
-            self.db.reset_config()
-            self.db.apply_config(self.config.get('dbconfig', {}))
+            if dbconfig:
+                self.db.reset_config()
+                self.db.apply_config(dbconfig)
 
             self.run_streams(reporting_queue)
             self.reporting.run_report(reporting_queue)
@@ -96,7 +98,8 @@ class Streams:
             pass
 
         finally:
-            self.db.reset_config()
+            if dbconfig:
+                self.db.reset_config()
 
     def get_stream_sequence(self, stream_id):
         streams_path = os.path.join(self.benchmark.base_dir, 'queries', 'streams.yaml')

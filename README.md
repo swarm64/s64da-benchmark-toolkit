@@ -105,5 +105,9 @@ To use this file, pass the `--config=<path-to-file>` argument to the test
 executor. In this example, the query timeout is set to `30min`. Queries 18, 20,
 and 21 will not execute. Additionally, the database parameters
 `max_parallel_workers` will change to 96 and `max_parallel_workers_per_gather`
-will change to `32`. Any change to the database configuration is applied before
-the benchmark starts and are reverted after the benchmark completes.
+will change to `32`.
+
+To perform changes to the database configuration, the user needs to have superuser
+privileges. Any change to the database configuration is applied before
+the benchmark starts to the whole system. If any change was applied, after the benchmark completes the whole database
+configuration is reset to the PostgreSQL configuration files.
