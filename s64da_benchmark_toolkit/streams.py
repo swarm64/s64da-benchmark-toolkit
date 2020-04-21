@@ -101,7 +101,10 @@ class Streams:
     def get_stream_sequence(self, stream_id):
         streams_path = os.path.join(self.benchmark.base_dir, 'queries', 'streams.yaml')
         with open(streams_path, 'r') as streams_file:
-            return yaml.load(streams_file, Loader=yaml.Loader)[stream_id]
+            try:
+                return yaml.load(streams_file, Loader=yaml.Loader)[stream_id]
+            except KeyError:
+                raise ValueError(f'Stream file {streams_path} does not contain stream id {stream_id}')
 
     def _make_run_args(self, reporting_queue):
         if self.num_streams == 0:

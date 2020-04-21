@@ -110,12 +110,12 @@ def test_make_run_args(args, benchmark, reporting_queue):
 
 def test_get_stream_sequence(mocker, args, benchmark):
     open_patched = mocker.patch('builtins.open', mocker.mock_open(read_data=''))
-    mocker.patch('yaml.load', return_value=[
-        [0, 1, 2],
-        [1, 2, 0],
-        [2, 1, 0],
-        [1, 0, 2]
-    ])
+    mocker.patch('yaml.load', return_value={
+        0 : [0, 1, 2],
+        1 : [1, 2, 0],
+        2 : [2, 1, 0],
+        3 : [1, 0, 2]
+        })
 
     result = streams.Streams(args, benchmark).get_stream_sequence(2)
     open_patched.assert_called_with(f'{benchmark.base_dir}/queries/streams.yaml', 'r')
