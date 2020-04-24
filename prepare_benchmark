@@ -66,6 +66,10 @@ if __name__ == '__main__':
         'performed prior to ingestion.'
     ))
 
+    args_to_parse.add_argument('--data-dir', default=None, help=(
+        'The directory holding the data files to ingest from.'
+    ))
+
     args = args_to_parse.parse_args()
     for benchmark in benchmarks:
         if benchmark.name == args.benchmark:

@@ -1,14 +1,14 @@
 
-from s64da_benchmark_toolkit.prepare import PrepareBenchmarkFactory
+from s64da_benchmark_toolkit.prepare import PrepareBenchmarkFactory, TableGroup
 
 class PrepareBenchmark(PrepareBenchmarkFactory):
-    PrepareBenchmarkFactory.TABLES = (
+    PrepareBenchmarkFactory.TABLES = (TableGroup(
         'date',
         'customer',
         'part',
         'supplier',
         'lineorder'
-    )
+    ),)
 
     def get_ingest_tasks(self, table):
         use_chunks = (self.args.scale_factor > 1 and
@@ -17,7 +17,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         table_code = table[0]
 
         dbgen_cmd = f'./dbgen -s {self.args.scale_factor} -T {table_code} -o'
-        psql_copy = f"psql {self.args.dsn} -c \"COPY {table} FROM STDIN WITH DELIMITER '|'\""
+        psql_copy = self.psql_exec_cmd(f"COPY {table} FROM STDIN WITH DELIMITER '|'")
         sed_cmd = "sed 's/|$//'"
 
         if use_chunks:

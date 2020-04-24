@@ -9,6 +9,7 @@ def prepare_mock(mocker):
     class Args:
         schema = 'sdb_hooray'
         scale_factor = 100
+        data_dir = 'some/fancy/dir'
 
     class PrepareTestBenchmark(PrepareBenchmarkFactory):
         PrepareBenchmarkFactory.SIZING_FACTORS = {

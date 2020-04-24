@@ -1,8 +1,8 @@
 
-from s64da_benchmark_toolkit.prepare import PrepareBenchmarkFactory
+from s64da_benchmark_toolkit.prepare import PrepareBenchmarkFactory, TableGroup
 
 class PrepareBenchmark(PrepareBenchmarkFactory):
-    PrepareBenchmarkFactory.TABLES = (
+    PrepareBenchmarkFactory.TABLES = (TableGroup(
         'customer_address',
         'customer_demographics',
         'date_dim',
@@ -24,7 +24,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         'web_sales',
         'catalog_sales',
         'store_sales',
-    )
+    ),)
 
     PrepareBenchmarkFactory.SIZING_FACTORS = {
         's64da': {
