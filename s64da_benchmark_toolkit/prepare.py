@@ -1,13 +1,18 @@
 
 import os
+import re
 import shutil
 
+from collections import namedtuple
+
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from psycopg2 import ProgrammingError
 from subprocess import Popen, PIPE
 from urllib.parse import urlparse
 
 from .dbconn import DBConn
 
+Swarm64DAVersion = namedtuple('Swarm64DAVersion', ['major', 'minor', 'patch'])
 
 class TableGroup:
     def __init__(self, *args):
@@ -37,6 +42,30 @@ class PrepareBenchmarkFactory:
         self.schema_dir = os.path.join(benchmark.base_dir, 'schemas', args.schema)
         self.data_dir = args.data_dir
         assert os.path.isdir(self.schema_dir), 'Schema does not exist'
+
+    @property
+    def swarm64da_version(self):
+        try:
+            with DBConn(self.args.dsn) as conn:
+                conn.cursor.execute('SELECT swarm64da.get_version()')
+                result = conn.cursor.fetchone()[0]
+
+            s64da_version_string = re.findall(r'[0-9]+\.[0-9]+\.[0-9]+', result)[0]
+            return Swarm64DAVersion(*[int(part) for part in s64da_version_string.split('.')])
+
+        except ProgrammingError:
+            return None
+
+    @property
+    def supports_cluster(self):
+        version = self.swarm64da_version
+        if not version:
+            return False
+
+        if version.major <= 4 and version.minor < 1:
+            return False
+
+        return True
 
     def psql_exec_file(self, filename):
         return f'psql {self.args.dsn} -f {filename}'
@@ -87,6 +116,17 @@ class PrepareBenchmarkFactory:
         assert space_needed < free, \
             f'Not enough disk space available. Needed [GBytes]: {space_needed>>30}, free: {free>>30}'
 
+    def _apply_schema_modifications(self, schema_sql):
+        version = self.swarm64da_version
+        if not version:
+            # No S64 DA, no modifications
+            return schema_sql
+
+        if not (version.major <= 4 and version.minor < 1):
+            schema_sql = schema_sql.replace('optimized_columns', 'range_index')
+
+        return schema_sql
+
     def run(self):
         diskpace_check_dir = self.args.check_diskspace_of_directory
         if diskpace_check_dir:
@@ -107,12 +147,27 @@ class PrepareBenchmarkFactory:
         print('Adding indices')
         self.add_indexes()
 
-        if self.supports_cluster():
+        if self.supports_cluster:
             print('Swarm64 DA CLUSTER')
             self.cluster()
 
         print('VACUUM-ANALYZE')
         self.vacuum_analyze()
+
+    def _load_pre_schema(self, conn):
+        pre_schema_path = os.path.join(self.schema_dir, 'pre_schema.sql')
+        if os.path.isfile(pre_schema_path):
+            print(f'Loading pre-schema')
+            with open(pre_schema_path, 'r') as pre_schema_file:
+                conn.cursor.execute(pre_schema_file.read())
+
+    def _load_schema(self, conn):
+        print(f'Loading schema')
+        schema_path = os.path.join(self.schema_dir, 'schema.sql')
+        with open(schema_path, 'r') as schema:
+            schema_sql = schema.read()
+            schema_sql = self._apply_schema_modifications(schema_sql)
+            conn.cursor.execute(schema_sql)
 
     def prepare_db(self):
         dsn_url = urlparse(self.args.dsn)
@@ -125,10 +180,8 @@ class PrepareBenchmarkFactory:
             conn.cursor.execute(f"CREATE DATABASE {dbname} TEMPLATE template0 ENCODING 'UTF-8'")
 
         with DBConn(self.args.dsn) as conn:
-            print(f'Loading schema')
-            schema_path = os.path.join(self.schema_dir, 'schema.sql')
-            with open(schema_path, 'r') as schema:
-                conn.cursor.execute(schema.read())
+            self._load_pre_schema(conn)
+            self._load_schema(conn)
 
     def get_ingest_tasks(self, table):
         return []
@@ -156,13 +209,6 @@ class PrepareBenchmarkFactory:
                 analyze_tasks.append(f'psql {self.args.dsn} -c "ANALYZE {table}"')
 
         self._run_tasks_parallel(analyze_tasks)
-
-    def supports_cluster(self):
-        result = self._run_shell_task(
-                # Check if there is a 'cluster' function in the 'swarm64da' namespace
-                f'psql {self.args.dsn} --tuples-only --no-align -c "\dfn swarm64da.cluster"',
-                return_output=True)
-        return result.startswith(b'swarm64da|cluster')
 
     def cluster(self):
         cluster_tasks = [

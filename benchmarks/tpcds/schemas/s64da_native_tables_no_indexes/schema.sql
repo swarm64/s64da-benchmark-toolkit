@@ -1,5 +1,3 @@
-CREATE EXTENSION swarm64da;
-
 -- round(double precision, int) does not exist by default
 CREATE FUNCTION round(double precision, integer) RETURNS NUMERIC AS $$
     SELECT round($1::numeric, $2)

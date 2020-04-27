@@ -1,5 +1,3 @@
-CREATE EXTENSION swarm64da;
-
 CREATE TABLE nation (
     n_nationkey int NOT NULL,
     n_name character varying(25) NOT NULL,

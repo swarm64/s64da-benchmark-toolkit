@@ -1,0 +1,1 @@
+CREATE EXTENSION swarm64da;

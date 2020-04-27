@@ -1,5 +1,3 @@
-CREATE EXTENSION swarm64da;
-
 CREATE FOREIGN TABLE customer (
   c_custkey      INTEGER NOT NULL,
   c_name         VARCHAR(25) NOT NULL,
