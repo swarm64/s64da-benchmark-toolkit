@@ -9,8 +9,25 @@ from urllib.parse import urlparse
 from .dbconn import DBConn
 
 
+class TableGroup:
+    def __init__(self, *args):
+        self.data = args
+        self._idx = 0
+
+    def __iter__(self):
+        self._idx = 0
+        return self
+
+    def __next__(self):
+        if self._idx == len(self.data):
+            raise StopIteration
+        self._idx += 1
+        return self.data[self._idx - 1]
+
+
 class PrepareBenchmarkFactory:
     TABLES = []
+    TABLES_ANALYZE = None
     SIZING_FACTORS = {}
     CLUSTER_SPEC = {}
 
@@ -18,7 +35,14 @@ class PrepareBenchmarkFactory:
         self.args = args
         self.benchmark = benchmark
         self.schema_dir = os.path.join(benchmark.base_dir, 'schemas', args.schema)
+        self.data_dir = args.data_dir
         assert os.path.isdir(self.schema_dir), 'Schema does not exist'
+
+    def psql_exec_file(self, filename):
+        return f'psql {self.args.dsn} -f {filename}'
+
+    def psql_exec_cmd(self, sql):
+        return f'psql {self.args.dsn} -c "{sql}"'
 
     def _run_shell_task(self, task, return_output=False):
         p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
@@ -72,12 +96,13 @@ class PrepareBenchmarkFactory:
         self.prepare_db()
 
         print('Ingesting data')
-        ingest_tasks = []
-        for table in PrepareBenchmarkFactory.TABLES:
-            tasks = self.get_ingest_tasks(table)
-            assert isinstance(tasks, list), 'Returned object is not a list'
-            ingest_tasks.extend(tasks)
-        self._run_tasks_parallel(ingest_tasks)
+        for table_group in PrepareBenchmarkFactory.TABLES:
+            ingest_tasks = []
+            for table in table_group:
+                tasks = self.get_ingest_tasks(table)
+                assert isinstance(tasks, list), 'Returned object is not a list'
+                ingest_tasks.extend(tasks)
+            self._run_tasks_parallel(ingest_tasks)
 
         print('Adding indices')
         self.add_indexes()
@@ -123,8 +148,13 @@ class PrepareBenchmarkFactory:
 
     def vacuum_analyze(self):
         self._run_shell_task(f'psql {self.args.dsn} -c "VACUUM"')
-        analyze_tasks = [f'psql {self.args.dsn} -c "ANALYZE {table}"' for table in
-                         PrepareBenchmarkFactory.TABLES]
+
+        analyze_tasks = []
+        tables = PrepareBenchmarkFactory.TABLES_ANALYZE or PrepareBenchmarkFactory.TABLES
+        for table_group in tables:
+            for table in table_group:
+                analyze_tasks.append(f'psql {self.args.dsn} -c "ANALYZE {table}"')
+
         self._run_tasks_parallel(analyze_tasks)
 
     def supports_cluster(self):

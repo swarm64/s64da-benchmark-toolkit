@@ -1,8 +1,8 @@
 
-from s64da_benchmark_toolkit.prepare import PrepareBenchmarkFactory
+from s64da_benchmark_toolkit.prepare import PrepareBenchmarkFactory, TableGroup
 
 class PrepareBenchmark(PrepareBenchmarkFactory):
-    PrepareBenchmarkFactory.TABLES = (
+    PrepareBenchmarkFactory.TABLES = (TableGroup(
         'region',
         'customer',
         'lineitem',
@@ -11,7 +11,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         'part',
         'partsupp',
         'supplier'
-    )
+    ),)
 
     PrepareBenchmarkFactory.SIZING_FACTORS = {
         's64da': {
@@ -53,7 +53,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         table_code = PrepareBenchmark.TABLE_CODES[table]
 
         dbgen_cmd = f'./dbgen -s {self.args.scale_factor} -T {table_code} -o'
-        psql_copy = f"psql {self.args.dsn} -c \"COPY {table} FROM STDIN WITH DELIMITER '|'\""
+        psql_copy = self.psql_exec_cmd(f"COPY {table} FROM STDIN WITH DELIMITER '|'")
 
         if use_chunks:
             return [f'{dbgen_cmd} -S {chunk} -C {self.args.chunks} | {psql_copy}' for
