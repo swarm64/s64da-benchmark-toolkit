@@ -62,7 +62,7 @@ class PrepareBenchmarkFactory:
         if not version:
             return False
 
-        if version.major <= 4 and version.minor < 1:
+        if version.major < 4 or version.major <= 4 and version.minor < 1:
             return False
 
         return True
@@ -122,7 +122,7 @@ class PrepareBenchmarkFactory:
             # No S64 DA, no modifications
             return schema_sql
 
-        if not (version.major <= 4 and version.minor < 1):
+        if not (version.major < 4 or version.major <= 4 and version.minor < 1):
             schema_sql = schema_sql.replace('optimized_columns', 'range_index')
 
         return schema_sql
