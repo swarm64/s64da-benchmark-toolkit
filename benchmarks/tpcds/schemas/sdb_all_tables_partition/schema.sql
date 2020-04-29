@@ -18,8 +18,6 @@ CREATE FUNCTION round(double precision, integer) RETURNS NUMERIC AS $$
     SELECT round($1::numeric, $2)
 $$ LANGUAGE sql;
 
-CREATE EXTENSION swarm64da;
-
 -- 1TB = 6M records
 CREATE TABLE customer_address
 (

@@ -1,5 +1,3 @@
-CREATE EXTENSION swarm64da;
-
 {% set num_partitions = num_partitions|int %}
 
 CREATE TABLE nation (
