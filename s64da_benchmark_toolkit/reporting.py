@@ -76,6 +76,7 @@ class Reporting:
 
     def run_report(self, reporting_queue):
         self.df = pandas.DataFrame(columns=QueryMetric.dataframe_columns)
+        print('run report')
 
         while not reporting_queue.empty():
             query_metric = reporting_queue.get()
