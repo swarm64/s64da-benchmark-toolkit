@@ -175,6 +175,6 @@ class Streams:
             if not unit:
                 unit = 'ms'
 
-            return int(tm) * valid_units.get(unit, 1)
+            return int(tm) * valid_units.get(unit, 1) // 1000
 
         return None
