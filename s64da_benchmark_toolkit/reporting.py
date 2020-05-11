@@ -87,9 +87,10 @@ class Reporting:
                 self._save_query_output(query_metric)
 
             self.df = self.df.append(query_metric.dataframe)
-            print(self.df)
 
         self.df = self.df.reset_index(drop=True)
+        print('debug df')
+        print(self.df)
 
         netdata_config = self.config.get('netdata')
         if netdata_config:
