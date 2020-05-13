@@ -96,7 +96,7 @@ class Reporting:
             if self.netdata_output_file:
                 netdata.write_stats(self.df, self.netdata_output_file)
 
-        if self.check_correctness:
+        if self.check_correctness and self.scale_factor:
             self._check_correctness()
 
         total_runtime = self.df['timestamp_stop'].max() - self.df['timestamp_start'].min()
