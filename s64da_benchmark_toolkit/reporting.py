@@ -54,6 +54,7 @@ class Reporting:
         self.html_output = os.path.join(self.results_root_dir, 'report.html')
         self.query_results = os.path.join(self.results_root_dir, 'query_results')
         self.explain_analyze_dir = os.path.join(self.results_root_dir, 'query_plans')
+        self.check_correctness = args.check_correctness
         self.scale_factor = args.scale_factor
         self.explain_analyze = args.explain_analyze
         self.all_query_metrics = []
@@ -95,7 +96,7 @@ class Reporting:
             if self.netdata_output_file:
                 netdata.write_stats(self.df, self.netdata_output_file)
 
-        if self.scale_factor:
+        if self.check_correctness and self.scale_factor:
             self._check_correctness()
 
         total_runtime = self.df['timestamp_stop'].max() - self.df['timestamp_start'].min()

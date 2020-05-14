@@ -168,7 +168,7 @@ def test_run_stream(mocker, args, benchmark, reporting_queue):
     read_sql_file_mock.assert_has_calls([mocker.call(query_id) for query_id in executed_test_sequence])
     mock_cursor.execute.assert_has_calls([mocker.call(test_sql)] * len(executed_test_sequence))
 
-    assert len(reporting_queue.values) == len(executed_test_sequence)
+    assert len(reporting_queue.values) == len(executed_test_sequence) + 1
     assert all([sid == test_stream_id for sid in reporting_queue.stream_ids])
 
 
@@ -191,3 +191,12 @@ def test_run_keyboard_interrupt(mocker, args, benchmark):
 
     assert db_mock.reset_config.call_count == 0
     run_streams_mock.assert_called_once()
+
+
+def test_parse_timeout(args, benchmark):
+    obj = streams.Streams(args, benchmark)
+
+    assert obj.parse_timeout('5min') == 300
+    assert obj.parse_timeout('1111') == 1
+    assert obj.parse_timeout('1h') == 3600
+    assert obj.parse_timeout('1foo') == 0

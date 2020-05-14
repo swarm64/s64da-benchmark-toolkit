@@ -3,6 +3,7 @@
 import logging
 import os
 import csv
+import re
 import time
 
 from collections import namedtuple
@@ -137,20 +138,43 @@ class Streams:
 
             if query_id in self.config.get('ignore', []):
                 LOG.info(f'ignoring {pretext}.')
-                continue
+                reporting_queue.put(QueryMetric(
+                    stream_id=stream_id,
+                    query_id=query_id,
+                    timestamp_start=time.time(),
+                    timestamp_stop=time.time() + Streams.parse_timeout(self.config.get('timeout', 0)),
+                    status="IGNORED",
+                    result=None,
+                    plan=None
+                ))
+            else:
+                LOG.info(f'running  {pretext}.')
+                timing, query_result, plan = self._run_query(stream_id, query_id)
 
-            LOG.info(f'running  {pretext}.')
-            timing, query_result, plan = self._run_query(stream_id, query_id)
+                runtime = timing.stop - timing.start
+                LOG.info(f'finished {pretext}: {runtime:.2f}s {timing.status.name}')
 
-            runtime = timing.stop - timing.start
-            LOG.info(f'finished {pretext}: {runtime:.2f}s {timing.status.name}')
+                reporting_queue.put(QueryMetric(
+                    stream_id=stream_id,
+                    query_id=query_id,
+                    timestamp_start=timing.start,
+                    timestamp_stop=timing.stop,
+                    status=timing.status.name,
+                    result=query_result,
+                    plan=plan
+                ))
 
-            reporting_queue.put(QueryMetric(
-                stream_id=stream_id,
-                query_id=query_id,
-                timestamp_start=timing.start,
-                timestamp_stop=timing.stop,
-                status=timing.status.name,
-                result=query_result,
-                plan=plan
-            ))
+    @staticmethod
+    def parse_timeout(timeout):
+        valid_units = {'ms': 1, 's': 1000, 'min': 60000, 'h': 3.6e+6, 'd': 8.64e+7}
+
+        match = re.match(r"(?P<tm>\d+)\s*(?P<unit>\w*)", timeout)
+        if match:
+            tm = match.group('tm')
+            unit = match.group('unit')
+            if not unit:
+                unit = 'ms'
+
+            return int(tm) * valid_units.get(unit, 1) // 1000
+
+        return None
