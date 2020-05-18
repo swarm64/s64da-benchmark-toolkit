@@ -105,6 +105,8 @@ class Reporting:
         print(f'\nTotal runtime: {total_runtime} ({self.total_runtime_seconds:.2f}s)')
 
     def _save_explain_plan(self, query_metric):
+        if not query_metric.plan:
+            return
         plan_file_name = query_metric.make_file_name('txt')
         plan_file_path = os.path.join(self.explain_analyze_dir, plan_file_name)
         os.makedirs(os.path.dirname(plan_file_path), exist_ok=True)
