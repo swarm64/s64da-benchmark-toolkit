@@ -1,6 +1,6 @@
 
 import pytest
-
+from tests.test_db import no_plan
 from s64da_benchmark_toolkit import streams
 
 
@@ -147,7 +147,7 @@ def test_run_multiple_streams(mocker, args, benchmark, reporting_queue):
     pool_mock_obj.starmap.assert_called_once_with(s._run_stream, stream_ids)
 
 
-def test_run_stream(mocker, args, benchmark, reporting_queue):
+def test_run_stream(no_plan, mocker, args, benchmark, reporting_queue):
     psycopg2_connect = mocker.patch('psycopg2.connect')
     mock_conn = psycopg2_connect.return_value
     mock_cursor = mock_conn.cursor.return_value
