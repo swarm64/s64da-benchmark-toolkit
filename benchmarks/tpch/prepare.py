@@ -56,7 +56,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         psql_copy = self.psql_exec_cmd(f"COPY {table} FROM STDIN WITH DELIMITER '|'")
 
         if use_chunks:
-            return [f'{dbgen_cmd} -S {chunk} -C {self.args.chunks} | {psql_copy}' for
+            return [f'{dbgen_cmd} -S {chunk} -C {self.args.chunks} 2>/dev/null | {psql_copy}' for
                     chunk in range(1, self.args.chunks + 1)]
 
-        return [f'{dbgen_cmd} | {psql_copy}']
+        return [f'{dbgen_cmd} 2>/dev/null | {psql_copy}']

@@ -75,7 +75,7 @@ class PrepareBenchmarkFactory:
 
     def _run_shell_task(self, task, return_output=False):
         p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
-                  stdout=PIPE if return_output else None)
+                  stdout=PIPE)
         p.wait()
         assert p.returncode == 0, 'Shell task did not finish with exit code 0'
 
@@ -146,10 +146,6 @@ class PrepareBenchmarkFactory:
 
         print('Adding indices')
         self.add_indexes()
-
-        if self.supports_cluster:
-            print('Swarm64 DA CLUSTER')
-            self.cluster()
 
         print('VACUUM-ANALYZE')
         self.vacuum_analyze()
