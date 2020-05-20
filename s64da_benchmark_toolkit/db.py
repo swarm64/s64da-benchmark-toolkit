@@ -42,6 +42,7 @@ class DB:
     def run_query(self, sql, timeout, auto_explain=False):
         status = Status.ERROR
         query_result = None
+        plan = None
         with DBConn(self.dsn, statement_timeout=timeout) as conn:
             try:
                 start = time.time()
@@ -61,15 +62,15 @@ class DB:
             except psycopg2.extensions.QueryCanceledError:
                 status = Status.TIMEOUT
                 query_result = None
-                plan = DB.get_explain_output(conn.conn, sql)
 
             except (psycopg2.InternalError, psycopg2.Error, UnicodeDecodeError):
                 LOG.exception('Ignoring psycopg2 Error')
                 query_result = None
-                plan = DB.get_explain_output(conn.conn, sql)
 
             finally:
                 stop = time.time()
+                if plan == None or plan.strip() == '':
+                    plan = DB.get_explain_output(conn.conn, sql)
 
             return Timing(start=start, stop=stop, status=status), query_result, plan
 
