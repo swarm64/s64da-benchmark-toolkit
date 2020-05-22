@@ -57,7 +57,7 @@ def test_db_reset_config(mocker):
     ])
 
 
-def test_db_run_query_ok(mocker):
+def test_db_run_query_ok(no_plan, mocker):
     mock_cursor = get_mocked_cursor(mocker)
     result, query_output, _ = db.DB(DSN).run_query('SELECT 1', 0)
 
