@@ -3,6 +3,7 @@
 This toolkit provides methods to execute the TPC-H, TPC-DS, and SSB benchmark on
 Swarm64 DA and native PostgreSQL.
 
+Important notice: In order to guarantee compatibility between S64 DA and s64da-benchmark-toolkit, please checkout the GIT Tag that corresponds to your version of S64 DA. For example, if your version of S64 DA is 4.1.1, clone this repository and execute git checkout v4.1.1 within the the repository root folder before proceeding. For S64 DA versions 4.0.0 and below checkout v4.0.0
 
 # Prerequisites
 
