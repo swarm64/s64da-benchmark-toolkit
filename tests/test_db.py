@@ -10,12 +10,12 @@ from s64da_benchmark_toolkit import db
 DSN = 'postgresql://postgres@nowhere:1234/foodb'
 DSN_PG = 'postgresql://postgres@nowhere:1234/postgres'
 
+def get_mocked_conn(mocker):
+    psycopg2_connect = mocker.patch('psycopg2.connect')
+    return psycopg2_connect.return_value
 
 def get_mocked_cursor(mocker):
-    psycopg2_connect = mocker.patch('psycopg2.connect')
-    mock_conn = psycopg2_connect.return_value
-    return mock_conn.cursor.return_value
-
+    return get_mocked_conn(mocker).cursor.return_value
 
 @pytest.fixture
 def no_plan(monkeypatch):
