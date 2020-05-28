@@ -3,7 +3,7 @@ import logging
 import os
 
 from csv import writer as csv_writer
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from uuid import uuid4
 
@@ -100,7 +100,10 @@ class Reporting:
             self._check_correctness()
 
         total_runtime = self.df['timestamp_stop'].max() - self.df['timestamp_start'].min()
-        self.total_runtime_seconds = total_runtime.total_seconds()
+        if type(total_runtime) == timedelta:
+            self.total_runtime_seconds = total_runtime.total_seconds()
+        else:
+            self.total_runtime_seconds = -1
         self._print_results()
 
         print(f'\nTotal runtime: {total_runtime} ({self.total_runtime_seconds:.2f}s)')
