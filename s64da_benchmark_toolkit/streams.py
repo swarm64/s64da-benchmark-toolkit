@@ -92,13 +92,13 @@ class Streams:
                 self.db.apply_config(dbconfig)
 
             self.run_streams(reporting_queue)
-            self.reporting.run_report(reporting_queue)
 
         except KeyboardInterrupt:
             # Reset all the stuff
             pass
 
         finally:
+            self.reporting.run_report(reporting_queue)
             if dbconfig:
                 self.db.reset_config()
 
