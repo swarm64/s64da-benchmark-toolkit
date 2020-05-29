@@ -1,6 +1,7 @@
 
 import logging
 import os
+import time
 
 from csv import writer as csv_writer
 from datetime import datetime
@@ -22,10 +23,10 @@ LOG = logging.getLogger()
 class QueryMetric:
     dataframe_columns = (
         'stream_id', 'query_id', 'timestamp_start', 'timestamp_stop',
-        'runtime', 'status')
+        'runtime', 'status', 'timeout')
 
     def __init__(self, *, stream_id, query_id, timestamp_start, timestamp_stop,
-                 status, result, plan):
+                 status, result, plan, timeout):
         self.stream_id = stream_id
         self.query_id = query_id
         self.timestamp_start = datetime.fromtimestamp(timestamp_start)
@@ -33,9 +34,24 @@ class QueryMetric:
         self.status = status
         self.result = result
         self.plan = plan
+        self.timeout = timeout
 
     def make_file_name(self, extension):
         return f'{self.stream_id}_{self.query_id}.{extension}'
+
+    @classmethod
+    def make_ignored(cls, stream_id, query_id, timeout):
+        timestamp = time.time()
+        return cls(
+            stream_id=stream_id,
+            query_id=query_id,
+            timestamp_start=timestamp,
+            timestamp_stop=timestamp,
+            status='IGNORED',
+            result=None,
+            plan=None,
+            timeout=timeout
+        )
 
     @property
     def dataframe(self):
