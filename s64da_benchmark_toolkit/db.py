@@ -101,5 +101,5 @@ class DB:
             return f'{{"Explain Output failed": "{str(e)}"}}'
 
         except json.JSONDecodeError as e:
-            LOG.error('Explain Output failed with a JSON Decode Error')
-            return f'{{"Explain Output failed with a JSON Decode Error": "{str(e)}"}}'
+            LOG.warning('Explain Output failed with a JSON Decode Error')
+            return f'Explain Output failed with a JSON Decode Error: {str(e)}'
