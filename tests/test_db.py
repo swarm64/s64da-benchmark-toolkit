@@ -94,4 +94,4 @@ def test_get_explain_output_json_error(mocker):
     mocker_json = mocker.patch('json.dumps')
     mocker_json.side_effect = json.decoder.JSONDecodeError('Test invalid explain plan', '', 255)
     plan = db.DB(DSN).get_explain_output(mocker_conn, 'EXPLAIN JSON SELECT 1')
-    assert plan ==  f'{{"Explain Output failed with a JSON Decode Error": "Test invalid explain plan: line 1 column 256 (char 255)"}}'
+    assert plan ==  f'Explain Output failed with a JSON Decode Error: Test invalid explain plan: line 1 column 256 (char 255)'
