@@ -116,17 +116,6 @@ class PrepareBenchmarkFactory:
         assert space_needed < free, \
             f'Not enough disk space available. Needed [GBytes]: {space_needed>>30}, free: {free>>30}'
 
-    def _apply_schema_modifications(self, schema_sql):
-        version = self.swarm64da_version
-        if not version:
-            # No S64 DA, no modifications
-            return schema_sql
-
-        if not (version.major < 4 or (version.major == 4 and version.minor < 1)):
-            schema_sql = schema_sql.replace('optimized_columns', 'range_index')
-
-        return schema_sql
-
     def run(self):
         diskpace_check_dir = self.args.check_diskspace_of_directory
         if diskpace_check_dir:
@@ -166,7 +155,6 @@ class PrepareBenchmarkFactory:
         schema_path = os.path.join(self.schema_dir, 'schema.sql')
         with open(schema_path, 'r') as schema:
             schema_sql = schema.read()
-            schema_sql = self._apply_schema_modifications(schema_sql)
             conn.cursor.execute(schema_sql)
 
     def prepare_db(self):
