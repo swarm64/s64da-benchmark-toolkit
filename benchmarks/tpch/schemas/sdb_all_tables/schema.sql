@@ -4,16 +4,14 @@ CREATE FOREIGN TABLE nation (
     n_regionkey int NOT NULL,
     n_comment character varying(152) NOT NULL
 ) SERVER swarm64da_server
-OPTIONS(optimized_columns 'n_nationkey',
-        optimization_level_target '900');
+OPTIONS(range_index 'n_nationkey');
 
 CREATE FOREIGN TABLE region (
     r_regionkey int NOT NULL,
     r_name character varying(25) NOT NULL,
     r_comment character varying(152) NOT NULL
 ) SERVER swarm64da_server
-OPTIONS(optimized_columns 'r_regionkey',
-        optimization_level_target '900');
+OPTIONS(range_index 'r_regionkey');
 
 CREATE FOREIGN TABLE part (
     p_partkey int NOT NULL,
@@ -26,8 +24,7 @@ CREATE FOREIGN TABLE part (
     p_retailprice double precision NOT NULL,
     p_comment character varying(23) NOT NULL
 ) SERVER swarm64da_server
-OPTIONS(optimized_columns 'p_partkey',
-        optimization_level_target '900');
+OPTIONS(range_index 'p_partkey');
 
 CREATE FOREIGN TABLE supplier (
     s_suppkey int NOT NULL,
@@ -38,8 +35,7 @@ CREATE FOREIGN TABLE supplier (
     s_acctbal double precision NOT NULL,
     s_comment character varying(101) NOT NULL
 ) SERVER swarm64da_server
-OPTIONS(optimized_columns 's_suppkey',
-        optimization_level_target '900');
+OPTIONS(range_index 's_suppkey');
 
 CREATE FOREIGN TABLE partsupp (
     ps_partkey int NOT NULL,
@@ -48,8 +44,7 @@ CREATE FOREIGN TABLE partsupp (
     ps_supplycost double precision NOT NULL,
     ps_comment character varying(199) NOT NULL
 ) SERVER swarm64da_server
-OPTIONS(optimized_columns 'ps_partkey, ps_suppkey',
-        optimization_level_target '900');
+OPTIONS(range_index 'ps_partkey, ps_suppkey');
 
 CREATE FOREIGN TABLE customer (
     c_custkey int NOT NULL,
@@ -61,8 +56,7 @@ CREATE FOREIGN TABLE customer (
     c_mktsegment character varying(10) NOT NULL,
     c_comment character varying(117) NOT NULL
 ) SERVER swarm64da_server
-OPTIONS(optimized_columns 'c_custkey',
-        optimization_level_target '900');
+OPTIONS(range_index 'c_custkey');
 
 CREATE FOREIGN TABLE orders (
     o_orderkey bigint NOT NULL,
@@ -75,8 +69,7 @@ CREATE FOREIGN TABLE orders (
     o_shippriority int NOT NULL,
     o_comment character varying(79) NOT NULL
 ) SERVER swarm64da_server
-OPTIONS(optimized_columns 'o_orderdate',
-        optimization_level_target '900');
+OPTIONS(range_index 'o_orderdate');
 
 CREATE FOREIGN TABLE lineitem (
     l_orderkey bigint NOT NULL,
@@ -96,5 +89,4 @@ CREATE FOREIGN TABLE lineitem (
     l_shipmode character varying(10) NOT NULL,
     l_comment character varying(44) NOT NULL
 ) SERVER swarm64da_server
-OPTIONS(optimized_columns 'l_shipdate,l_receiptdate',
-        optimization_level_target '900');
+OPTIONS(range_index 'l_shipdate,l_receiptdate');
