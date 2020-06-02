@@ -96,17 +96,17 @@ class Reporting:
             if self.netdata_output_file:
                 netdata.write_stats(self.df, self.netdata_output_file)
 
-        if self.check_correctness and self.scale_factor:
-            self._check_correctness()
+        if self.df.empty == False:
+            if self.check_correctness and self.scale_factor:
+                self._check_correctness()
 
-        total_runtime = self.df['timestamp_stop'].max() - self.df['timestamp_start'].min()
-        if type(total_runtime) == timedelta:
+            total_runtime = self.df['timestamp_stop'].max() - self.df['timestamp_start'].min()
             self.total_runtime_seconds = total_runtime.total_seconds()
-        else:
-            self.total_runtime_seconds = -1
-        self._print_results()
+            self._print_results()
 
-        print(f'\nTotal runtime: {total_runtime} ({self.total_runtime_seconds:.2f}s)')
+            print(f'\nTotal runtime: {total_runtime} ({self.total_runtime_seconds:.2f}s)')
+        else:
+            LOG.warning("The reporting queue was found empty, which indicates that no queries were ran")
 
     def _save_explain_plan(self, query_metric):
         if not query_metric.plan:
