@@ -99,3 +99,7 @@ class DB:
 
         except psycopg2.Error as e:
             return f'{{"Explain Output failed": "{str(e)}"}}'
+
+        except json.JSONDecodeError as e:
+            LOG.warning('Explain Output failed with a JSON Decode Error')
+            return f'Explain Output failed with a JSON Decode Error: {str(e)}'
