@@ -4,6 +4,7 @@ import re
 import shutil
 
 from collections import namedtuple
+from sys import exit
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from psycopg2 import ProgrammingError
@@ -13,6 +14,7 @@ from urllib.parse import urlparse
 from .dbconn import DBConn
 
 Swarm64DAVersion = namedtuple('Swarm64DAVersion', ['major', 'minor', 'patch'])
+allow_run_new_shell_task = True
 
 class TableGroup:
     def __init__(self, *args):
@@ -74,14 +76,18 @@ class PrepareBenchmarkFactory:
         return f'psql {self.args.dsn} -c "{sql}"'
 
     def _run_shell_task(self, task, return_output=False):
-        p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
-                  stdout=PIPE if return_output else None)
-        p.wait()
-        assert p.returncode == 0, 'Shell task did not finish with exit code 0'
+        global allow_run_new_shell_task
+        if(allow_run_new_shell_task):
+            p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
+                      stdout=PIPE if return_output else None)
+            p.wait()
+            if(p.returncode != 0):
+                allow_run_new_shell_task = False
+                exit(task)
 
-        if return_output:
-            stdout, _ = p.communicate()
-            return stdout
+            if return_output:
+                stdout, _ = p.communicate()
+                return stdout
 
     def _run_tasks_parallel(self, tasks):
         with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
@@ -92,6 +98,7 @@ class PrepareBenchmarkFactory:
                     print(f'Task threw an exception: {exc}')
                     for future in futures:
                         future.cancel()
+                    exit(1)
 
     def _check_diskspace(self, diskpace_check_dir):
         db_type = os.path.basename(self.schema_dir).split('_')[0]
