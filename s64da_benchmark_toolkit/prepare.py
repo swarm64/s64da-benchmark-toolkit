@@ -10,11 +10,12 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from psycopg2 import ProgrammingError
 from subprocess import Popen, PIPE
 from urllib.parse import urlparse
+import threading
 
 from .dbconn import DBConn
 
 Swarm64DAVersion = namedtuple('Swarm64DAVersion', ['major', 'minor', 'patch'])
-allow_run_new_shell_task = True
+cancelEvent = threading.Event()
 
 class TableGroup:
     def __init__(self, *args):
@@ -76,13 +77,12 @@ class PrepareBenchmarkFactory:
         return f'psql {self.args.dsn} -c "{sql}"'
 
     def _run_shell_task(self, task, return_output=False):
-        global allow_run_new_shell_task
-        if(allow_run_new_shell_task):
+        if not cancelEvent.isSet():
             p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
                       stdout=PIPE if return_output else None)
             p.wait()
             if(p.returncode != 0):
-                allow_run_new_shell_task = False
+                cancelEvent.set()
                 exit(task)
 
             if return_output:
