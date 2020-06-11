@@ -10,7 +10,7 @@ def prepare_mock(mocker):
         schema = 'sdb_hooray'
         scale_factor = 100
         data_dir = 'some/fancy/dir'
-        num_partitions = 1
+        num_partitions = None
 
     class PrepareTestBenchmark(PrepareBenchmarkFactory):
         PrepareBenchmarkFactory.SIZING_FACTORS = {

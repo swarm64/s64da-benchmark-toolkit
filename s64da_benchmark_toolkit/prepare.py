@@ -6,6 +6,7 @@ import shutil
 from collections import namedtuple
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 from psycopg2 import ProgrammingError
 from subprocess import Popen, PIPE
@@ -14,7 +15,7 @@ from urllib.parse import urlparse
 from .dbconn import DBConn
 
 Swarm64DAVersion = namedtuple('Swarm64DAVersion', ['major', 'minor', 'patch'])
-s64_benchmark_toolkit_root_dir=Path(os.path.abspath(__file__)).parents[1]
+s64_benchmark_toolkit_root_dir = Path(os.path.abspath(__file__)).parents[1]
 
 class TableGroup:
     def __init__(self, *args):
@@ -39,13 +40,14 @@ class PrepareBenchmarkFactory:
     CLUSTER_SPEC = {}
 
     def __init__(self, args, benchmark):
+        schemas_dir = os.path.join(s64_benchmark_toolkit_root_dir, benchmark.base_dir, "schemas")
         self.args = args
         self.benchmark = benchmark
-        self.schema_dir = os.path.join(benchmark.base_dir, 'schemas', args.schema)
+        self.schema_dir = os.path.join(schemas_dir, args.schema)
         self.data_dir = args.data_dir
         self.num_partitions = args.num_partitions
         assert os.path.isdir(self.schema_dir), \
-        f'Schema does not exist. Available ones are subfolders in {os.path.join(s64_benchmark_toolkit_root_dir, benchmark.base_dir, "schemas")}'
+            f'Schema does not exist. Available ones are subfolders in {schemas_dir}'
 
     @property
     def swarm64da_version(self):
@@ -150,16 +152,18 @@ class PrepareBenchmarkFactory:
         print('VACUUM-ANALYZE')
         self.vacuum_analyze()
 
+        print(f'Process complete. DSN: {self.args.dsn}')
+
     def _load_pre_schema(self, conn):
         pre_schema_path = os.path.join(self.schema_dir, 'pre_schema.sql')
         if os.path.isfile(pre_schema_path):
-            print(f'Loading pre-schema')
+            print(f'Loading pre-schema {pre_schema_path}')
             with open(pre_schema_path, 'r') as pre_schema_file:
                 conn.cursor.execute(pre_schema_file.read())
 
-    def _load_schema(self, conn):
-        print(f'Loading schema')
-        with open(schema_path, 'r') as schema:
+    def _load_schema(self, conn, applied_schema_path):
+        print(f'Loading schema {applied_schema_path}')
+        with open(applied_schema_path, 'r') as schema:
             schema_sql = schema.read()
             conn.cursor.execute(schema_sql)
 
@@ -168,21 +172,25 @@ class PrepareBenchmarkFactory:
         dbname = dsn_url.path[1:]
 
         with DBConn(f'{dsn_url.scheme}://{dsn_url.netloc}/postgres') as conn:
-            print(f'Deleting {dbname}')
+            print(f'Deleting Database {dbname} if it already exists')
             conn.cursor.execute(f'DROP DATABASE IF EXISTS {dbname}')
-            print(f'Creating {dbname}')
+            print(f'Creating Database  {dbname}')
             conn.cursor.execute(f"CREATE DATABASE {dbname} TEMPLATE template0 ENCODING 'UTF-8'")
 
-        schema_path = os.path.join(s64_benchmark_toolkit_root_dir, self.schema_dir, 'schema.sql')
-        applied_schema_path=os.path.join(s64_benchmark_toolkit_root_dir,"applied_schema.sql")
+        applied_schema_path = os.path.join(s64_benchmark_toolkit_root_dir, 'applied_schema.sql')
         
         if self.num_partitions:
-            print(f'Applying partitions on schema with {self.num_partitions} partitions. Result schema: {applied_schema_path}')
-        self._run_shell_task(f'jinja2 {schema_path} -D num_partitions={self.num_partitions} > {applied_schema_path}',True)
+            print(f'Applying partitions on schema with {self.num_partitions} partitions.\nResult schema: {applied_schema_path}')
+        
+        jinja_env = Environment(loader=FileSystemLoader(self.schema_dir))
+        applied_schema = jinja_env.get_template("schema.sql").render(num_partitions=self.num_partitions)
 
+        with open(applied_schema_path, "w") as applied_schema_file: 
+            applied_schema_file.write(applied_schema)
+        
         with DBConn(self.args.dsn) as conn:
             self._load_pre_schema(conn)
-            self._load_schema(conn)
+            self._load_schema(conn, applied_schema_path)
 
     def get_ingest_tasks(self, table):
         return []
@@ -201,6 +209,7 @@ class PrepareBenchmarkFactory:
                         conn.cursor.execute(sql)
 
     def vacuum_analyze(self):
+        print(f'Running VACUUM on {self.args.dsn}')
         self._run_shell_task(f'psql {self.args.dsn} -c "VACUUM"')
 
         analyze_tasks = []
