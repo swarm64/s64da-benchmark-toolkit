@@ -15,7 +15,6 @@ import threading
 from .dbconn import DBConn
 
 Swarm64DAVersion = namedtuple('Swarm64DAVersion', ['major', 'minor', 'patch'])
-cancelEvent = threading.Event()
 
 class TableGroup:
     def __init__(self, *args):
@@ -44,6 +43,7 @@ class PrepareBenchmarkFactory:
         self.benchmark = benchmark
         self.schema_dir = os.path.join(benchmark.base_dir, 'schemas', args.schema)
         self.data_dir = args.data_dir
+        self.cancel_event = threading.Event()
         assert os.path.isdir(self.schema_dir), 'Schema does not exist'
 
     @property
@@ -77,12 +77,12 @@ class PrepareBenchmarkFactory:
         return f'psql {self.args.dsn} -c "{sql}"'
 
     def _run_shell_task(self, task, return_output=False):
-        if not cancelEvent.isSet():
+        if not self.cancel_event.is_set():
             p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
                       stdout=PIPE if return_output else None)
             p.wait()
             if(p.returncode != 0):
-                cancelEvent.set()
+                self.cancel_event.set()
                 exit(task)
 
             if return_output:
