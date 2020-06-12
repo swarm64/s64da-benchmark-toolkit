@@ -70,6 +70,10 @@ if __name__ == '__main__':
         'The directory holding the data files to ingest from.'
     ))
 
+    args_to_parse.add_argument('--num-partitions', default=None, help=(
+        'The number of partitions for partitioned schemas.'
+    ))    
+
     args = args_to_parse.parse_args()
     for benchmark in benchmarks:
         if benchmark.name == args.benchmark:
