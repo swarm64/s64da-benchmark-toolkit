@@ -2,6 +2,7 @@
 import os
 import re
 import shutil
+import threading
 
 from collections import namedtuple
 from sys import exit
@@ -10,7 +11,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from psycopg2 import ProgrammingError
 from subprocess import Popen, PIPE
 from urllib.parse import urlparse
-import threading
 
 from .dbconn import DBConn
 
