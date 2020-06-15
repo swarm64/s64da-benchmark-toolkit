@@ -13,5 +13,6 @@ ${PYTHON} prepare_benchmark \
     --schema=${SCHEMA} \
     --chunks=${CHUNKS} \
     --max-jobs=${MAX_JOBS} \
+    --num-partitions=${NUM_PARTITIONS} \
     --check-diskspace-of-directory=${DISK_SPACE_CHECK_DIR} \
     --benchmark=tpch
