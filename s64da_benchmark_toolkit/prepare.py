@@ -2,8 +2,10 @@
 import os
 import re
 import shutil
+import threading
 
 from collections import namedtuple
+from sys import exit
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from jinja2 import Environment, FileSystemLoader
@@ -45,6 +47,7 @@ class PrepareBenchmarkFactory:
         self.benchmark = benchmark
         self.schema_dir = os.path.join(schemas_dir, args.schema)
         self.data_dir = args.data_dir
+        self.cancel_event = threading.Event()
         self.num_partitions = args.num_partitions
         assert os.path.isdir(self.schema_dir), \
             f'Schema does not exist. Available ones are subfolders in {schemas_dir}'
@@ -80,14 +83,17 @@ class PrepareBenchmarkFactory:
         return f'psql {self.args.dsn} -c "{sql}"'
 
     def _run_shell_task(self, task, return_output=False):
-        p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
-                  stdout=PIPE if return_output else None)
-        p.wait()
-        assert p.returncode == 0, 'Shell task did not finish with exit code 0'
+        if not self.cancel_event.is_set():
+            p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
+                      stdout=PIPE if return_output else None)
+            p.wait()
+            if(p.returncode != 0):
+                self.cancel_event.set()
+                exit(task)
 
-        if return_output:
-            stdout, _ = p.communicate()
-            return stdout
+            if return_output:
+                stdout, _ = p.communicate()
+                return stdout
 
     def _run_tasks_parallel(self, tasks):
         with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
@@ -98,6 +104,7 @@ class PrepareBenchmarkFactory:
                     print(f'Task threw an exception: {exc}')
                     for future in futures:
                         future.cancel()
+                    exit(1)
 
     def _check_diskspace(self, diskpace_check_dir):
         db_type = os.path.basename(self.schema_dir).split('_')[0]
