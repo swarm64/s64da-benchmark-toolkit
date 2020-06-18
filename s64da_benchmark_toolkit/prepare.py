@@ -71,7 +71,17 @@ class PrepareBenchmarkFactory:
         if not version:
             return False
 
+        if self.num_partitions:
+            print('Swarm64 DA CLUSTER not supported for partitioned schemas at the moment. Skipping')
+            return False
+
+        # Clustering not supported in S64 DA on native tables
+        if "native" in self.schema_dir:
+            print('Swarm64 DA CLUSTER not supported for S64 DA with Native Tables. Skipping')
+            return False
+
         if version.major < 4 or (version.major == 4 and version.minor < 1):
+            print('Swarm64 DA version does not support clustering. Skipping')
             return False
 
         return True
@@ -150,11 +160,8 @@ class PrepareBenchmarkFactory:
         self.add_indexes()
 
         if self.supports_cluster:
-            if self.num_partitions:
-                print('Swarm64 DA CLUSTER not supported for partitioned schemas at the moment. Skipping')
-            else:
-                print('Swarm64 DA CLUSTER')
-                self.cluster()
+            print('Swarm64 DA CLUSTER')
+            self.cluster()
 
         print('VACUUM-ANALYZE')
         self.vacuum_analyze()
