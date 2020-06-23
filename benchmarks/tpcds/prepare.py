@@ -54,8 +54,8 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         task = f'{dbgen} | recode ISO-8859-1..UTF-8 | '
         if '_sales' in table:
             returns_table = table.split('_')[0] + '_returns'
-            task += (f'tee >({self._stream_to_db(table)}) | '
-                     f'({self._stream_to_db(returns_table)})')
+            task += (f'tee >({self._stream_to_db(table)}) '
+                     f'>({self._stream_to_db(returns_table)})')
         else:
             task += f'{self._stream_to_db(table)}'
 
