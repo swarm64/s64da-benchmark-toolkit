@@ -162,7 +162,7 @@ class PrepareBenchmarkFactory:
                 conn.cursor.execute(pre_schema_file.read())
 
     def _load_license(self, conn):
-        license_path = '/s64da_license/s64da_license.license'
+        license_path = '/s64da.license'
         try:
             conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
             print(f'Loading S64 DA License {license_path}')
@@ -170,7 +170,10 @@ class PrepareBenchmarkFactory:
             print(f'Could not find a license at {license_path}. Skip loading license.')
 
         print(f'S64 DA License Status:')
-        self._run_shell_task(f'psql {self.args.dsn} -c "select swarm64da.show_license()"')
+        try:
+            self._run_shell_task(f'psql {self.args.dsn} -c "select swarm64da.show_license()"')
+        except:
+            print(f'No license file loaded or license invalid.')
 
     def _load_schema(self, conn, applied_schema_path):
         print(f'Loading schema {applied_schema_path}')
