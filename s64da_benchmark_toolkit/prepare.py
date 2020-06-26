@@ -175,6 +175,20 @@ class PrepareBenchmarkFactory:
             with open(pre_schema_path, 'r') as pre_schema_file:
                 conn.cursor.execute(pre_schema_file.read())
 
+    def _load_license(self, conn):
+        license_path = '/s64da.license'
+        try:
+            conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
+            print(f'Loading S64 DA License {license_path}')
+        except:
+            print(f'Could not find a license at {license_path}. Skip loading license.')
+
+        print(f'S64 DA License Status:')
+        try:
+            self._run_shell_task(f'psql {self.args.dsn} -c "select swarm64da.show_license()"')
+        except:
+            print(f'No license file loaded or license invalid.')
+
     def _load_schema(self, conn, applied_schema_path):
         print(f'Loading schema {applied_schema_path}')
         with open(applied_schema_path, 'r') as schema:
@@ -188,7 +202,7 @@ class PrepareBenchmarkFactory:
         with DBConn(f'{dsn_url.scheme}://{dsn_url.netloc}/postgres') as conn:
             print(f'Deleting Database {dbname} if it already exists')
             conn.cursor.execute(f'DROP DATABASE IF EXISTS {dbname}')
-            print(f'Creating Database  {dbname}')
+            print(f'Creating Database {dbname}')
             conn.cursor.execute(f"CREATE DATABASE {dbname} TEMPLATE template0 ENCODING 'UTF-8'")
 
         applied_schema_path = os.path.join(s64_benchmark_toolkit_root_dir, 'applied_schema.sql')
@@ -204,6 +218,7 @@ class PrepareBenchmarkFactory:
         
         with DBConn(self.args.dsn) as conn:
             self._load_pre_schema(conn)
+            self._load_license(conn)
             self._load_schema(conn, applied_schema_path)
 
     def get_ingest_tasks(self, table):
