@@ -56,7 +56,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
             returns_table = table.split('_')[0] + '_returns'
             task += (f'tee >({self._stream_to_db(table)}) '
                      f'>({self._stream_to_db(returns_table)}) | '
-                     f'grep -vE "^({table}|{returns_table})"') # Hide the dsdgen output from the loader output
+                     f'grep -vE "^({table}|{returns_table})" | cat') # Hide the dsdgen output from the loader output
         else:
             task += f'{self._stream_to_db(table)}'
 
