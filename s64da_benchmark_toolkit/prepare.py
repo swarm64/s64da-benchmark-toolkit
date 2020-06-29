@@ -149,6 +149,7 @@ class PrepareBenchmarkFactory:
 
         print('Ingesting data')
         for table_group in PrepareBenchmarkFactory.TABLES:
+            self.cancel_event.unset()
             ingest_tasks = []
             for table in table_group:
                 tasks = self.get_ingest_tasks(table)
