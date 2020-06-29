@@ -176,6 +176,10 @@ class PrepareBenchmarkFactory:
                 conn.cursor.execute(pre_schema_file.read())
 
     def _load_license(self, conn):
+        # Check whether the schema is on S64 DA and only then handle the license
+        if not self.swarm64da_version:
+            return     
+               
         license_path = '/s64da.license'
         try:
             conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
