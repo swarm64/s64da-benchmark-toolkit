@@ -10,7 +10,7 @@ from sys import exit
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
-from psycopg2 import ProgrammingError
+from psycopg2 import ProgrammingError, errors
 from subprocess import Popen, PIPE
 from urllib.parse import urlparse
 
@@ -176,22 +176,32 @@ class PrepareBenchmarkFactory:
                 conn.cursor.execute(pre_schema_file.read())
 
     def _load_license(self, conn):
-        # Check whether the schema is on S64 DA and only then handle the license
-        if not self.swarm64da_version:
-            return     
-               
-        license_path = '/s64da.license'
         try:
-            conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
-            print(f'Loading S64 DA License {license_path}')
+            conn.cursor.execute(f'select swarm64da.show_license()')
+        except errors.InvalidSchemaName:
+            print(f'Selected schema is not for S64 DA. Skip checking license.')
+            return
+        except errors.UndefinedFunction:
+            print(f'License check function not required or supported. Skip checking license.')
+            return
         except:
-            print(f'Could not find a license at {license_path}. Skip loading license.')
+            pass
 
-        print(f'S64 DA License Status:')
         try:
-            self._run_shell_task(f'psql {self.args.dsn} -c "select swarm64da.show_license()"')
+            license_path = '/s64da.license'
+            try:
+                conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
+                print(f'Loading S64 DA License {license_path}')
+            except:
+                print(f'Could not find a license at {license_path}. Skip loading license.')
+
+            print(f'S64 DA License Status:')
+            try:
+                self._run_shell_task(f'psql {self.args.dsn} -c "select swarm64da.show_license()"')
+            except:
+                print(f'No license file loaded or license invalid.')
         except:
-            print(f'No license file loaded or license invalid.')
+            return
 
     def _load_schema(self, conn, applied_schema_path):
         print(f'Loading schema {applied_schema_path}')
