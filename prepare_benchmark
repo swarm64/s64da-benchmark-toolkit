@@ -72,7 +72,11 @@ if __name__ == '__main__':
 
     args_to_parse.add_argument('--num-partitions', default=None, help=(
         'The number of partitions for partitioned schemas.'
-    ))    
+    ))
+
+    args_to_parse.add_argument('--s64da-license-path', default='/s64da.license', help=(
+        'The path to the S64 DA license.'
+    ))
 
     args = args_to_parse.parse_args()
     for benchmark in benchmarks:

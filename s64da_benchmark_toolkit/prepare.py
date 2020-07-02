@@ -178,7 +178,7 @@ class PrepareBenchmarkFactory:
     def _load_license(self, conn):
         try:
             conn.cursor.execute(f'select swarm64da.show_license()')
-            license_path = '/s64da.license'
+            license_path = self.args.s64da_license_path
             conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
 
             conn.cursor.execute(f'select swarm64da.show_license()')
