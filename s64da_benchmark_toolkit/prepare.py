@@ -178,30 +178,24 @@ class PrepareBenchmarkFactory:
     def _load_license(self, conn):
         try:
             conn.cursor.execute(f'select swarm64da.show_license()')
-        except errors.InvalidSchemaName:
-            print(f'Selected schema is not for S64 DA. Skip checking license.')
-            return
-        except errors.UndefinedFunction:
-            print(f'License check function not required or supported. Skip checking license.')
-            return
-        except:
-            pass
-
-        try:
             license_path = '/s64da.license'
-            try:
-                conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
-                print(f'Loading S64 DA License {license_path}')
-            except:
-                print(f'Could not find a license at {license_path}. Skip loading license.')
+            conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
 
-            print(f'S64 DA License Status:')
-            try:
-                self._run_shell_task(f'psql {self.args.dsn} -c "select swarm64da.show_license()"')
-            except:
-                print(f'No license file loaded or license invalid.')
-        except:
+            conn.cursor.execute(f'select swarm64da.show_license()')
+            license_status = conn.cursor.fetchall()[0]
+            print(f'S64 DA license status: {license_status}')
+
+        except errors.InvalidSchemaName as err:
+            print(f'Schema swarm64da not found: {err}')
             return
+
+        except errors.UndefinedFunction as err:
+            print(f'License check function not found: {err}')
+            return
+
+        except IndexError:
+            print(f'Could not load S64 DA license file or file is invalid')
+            raise
 
     def _load_schema(self, conn, applied_schema_path):
         print(f'Loading schema {applied_schema_path}')
@@ -220,16 +214,16 @@ class PrepareBenchmarkFactory:
             conn.cursor.execute(f"CREATE DATABASE {dbname} TEMPLATE template0 ENCODING 'UTF-8'")
 
         applied_schema_path = os.path.join(s64_benchmark_toolkit_root_dir, 'applied_schema.sql')
-        
+
         if self.num_partitions:
             print(f'Applying partitions on schema with {self.num_partitions} partitions.\nResult schema: {applied_schema_path}')
-        
+
         jinja_env = Environment(loader=FileSystemLoader(self.schema_dir))
         applied_schema = jinja_env.get_template("schema.sql").render(num_partitions=self.num_partitions)
 
-        with open(applied_schema_path, "w") as applied_schema_file: 
+        with open(applied_schema_path, "w") as applied_schema_file:
             applied_schema_file.write(applied_schema)
-        
+
         with DBConn(self.args.dsn) as conn:
             self._load_pre_schema(conn)
             self._load_license(conn)
