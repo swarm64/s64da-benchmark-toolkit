@@ -19,6 +19,7 @@ CHUNKS=10
 MAX_JOBS=8
 PYTHON="python3"
 DISK_SPACE_CHECK_DIR=""
+S64DA_LICENSE_PATH="/s64da.license"
 
 function print_help {
 echo "
@@ -45,7 +46,10 @@ Usage instructions:
                         be ingested (if applicable)
 
       --max-jobs        Limits the overall amount of parallelism.
-                        Default: 8"
+                        Default: 8
+
+      --s64da-license-path The path to the S64 DA license.
+                        Default: /s64da.license"
 
 }
 
@@ -93,6 +97,10 @@ case $i in
     ;;
     --max-jobs=*)
     MAX_JOBS="${i#*=}"
+    shift
+    ;;
+    --s64da-license-path=*)
+    S64DA_LICENSE_PATH="${i#*=}"
     shift
     ;;
     *)

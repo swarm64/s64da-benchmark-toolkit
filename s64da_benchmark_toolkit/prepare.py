@@ -185,15 +185,15 @@ class PrepareBenchmarkFactory:
             print(f'S64 DA license status: {license_status}')
 
         except errors.UndefinedFunction as err:
-            print(f'License check function not found. Skipping, presumably on AWS.')
+            print('License check function not found. Skipping, presumably on AWS.')
             return
 
-        except errors.InternalError as err:
-            print(f'S64 DA licensing error: {err}')
-            raise
+        except errors.InternalError:
+            print(f'Could not load S64 DA license file or file is invalid: {license_path}')
+            return
 
-        except IndexError:
-            print(f'Could not load S64 DA license file or file is invalid')
+        except IndexError as err:
+            print(f'S64 DA licensing error: {err}')
             raise
 
     def _load_schema(self, conn, applied_schema_path):
@@ -264,3 +264,4 @@ class PrepareBenchmarkFactory:
                 f'''psql {self.args.dsn} -c "SELECT swarm64da.cluster('{table}', '{colspec}')"'''
                 for table, colspec in PrepareBenchmarkFactory.CLUSTER_SPEC.items()]
         self._run_tasks_parallel(cluster_tasks)
+
