@@ -185,7 +185,7 @@ class PrepareBenchmarkFactory:
         except errors.UndefinedFunction as err:
             print('License check function not found. Skipping, presumably on AWS.')
             return            
-        except:
+        except errors.InternalError:
             license_loaded = False
 
         if not license_loaded: 
@@ -277,4 +277,3 @@ class PrepareBenchmarkFactory:
                 f'''psql {self.args.dsn} -c "SELECT swarm64da.cluster('{table}', '{colspec}')"'''
                 for table, colspec in PrepareBenchmarkFactory.CLUSTER_SPEC.items()]
         self._run_tasks_parallel(cluster_tasks)
-
