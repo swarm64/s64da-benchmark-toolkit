@@ -16,4 +16,5 @@ ${PYTHON} prepare_benchmark \
     --chunks=${CHUNKS} \
     --max-jobs=${MAX_JOBS} \
     --check-diskspace-of-directory="" \
+    --s64da-license-path=${S64DA_LICENSE_PATH} \
     --benchmark=ssb

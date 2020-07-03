@@ -15,4 +15,5 @@ ${PYTHON} prepare_benchmark \
     --max-jobs=${MAX_JOBS} \
     --num-partitions=${NUM_PARTITIONS} \
     --check-diskspace-of-directory=${DISK_SPACE_CHECK_DIR} \
+    --s64da-license-path=${S64DA_LICENSE_PATH} \
     --benchmark=tpcds
