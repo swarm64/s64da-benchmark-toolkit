@@ -177,21 +177,15 @@ class PrepareBenchmarkFactory:
 
     def _load_license(self, conn):
         try:
-            conn.cursor.execute(f'select swarm64da.show_license()')
             license_path = self.args.s64da_license_path
             conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
-
             conn.cursor.execute(f'select swarm64da.show_license()')
             license_status = conn.cursor.fetchall()[0]
             print(f'S64 DA license status: {license_status}')
 
-        except errors.InvalidSchemaName as err:
-            print(f'Schema swarm64da not found: {err}')
-            raise
-
         except errors.UndefinedFunction as err:
-            print(f'License check function not found: {err}')
-            raise
+            print(f'License check function not found: {err}. Skipping, presumably on AWS.')
+            return
 
         except errors.InternalError as err:
             print(f'S64 DA licensing error: {err}')
