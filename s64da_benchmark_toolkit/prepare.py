@@ -184,7 +184,7 @@ class PrepareBenchmarkFactory:
             print(f'S64 DA license status: {license_status}')
 
         except errors.UndefinedFunction as err:
-            print(f'License check function not found: {err}. Skipping, presumably on AWS.')
+            print(f'License check function not found. Skipping, presumably on AWS.')
             return
 
         except errors.InternalError as err:
