@@ -41,7 +41,9 @@ class CorrectnessResult:
             return status
 
         # HTML here, since it'll be used for reporting to HTML
+        print('truth : ', self.truth)
         truth_html = self.truth.to_html()
+        print('result : ', self.result)
         result_html = self.result.to_html()
         return f'{status}<br /><div>{truth_html}</div><br /><div>{result_html}</div>'
 
