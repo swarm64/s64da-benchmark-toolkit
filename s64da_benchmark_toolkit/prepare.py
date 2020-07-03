@@ -10,7 +10,7 @@ from sys import exit
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
-from psycopg2 import ProgrammingError
+from psycopg2 import ProgrammingError, errors
 from subprocess import Popen, PIPE
 from urllib.parse import urlparse
 
@@ -177,18 +177,24 @@ class PrepareBenchmarkFactory:
                 conn.cursor.execute(pre_schema_file.read())
 
     def _load_license(self, conn):
-        license_path = '/s64da.license'
         try:
+            license_path = self.args.s64da_license_path
             conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
-            print(f'Loading S64 DA License {license_path}')
-        except:
-            print(f'Could not find a license at {license_path}. Skip loading license.')
+            conn.cursor.execute(f'select swarm64da.show_license()')
+            license_status = conn.cursor.fetchall()[0]
+            print(f'S64 DA license status: {license_status}')
 
-        print(f'S64 DA License Status:')
-        try:
-            self._run_shell_task(f'psql {self.args.dsn} -c "select swarm64da.show_license()"')
-        except:
-            print(f'No license file loaded or license invalid.')
+        except errors.UndefinedFunction as err:
+            print(f'License check function not found. Skipping, presumably on AWS.')
+            return
+
+        except errors.InternalError as err:
+            print(f'S64 DA licensing error: {err}')
+            raise
+
+        except IndexError:
+            print(f'Could not load S64 DA license file or file is invalid')
+            raise
 
     def _load_schema(self, conn, applied_schema_path):
         print(f'Loading schema {applied_schema_path}')
@@ -207,19 +213,22 @@ class PrepareBenchmarkFactory:
             conn.cursor.execute(f"CREATE DATABASE {dbname} TEMPLATE template0 ENCODING 'UTF-8'")
 
         applied_schema_path = os.path.join(s64_benchmark_toolkit_root_dir, 'applied_schema.sql')
-        
+
         if self.num_partitions:
             print(f'Applying partitions on schema with {self.num_partitions} partitions.\nResult schema: {applied_schema_path}')
-        
+
         jinja_env = Environment(loader=FileSystemLoader(self.schema_dir))
         applied_schema = jinja_env.get_template("schema.sql").render(num_partitions=self.num_partitions)
 
-        with open(applied_schema_path, "w") as applied_schema_file: 
+        with open(applied_schema_path, "w") as applied_schema_file:
             applied_schema_file.write(applied_schema)
-        
+
         with DBConn(self.args.dsn) as conn:
             self._load_pre_schema(conn)
-            self._load_license(conn)
+
+            if self.swarm64da_version:
+                self._load_license(conn)
+
             self._load_schema(conn, applied_schema_path)
 
     def get_ingest_tasks(self, table):
