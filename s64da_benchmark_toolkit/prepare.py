@@ -187,11 +187,15 @@ class PrepareBenchmarkFactory:
 
         except errors.InvalidSchemaName as err:
             print(f'Schema swarm64da not found: {err}')
-            return
+            raise
 
         except errors.UndefinedFunction as err:
             print(f'License check function not found: {err}')
-            return
+            raise
+
+        except errors.InternalError as err:
+            print(f'S64 DA licensing error: {err}')
+            raise
 
         except IndexError:
             print(f'Could not load S64 DA license file or file is invalid')
@@ -226,7 +230,10 @@ class PrepareBenchmarkFactory:
 
         with DBConn(self.args.dsn) as conn:
             self._load_pre_schema(conn)
-            self._load_license(conn)
+
+            if self.swarm64da_version:
+                self._load_license(conn)
+
             self._load_schema(conn, applied_schema_path)
 
     def get_ingest_tasks(self, table):
