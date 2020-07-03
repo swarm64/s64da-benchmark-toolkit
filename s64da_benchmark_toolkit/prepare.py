@@ -177,23 +177,36 @@ class PrepareBenchmarkFactory:
                 conn.cursor.execute(pre_schema_file.read())
 
     def _load_license(self, conn):
+
+        license_loaded = True
+
         try:
-            license_path = self.args.s64da_license_path
-            conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
+            conn.cursor.execute(f'select swarm64da.show_license()')
+        except errors.UndefinedFunction as err:
+            print('License check function not found. Skipping, presumably on AWS.')
+            return            
+        except:
+            license_loaded = False
+
+        if not license_loaded: 
+            try:
+                license_path = self.args.s64da_license_path
+                print(f'Loading license from: {license_path}')
+                conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
+            except errors.InternalError:
+                print(f'Could not load S64 DA license file or file is invalid: {license_path}\n'
+                      f'Make sure the --s64da-license-path argument points to a valid license file.')
+                raise
+            except IndexError as err:
+                print(f'S64 DA licensing error: {err}')
+                raise
+
+        try:
             conn.cursor.execute(f'select swarm64da.show_license()')
             license_status = conn.cursor.fetchall()[0]
             print(f'S64 DA license status: {license_status}')
-
-        except errors.UndefinedFunction as err:
-            print('License check function not found. Skipping, presumably on AWS.')
-            return
-
-        except errors.InternalError:
-            print(f'Could not load S64 DA license file or file is invalid: {license_path}')
-            return
-
-        except IndexError as err:
-            print(f'S64 DA licensing error: {err}')
+        except Exception as err:
+            print(f'Error reading S64 DA license: {err}')
             raise
 
     def _load_schema(self, conn, applied_schema_path):
