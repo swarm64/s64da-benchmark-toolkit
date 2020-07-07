@@ -143,7 +143,6 @@ class Reporting:
 
     def _print_results(self):
         self._sort_df()
-        print('from print results',self.df)
 
         if 'print' in self.output:
             print('\n')

@@ -41,8 +41,6 @@ class CorrectnessResult:
             return status
 
         # HTML here, since it'll be used for reporting to HTML
-        print('truth : ', self.truth, type(self.truth), self.detail)
-        print('result : ', self.result, type(self.result))
         truth_html = 'None' if type(self.truth) == type([]) and self.truth == [] else self.truth.to_html()
         result_html = 'None' if type(self.result) == type([]) and self.result == [] else self.result.to_html()
         return f'{status}<br /><div>{truth_html}</div><br /><div>{result_html}</div>'
