@@ -40,9 +40,15 @@ class CorrectnessResult:
         if self.is_ok:
             return status
 
+        def check_for_empty_df_then_convert_to_html(df):
+            if isinstance(df, list) and df == []:
+                return 'None'
+            else:
+                return df.to_html()
+
         # HTML here, since it'll be used for reporting to HTML
-        truth_html = self.truth.to_html()
-        result_html = self.result.to_html()
+        truth_html = check_for_empty_df_then_convert_to_html(self.truth)
+        result_html = check_for_empty_df_then_convert_to_html(self.result)
         return f'{status}<br /><div>{truth_html}</div><br /><div>{result_html}</div>'
 
     def __repr__(self):
