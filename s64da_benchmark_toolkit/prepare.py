@@ -173,7 +173,7 @@ class PrepareBenchmarkFactory:
         optimize_duration = time.time() - start_optimize
 
         with open("prepare_metrics.csv", "w") as prepare_metrics_file:
-            prepare_metrics_file.write(f'ingest; {ingest_duration}')
+            prepare_metrics_file.write(f'ingest; {ingest_duration}\n')
             prepare_metrics_file.write(f'optimize; {optimize_duration}')
             
 
