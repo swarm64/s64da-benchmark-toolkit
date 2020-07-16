@@ -6,6 +6,7 @@ from csv import writer as csv_writer
 from datetime import datetime, timedelta
 from pathlib import Path
 from uuid import uuid4
+from shutil import copyfile
 
 import pandas
 
@@ -54,6 +55,7 @@ class Reporting:
         self.html_output = os.path.join(self.results_root_dir, 'report.html')
         self.query_results = os.path.join(self.results_root_dir, 'query_results')
         self.explain_analyze_dir = os.path.join(self.results_root_dir, 'query_plans')
+        self.prepare_metrics_path = 'prepare_metrics.csv'
         self.check_correctness = args.check_correctness
         self.scale_factor = args.scale_factor
         self.explain_analyze = args.explain_analyze
@@ -76,6 +78,7 @@ class Reporting:
 
     def run_report(self, reporting_queue):
         self.df = pandas.DataFrame(columns=QueryMetric.dataframe_columns)
+        self._save_prepare_metrics()
 
         while not reporting_queue.empty():
             query_metric = reporting_queue.get()
@@ -117,6 +120,10 @@ class Reporting:
 
         with open(plan_file_path, 'w') as plan_file:
             plan_file.write(query_metric.plan)
+
+    def _save_prepare_metrics(self):
+        if os.path.exists(self.prepare_metrics_path):
+            copyfile(self.prepare_metrics_path, os.path.join(self.results_root_dir, self.prepare_metrics_path))
 
     def _save_query_output(self, query_metric):
         query_result = query_metric.result
