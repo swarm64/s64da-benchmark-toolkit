@@ -3,6 +3,7 @@ import os
 import re
 import shutil
 import threading
+import time
 
 from collections import namedtuple
 from sys import exit
@@ -149,6 +150,7 @@ class PrepareBenchmarkFactory:
 
         print('Ingesting data')
         self.cancel_event.clear()
+        start_ingest = time.time()
         for table_group in PrepareBenchmarkFactory.TABLES:
             ingest_tasks = []
             for table in table_group:
@@ -156,8 +158,10 @@ class PrepareBenchmarkFactory:
                 assert isinstance(tasks, list), 'Returned object is not a list'
                 ingest_tasks.extend(tasks)
             self._run_tasks_parallel(ingest_tasks)
+        ingest_duration = time.time() - start_ingest
 
         print('Adding indices')
+        start_optimize = time.time()
         self.add_indexes()
 
         if self.supports_cluster:
@@ -166,6 +170,12 @@ class PrepareBenchmarkFactory:
 
         print('VACUUM-ANALYZE')
         self.vacuum_analyze()
+        optimize_duration = time.time() - start_optimize
+
+        with open("prepare_metrics.csv", "w") as prepare_metrics_file:
+            prepare_metrics_file.write(f'ingest; {ingest_duration}\n')
+            prepare_metrics_file.write(f'optimize; {optimize_duration}')
+            
 
         print(f'Process complete. DSN: {self.args.dsn}')
 
