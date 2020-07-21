@@ -43,7 +43,6 @@ class Netdata:
 
         data.index = pandas.to_datetime(data.index, unit='s')
 
-        print(f'Printing dataframe: \n{data}')
         return data
 
     @classmethod
@@ -61,6 +60,7 @@ class Netdata:
 
             netdata_df = self._get_data(timerange, 1)
 
+            print(f'Printing row: \n{row}')
             query_id = row['query_id']
             data[query_id] = netdata_df.agg(self.metrics)
 
