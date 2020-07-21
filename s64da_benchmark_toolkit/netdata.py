@@ -60,9 +60,9 @@ class Netdata:
 
             netdata_df = self._get_data(timerange, 1)
 
-            print(f'Printing row: \n{row}')
             query_id = row['query_id']
             data[query_id] = netdata_df.agg(self.metrics)
+            print(f'Printing data: \n{data}')
 
         return data
 
