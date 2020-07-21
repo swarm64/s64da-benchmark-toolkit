@@ -43,6 +43,7 @@ class Netdata:
 
         data.index = pandas.to_datetime(data.index, unit='s')
 
+        print(f'Printing dataframe: \n{data}')
         return data
 
     @classmethod
