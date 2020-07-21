@@ -62,7 +62,6 @@ class Netdata:
 
             query_id = row['query_id']
             data[query_id] = netdata_df.agg(self.metrics)
-            print(f'Printing data: \n{data}')
 
         return data
 
@@ -77,6 +76,7 @@ class Netdata:
 
         with open(output, 'w') as output_file:
             for query_id in query_ids:
+                print(f'Printing query id: {query_id}')
                 output_file.write(f'{query_id}')
                 data[query_id].to_csv(output_file)
                 output_file.write('\n')
