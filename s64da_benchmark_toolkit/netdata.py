@@ -77,6 +77,7 @@ class Netdata:
         with open(output, 'w') as output_file:
             for query_id in query_ids:
                 print(f'Printing query id: {query_id}')
+                print(f'Printing data: {data[query_id]}')
                 output_file.write(f'{query_id}')
                 data[query_id].to_csv(output_file)
                 output_file.write('\n')
