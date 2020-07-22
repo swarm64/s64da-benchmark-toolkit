@@ -79,7 +79,7 @@ class Netdata:
                 print(f'Printing query id: {query_id}')
                 print(f'Printing data: {data[query_id]}')
                 output_file.write(f'{query_id}\n')
-                data[query_id].to_csv(output_file, index=False)
+                data[query_id].reset_index(inplace=True).to_csv(output_file, index=False)
                 output_file.write('\n')
 
     def _write_stats_no_breakdown(self, df, output):
