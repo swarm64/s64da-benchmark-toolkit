@@ -76,8 +76,6 @@ class Netdata:
 
         with open(output, 'w') as output_file:
             for query_id in query_ids:
-                print(f'Printing query id: {query_id}')
-                print(f'Printing data: {data[query_id]}')
                 output_file.write(f'{query_id}\n')
                 data[query_id].to_csv(output_file, header=False)
                 output_file.write('\n')
@@ -88,7 +86,7 @@ class Netdata:
         netdata_df = self.get_system_stats(df, 1)
 
         with open(output, 'w') as output_file:
-            output_file.write(f'all')
+            output_file.write(f'all\n')
             netdata_df.to_csv(output_file)
             output_file.write('\n')
 
