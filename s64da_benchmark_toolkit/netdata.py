@@ -93,5 +93,5 @@ class Netdata:
     def write_stats(self, df, output):
         if len(df['stream_id'].unique()) == 1:
             self._write_stats_per_query(df, output)
-        else:
-            self._write_stats_no_breakdown(df, output)
+
+        self._write_stats_no_breakdown(df, output)
