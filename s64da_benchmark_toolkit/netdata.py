@@ -1,4 +1,4 @@
-
+import os
 import logging
 
 import requests
@@ -73,8 +73,9 @@ class Netdata:
     def _write_stats_per_query(self, df, output):
         data = self._get_netdata_per_query(df, output)
         query_ids = natsorted(data.keys())
+        flname, flext = os.path.splitext(output)
 
-        with open(output, 'w') as output_file:
+        with open(f'{flname}_single_stream{flext}', 'w') as output_file:
             for query_id in query_ids:
                 output_file.write(f'{query_id}\n')
                 data[query_id].to_csv(output_file, header=False)
@@ -86,7 +87,6 @@ class Netdata:
         netdata_df = self.get_system_stats(df, 1)
 
         with open(output, 'a') as output_file:
-            output_file.write(f'all\n')
             netdata_df.to_csv(output_file)
             output_file.write('\n')
 
