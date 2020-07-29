@@ -73,9 +73,8 @@ class Netdata:
     def _write_stats_per_query(self, df, output):
         data = self._get_netdata_per_query(df, output)
         query_ids = natsorted(data.keys())
-        flname, flext = os.path.splitext(output)
 
-        with open(f'{flname}_single_stream{flext}', 'w') as output_file:
+        with open(output, 'w') as output_file:
             for query_id in query_ids:
                 output_file.write(f'{query_id}\n')
                 data[query_id].to_csv(output_file, header=False)
@@ -91,7 +90,8 @@ class Netdata:
             output_file.write('\n')
 
     def write_stats(self, df, output):
+        flname, flext = os.path.splitext(output)
         if len(df['stream_id'].unique()) == 1:
-            self._write_stats_per_query(df, output)
+            self._write_stats_per_query(df, f'{flname}_single_stream{flext}')
 
         self._write_stats_no_breakdown(df, output)
