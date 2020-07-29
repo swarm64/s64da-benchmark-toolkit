@@ -16,7 +16,7 @@ def is_netdata_set_and_runnning(config):
             return True
 
         except requests.exceptions.ConnectionError as e:
-            LOG.error(f'Host has no Netdata running on the given URL: {netdata_config['url']}')
+            LOG.error(f'Host has no Netdata running on the given URL: {netdata_config["url"]}')
             LOG.info(f'Please make sure Netdata is running, or check if the URL provided is correct')
             LOG.info(f'Or remove netdata from the configs if its not going to be used')
             return False
