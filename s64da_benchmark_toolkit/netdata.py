@@ -90,8 +90,9 @@ class Netdata:
             output_file.write('\n')
 
     def write_stats(self, df, output):
-        flname, flext = os.path.splitext(output)
+
         if len(df['stream_id'].unique()) == 1:
+            flname, flext = os.path.splitext(output)
             self._write_stats_per_query(df, f'{flname}_single_stream{flext}')
 
         self._write_stats_no_breakdown(df, output)
