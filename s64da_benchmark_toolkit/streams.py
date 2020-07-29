@@ -17,6 +17,7 @@ import yaml
 
 from .db import DB
 from .reporting import Reporting, QueryMetric
+from .netdata import is_netdata_set_and_runnning
 
 
 Benchmark = namedtuple('Benchmark', ['name', 'base_dir'])
@@ -82,6 +83,8 @@ class Streams:
         return sql
 
     def run(self):
+        if not is_netdata_set_and_runnning(self.config):
+            return
         dbconfig = self.config.get('dbconfig')
         try:
             mp_manager = Manager()
