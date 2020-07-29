@@ -86,7 +86,7 @@ class Netdata:
                  'out without analysis.')
         netdata_df = self.get_system_stats(df, 1)
 
-        with open(output, 'a') as output_file:
+        with open(output, 'w') as output_file:
             netdata_df.to_csv(output_file)
             output_file.write('\n')
 
