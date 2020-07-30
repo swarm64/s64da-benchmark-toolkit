@@ -9,7 +9,7 @@ from natsort import natsorted
 LOG = logging.getLogger()
 
 def is_netdata_set_and_runnning(config):
-    netdata_config = config.get('netdata'))
+    netdata_config = config.get('netdata')
     if netdata_config:
         try:
             netdata_url = netdata_config.get('url')
@@ -18,15 +18,13 @@ def is_netdata_set_and_runnning(config):
             if status_code != 200:
                 LOG.error(f'Netdata url response ({netdata_url}) does not return 200, but {status_code}')
                 return False
-            return True
 
         except requests.exceptions.ConnectionError as e:
             LOG.error(f'Host has no Netdata running on the given URL: {netdata_config["url"]}')
             LOG.info(f'Please make sure Netdata is running, or check if the URL provided is correct')
             LOG.info(f'Or remove netdata from the configs if its not going to be used')
             return False
-    else:
-        return True
+    return True
     
 class Netdata:
     def __init__(self, config):
