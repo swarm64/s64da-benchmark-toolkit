@@ -9,9 +9,10 @@ from natsort import natsorted
 LOG = logging.getLogger()
 
 def is_netdata_set_and_runnning(config):
-    netdata_url = config.get('netdata').get('url')
-    if netdata_url:
+    netdata_config = config.get('netdata'))
+    if netdata_config:
         try:
+            netdata_url = netdata_config.get('url')
             response = requests.get(netdata_url)
             status_code = response.status_code
             if status_code != 200:
