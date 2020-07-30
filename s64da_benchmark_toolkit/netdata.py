@@ -1,4 +1,4 @@
-
+import os
 import logging
 
 import requests
@@ -94,8 +94,8 @@ class Netdata:
 
         with open(output, 'w') as output_file:
             for query_id in query_ids:
-                output_file.write(f'{query_id}')
-                data[query_id].to_csv(output_file)
+                output_file.write(f'{query_id}\n')
+                data[query_id].to_csv(output_file, header=False)
                 output_file.write('\n')
 
     def _write_stats_no_breakdown(self, df, output):
@@ -104,12 +104,13 @@ class Netdata:
         netdata_df = self.get_system_stats(df, 1)
 
         with open(output, 'w') as output_file:
-            output_file.write(f'all')
             netdata_df.to_csv(output_file)
             output_file.write('\n')
 
     def write_stats(self, df, output):
+
         if len(df['stream_id'].unique()) == 1:
-            self._write_stats_per_query(df, output)
-        else:
-            self._write_stats_no_breakdown(df, output)
+            flname, flext = os.path.splitext(output)
+            self._write_stats_per_query(df, f'{flname}_single_stream{flext}')
+
+        self._write_stats_no_breakdown(df, output)
