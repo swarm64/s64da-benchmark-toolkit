@@ -9,10 +9,14 @@ from natsort import natsorted
 LOG = logging.getLogger()
 
 def is_netdata_set_and_runnning(config):
-    netdata_config = config.get('netdata')
-    if netdata_config:
+    netdata_url = config.get('netdata').get('url')
+    if netdata_url:
         try:
-            requests.get(netdata_config['url'])
+            response = requests.get(netdata_url)
+            status_code = response.status_code
+            if status_code != 200:
+                LOG.error(f'Netdata url response ({netdata_url}) does not return 200, but {status_code}')
+                return False
             return True
 
         except requests.exceptions.ConnectionError as e:
@@ -110,7 +114,3 @@ class Netdata:
             self._write_stats_per_query(df, output)
         else:
             self._write_stats_no_breakdown(df, output)
-
-
-
-
