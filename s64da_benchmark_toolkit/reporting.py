@@ -96,7 +96,7 @@ class Reporting:
         netdata_config = self.config.get('netdata')
         if netdata_config:
             netdata = Netdata(netdata_config)
-            if self.netdata_output_file:
+            if self.netdata_output_file and netdata.is_netdata_set_and_running:
                 netdata.write_stats(self.df, self.netdata_output_file)
 
         if self.df.empty == False:

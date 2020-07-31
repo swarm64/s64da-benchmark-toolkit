@@ -8,23 +8,7 @@ from natsort import natsorted
 
 LOG = logging.getLogger()
 
-def is_netdata_set_and_runnning(config):
-    netdata_config = config.get('netdata')
-    if netdata_config:
-        try:
-            netdata_url = netdata_config.get('url')
-            response = requests.get(netdata_url)
-            status_code = response.status_code
-            if status_code != 200:
-                LOG.error(f'Netdata url response ({netdata_url}) does not return 200, but {status_code}')
-                return False
 
-        except requests.exceptions.ConnectionError as e:
-            LOG.error(f'Host has no Netdata running on the given URL: {netdata_config["url"]}')
-            LOG.info(f'Please make sure Netdata is running, or check if the URL provided is correct')
-            LOG.info(f'Or remove netdata from the configs if its not going to be used')
-            return False
-    return True
     
 class Netdata:
     def __init__(self, config):
@@ -114,3 +98,18 @@ class Netdata:
             self._write_stats_per_query(df, f'{flname}_single_stream{flext}')
 
         self._write_stats_no_breakdown(df, output)
+
+    def is_netdata_set_and_running(self):
+        try:
+            response = requests.get(self.url)
+            status_code = response.status_code
+            if status_code != 200:
+                LOG.warning(f'Netdata url response ({self.url}) does not return 200, but {status_code}')
+                return False
+
+        except requests.exceptions.ConnectionError as e:
+            LOG.warning(f'Host has no Netdata running on the given URL: {self.url}')
+            LOG.info(f'Please make sure Netdata is running, or check if the URL provided is correct')
+            LOG.info(f'Or remove netdata from the configs if its not going to be used')
+            return False
+        return True
