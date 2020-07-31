@@ -17,7 +17,6 @@ import yaml
 
 from .db import DB
 from .reporting import Reporting, QueryMetric
-from .netdata import is_netdata_set_and_runnning
 
 
 Benchmark = namedtuple('Benchmark', ['name', 'base_dir'])
