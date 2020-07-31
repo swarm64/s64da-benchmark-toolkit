@@ -83,8 +83,6 @@ class Streams:
         return sql
 
     def run(self):
-        if not is_netdata_set_and_runnning(self.config):
-            return
         dbconfig = self.config.get('dbconfig')
         try:
             mp_manager = Manager()
