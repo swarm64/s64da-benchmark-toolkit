@@ -3,8 +3,6 @@ CREATE FUNCTION round(double precision, integer) RETURNS NUMERIC AS $$
     SELECT round($1::numeric, $2)
 $$ LANGUAGE sql;
 
-CREATE EXTENSION swarm64da;
-
 CREATE FOREIGN TABLE customer_address
 (
     ca_address_sk             INTEGER               NOT NULL,
@@ -21,7 +19,7 @@ CREATE FOREIGN TABLE customer_address
     ca_gmt_offset             DECIMAL(5,2),
     ca_location_type          VARCHAR(20)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'ca_address_sk, ca_gmt_offset');
+SERVER swarm64da_server OPTIONS (range_index 'ca_address_sk, ca_gmt_offset');
 
 CREATE FOREIGN TABLE customer_demographics
 (
@@ -35,7 +33,7 @@ CREATE FOREIGN TABLE customer_demographics
     cd_dep_employed_count     BIGINT,
     cd_dep_college_count      BIGINT
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'cd_demo_sk');
+SERVER swarm64da_server OPTIONS (range_index 'cd_demo_sk');
 
 CREATE FOREIGN TABLE date_dim
 (
@@ -68,7 +66,7 @@ CREATE FOREIGN TABLE date_dim
     d_current_quarter         "char",
     d_current_year            "char"
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'd_year, d_moy, d_date');
+SERVER swarm64da_server OPTIONS (range_index 'd_year, d_moy, d_date');
 
 CREATE FOREIGN TABLE warehouse
 (
@@ -87,7 +85,7 @@ CREATE FOREIGN TABLE warehouse
     w_country                 VARCHAR(20),
     w_gmt_offset              DECIMAL(5,2)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'w_warehouse_sk');
+SERVER swarm64da_server OPTIONS (range_index 'w_warehouse_sk');
 
 CREATE FOREIGN TABLE ship_mode
 (
@@ -98,7 +96,7 @@ CREATE FOREIGN TABLE ship_mode
     sm_carrier                VARCHAR(20),
     sm_contract               VARCHAR(20)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'sm_ship_mode_sk');
+SERVER swarm64da_server OPTIONS (range_index 'sm_ship_mode_sk');
 
 CREATE FOREIGN TABLE time_dim
 (
@@ -113,7 +111,7 @@ CREATE FOREIGN TABLE time_dim
     t_sub_shift               VARCHAR(20),
     t_meal_time               VARCHAR(20)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 't_time_sk');
+SERVER swarm64da_server OPTIONS (range_index 't_time_sk');
 
 CREATE FOREIGN TABLE reason
 (
@@ -121,7 +119,7 @@ CREATE FOREIGN TABLE reason
     r_reason_id               VARCHAR(16)           NOT NULL,
     r_reason_desc             VARCHAR(100)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'r_reason_sk');
+SERVER swarm64da_server OPTIONS (range_index 'r_reason_sk');
 
 CREATE FOREIGN TABLE income_band
 (
@@ -129,7 +127,7 @@ CREATE FOREIGN TABLE income_band
     ib_lower_bound            BIGINT,
     ib_upper_bound            BIGINT
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'ib_lower_bound, ib_upper_bound');
+SERVER swarm64da_server OPTIONS (range_index 'ib_lower_bound, ib_upper_bound');
 
 CREATE FOREIGN TABLE item
 (
@@ -156,7 +154,7 @@ CREATE FOREIGN TABLE item
     i_manager_id              BIGINT,
     i_product_name            VARCHAR(50)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'i_current_price');
+SERVER swarm64da_server OPTIONS (range_index 'i_current_price');
 
 CREATE FOREIGN TABLE store
 (
@@ -190,7 +188,7 @@ CREATE FOREIGN TABLE store
     s_gmt_offset              DECIMAL(5,2),
     s_tax_precentage          DECIMAL(5,2)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 's_store_sk, s_market_id');
+SERVER swarm64da_server OPTIONS (range_index 's_store_sk, s_market_id');
 
 CREATE FOREIGN TABLE call_center
 (
@@ -226,7 +224,7 @@ CREATE FOREIGN TABLE call_center
     cc_gmt_offset             DECIMAL(5,2),
     cc_tax_percentage         DECIMAL(5,2)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'cc_call_center_sk');
+SERVER swarm64da_server OPTIONS (range_index 'cc_call_center_sk');
 
 CREATE FOREIGN TABLE customer
 (
@@ -249,7 +247,7 @@ CREATE FOREIGN TABLE customer
     c_email_address           VARCHAR(50),
     c_last_review_date_sk     INTEGER
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'c_birth_month');
+SERVER swarm64da_server OPTIONS (range_index 'c_birth_month');
 
 CREATE FOREIGN TABLE web_site
 (
@@ -280,7 +278,7 @@ CREATE FOREIGN TABLE web_site
     web_gmt_offset            DECIMAL(5,2),
     web_tax_percentage        DECIMAL(5,2)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'web_site_sk');
+SERVER swarm64da_server OPTIONS (range_index 'web_site_sk');
 
 CREATE FOREIGN TABLE store_returns
 (
@@ -305,7 +303,7 @@ CREATE FOREIGN TABLE store_returns
     sr_store_credit           DECIMAL(7,2),
     sr_net_loss               DECIMAL(7,2)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'sr_return_amt');
+SERVER swarm64da_server OPTIONS (range_index 'sr_return_amt');
 
 CREATE FOREIGN TABLE household_demographics
 (
@@ -315,7 +313,7 @@ CREATE FOREIGN TABLE household_demographics
     hd_dep_count              BIGINT,
     hd_vehicle_count          BIGINT
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'hd_vehicle_count');
+SERVER swarm64da_server OPTIONS (range_index 'hd_vehicle_count');
 
 CREATE FOREIGN TABLE web_page
 (
@@ -334,7 +332,7 @@ CREATE FOREIGN TABLE web_page
     wp_image_count            BIGINT,
     wp_max_ad_count           BIGINT
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'wp_web_page_sk');
+SERVER swarm64da_server OPTIONS (range_index 'wp_web_page_sk');
 
 CREATE FOREIGN TABLE promotion
 (
@@ -358,7 +356,7 @@ CREATE FOREIGN TABLE promotion
     p_purpose                 VARCHAR(15),
     p_discount_active         "char"
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'p_promo_sk');
+SERVER swarm64da_server OPTIONS (range_index 'p_promo_sk');
 
 CREATE FOREIGN TABLE catalog_page
 (
@@ -372,7 +370,7 @@ CREATE FOREIGN TABLE catalog_page
     cp_description            VARCHAR(100),
     cp_type                   VARCHAR(100)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'cp_catalog_page_sk');
+SERVER swarm64da_server OPTIONS (range_index 'cp_catalog_page_sk');
 
 CREATE FOREIGN TABLE inventory
 (
@@ -381,7 +379,7 @@ CREATE FOREIGN TABLE inventory
     inv_warehouse_sk          INTEGER               NOT NULL,
     inv_quantity_on_hand      BIGINT
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'inv_date_sk, inv_item_sk, inv_warehouse_sk');
+SERVER swarm64da_server OPTIONS (range_index 'inv_date_sk, inv_item_sk, inv_warehouse_sk');
 
 CREATE FOREIGN TABLE catalog_returns
 (
@@ -413,7 +411,7 @@ CREATE FOREIGN TABLE catalog_returns
     cr_store_credit           DECIMAL(7,2),
     cr_net_loss               DECIMAL(7,2)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'cr_return_quantity, cr_return_amount');
+SERVER swarm64da_server OPTIONS (range_index 'cr_return_quantity, cr_return_amount');
 
 CREATE FOREIGN TABLE web_returns
 (
@@ -442,7 +440,7 @@ CREATE FOREIGN TABLE web_returns
     wr_account_credit         DECIMAL(7,2),
     wr_net_loss               DECIMAL(7,2)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'wr_return_amt');
+SERVER swarm64da_server OPTIONS (range_index 'wr_return_amt');
 
 CREATE FOREIGN TABLE web_sales
 (
@@ -481,7 +479,7 @@ CREATE FOREIGN TABLE web_sales
     ws_net_paid_inc_ship_tax  DECIMAL(7,2),
     ws_net_profit             DECIMAL(7,2)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'ws_net_profit, ws_quantity');
+SERVER swarm64da_server OPTIONS (range_index 'ws_net_profit, ws_quantity');
 
 CREATE FOREIGN TABLE catalog_sales
 (
@@ -520,7 +518,7 @@ CREATE FOREIGN TABLE catalog_sales
     cs_net_paid_inc_ship_tax  DECIMAL(7,2),
     cs_net_profit             DECIMAL(7,2)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'cs_net_profit, cs_quantity');
+SERVER swarm64da_server OPTIONS (range_index 'cs_net_profit, cs_quantity');
 
 CREATE FOREIGN TABLE store_sales
 (
@@ -548,4 +546,4 @@ CREATE FOREIGN TABLE store_sales
     ss_net_paid_inc_tax       DECIMAL(7,2),
     ss_net_profit             DECIMAL(7,2)
 )
-SERVER swarm64da_server OPTIONS (optimized_columns 'ss_sales_price, ss_net_profit, ss_quantity');
+SERVER swarm64da_server OPTIONS (range_index 'ss_sales_price, ss_net_profit, ss_quantity');

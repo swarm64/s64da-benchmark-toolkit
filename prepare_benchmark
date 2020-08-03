@@ -20,7 +20,9 @@ if __name__ == '__main__':
         logger.error('Your python version does not match the requirements.')
         sys.exit()
 
-    args_to_parse = argparse.ArgumentParser(argument_default=argparse.SUPPRESS)
+    args_to_parse = argparse.ArgumentParser(
+        argument_default=argparse.SUPPRESS,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     args_to_parse.add_argument('--dsn', required=True, help=(
         'The PostgreSQL DSN to connect to. Supply with DB, e.g. '
@@ -59,8 +61,21 @@ if __name__ == '__main__':
         'Limit the overall parallelism to this amount of jobs.'
     ))
 
-    args_to_parse.add_argument('--check-diskspace-of-directory', help=(
-        'If flag is present, a disk space check on the passed storage directory will be performed prior ingestion.'
+    args_to_parse.add_argument('--check-diskspace-of-directory', default=None, help=(
+        'If flag is present, a disk space check on the passed storage directory will be '
+        'performed prior to ingestion.'
+    ))
+
+    args_to_parse.add_argument('--data-dir', default=None, help=(
+        'The directory holding the data files to ingest from.'
+    ))
+
+    args_to_parse.add_argument('--num-partitions', default=None, help=(
+        'The number of partitions for partitioned schemas.'
+    ))
+
+    args_to_parse.add_argument('--s64da-license-path', default='/s64da.license', help=(
+        'The path to the S64 DA license.'
     ))
 
     args = args_to_parse.parse_args()

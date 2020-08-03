@@ -44,7 +44,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
    customer_address FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'ca_address_sk, ca_state');
+   swarm64da_server OPTIONS (range_index 'ca_address_sk, ca_state');
 {% endfor %}
 
 -- 1TB = 2M records
@@ -67,7 +67,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
    customer_demographics FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'cd_demo_sk');
+   swarm64da_server OPTIONS (range_index 'cd_demo_sk');
 {% endfor %}
 
 -- contains 200 YEARS of data (~73k records)
@@ -109,7 +109,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
    date_dim FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'd_date_sk');
+   swarm64da_server OPTIONS (range_index 'd_date_sk');
 {% endfor %}
 
 -- 20 records
@@ -137,7 +137,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
    warehouse FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'w_warehouse_sk');
+   swarm64da_server OPTIONS (range_index 'w_warehouse_sk');
 {% endfor %}
 
 -- 20 records
@@ -157,7 +157,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
    ship_mode FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'sm_ship_mode_sk');
+   swarm64da_server OPTIONS (range_index 'sm_ship_mode_sk');
 {% endfor %}
 
 
@@ -182,7 +182,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
    time_dim FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 't_time_sk');
+   swarm64da_server OPTIONS (range_index 't_time_sk');
 {% endfor %}
 
 -- 65 records
@@ -199,7 +199,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
    reason FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'r_reason_sk');
+   swarm64da_server OPTIONS (range_index 'r_reason_sk');
 {% endfor %}
 
 -- 20 records
@@ -216,7 +216,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
    income_band FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'ib_lower_bound, ib_upper_bound');
+   swarm64da_server OPTIONS (range_index 'ib_lower_bound, ib_upper_bound');
 {% endfor %}
 
 -- 1TB = 300k records
@@ -252,7 +252,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
    item FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'i_item_sk');
+   swarm64da_server OPTIONS (range_index 'i_item_sk');
 {% endfor %}
 
 -- 1k records
@@ -295,7 +295,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     store FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 's_store_sk, s_market_id');
+   swarm64da_server OPTIONS (range_index 's_store_sk, s_market_id');
 {% endfor %}
 
 -- 42 records
@@ -340,7 +340,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     call_center FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'cc_call_center_sk');
+   swarm64da_server OPTIONS (range_index 'cc_call_center_sk');
 {% endfor %}
 
 -- 1TB = 12M records
@@ -372,7 +372,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     customer FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'c_customer_sk');
+   swarm64da_server OPTIONS (range_index 'c_customer_sk');
 {% endfor %}
 
 -- 54 records
@@ -412,7 +412,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     web_site FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'web_site_sk');
+   swarm64da_server OPTIONS (range_index 'web_site_sk');
 {% endfor %}
 
 -- 1TB = 289M records
@@ -446,7 +446,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     store_returns FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'sr_returned_date_sk, sr_item_sk', optimization_level_target '900');
+   swarm64da_server options(range_index 'sr_returned_date_sk, sr_item_sk');
 {% endfor %}
 
 -- 7200 records
@@ -465,7 +465,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     household_demographics FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'hd_vehicle_count');
+   swarm64da_server OPTIONS (range_index 'hd_vehicle_count');
 {% endfor %}
 
 -- 3000 records
@@ -493,7 +493,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
    web_page FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'wp_web_page_sk');
+   swarm64da_server OPTIONS (range_index 'wp_web_page_sk');
 {% endfor %}
 
 CREATE TABLE promotion
@@ -525,7 +525,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     promotion FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'p_promo_sk');
+   swarm64da_server OPTIONS (range_index 'p_promo_sk');
 {% endfor %}
 
 -- 1TB = 30k records
@@ -548,7 +548,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     catalog_page FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server OPTIONS (optimized_columns 'cp_catalog_page_sk');
+   swarm64da_server OPTIONS (range_index 'cp_catalog_page_sk');
 {% endfor %}
 
 -- 1TB = 783M records
@@ -566,7 +566,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     inventory FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'inv_date_sk, inv_item_sk, inv_warehouse_sk', optimization_level_target '900');
+   swarm64da_server options(range_index 'inv_date_sk, inv_item_sk, inv_warehouse_sk');
 {% endfor %}
 
 -- 1TB = 143M records
@@ -607,7 +607,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     catalog_returns FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'cr_returned_date_sk, cr_item_sk', optimization_level_target '900');
+   swarm64da_server options(range_index 'cr_returned_date_sk, cr_item_sk');
 {% endfor %}
 
 -- 1TB = 71M records
@@ -645,7 +645,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     web_returns FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'wr_returned_date_sk, wr_item_sk', optimization_level_target '900');
+   swarm64da_server options(range_index 'wr_returned_date_sk, wr_item_sk');
 {% endfor %}
 
 -- 1TB = 720M records
@@ -694,7 +694,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     web_sales FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'ws_sold_date_sk, ws_item_sk', optimization_level_target '900');
+   swarm64da_server options(range_index 'ws_sold_date_sk, ws_item_sk');
 {% endfor %}
 
 -- 1TB = 1.4B records
@@ -742,7 +742,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     catalog_sales FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'cs_sold_date_sk, cs_item_sk', optimization_level_target '900');
+   swarm64da_server options(range_index 'cs_sold_date_sk, cs_item_sk');
 {% endfor %}
 
 -- 1TB = 2.8B records
@@ -780,5 +780,5 @@ CREATE FOREIGN TABLE
 PARTITION OF
     store_sales FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'ss_item_sk, ss_sold_date_sk', optimization_level_target '900');
+   swarm64da_server options(range_index 'ss_item_sk, ss_sold_date_sk');
 {% endfor %}

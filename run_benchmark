@@ -18,7 +18,9 @@ if __name__ == '__main__':
         logger.error('Your python version does not match the requirements.')
         sys.exit()
 
-    args_to_parse = argparse.ArgumentParser(argument_default=argparse.SUPPRESS)
+    args_to_parse = argparse.ArgumentParser(
+        argument_default=argparse.SUPPRESS,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     args_to_parse.add_argument('--dsn', required=True, help=(
         'The PostgreSQL DSN to connect to. Supply with DB, e.g. '
@@ -78,7 +80,7 @@ if __name__ == '__main__':
         'Additionally, each query output will be stored in the query_results folder.'
     ))
 
-    args_to_parse.add_argument('--scale-factor', choices=(10, 100, 300, 1000), type=int, default=None,
+    args_to_parse.add_argument('--scale-factor', choices=(10, 100, 300, 1000, 3000, 8000), type=int, default=None,
                                required=(any(arg in ['--check-correctness','tpcds'] for arg in sys.argv)), help=(
         'Scale Factor of correctness result to compare with the query output.'
     ))

@@ -1,11 +1,7 @@
-{% set num_partitions = num_partitions|int %}
-
 -- round(double precision, int) does not exist by default
 CREATE FUNCTION round(double precision, integer) RETURNS NUMERIC AS $$
     SELECT round($1::numeric, $2)
 $$ LANGUAGE sql;
-
-CREATE EXTENSION swarm64da;
 
 CREATE TABLE customer_address
 (
@@ -273,36 +269,27 @@ CREATE TABLE web_site
 
 CREATE TABLE store_returns
 (
-    sr_returned_date_sk       INTEGER,                        -- ~16x JOIN
-    sr_return_time_sk         INTEGER,                        --
-    sr_item_sk                INTEGER               NOT NULL, -- ~16x JOIN
-    sr_customer_sk            INTEGER,                        -- ~9x JOIN
-    sr_cdemo_sk               INTEGER,                        -- ~1x JOIN
-    sr_hdemo_sk               INTEGER,                        -- 
-    sr_addr_sk                INTEGER,                        --
-    sr_store_sk               INTEGER,                        -- ~4x JOIN
-    sr_reason_sk              INTEGER,                        -- ~1x JOIN
-    sr_ticket_number          INTEGER               NOT NULL, --
-    sr_return_quantity        BIGINT,                         --
-    sr_return_amt             DECIMAL(7,2),                   --
-    sr_return_tax             DECIMAL(7,2),                   --
-    sr_return_amt_inc_tax     DECIMAL(7,2),                   --
-    sr_fee                    DECIMAL(7,2),                   --
-    sr_return_ship_cost       DECIMAL(7,2),                   --
-    sr_refunded_cash          DECIMAL(7,2),                   --
-    sr_reversed_charge        DECIMAL(7,2),                   --
-    sr_store_credit           DECIMAL(7,2),                   --
-    sr_net_loss               DECIMAL(7,2)                    --
-) PARTITION BY HASH(sr_item_sk);
-
-{% for partition_idx in range(num_partitions) %}
-CREATE FOREIGN TABLE
-    store_returns_prt_{{ partition_idx }}
-PARTITION OF
-    store_returns FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
-SERVER
-   swarm64da_server options(optimized_columns 'sr_returned_date_sk, sr_item_sk', optimization_level_target '900');
-{% endfor %}
+    sr_returned_date_sk       INTEGER,
+    sr_return_time_sk         INTEGER,
+    sr_item_sk                INTEGER               NOT NULL,
+    sr_customer_sk            INTEGER,
+    sr_cdemo_sk               INTEGER,
+    sr_hdemo_sk               INTEGER,
+    sr_addr_sk                INTEGER,
+    sr_store_sk               INTEGER,
+    sr_reason_sk              INTEGER,
+    sr_ticket_number          INTEGER               NOT NULL,
+    sr_return_quantity        BIGINT,
+    sr_return_amt             DECIMAL(7,2),
+    sr_return_tax             DECIMAL(7,2),
+    sr_return_amt_inc_tax     DECIMAL(7,2),
+    sr_fee                    DECIMAL(7,2),
+    sr_return_ship_cost       DECIMAL(7,2),
+    sr_refunded_cash          DECIMAL(7,2),
+    sr_reversed_charge        DECIMAL(7,2),
+    sr_store_credit           DECIMAL(7,2),
+    sr_net_loss               DECIMAL(7,2)
+);
 
 CREATE TABLE household_demographics
 (
@@ -369,20 +356,11 @@ CREATE TABLE catalog_page
 
 CREATE TABLE inventory
 (
-    inv_date_sk               INTEGER               NOT NULL, -- 7x JOIN
-    inv_item_sk               INTEGER               NOT NULL, -- 7x JOIN
-    inv_warehouse_sk          INTEGER               NOT NULL, -- 4x JOIN
-    inv_quantity_on_hand      BIGINT                          -- 3x WHERE
-) PARTITION BY HASH(inv_date_sk, inv_item_sk, inv_warehouse_sk);
-
-{% for partition_idx in range(num_partitions) %}
-CREATE FOREIGN TABLE
-    inventory_prt_{{ partition_idx }}
-PARTITION OF
-    inventory FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
-SERVER
-   swarm64da_server options(optimized_columns 'inv_date_sk, inv_item_sk, inv_warehouse_sk', optimization_level_target '900');
-{% endfor %}
+    inv_date_sk               INTEGER               NOT NULL,
+    inv_item_sk               INTEGER               NOT NULL,
+    inv_warehouse_sk          INTEGER               NOT NULL,
+    inv_quantity_on_hand      BIGINT
+);
 
 CREATE TABLE catalog_returns
 (
@@ -413,16 +391,7 @@ CREATE TABLE catalog_returns
     cr_reversed_charge        DECIMAL(7,2),
     cr_store_credit           DECIMAL(7,2),
     cr_net_loss               DECIMAL(7,2)
-) PARTITION BY HASH(cr_item_sk);
-
-{% for partition_idx in range(num_partitions) %}
-CREATE FOREIGN TABLE
-    catalog_returns_prt_{{ partition_idx }}
-PARTITION OF
-    catalog_returns FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
-SERVER
-   swarm64da_server options(optimized_columns 'cr_returned_date_sk, cr_item_sk', optimization_level_target '900');
-{% endfor %}
+);
 
 CREATE TABLE web_returns
 (
@@ -450,16 +419,7 @@ CREATE TABLE web_returns
     wr_reversed_charge        DECIMAL(7,2),
     wr_account_credit         DECIMAL(7,2),
     wr_net_loss               DECIMAL(7,2)
-) PARTITION BY HASH(wr_item_sk);
-
-{% for partition_idx in range(num_partitions) %}
-CREATE FOREIGN TABLE
-    web_returns_prt_{{ partition_idx }}
-PARTITION OF
-    web_returns FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
-SERVER
-   swarm64da_server options(optimized_columns 'wr_returned_date_sk, wr_item_sk', optimization_level_target '900');
-{% endfor %}
+);
 
 CREATE TABLE web_sales
 (
@@ -497,37 +457,27 @@ CREATE TABLE web_sales
     ws_net_paid_inc_ship      DECIMAL(7,2),
     ws_net_paid_inc_ship_tax  DECIMAL(7,2),
     ws_net_profit             DECIMAL(7,2)
-)
-PARTITION BY HASH(ws_item_sk);
-
-{% for partition_idx in range(num_partitions) %}
-CREATE FOREIGN TABLE
-    web_sales_prt_{{ partition_idx }}
-PARTITION OF
-    web_sales FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
-SERVER
-   swarm64da_server options(optimized_columns 'ws_sold_date_sk, ws_item_sk', optimization_level_target '900');
-{% endfor %}
+);
 
 CREATE TABLE catalog_sales
 (
-    cs_sold_date_sk           INTEGER,                         -- ~50x JOIN
-    cs_sold_time_sk           INTEGER,                         -- ~2x JOIN
-    cs_ship_date_sk           INTEGER,                         -- ~11x JOIN
-    cs_bill_customer_sk       INTEGER,                         -- ~16x JOIN
-    cs_bill_cdemo_sk          INTEGER,                         -- ~3x JOIN
-    cs_bill_hdemo_sk          INTEGER,                         -- ~1x JOIN
-    cs_bill_addr_sk           INTEGER,                         -- ~3x JOIN
-    cs_ship_customer_sk       INTEGER,                         -- ~5x JOIN
-    cs_ship_cdemo_sk          INTEGER,                         -- ~0x JOIN
-    cs_ship_hdemo_sk          INTEGER,                         -- ~0x JOIN
-    cs_ship_addr_sk           INTEGER,                         -- ~1x JOIN
-    cs_call_center_sk         INTEGER,                         -- ~6x JOIN
-    cs_catalog_page_sk        INTEGER,                         -- ~2x JOIN
-    cs_ship_mode_sk           INTEGER,                         -- ~2x JOIN
-    cs_warehouse_sk           INTEGER,                         -- ~4x JOIN
-    cs_item_sk                INTEGER               NOT NULL,  -- ~45x JOIN
-    cs_promo_sk               INTEGER,                         -- ~3x JOIN
+    cs_sold_date_sk           INTEGER,
+    cs_sold_time_sk           INTEGER,
+    cs_ship_date_sk           INTEGER,
+    cs_bill_customer_sk       INTEGER,
+    cs_bill_cdemo_sk          INTEGER,
+    cs_bill_hdemo_sk          INTEGER,
+    cs_bill_addr_sk           INTEGER,
+    cs_ship_customer_sk       INTEGER,
+    cs_ship_cdemo_sk          INTEGER,
+    cs_ship_hdemo_sk          INTEGER,
+    cs_ship_addr_sk           INTEGER,
+    cs_call_center_sk         INTEGER,
+    cs_catalog_page_sk        INTEGER,
+    cs_ship_mode_sk           INTEGER,
+    cs_warehouse_sk           INTEGER,
+    cs_item_sk                INTEGER               NOT NULL,
+    cs_promo_sk               INTEGER,
     cs_order_number           INTEGER               NOT NULL,
     cs_quantity               BIGINT,
     cs_wholesale_cost         DECIMAL(7,2),
@@ -545,28 +495,19 @@ CREATE TABLE catalog_sales
     cs_net_paid_inc_ship      DECIMAL(7,2),
     cs_net_paid_inc_ship_tax  DECIMAL(7,2),
     cs_net_profit             DECIMAL(7,2)
-) PARTITION BY HASH(cs_item_sk);
-
-{% for partition_idx in range(num_partitions) %}
-CREATE FOREIGN TABLE
-    catalog_sales_prt_{{ partition_idx }}
-PARTITION OF
-    catalog_sales FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
-SERVER
-   swarm64da_server options(optimized_columns 'cs_sold_date_sk, cs_item_sk', optimization_level_target '900');
-{% endfor %}
+);
 
 CREATE TABLE store_sales
 (
-    ss_sold_date_sk           INTEGER,                        -- ~80x JOIN
-    ss_sold_time_sk           INTEGER,                        -- ~10x JOIN
-    ss_item_sk                INTEGER               NOT NULL, -- ~83x JOIN
-    ss_customer_sk            INTEGER,                        -- ~51x JOIN
-    ss_cdemo_sk               INTEGER,                        -- ~11x JOIN
-    ss_hdemo_sk               INTEGER,                        -- ~18x JOIN
-    ss_addr_sk                INTEGER,                        -- ~16x JOIN
-    ss_store_sk               INTEGER,                        -- ~58x JOIN
-    ss_promo_sk               INTEGER,                        --  ~6x JOIN
+    ss_sold_date_sk           INTEGER,
+    ss_sold_time_sk           INTEGER,
+    ss_item_sk                INTEGER               NOT NULL,
+    ss_customer_sk            INTEGER,
+    ss_cdemo_sk               INTEGER,
+    ss_hdemo_sk               INTEGER,
+    ss_addr_sk                INTEGER,
+    ss_store_sk               INTEGER,
+    ss_promo_sk               INTEGER,
     ss_ticket_number          INTEGER               NOT NULL,
     ss_quantity               BIGINT,
     ss_wholesale_cost         DECIMAL(7,2),
@@ -581,14 +522,4 @@ CREATE TABLE store_sales
     ss_net_paid               DECIMAL(7,2),
     ss_net_paid_inc_tax       DECIMAL(7,2),
     ss_net_profit             DECIMAL(7,2)
-)
-PARTITION BY HASH(ss_item_sk);
-
-{% for partition_idx in range(num_partitions) %}
-CREATE FOREIGN TABLE
-    store_sales_prt_{{ partition_idx }}
-PARTITION OF
-    store_sales FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER  {{ partition_idx }})
-SERVER
-   swarm64da_server options(optimized_columns 'ss_item_sk, ss_sold_date_sk', optimization_level_target '900');
-{% endfor %}
+);

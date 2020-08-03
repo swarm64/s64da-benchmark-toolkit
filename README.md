@@ -3,12 +3,14 @@
 This toolkit provides methods to execute the TPC-H, TPC-DS, and SSB benchmark on
 Swarm64 DA and native PostgreSQL.
 
+Important notice: In order to guarantee compatibility between S64 DA and s64da-benchmark-toolkit, please checkout the GIT Tag that corresponds to your version of S64 DA. For example, if your version of S64 DA is 4.2.0, clone this repository and execute git checkout v4.2.0 within the the repository root folder before proceeding. For S64 DA versions 4.0.0 and below checkout v4.0.0_and_below
 
 # Prerequisites
 
 - Python min. 3.6 and pip3
 - For TPC-DS only: Linux package `recode`
 - Install additional packages, for Python 3.6 eg. with: `/usr/bin/python3.6 -m pip install -r requirements.txt`
+- The `psql` PostgreSQL client
 - For loading the data, the database must be accessible with the user
   `postgres` *without password*
 
@@ -26,12 +28,17 @@ Swarm64 DA and native PostgreSQL.
         --schema=<schema-to-deploy> \
         --scale-factor=<scale-factor-to-use> \
         --dbname=<target-db>
-
+  
+    For example in `schemas/tpch`:
+```
+        ./loader.sh --schema=sdb_all_tables --scale-factor=1000 --dbname=example-database
+```
+  
 ### Required Parameters
 
    | Parameter      | Description                                            |
    | -------------- | ------------------------------------------------------ |
-   | `schema`       | The schema to deploy. Schemas are directories in the current working directory and start with either `sdb_` or `psql_`. The schema name equals the directory name. |
+   | `schema`       | The schema to deploy. Schemas are directories the benchmarks/\<benchmark\>/schemas directory and start with either `sdb_`, `s64da_`, or `psql_`. The schema name equals the directory name. |
    | `scale-factor` | The scale factor to use, such as `10`, `100` or `1000`.      |
    | `dbname`       | The name of the target database. If the database does not exist, it will be created. If it does exist, it will be deleted and recreated.    |
 
@@ -99,5 +106,9 @@ To use this file, pass the `--config=<path-to-file>` argument to the test
 executor. In this example, the query timeout is set to `30min`. Queries 18, 20,
 and 21 will not execute. Additionally, the database parameters
 `max_parallel_workers` will change to 96 and `max_parallel_workers_per_gather`
-will change to `32`. Any change to the database configuration is applied before
-the benchmark starts and are reverted after the benchmark completes.
+will change to `32`.
+
+To perform changes to the database configuration, the user needs to have superuser
+privileges. Any change to the database configuration is applied before
+the benchmark starts to the whole system. If any change was applied, after the benchmark completes the whole database
+configuration is reset to the PostgreSQL configuration files.

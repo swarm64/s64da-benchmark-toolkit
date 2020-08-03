@@ -1,7 +1,6 @@
 
 import pytest
-import pandas as pd
-
+from tests.test_db import no_plan
 from s64da_benchmark_toolkit import streams
 
 
@@ -26,6 +25,28 @@ def args():
 @pytest.fixture
 def benchmark():
     return streams.Benchmark(name='tpch', base_dir='foo/bar')
+
+
+@pytest.fixture(autouse=True)
+def reporting_queue():
+    class ReportingQueue:
+        def __init__(self):
+            self.values = []
+
+        def put(self, value):
+            self.values.append(value)
+
+        def get(self, value):
+            return self.values.pop(0)
+
+        def empty(self):
+            return self.values.count() == 0
+
+        @property
+        def stream_ids(self):
+            return [x.stream_id for x in self.values]
+
+    return ReportingQueue()
 
 
 def test_make_config_default_config_file(mocker, args, benchmark):
@@ -78,55 +99,55 @@ def test_apply_sql_modifications():
     assert sql == 'SELECT AA, B, C FROM foo WHERE bor = 1'
 
 
-def test_make_run_args(args, benchmark):
-    run_args = streams.Streams(args, benchmark)._make_run_args()
-    assert run_args == ((0,),)
+def test_make_run_args(args, benchmark, reporting_queue):
+    run_args = streams.Streams(args, benchmark)._make_run_args(reporting_queue)
+    assert run_args == ((reporting_queue, 0),)
 
     args.streams = 3
-    run_args = streams.Streams(args, benchmark)._make_run_args()
-    assert run_args == ((1,), (2,), (3,))
+    run_args = streams.Streams(args, benchmark)._make_run_args(reporting_queue)
+    assert run_args == ((reporting_queue, 1), (reporting_queue, 2), (reporting_queue, 3))
 
 
 def test_get_stream_sequence(mocker, args, benchmark):
     open_patched = mocker.patch('builtins.open', mocker.mock_open(read_data=''))
-    mocker.patch('yaml.load', return_value=[
-        [0, 1, 2],
-        [1, 2, 0],
-        [2, 1, 0],
-        [1, 0, 2]
-    ])
+    mocker.patch('yaml.load', return_value={
+        0 : [0, 1, 2],
+        1 : [1, 2, 0],
+        2 : [2, 1, 0],
+        3 : [1, 0, 2]
+        })
 
     result = streams.Streams(args, benchmark).get_stream_sequence(2)
     open_patched.assert_called_with(f'{benchmark.base_dir}/queries/streams.yaml', 'r')
     assert result == [2, 1, 0]
 
 
-def test_run_single_stream(mocker, args, benchmark):
+def test_run_single_stream(mocker, args, benchmark, reporting_queue):
     pool_mock = mocker.patch('multiprocessing.pool.Pool', autospec=True)
     pool_mock_obj = pool_mock.return_value.__enter__.return_value
 
     s = streams.Streams(args, benchmark)
-    s.run_streams()
+    s.run_streams(reporting_queue)
 
-    stream_ids = ((0,),)
+    stream_ids = ((reporting_queue, 0),)
     pool_mock.assert_called_once()
     pool_mock_obj.starmap.assert_called_once_with(s._run_stream, stream_ids)
 
 
-def test_run_multiple_streams(mocker, args, benchmark):
+def test_run_multiple_streams(mocker, args, benchmark, reporting_queue):
     pool_mock = mocker.patch('multiprocessing.pool.Pool', autospec=True)
     pool_mock_obj = pool_mock.return_value.__enter__.return_value
 
     args.streams = 3
     s = streams.Streams(args, benchmark)
-    s.run_streams()
+    s.run_streams(reporting_queue)
 
-    stream_ids = ((1,), (2,), (3,))
+    stream_ids = ((reporting_queue, 1), (reporting_queue, 2), (reporting_queue, 3))
     pool_mock.assert_called_once()
     pool_mock_obj.starmap.assert_called_once_with(s._run_stream, stream_ids)
 
 
-def test_run_stream(mocker, args, benchmark):
+def test_run_stream(no_plan, mocker, args, benchmark, reporting_queue):
     psycopg2_connect = mocker.patch('psycopg2.connect')
     mock_conn = psycopg2_connect.return_value
     mock_cursor = mock_conn.cursor.return_value
@@ -142,26 +163,23 @@ def test_run_stream(mocker, args, benchmark):
     mocker.patch.object(s, 'get_stream_sequence', return_value=test_sequence, autospec=True)
     read_sql_file_mock = mocker.patch.object(s, 'read_sql_file', return_value=test_sql)
 
-    result = s._run_stream(test_stream_id)
+    s._run_stream(reporting_queue, test_stream_id)
 
     read_sql_file_mock.assert_has_calls([mocker.call(query_id) for query_id in executed_test_sequence])
     mock_cursor.execute.assert_has_calls([mocker.call(test_sql)] * len(executed_test_sequence))
 
-    assert len(result) == 1
-    assert list(result.keys())[0] == test_stream_id
-    assert len(result[test_stream_id]) == len(executed_test_sequence)
+    assert len(reporting_queue.values) == len(executed_test_sequence) + 1
+    assert all([sid == test_stream_id for sid in reporting_queue.stream_ids])
 
 
 def test_run(mocker, args, benchmark):
     s = streams.Streams(args, benchmark)
-    mocker.patch.object(s, '_print_results', autospec=True)
-    mocker.patch.object(s, 'save_to_dataframe', autospec=True)
+    mocker.patch.object(s, 'reporting')
     db_mock = mocker.patch.object(s, 'db', autospec=True)
     run_streams_mock = mocker.patch.object(s, 'run_streams')
     s.run()
 
-    assert db_mock.reset_config.call_count == 2
-    db_mock.apply_config.assert_called_once_with({})
+    assert db_mock.reset_config.call_count == 0
     run_streams_mock.assert_called_once()
 
 
@@ -171,19 +189,14 @@ def test_run_keyboard_interrupt(mocker, args, benchmark):
     run_streams_mock = mocker.patch.object(s, 'run_streams', side_effect=KeyboardInterrupt('Ctrl-C!'))
     s.run()
 
-    assert db_mock.reset_config.call_count == 2
-    db_mock.apply_config.assert_called_once_with({})
+    assert db_mock.reset_config.call_count == 0
     run_streams_mock.assert_called_once()
 
-def test_sort_output():
-    data_in = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    index_in = [5, 1, '3a', 3, 11, 20, '3b', 4, 21, 2]
 
-    df = pd.DataFrame(data_in, index=index_in)
-    df = streams.Streams.sort_df(df)
+def test_parse_timeout(args, benchmark):
+    obj = streams.Streams(args, benchmark)
 
-    data_out = [2, 10, 4, 3, 7, 8, 1, 5, 6, 9]
-    index_out = [1, 2, 3, '3a', '3b', 4, 5, 11, 20, 21]
-
-    assert list(df[0].index) == index_out
-    assert list(df[0]) == data_out
+    assert obj.parse_timeout('5min') == 300
+    assert obj.parse_timeout('1111') == 1
+    assert obj.parse_timeout('1h') == 3600
+    assert obj.parse_timeout('1foo') == 0

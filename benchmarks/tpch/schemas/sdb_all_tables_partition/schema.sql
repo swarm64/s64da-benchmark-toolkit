@@ -14,7 +14,7 @@ CREATE FOREIGN TABLE
     nation_prt_{{ partition_idx }}
 PARTITION OF
     nation FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER {{ partition_idx }})
-SERVER swarm64da_server OPTIONS (optimized_columns 'n_nationkey', optimization_level_target '900');
+SERVER swarm64da_server OPTIONS (range_index 'n_nationkey');
 {% endfor %}
 
 CREATE TABLE region (
@@ -28,7 +28,7 @@ CREATE FOREIGN TABLE
     region_prt_{{ partition_idx }}
 PARTITION OF
     region FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER {{ partition_idx }})
-SERVER swarm64da_server OPTIONS (optimized_columns 'r_regionkey', optimization_level_target '900');
+SERVER swarm64da_server OPTIONS (range_index 'r_regionkey');
 {% endfor %}
 
 CREATE TABLE part (
@@ -49,7 +49,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     part FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'p_partkey', optimization_level_target '900');
+   swarm64da_server options(range_index 'p_partkey');
 {% endfor %}
 
 
@@ -69,7 +69,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     supplier FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 's_nationkey', optimization_level_target '900');
+   swarm64da_server options(range_index 's_nationkey');
 {% endfor %}
 
 
@@ -87,7 +87,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     partsupp FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'ps_suppkey', optimization_level_target '900');
+   swarm64da_server options(range_index 'ps_suppkey');
 {% endfor %}
 
 
@@ -108,7 +108,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     customer FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'c_nationkey', optimization_level_target '900');
+   swarm64da_server options(range_index 'c_nationkey');
 {% endfor %}
 
 
@@ -130,7 +130,7 @@ CREATE FOREIGN TABLE
 PARTITION OF
     orders FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'o_orderdate, o_custkey', optimization_level_target '900');
+   swarm64da_server options(range_index 'o_orderdate, o_custkey');
 {% endfor %}
 
 
@@ -159,5 +159,5 @@ CREATE FOREIGN TABLE
 PARTITION OF
     lineitem FOR VALUES WITH (MODULUS {{ num_partitions }}, REMAINDER {{ partition_idx }})
 SERVER
-   swarm64da_server options(optimized_columns 'l_shipdate, l_partkey, l_receiptdate', optimization_level_target '900');
+   swarm64da_server options(range_index 'l_shipdate, l_partkey, l_receiptdate');
 {% endfor %}

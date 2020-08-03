@@ -4,7 +4,7 @@ import pandas
 
 from io import StringIO
 
-from s64da_benchmark_toolkit.correctness import Correctness
+from s64da_benchmark_toolkit.correctness import Correctness, ResultDetail
 
 
 # Acceptance test for correctness checking
@@ -97,32 +97,34 @@ def test_correctness_truth_empty(correctness):
     truth = pandas.DataFrame()
     result = get_dataframe(CSV_BASE)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == list(result.index)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.TRUTH_EMPTY
 
 
 def test_correctness_result_empty(correctness):
     truth = get_dataframe(CSV_BASE)
     result = pandas.DataFrame()
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == list(truth.index)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.RESULT_EMPTY
 
 
 def test_correctness_full_equal(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_BASE)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == []
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx == None
 
 
 def test_correctness_full_equal_column_swapped(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_BASE).reindex(columns=['state', 'cnt', 'value'])
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == []
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx == None
 
 
 def test_correctness_precision(correctness):
@@ -136,7 +138,8 @@ def test_correctness_precision(correctness):
     2,9999999999.1448'''
     result = get_dataframe(CSV_PRECISION_B)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.VALUE_MISMATCH
     assert mismatch_idx == [0]
 
 
@@ -144,32 +147,36 @@ def test_tpch_precision(correctness):
     truth = pandas.DataFrame([[0.05000012926042882], [0.04999679231408742]])
     result = pandas.DataFrame([[0.0499967923141588], [0.0500001292604431]])
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == []
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx == None
 
 
 def test_correctness_full_equal_within_precision(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_WITHIN_PRECISION)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == []
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx == None
 
 
 def test_correctness_full_equal_randomized_rows(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_BASE).sample(frac=1, random_state=1)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == []
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx == None
 
 
 def test_correctness_full_equal_randomized_columns(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_BASE).sample(frac=1, random_state=1, axis=1)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == []
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx == None
 
 
 def test_correctness_full_equal_randomized_full(correctness):
@@ -178,47 +185,53 @@ def test_correctness_full_equal_randomized_full(correctness):
         .sample(frac=1, random_state=1) \
         .sample(frac=1, random_state=1, axis=1)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == []
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx == None
 
 
 def test_correctness_not_equal_row_missing_truth(correctness):
     truth = get_dataframe(CSV_BASE).drop(ROWS_TO_DROP)
     result = get_dataframe(CSV_BASE)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == list(truth.index)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.SHAPE_MISMATCH
+    assert mismatch_idx == None
 
 
 def test_correctness_not_equal_row_missing_result(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_BASE).drop(ROWS_TO_DROP)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == list(truth.index)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.SHAPE_MISMATCH
+    assert mismatch_idx == None
 
 
 def test_correctness_not_equal_column_missing_truth(correctness):
     truth = get_dataframe(CSV_BASE).drop(COLUMNS_TO_DROP, axis=1)
     result = get_dataframe(CSV_BASE)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == list(truth.index)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.SHAPE_MISMATCH
+    assert mismatch_idx == None
 
 
 def test_correctness_not_equal_column_missing_result(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_BASE).drop(COLUMNS_TO_DROP, axis=1)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == list(truth.index)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.SHAPE_MISMATCH
+    assert mismatch_idx == None
 
 
 def test_correctness_not_equal(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_ERRORS)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.VALUE_MISMATCH
     assert mismatch_idx == CSV_ERRORS_IDX
 
 
@@ -226,7 +239,8 @@ def test_correctness_not_equal_randomized_rows(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_ERRORS).sample(frac=1, random_state=1)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.VALUE_MISMATCH
     assert mismatch_idx == CSV_ERRORS_IDX
 
 
@@ -234,7 +248,8 @@ def test_correctness_not_equal_randomized_columns(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_ERRORS).sample(frac=1, random_state=1, axis=1)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.VALUE_MISMATCH
     assert mismatch_idx == CSV_ERRORS_IDX
 
 
@@ -244,7 +259,8 @@ def test_correctness_not_equal_randomized_full(correctness):
         .sample(frac=1, random_state=1) \
         .sample(frac=1, random_state=1, axis=1)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.VALUE_MISMATCH
     assert mismatch_idx == CSV_ERRORS_IDX
 
 
@@ -252,7 +268,8 @@ def test_correctness_not_equal_precision(correctness):
     truth = get_dataframe(CSV_BASE)
     result = get_dataframe(CSV_ERRORS_PRECISION)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.VALUE_MISMATCH
     assert mismatch_idx == CSV_ERRORS_PRECISION_IDX
 
 
@@ -260,7 +277,8 @@ def test_value_swap_rows(correctness):
     truth = pandas.DataFrame([[1, 2], [4, 5]])
     result = pandas.DataFrame([[2, 1], [4, 5]])
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.VALUE_MISMATCH
     assert mismatch_idx == [0]
 
 
@@ -268,7 +286,8 @@ def test_value_swap_columns(correctness):
     truth = pandas.DataFrame([[1, 4], [2, 5]])
     result = pandas.DataFrame([[2, 4], [1, 5]])
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.VALUE_MISMATCH
     assert mismatch_idx == [0, 1]
 
 
@@ -378,5 +397,27 @@ def test_correctness_full_equal_text_shuffled(correctness):
     truth = get_dataframe(CSV_TEXT)
     result = get_dataframe(CSV_TEXT).sample(frac=1, random_state=1)
 
-    mismatch_idx = correctness._check_correctness_impl(truth, result)
-    assert mismatch_idx == []
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx == None
+
+
+def test_tpch_trailing_zeros(correctness):
+    # result has a number with trailing zeros: 5579227.675000000000
+    resultstr = '''i_category,d_year,d_moy,avg_monthly_sales,sum_sales,psum,nsum
+Women,2001,2,5579227.675000000000,2986084.99,3556172.43,3192346.92
+    '''
+
+    # truth hasn't trailing zeros: 5579227.675
+    truthstr = '''avg_monthly_sales,d_moy,d_year,i_category,nsum,psum,sum_sales
+5579227.675,2,2001,Women,3192346.92,3556172.43,2986084.99
+    '''
+
+    truth = pandas.read_csv(StringIO(truthstr))
+    # with float_precision='round_trip' option test passes
+    result = pandas.read_csv(StringIO(resultstr), float_precision='round_trip')
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx == None
+

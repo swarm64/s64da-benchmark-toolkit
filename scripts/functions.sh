@@ -14,10 +14,12 @@ trap intexit INT
 set -e
 DB_HOST="localhost"
 DB_PORT=5432
-NUM_PARTITIONS=32
+NUM_PARTITIONS=""
 CHUNKS=10
 MAX_JOBS=8
 PYTHON="python3"
+DISK_SPACE_CHECK_DIR=""
+S64DA_LICENSE_PATH="/s64da.license"
 
 function print_help {
 echo "
@@ -44,7 +46,10 @@ Usage instructions:
                         be ingested (if applicable)
 
       --max-jobs        Limits the overall amount of parallelism.
-                        Default: 8"
+                        Default: 8
+
+      --s64da-license-path The path to the S64 DA license.
+                        Default: /s64da.license"
 
 }
 
@@ -57,6 +62,10 @@ case $i in
     ;;
     --schema=*)
     SCHEMA="${i#*=}"
+    shift
+    ;;
+    --check-diskspace-of-directory=*)
+    DISK_SPACE_CHECK_DIR="${i#*=}"
     shift
     ;;
     --scale-factor=*)
@@ -90,6 +99,10 @@ case $i in
     MAX_JOBS="${i#*=}"
     shift
     ;;
+    --s64da-license-path=*)
+    S64DA_LICENSE_PATH="${i#*=}"
+    shift
+    ;;
     *)
         echo "Unknown option $i"
         print_help
@@ -116,6 +129,13 @@ check_and_fail DB "--dbname"
 check_and_fail SCHEMA "--schema"
 check_and_fail SCALE_FACTOR "--scale-factor"
 
+if [[ $SCHEMA == *"part"* ]]; then
+  if [ -z $NUM_PARTITIONS ]; then
+    NUM_PARTITIONS=32
+    echo "Partitioned schema selected but no number of partitions given. Defaulting to: ${NUM_PARTITIONS} partitions"
+  fi
+fi
+
 function check_and_set_python {
     python_minor=$(python3 -c 'import sys; print(sys.version_info[1])')
     bin_path="/usr/bin"
@@ -127,7 +147,7 @@ function check_and_set_python {
             echo "Found ${bin_path}/python3.6"
             PYTHON="python3.6"
         else
-            echo "Could not find ${bin_path}/python3.6 - Exit"
+            echo "ERROR: Could not find ${bin_path}/python3.6"
             exit 1
         fi
     fi
@@ -137,61 +157,10 @@ function check_program_and_fail {
     PROGRAM=$1
     HINT=$2
     if ! hash $PROGRAM 2> /dev/null; then
-        echo "ERROR:    $PROGRAM    is not installed. $HINT"
+        echo "ERROR: Could not find $PROGRAM. $HINT"
         exit -1
     fi
 }
 
-check_program_and_fail "jinja2" "Did you run 'pip3 install -r requirements.txt'?"
+check_program_and_fail "jinja2" "Did you run 'pip3 install -r requirements.txt'? Is PATH setup properly?"
 check_program_and_fail "psql" "Is it installed? Is PATH setup properly?"
-
-function wait_for_pg {
-    set +e
-
-    PSQL_UP=0
-    for i in {0..120}; do
-        $PSQL -c "SELECT 1"
-        if [ $? -eq 0 ]; then
-            PSQL_UP=1
-            break
-        fi
-        sleep 1
-    done
-
-    if [ $PSQL_UP -ne 1 ]; then
-        echo "PSQL did not come up."
-        exit -1
-    fi
-
-    set -e
-}
-
-function psql_exec_file {
-    $PSQL -d $DB -f "$1"
-}
-
-function psql_exec_cmd {
-    $PSQL -d $DB -c "$1"
-}
-
-function prepare_db {
-    ENCODING=$1
-    $PSQL -c "DROP DATABASE IF EXISTS $DB"
-    $PSQL -c "CREATE DATABASE $DB WITH ENCODING ${ENCODING} TEMPLATE TEMPLATE0"
-}
-
-function run_if_exists {
-    FILE=$SCHEMA/$1
-    if [ -f "$FILE" ]; then
-        echo "Executing $FILE"
-        psql_exec_file $FILE
-    fi
-}
-
-function deploy_schema {
-    SCHEMA=$1
-    NUM_PARTITIONS=$2
-    SCHEMA_FILE=`mktemp`
-    jinja2 $SCHEMA/schema.sql -D num_partitions=$NUM_PARTITIONS > $SCHEMA_FILE
-    psql_exec_file $SCHEMA_FILE
-}

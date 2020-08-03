@@ -1,28 +1,110 @@
 
 import os
+import re
 import shutil
+import threading
+import time
+
+from collections import namedtuple
+from sys import exit
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from subprocess import Popen
+from jinja2 import Environment, FileSystemLoader
+from pathlib import Path
+from psycopg2 import ProgrammingError, errors
+from subprocess import Popen, PIPE
 from urllib.parse import urlparse
 
 from .dbconn import DBConn
 
+Swarm64DAVersion = namedtuple('Swarm64DAVersion', ['major', 'minor', 'patch'])
+s64_benchmark_toolkit_root_dir = Path(os.path.abspath(__file__)).parents[1]
+
+class TableGroup:
+    def __init__(self, *args):
+        self.data = args
+        self._idx = 0
+
+    def __iter__(self):
+        self._idx = 0
+        return self
+
+    def __next__(self):
+        if self._idx == len(self.data):
+            raise StopIteration
+        self._idx += 1
+        return self.data[self._idx - 1]
+
 
 class PrepareBenchmarkFactory:
     TABLES = []
+    TABLES_ANALYZE = None
     SIZING_FACTORS = {}
+    CLUSTER_SPEC = {}
 
     def __init__(self, args, benchmark):
+        schemas_dir = os.path.join(s64_benchmark_toolkit_root_dir, benchmark.base_dir, "schemas")
         self.args = args
         self.benchmark = benchmark
-        self.schema_dir = os.path.join(benchmark.base_dir, 'schemas', args.schema)
-        assert os.path.isdir(self.schema_dir), 'Schema does not exist'
+        self.schema_dir = os.path.join(schemas_dir, args.schema)
+        self.data_dir = args.data_dir
+        self.cancel_event = threading.Event()
+        self.num_partitions = args.num_partitions
+        assert os.path.isdir(self.schema_dir), \
+            f'Schema does not exist. Available ones are subfolders in {schemas_dir}'
 
-    def _run_shell_task(self, task):
-        p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash')
-        p.wait()
-        assert p.returncode == 0, 'Shell task did not finish with exit code 0'
+    @property
+    def swarm64da_version(self):
+        try:
+            with DBConn(self.args.dsn) as conn:
+                conn.cursor.execute('SELECT swarm64da.get_version()')
+                result = conn.cursor.fetchone()[0]
+
+            s64da_version_string = re.findall(r'[0-9]+\.[0-9]+\.[0-9]+', result)[0]
+            return Swarm64DAVersion(*[int(part) for part in s64da_version_string.split('.')])
+
+        except ProgrammingError:
+            return None
+
+    @property
+    def supports_cluster(self):
+        version = self.swarm64da_version
+        if not version:
+            return False
+
+        if self.num_partitions:
+            print('Swarm64 DA CLUSTER not supported for partitioned schemas at the moment. Skipping')
+            return False
+
+        # Clustering not supported in S64 DA on native tables
+        if "native" in self.schema_dir:
+            print('Swarm64 DA CLUSTER not supported for S64 DA with Native Tables. Skipping')
+            return False
+
+        if version.major < 4 or (version.major == 4 and version.minor < 1):
+            print('Swarm64 DA version does not support clustering. Skipping')
+            return False
+
+        return True
+
+    def psql_exec_file(self, filename):
+        return f'psql {self.args.dsn} -f {filename}'
+
+    def psql_exec_cmd(self, sql):
+        return f'psql {self.args.dsn} -c "{sql}"'
+
+    def _run_shell_task(self, task, return_output=False):
+        if not self.cancel_event.is_set():
+            p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
+                      stdout=PIPE if return_output else None)
+            p.wait()
+            if(p.returncode != 0):
+                self.cancel_event.set()
+                exit(task)
+
+            if return_output:
+                stdout, _ = p.communicate()
+                return stdout
 
     def _run_tasks_parallel(self, tasks):
         with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
@@ -33,6 +115,7 @@ class PrepareBenchmarkFactory:
                     print(f'Task threw an exception: {exc}')
                     for future in futures:
                         future.cancel()
+                    exit(1)
 
     def _check_diskspace(self, diskpace_check_dir):
         db_type = os.path.basename(self.schema_dir).split('_')[0]
@@ -53,9 +136,9 @@ class PrepareBenchmarkFactory:
               f'    Size factor   : {size_factor}')
 
         _, _, free = shutil.disk_usage(diskpace_check_dir)
-        space_needed = scale_factor * 1024 * 1024 * size_factor
+        space_needed = int(scale_factor * size_factor) << 30
         assert space_needed < free, \
-            f'Not enough disk space available. Needed: {space_needed}, free: {free}'
+            f'Not enough disk space available. Needed [GBytes]: {space_needed>>30}, free: {free>>30}'
 
     def run(self):
         diskpace_check_dir = self.args.check_diskspace_of_directory
@@ -66,41 +149,117 @@ class PrepareBenchmarkFactory:
         self.prepare_db()
 
         print('Ingesting data')
-        ingest_tasks = []
-        for table in PrepareBenchmarkFactory.TABLES:
-            tasks = self.get_ingest_tasks(table)
-            assert isinstance(tasks, list), 'Returned object is not a list'
-            ingest_tasks.extend(tasks)
-        self._run_tasks_parallel(ingest_tasks)
+        self.cancel_event.clear()
+        start_ingest = time.time()
+        for table_group in PrepareBenchmarkFactory.TABLES:
+            ingest_tasks = []
+            for table in table_group:
+                tasks = self.get_ingest_tasks(table)
+                assert isinstance(tasks, list), 'Returned object is not a list'
+                ingest_tasks.extend(tasks)
+            self._run_tasks_parallel(ingest_tasks)
+        ingest_duration = time.time() - start_ingest
 
         print('Adding indices')
+        start_optimize = time.time()
         self.add_indexes()
+
+        if self.supports_cluster:
+            print('Swarm64 DA CLUSTER')
+            self.cluster()
 
         print('VACUUM-ANALYZE')
         self.vacuum_analyze()
+        optimize_duration = time.time() - start_optimize
+
+        with open("prepare_metrics.csv", "w") as prepare_metrics_file:
+            prepare_metrics_file.write(f'ingest; {ingest_duration}\n')
+            prepare_metrics_file.write(f'optimize; {optimize_duration}')
+            
+
+        print(f'Process complete. DSN: {self.args.dsn}')
+
+    def _load_pre_schema(self, conn):
+        pre_schema_path = os.path.join(self.schema_dir, 'pre_schema.sql')
+        if os.path.isfile(pre_schema_path):
+            print(f'Loading pre-schema {pre_schema_path}')
+            with open(pre_schema_path, 'r') as pre_schema_file:
+                conn.cursor.execute(pre_schema_file.read())
+
+    def _load_license(self, conn):
+
+        license_loaded = True
+
+        try:
+            conn.cursor.execute(f'select swarm64da.show_license()')
+        except errors.UndefinedFunction as err:
+            print('License check function not found. Skipping, presumably on AWS.')
+            return            
+        except errors.InternalError:
+            license_loaded = False
+
+        if not license_loaded: 
+            try:
+                license_path = self.args.s64da_license_path
+                print(f'Loading license from: {license_path}')
+                conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
+            except errors.InternalError:
+                print(f'Could not load S64 DA license file or file is invalid: {license_path}\n'
+                      f'Make sure the --s64da-license-path argument points to a valid license file.')
+                raise
+            except IndexError as err:
+                print(f'S64 DA licensing error: {err}')
+                raise
+
+        try:
+            conn.cursor.execute(f'select swarm64da.show_license()')
+            license_status = conn.cursor.fetchall()[0]
+            print(f'S64 DA license status: {license_status}')
+        except Exception as err:
+            print(f'Error reading S64 DA license: {err}')
+            raise
+
+    def _load_schema(self, conn, applied_schema_path):
+        print(f'Loading schema {applied_schema_path}')
+        with open(applied_schema_path, 'r') as schema:
+            schema_sql = schema.read()
+            conn.cursor.execute(schema_sql)
 
     def prepare_db(self):
         dsn_url = urlparse(self.args.dsn)
         dbname = dsn_url.path[1:]
 
         with DBConn(f'{dsn_url.scheme}://{dsn_url.netloc}/postgres') as conn:
-            print(f'Deleting {dbname}')
+            print(f'Deleting Database {dbname} if it already exists')
             conn.cursor.execute(f'DROP DATABASE IF EXISTS {dbname}')
-            print(f'Creating {dbname}')
+            print(f'Creating Database {dbname}')
             conn.cursor.execute(f"CREATE DATABASE {dbname} TEMPLATE template0 ENCODING 'UTF-8'")
 
+        applied_schema_path = os.path.join(s64_benchmark_toolkit_root_dir, 'applied_schema.sql')
+
+        if self.num_partitions:
+            print(f'Applying partitions on schema with {self.num_partitions} partitions.\nResult schema: {applied_schema_path}')
+
+        jinja_env = Environment(loader=FileSystemLoader(self.schema_dir))
+        applied_schema = jinja_env.get_template("schema.sql").render(num_partitions=self.num_partitions)
+
+        with open(applied_schema_path, "w") as applied_schema_file:
+            applied_schema_file.write(applied_schema)
+
         with DBConn(self.args.dsn) as conn:
-            print(f'Loading schema')
-            schema_path = os.path.join(self.schema_dir, 'schema.sql')
-            with open(schema_path, 'r') as schema:
-                conn.cursor.execute(schema.read())
+            self._load_pre_schema(conn)
+
+            if self.swarm64da_version:
+                self._load_license(conn)
+
+            self._load_schema(conn, applied_schema_path)
 
     def get_ingest_tasks(self, table):
         return []
 
     def add_indexes(self):
         for sql_file in ('primary-keys.sql', 'foreign-keys.sql', 'indexes.sql'):
-            sql_file_path = os.path.join(self.schema_dir, sql_file)
+            sql_file_path = os.path.join(s64_benchmark_toolkit_root_dir, self.schema_dir, sql_file)
             if not os.path.isfile(sql_file_path):
                 continue
 
@@ -112,7 +271,19 @@ class PrepareBenchmarkFactory:
                         conn.cursor.execute(sql)
 
     def vacuum_analyze(self):
+        print(f'Running VACUUM on {self.args.dsn}')
         self._run_shell_task(f'psql {self.args.dsn} -c "VACUUM"')
-        analyze_tasks = [f'psql {self.args.dsn} -c "ANALYZE {table}"' for table in
-                         PrepareBenchmarkFactory.TABLES]
+
+        analyze_tasks = []
+        tables = PrepareBenchmarkFactory.TABLES_ANALYZE or PrepareBenchmarkFactory.TABLES
+        for table_group in tables:
+            for table in table_group:
+                analyze_tasks.append(f'psql {self.args.dsn} -c "ANALYZE {table}"')
+
         self._run_tasks_parallel(analyze_tasks)
+
+    def cluster(self):
+        cluster_tasks = [
+                f'''psql {self.args.dsn} -c "SELECT swarm64da.cluster('{table}', '{colspec}')"'''
+                for table, colspec in PrepareBenchmarkFactory.CLUSTER_SPEC.items()]
+        self._run_tasks_parallel(cluster_tasks)

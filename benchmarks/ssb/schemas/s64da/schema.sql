@@ -1,5 +1,3 @@
-CREATE EXTENSION swarm64da;
-
 CREATE FOREIGN TABLE customer (
   c_custkey      INTEGER NOT NULL,
   c_name         VARCHAR(25) NOT NULL,
@@ -11,7 +9,7 @@ CREATE FOREIGN TABLE customer (
   c_mktsegment   VARCHAR(10) NOT NULL
 )
 SERVER swarm64da_server
-OPTIONS(optimized_columns 'c_nation,c_region');
+OPTIONS(range_index 'c_nation,c_region');
 
 CREATE TABLE part (
   p_partkey     INTEGER NOT NULL,
@@ -75,4 +73,4 @@ CREATE FOREIGN TABLE lineorder (
   lo_shipmode          VARCHAR(10) NOT NULL
 )
 SERVER swarm64da_server
-OPTIONS (optimized_columns 'lo_quantity,lo_discount');
+OPTIONS (range_index 'lo_quantity,lo_discount');

@@ -1,7 +1,3 @@
-CREATE EXTENSION swarm64da;
-
-{% set num_partitions = num_partitions|int %}
-
 CREATE TABLE nation (
     n_nationkey int NOT NULL,
     n_name character varying(25) NOT NULL,
@@ -66,20 +62,7 @@ CREATE TABLE orders (
     o_clerk character varying(15) NOT NULL,
     o_shippriority int NOT NULL,
     o_comment character varying(79) NOT NULL
-) PARTITION BY HASH(o_orderkey);
-
-{% for partition_idx in range(num_partitions) %}
-CREATE FOREIGN TABLE orders_prt_{{ partition_idx }}
-PARTITION OF orders FOR VALUES WITH (
-    MODULUS {{ num_partitions }},
-    REMAINDER {{ partition_idx }}
-)
-SERVER swarm64da_server
-OPTIONS(
-    optimized_columns 'o_orderdate',
-    optimization_level_target '900'
 );
-{% endfor %}
 
 CREATE TABLE lineitem (
     l_orderkey bigint NOT NULL,
@@ -98,17 +81,4 @@ CREATE TABLE lineitem (
     l_shipinstruct character varying(25) NOT NULL,
     l_shipmode character varying(10) NOT NULL,
     l_comment character varying(44) NOT NULL
-) PARTITION BY HASH(l_orderkey);
-
-{% for partition_idx in range(num_partitions) %}
-CREATE FOREIGN TABLE lineitem_prt_{{ partition_idx }}
-PARTITION OF lineitem FOR VALUES WITH (
-    MODULUS {{ num_partitions }},
-    REMAINDER {{ partition_idx }}
-)
-SERVER swarm64da_server
-OPTIONS(
-    optimized_columns 'l_shipdate,l_receiptdate',
-    optimization_level_target '900'
 );
-{% endfor %}
