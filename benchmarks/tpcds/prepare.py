@@ -22,8 +22,11 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         'catalog_page',
         'inventory',
         'web_sales',
+        'web_returns',
         'catalog_sales',
+        'catalog_returns',
         'store_sales',
+        'store_returns'
     ),)
 
     PrepareBenchmarkFactory.SIZING_FACTORS = {
@@ -63,6 +66,9 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         return task
 
     def get_ingest_tasks(self, table):
+        if '_returns' in table:
+            return []
+
         use_chunks = (
             self.args.chunks > 1 and self.args.scale_factor >= 100 and
             table in ('inventory', 'web_sales', 'catalog_sales', 'store_sales')
