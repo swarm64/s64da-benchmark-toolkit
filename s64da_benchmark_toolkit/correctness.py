@@ -136,6 +136,11 @@ class Correctness:
 
         truth.drop_duplicates(inplace=True, ignore_index=True)
         result.drop_duplicates(inplace=True, ignore_index=True)
+
+        if truth.shape != result.shape:
+            LOG.debug("Rows mismatch after dropping duplicates")
+            return (ResultDetail.SHAPE_MISMATCH, None)
+
         truth = self.prepare(truth)
         result = self.prepare(result)
 
