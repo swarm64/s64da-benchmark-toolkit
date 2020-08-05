@@ -8,6 +8,8 @@ from natsort import natsorted
 
 LOG = logging.getLogger()
 
+
+    
 class Netdata:
     def __init__(self, config):
         self.url = f"{config['url']}/api/v1/data"
@@ -96,3 +98,18 @@ class Netdata:
             self._write_stats_per_query(df, f'{flname}_single_stream{flext}')
 
         self._write_stats_no_breakdown(df, output)
+
+    def is_netdata_set_and_running(self):
+        try:
+            response = requests.get(self.url)
+            status_code = response.status_code
+            if status_code != 200:
+                LOG.warning(f'Netdata url response ({self.url}) does not return 200, but {status_code}')
+                return False
+
+        except requests.exceptions.ConnectionError as e:
+            LOG.warning(f'Host has no Netdata running on the given URL: {self.url}')
+            LOG.info(f'Please make sure Netdata is running, or check if the URL provided is correct')
+            LOG.info(f'Or remove netdata from the configs if its not going to be used')
+            return False
+        return True
