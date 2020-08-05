@@ -1,4 +1,3 @@
-
 import os
 import re
 import shutil
@@ -10,6 +9,7 @@ from sys import exit
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from jinja2 import Environment, FileSystemLoader
+from packaging.version import Version
 from pathlib import Path
 from psycopg2 import ProgrammingError, errors
 from subprocess import Popen, PIPE
@@ -17,7 +17,6 @@ from urllib.parse import urlparse
 
 from .dbconn import DBConn
 
-Swarm64DAVersion = namedtuple('Swarm64DAVersion', ['major', 'minor', 'patch'])
 s64_benchmark_toolkit_root_dir = Path(os.path.abspath(__file__)).parents[1]
 
 class TableGroup:
@@ -61,7 +60,7 @@ class PrepareBenchmarkFactory:
                 result = conn.cursor.fetchone()[0]
 
             s64da_version_string = re.findall(r'[0-9]+\.[0-9]+\.[0-9]+', result)[0]
-            return Swarm64DAVersion(*[int(part) for part in s64da_version_string.split('.')])
+            return Version(s64da_version_string)
 
         except ProgrammingError:
             return None
@@ -81,7 +80,7 @@ class PrepareBenchmarkFactory:
             print('Swarm64 DA CLUSTER not supported for S64 DA with Native Tables. Skipping')
             return False
 
-        if version.major < 4 or (version.major == 4 and version.minor < 1):
+        if version < Version('4.1') or version >= Version('5.0'):
             print('Swarm64 DA version does not support clustering. Skipping')
             return False
 
