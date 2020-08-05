@@ -139,8 +139,7 @@ class Correctness:
 
         if truth.shape != result.shape:
             LOG.debug("Rows mismatch after dropping duplicates")
-            mismatch_indices = np.setdiff1d(truth.index.values, result.index.values)
-            return (ResultDetail.VALUE_MISMATCH, list(mismatch_indices))
+            return (ResultDetail.VALUE_MISMATCH, None)
 
         truth = self.prepare(truth)
         result = self.prepare(result)
