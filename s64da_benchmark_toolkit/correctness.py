@@ -139,7 +139,7 @@ class Correctness:
 
         if truth.shape != result.shape:
             LOG.debug("Rows mismatch after dropping duplicates")
-            return (ResultDetail.VALUE_MISMATCH, None)
+            return (ResultDetail.SHAPE_MISMATCH, None)
 
         truth = self.prepare(truth)
         result = self.prepare(result)
