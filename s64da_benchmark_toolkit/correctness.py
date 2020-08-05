@@ -100,8 +100,6 @@ class Correctness:
         differences = merge.loc[lambda x: x['_merge'] != 'both']
 
         mismatches = []
-        print('diff',differences)
-        print('result',result)
         for index, _ in differences.iterrows():
             truth_row = truth.iloc[index]
             result_row = result.iloc[index]
