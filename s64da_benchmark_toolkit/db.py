@@ -79,7 +79,8 @@ class DB:
         auto_explain_config = {
             'auto_explain.log_min_duration': 500,
             'auto_explain.log_analyze': 'on',
-            'auto_explain.log_buffers': 'on',
+            'auto_explain.log_verbose': 'on',
+            'auto_explain.log_buffers': 'off',
             'auto_explain.log_format': 'json',
             'client_min_messages': 'LOG'
         }
