@@ -266,23 +266,24 @@ class PrepareBenchmarkFactory:
                 print(f'Applying {sql_file_path}')
                 with open(sql_file_path, 'r') as sql_file:
                     sql = sql_file.read()
-                    sql_commands = sql.split(';')
-                    self._run_tasks_parallel(sql_commands)
+
+                tasks = [self.psql_exec_cmd(cmd) for cmd in sql.split(';')]
+                self._run_tasks_parallel(tasks)
 
     def vacuum_analyze(self):
         print(f'Running VACUUM on {self.args.dsn}')
-        self._run_shell_task(f'psql {self.args.dsn} -c "VACUUM"')
+        self._run_shell_task(self.psql_exec_cmd('VACUUM'))
 
         analyze_tasks = []
         tables = PrepareBenchmarkFactory.TABLES_ANALYZE or PrepareBenchmarkFactory.TABLES
         for table_group in tables:
             for table in table_group:
-                analyze_tasks.append(f'psql {self.args.dsn} -c "ANALYZE {table}"')
+                analyze_tasks.append(self.psql_exec_cmd(f'ANALYZE {table}'))
 
         self._run_tasks_parallel(analyze_tasks)
 
     def cluster(self):
         cluster_tasks = [
-                f'''psql {self.args.dsn} -c "SELECT swarm64da.cluster('{table}', '{colspec}')"'''
+                self.psql_exec_cmd(f"SELECT swarm64da.cluster('{table}', '{colspec}')")
                 for table, colspec in PrepareBenchmarkFactory.CLUSTER_SPEC.items()]
         self._run_tasks_parallel(cluster_tasks)
