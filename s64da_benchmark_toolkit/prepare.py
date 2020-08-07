@@ -12,6 +12,7 @@ from jinja2 import Environment, FileSystemLoader
 from packaging.version import Version
 from pathlib import Path
 from psycopg2 import ProgrammingError, errors
+from sqlparse import split as sqlparse_split
 from subprocess import Popen, PIPE
 from urllib.parse import urlparse
 
@@ -174,7 +175,7 @@ class PrepareBenchmarkFactory:
         with open("prepare_metrics.csv", "w") as prepare_metrics_file:
             prepare_metrics_file.write(f'ingest; {ingest_duration}\n')
             prepare_metrics_file.write(f'optimize; {optimize_duration}')
-            
+
 
         print(f'Process complete. DSN: {self.args.dsn}')
 
@@ -193,11 +194,11 @@ class PrepareBenchmarkFactory:
             conn.cursor.execute(f'select swarm64da.show_license()')
         except errors.UndefinedFunction as err:
             print('License check function not found. Skipping, presumably on AWS.')
-            return            
+            return
         except errors.InternalError:
             license_loaded = False
 
-        if not license_loaded: 
+        if not license_loaded:
             try:
                 license_path = self.args.s64da_license_path
                 print(f'Loading license from: {license_path}')
@@ -266,23 +267,26 @@ class PrepareBenchmarkFactory:
                 print(f'Applying {sql_file_path}')
                 with open(sql_file_path, 'r') as sql_file:
                     sql = sql_file.read()
-                    if sql:
-                        conn.cursor.execute(sql)
+
+                tasks = [self.psql_exec_cmd(cmd) for cmd in sqlparse_split(sql)]
+                self._run_tasks_parallel(tasks)
 
     def vacuum_analyze(self):
-        print(f'Running VACUUM on {self.args.dsn}')
-        self._run_shell_task(f'psql {self.args.dsn} -c "VACUUM"')
+        print(f'Running VACUUM-ANALYZE on {self.args.dsn}')
 
+        vacuum_tasks = []
         analyze_tasks = []
         tables = PrepareBenchmarkFactory.TABLES_ANALYZE or PrepareBenchmarkFactory.TABLES
         for table_group in tables:
             for table in table_group:
-                analyze_tasks.append(f'psql {self.args.dsn} -c "ANALYZE {table}"')
+                vacuum_tasks.append(self.psql_exec_cmd(f'VACUUM {table}'))
+                analyze_tasks.append(self.psql_exec_cmd(f'ANALYZE {table}'))
 
+        self._run_tasks_parallel(vacuum_tasks)
         self._run_tasks_parallel(analyze_tasks)
 
     def cluster(self):
         cluster_tasks = [
-                f'''psql {self.args.dsn} -c "SELECT swarm64da.cluster('{table}', '{colspec}')"'''
+                self.psql_exec_cmd(f"SELECT swarm64da.cluster('{table}', '{colspec}')")
                 for table, colspec in PrepareBenchmarkFactory.CLUSTER_SPEC.items()]
         self._run_tasks_parallel(cluster_tasks)
