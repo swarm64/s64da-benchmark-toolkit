@@ -174,7 +174,7 @@ class PrepareBenchmarkFactory:
         with open("prepare_metrics.csv", "w") as prepare_metrics_file:
             prepare_metrics_file.write(f'ingest; {ingest_duration}\n')
             prepare_metrics_file.write(f'optimize; {optimize_duration}')
-            
+
 
         print(f'Process complete. DSN: {self.args.dsn}')
 
@@ -193,11 +193,11 @@ class PrepareBenchmarkFactory:
             conn.cursor.execute(f'select swarm64da.show_license()')
         except errors.UndefinedFunction as err:
             print('License check function not found. Skipping, presumably on AWS.')
-            return            
+            return
         except errors.InternalError:
             license_loaded = False
 
-        if not license_loaded: 
+        if not license_loaded:
             try:
                 license_path = self.args.s64da_license_path
                 print(f'Loading license from: {license_path}')
@@ -266,8 +266,8 @@ class PrepareBenchmarkFactory:
                 print(f'Applying {sql_file_path}')
                 with open(sql_file_path, 'r') as sql_file:
                     sql = sql_file.read()
-                    if sql:
-                        conn.cursor.execute(sql)
+                    sql_commands = sql.split(';')
+                    self._run_tasks_parallel(sql_commands)
 
     def vacuum_analyze(self):
         print(f'Running VACUUM on {self.args.dsn}')
