@@ -92,10 +92,10 @@ class PrepareBenchmarkFactory:
     def psql_exec_cmd(self, sql):
         return f'psql {self.args.dsn} -c "{sql}"'
 
-    def _run_shell_task(self, task, return_output=False):
+    def _run_shell_task(self, task):
         if not self.cancel_event.is_set():
             p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
-                      stdout=PIPE if return_output else None)
+                      stdout=PIPE)
             p.wait()
             if(p.returncode != 0):
                 self.cancel_event.set()
