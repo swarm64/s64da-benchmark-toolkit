@@ -12,6 +12,7 @@ from jinja2 import Environment, FileSystemLoader
 from packaging.version import Version
 from pathlib import Path
 from psycopg2 import ProgrammingError, errors
+from sqlparse import split as sqlparse_split
 from subprocess import Popen, PIPE
 from urllib.parse import urlparse
 
@@ -267,7 +268,7 @@ class PrepareBenchmarkFactory:
                 with open(sql_file_path, 'r') as sql_file:
                     sql = sql_file.read()
 
-                tasks = [self.psql_exec_cmd(cmd) for cmd in sql.split(';')]
+                tasks = [self.psql_exec_cmd(cmd) for cmd in sqlparse_split(sql)]
                 self._run_tasks_parallel(tasks)
 
     def vacuum_analyze(self):
