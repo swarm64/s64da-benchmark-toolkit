@@ -3,6 +3,7 @@ import re
 import shutil
 import threading
 import time
+import random
 
 from collections import namedtuple
 from sys import exit
@@ -106,6 +107,8 @@ class PrepareBenchmarkFactory:
                 return stdout
 
     def _run_tasks_parallel(self, tasks):
+        # randomize the tasks to decrease lock contention
+        random.shuffle(tasks)
         with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
             futures = [executor.submit(self._run_shell_task, task) for task in tasks]
             for completed_future in as_completed(futures):
