@@ -271,15 +271,17 @@ class PrepareBenchmarkFactory:
                 self._run_tasks_parallel(tasks)
 
     def vacuum_analyze(self):
-        print(f'Running VACUUM on {self.args.dsn}')
-        self._run_shell_task(self.psql_exec_cmd('VACUUM'))
+        print(f'Running VACUUM-ANALYZE on {self.args.dsn}')
 
+        vacuum_tasks = []
         analyze_tasks = []
         tables = PrepareBenchmarkFactory.TABLES_ANALYZE or PrepareBenchmarkFactory.TABLES
         for table_group in tables:
             for table in table_group:
+                vacuum_tasks.append(self.psql_exec_cmd(f'VACUUM {table}'))
                 analyze_tasks.append(self.psql_exec_cmd(f'ANALYZE {table}'))
 
+        self._run_tasks_parallel(vacuum_tasks)
         self._run_tasks_parallel(analyze_tasks)
 
     def cluster(self):
