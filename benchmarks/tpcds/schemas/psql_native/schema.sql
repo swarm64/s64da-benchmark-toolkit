@@ -1,5 +1,5 @@
 -- round(double precision, int) does not exist by default
-CREATE FUNCTION round(double precision, integer) RETURNS NUMERIC AS $$
+CREATE FUNCTION round(double precision, integer) RETURNS NUMERIC STABLE AS $$
     SELECT round($1::numeric, $2)
 $$ LANGUAGE sql;
 
@@ -23,8 +23,8 @@ CREATE TABLE customer_address
 CREATE TABLE customer_demographics
 (
     cd_demo_sk                INTEGER               NOT NULL,
-    cd_gender                 "char",
-    cd_marital_status         "char",
+    cd_gender                 char,
+    cd_marital_status         char,
     cd_education_status       VARCHAR(20),
     cd_purchase_estimate      BIGINT,
     cd_credit_rating          VARCHAR(10),
@@ -51,18 +51,18 @@ CREATE TABLE date_dim
     d_fy_week_seq             BIGINT,
     d_day_name                VARCHAR(9),
     d_quarter_name            VARCHAR(6),
-    d_holiday                 "char",
-    d_weekend                 "char",
-    d_following_holiday       "char",
+    d_holiday                 char,
+    d_weekend                 char,
+    d_following_holiday       char,
     d_first_dom               BIGINT,
     d_last_dom                BIGINT,
     d_same_day_ly             BIGINT,
     d_same_day_lq             BIGINT,
-    d_current_day             "char",
-    d_current_week            "char",
-    d_current_month           "char",
-    d_current_quarter         "char",
-    d_current_year            "char"
+    d_current_day             char,
+    d_current_week            char,
+    d_current_month           char,
+    d_current_quarter         char,
+    d_current_year            char
 );
 
 CREATE TABLE warehouse
@@ -227,7 +227,7 @@ CREATE TABLE customer
     c_salutation              VARCHAR(10),
     c_first_name              VARCHAR(20),
     c_last_name               VARCHAR(30),
-    c_preferred_cust_flag     "char",
+    c_preferred_cust_flag     char,
     c_birth_day               BIGINT,
     c_birth_month             BIGINT,
     c_birth_year              BIGINT,
@@ -308,7 +308,7 @@ CREATE TABLE web_page
     wp_rec_end_date           DATE,
     wp_creation_date_sk       INTEGER,
     wp_access_date_sk         INTEGER,
-    wp_autogen_flag           "char",
+    wp_autogen_flag           char,
     wp_customer_sk            INTEGER,
     wp_url                    VARCHAR(100),
     wp_type                   VARCHAR(50),
@@ -328,17 +328,17 @@ CREATE TABLE promotion
     p_cost                    DECIMAL(15,2),
     p_response_target         BIGINT,
     p_promo_name              VARCHAR(50),
-    p_channel_dmail           "char",
-    p_channel_email           "char",
-    p_channel_catalog         "char",
-    p_channel_tv              "char",
-    p_channel_radio           "char",
-    p_channel_press           "char",
-    p_channel_event           "char",
-    p_channel_demo            "char",
+    p_channel_dmail           char,
+    p_channel_email           char,
+    p_channel_catalog         char,
+    p_channel_tv              char,
+    p_channel_radio           char,
+    p_channel_press           char,
+    p_channel_event           char,
+    p_channel_demo            char,
     p_channel_details         VARCHAR(100),
     p_purpose                 VARCHAR(15),
-    p_discount_active         "char"
+    p_discount_active         char
 );
 
 CREATE TABLE catalog_page
