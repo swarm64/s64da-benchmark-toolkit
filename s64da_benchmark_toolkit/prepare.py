@@ -234,9 +234,9 @@ class PrepareBenchmarkFactory:
 
         with DBConn(f'{dsn_url.scheme}://{dsn_url.netloc}/postgres') as conn:
             print(f'Deleting Database {dbname} if it already exists')
-            conn.cursor.execute(f'DROP DATABASE IF EXISTS {dbname}')
+            conn.cursor.execute(f'DROP DATABASE {dbname}')
             print(f'Creating Database {dbname}')
-            conn.cursor.execute(f"CREATE DATABASE {dbname} TEMPLATE template0 ENCODING 'UTF-8'")
+            conn.cursor.execute(f"CREATE DATABASE {dbname}")
 
         applied_schema_path = os.path.join(s64_benchmark_toolkit_root_dir, 'applied_schema.sql')
 
