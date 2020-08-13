@@ -31,7 +31,7 @@ Important notice: In order to guarantee compatibility between S64 DA and s64da-b
   
     For example in `schemas/tpch`:
 ```
-        ./loader.sh --schema=sdb_all_tables --scale-factor=1000 --dbname=example-database
+        ./loader.sh --schema=s64da_columnstore --scale-factor=1000 --dbname=example-database
 ```
   
 ### Required Parameters
