@@ -38,7 +38,7 @@ Important notice: In order to guarantee compatibility between S64 DA and s64da-b
 
    | Parameter      | Description                                            |
    | -------------- | ------------------------------------------------------ |
-   | `schema`       | The schema to deploy. Schemas are directories the benchmarks/\<benchmark\>/schemas directory and start with either `sdb_`, `s64da_`, or `psql_`. The schema name equals the directory name. |
+   | `schema`       | The schema to deploy. Schemas are directories in the benchmarks/\<benchmark\>/schemas directory and each benchmark has the following schemas: <br> - `psql_native`: plain tables + keys + indexes;<br> - `s64da_native`: as psql_native but with CREATE EXTENSION swarm64da (only default enabled features);<br> - `s64da_native_enhanced`: as s6da_native + opt-in features: columnstore index; <br> - `s64da_performance`: whatever needed to give the best S64 DA runtime. <br>The schema name equals the directory name. |
    | `scale-factor` | The scale factor to use, such as `10`, `100` or `1000`.      |
    | `dbname`       | The name of the target database. If the database does not exist, it will be created. If it does exist, it will be deleted and recreated.    |
 

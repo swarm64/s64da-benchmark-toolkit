@@ -3,7 +3,7 @@ CREATE FUNCTION round(double precision, integer) RETURNS NUMERIC AS $$
     SELECT round($1::numeric, $2)
 $$ LANGUAGE sql;
 
-CREATE FOREIGN TABLE customer_address
+CREATE TABLE customer_address
 (
     ca_address_sk             INTEGER               NOT NULL,
     ca_address_id             VARCHAR(16)           NOT NULL,
@@ -16,12 +16,11 @@ CREATE FOREIGN TABLE customer_address
     ca_state                  VARCHAR(2),
     ca_zip                    VARCHAR(10),
     ca_country                VARCHAR(20),
-    ca_gmt_offset             DECIMAL(5,2),
+    ca_gmt_offset             DOUBLE PRECISION,
     ca_location_type          VARCHAR(20)
-)
-SERVER swarm64da_server OPTIONS (range_index 'ca_address_sk, ca_gmt_offset');
+);
 
-CREATE FOREIGN TABLE customer_demographics
+CREATE TABLE customer_demographics
 (
     cd_demo_sk                INTEGER               NOT NULL,
     cd_gender                 "char",
@@ -32,10 +31,9 @@ CREATE FOREIGN TABLE customer_demographics
     cd_dep_count              BIGINT,
     cd_dep_employed_count     BIGINT,
     cd_dep_college_count      BIGINT
-)
-SERVER swarm64da_server OPTIONS (range_index 'cd_demo_sk');
+);
 
-CREATE FOREIGN TABLE date_dim
+CREATE TABLE date_dim
 (
     d_date_sk                 INTEGER               NOT NULL,
     d_date_id                 VARCHAR(16)           NOT NULL,
@@ -65,10 +63,9 @@ CREATE FOREIGN TABLE date_dim
     d_current_month           "char",
     d_current_quarter         "char",
     d_current_year            "char"
-)
-SERVER swarm64da_server OPTIONS (range_index 'd_year, d_moy, d_date');
+);
 
-CREATE FOREIGN TABLE warehouse
+CREATE TABLE warehouse
 (
     w_warehouse_sk            INTEGER               NOT NULL,
     w_warehouse_id            VARCHAR(16)           NOT NULL,
@@ -83,11 +80,10 @@ CREATE FOREIGN TABLE warehouse
     w_state                   VARCHAR(2),
     w_zip                     VARCHAR(10),
     w_country                 VARCHAR(20),
-    w_gmt_offset              DECIMAL(5,2)
-)
-SERVER swarm64da_server OPTIONS (range_index 'w_warehouse_sk');
+    w_gmt_offset              DOUBLE PRECISION
+);
 
-CREATE FOREIGN TABLE ship_mode
+CREATE TABLE ship_mode
 (
     sm_ship_mode_sk           INTEGER               NOT NULL,
     sm_ship_mode_id           VARCHAR(16)           NOT NULL,
@@ -95,10 +91,9 @@ CREATE FOREIGN TABLE ship_mode
     sm_code                   VARCHAR(10),
     sm_carrier                VARCHAR(20),
     sm_contract               VARCHAR(20)
-)
-SERVER swarm64da_server OPTIONS (range_index 'sm_ship_mode_sk');
+);
 
-CREATE FOREIGN TABLE time_dim
+CREATE TABLE time_dim
 (
     t_time_sk                 INTEGER               NOT NULL,
     t_time_id                 VARCHAR(16)           NOT NULL,
@@ -110,34 +105,31 @@ CREATE FOREIGN TABLE time_dim
     t_shift                   VARCHAR(20),
     t_sub_shift               VARCHAR(20),
     t_meal_time               VARCHAR(20)
-)
-SERVER swarm64da_server OPTIONS (range_index 't_time_sk');
+);
 
-CREATE FOREIGN TABLE reason
+CREATE TABLE reason
 (
     r_reason_sk               INTEGER               NOT NULL,
     r_reason_id               VARCHAR(16)           NOT NULL,
     r_reason_desc             VARCHAR(100)
-)
-SERVER swarm64da_server OPTIONS (range_index 'r_reason_sk');
+);
 
-CREATE FOREIGN TABLE income_band
+CREATE TABLE income_band
 (
     ib_income_band_sk         INTEGER               NOT NULL,
     ib_lower_bound            BIGINT,
     ib_upper_bound            BIGINT
-)
-SERVER swarm64da_server OPTIONS (range_index 'ib_lower_bound, ib_upper_bound');
+);
 
-CREATE FOREIGN TABLE item
+CREATE TABLE item
 (
     i_item_sk                 INTEGER               NOT NULL,
     i_item_id                 VARCHAR(16)           NOT NULL,
     i_rec_start_date          DATE,
     i_rec_end_date            DATE,
     i_item_desc               VARCHAR(200),
-    i_current_price           DECIMAL(7,2),
-    i_wholesale_cost          DECIMAL(7,2),
+    i_current_price           DOUBLE PRECISION,
+    i_wholesale_cost          DOUBLE PRECISION,
     i_brand_id                BIGINT,
     i_brand                   VARCHAR(50),
     i_class_id                BIGINT,
@@ -153,10 +145,9 @@ CREATE FOREIGN TABLE item
     i_container               VARCHAR(10),
     i_manager_id              BIGINT,
     i_product_name            VARCHAR(50)
-)
-SERVER swarm64da_server OPTIONS (range_index 'i_current_price');
+);
 
-CREATE FOREIGN TABLE store
+CREATE TABLE store
 (
     s_store_sk                INTEGER               NOT NULL,
     s_store_id                VARCHAR(16)           NOT NULL,
@@ -185,12 +176,11 @@ CREATE FOREIGN TABLE store
     s_state                   VARCHAR(2),
     s_zip                     VARCHAR(10),
     s_country                 VARCHAR(20),
-    s_gmt_offset              DECIMAL(5,2),
-    s_tax_precentage          DECIMAL(5,2)
-)
-SERVER swarm64da_server OPTIONS (range_index 's_store_sk, s_market_id');
+    s_gmt_offset              DOUBLE PRECISION,
+    s_tax_precentage          DOUBLE PRECISION
+);
 
-CREATE FOREIGN TABLE call_center
+CREATE TABLE call_center
 (
     cc_call_center_sk         INTEGER               NOT NULL,
     cc_call_center_id         VARCHAR(16)           NOT NULL,
@@ -221,12 +211,11 @@ CREATE FOREIGN TABLE call_center
     cc_state                  VARCHAR(2),
     cc_zip                    VARCHAR(10),
     cc_country                VARCHAR(20),
-    cc_gmt_offset             DECIMAL(5,2),
-    cc_tax_percentage         DECIMAL(5,2)
-)
-SERVER swarm64da_server OPTIONS (range_index 'cc_call_center_sk');
+    cc_gmt_offset             DOUBLE PRECISION,
+    cc_tax_percentage         DOUBLE PRECISION
+);
 
-CREATE FOREIGN TABLE customer
+CREATE TABLE customer
 (
     c_customer_sk             INTEGER               NOT NULL,
     c_customer_id             VARCHAR(16)           NOT NULL,
@@ -246,10 +235,9 @@ CREATE FOREIGN TABLE customer
     c_login                   VARCHAR(13),
     c_email_address           VARCHAR(50),
     c_last_review_date_sk     INTEGER
-)
-SERVER swarm64da_server OPTIONS (range_index 'c_birth_month');
+);
 
-CREATE FOREIGN TABLE web_site
+CREATE TABLE web_site
 (
     web_site_sk               INTEGER               NOT NULL,
     web_site_id               VARCHAR(16)           NOT NULL,
@@ -275,12 +263,11 @@ CREATE FOREIGN TABLE web_site
     web_state                 VARCHAR(2),
     web_zip                   VARCHAR(10),
     web_country               VARCHAR(20),
-    web_gmt_offset            DECIMAL(5,2),
-    web_tax_percentage        DECIMAL(5,2)
-)
-SERVER swarm64da_server OPTIONS (range_index 'web_site_sk');
+    web_gmt_offset            DOUBLE PRECISION,
+    web_tax_percentage        DOUBLE PRECISION
+);
 
-CREATE FOREIGN TABLE store_returns
+CREATE TABLE store_returns
 (
     sr_returned_date_sk       INTEGER,
     sr_return_time_sk         INTEGER,
@@ -291,31 +278,29 @@ CREATE FOREIGN TABLE store_returns
     sr_addr_sk                INTEGER,
     sr_store_sk               INTEGER,
     sr_reason_sk              INTEGER,
-    sr_ticket_number          BIGINT                NOT NULL,
+    sr_ticket_number          INTEGER               NOT NULL,
     sr_return_quantity        BIGINT,
-    sr_return_amt             DECIMAL(7,2),
-    sr_return_tax             DECIMAL(7,2),
-    sr_return_amt_inc_tax     DECIMAL(7,2),
-    sr_fee                    DECIMAL(7,2),
-    sr_return_ship_cost       DECIMAL(7,2),
-    sr_refunded_cash          DECIMAL(7,2),
-    sr_reversed_charge        DECIMAL(7,2),
-    sr_store_credit           DECIMAL(7,2),
-    sr_net_loss               DECIMAL(7,2)
-)
-SERVER swarm64da_server OPTIONS (range_index 'sr_return_amt');
+    sr_return_amt             DOUBLE PRECISION,
+    sr_return_tax             DOUBLE PRECISION,
+    sr_return_amt_inc_tax     DOUBLE PRECISION,
+    sr_fee                    DOUBLE PRECISION,
+    sr_return_ship_cost       DOUBLE PRECISION,
+    sr_refunded_cash          DOUBLE PRECISION,
+    sr_reversed_charge        DOUBLE PRECISION,
+    sr_store_credit           DOUBLE PRECISION,
+    sr_net_loss               DOUBLE PRECISION
+);
 
-CREATE FOREIGN TABLE household_demographics
+CREATE TABLE household_demographics
 (
     hd_demo_sk                INTEGER               NOT NULL,
     hd_income_band_sk         INTEGER,
     hd_buy_potential          VARCHAR(15),
     hd_dep_count              BIGINT,
     hd_vehicle_count          BIGINT
-)
-SERVER swarm64da_server OPTIONS (range_index 'hd_vehicle_count');
+);
 
-CREATE FOREIGN TABLE web_page
+CREATE TABLE web_page
 (
     wp_web_page_sk            INTEGER               NOT NULL,
     wp_web_page_id            VARCHAR(16)           NOT NULL,
@@ -331,10 +316,9 @@ CREATE FOREIGN TABLE web_page
     wp_link_count             BIGINT,
     wp_image_count            BIGINT,
     wp_max_ad_count           BIGINT
-)
-SERVER swarm64da_server OPTIONS (range_index 'wp_web_page_sk');
+);
 
-CREATE FOREIGN TABLE promotion
+CREATE TABLE promotion
 (
     p_promo_sk                INTEGER               NOT NULL,
     p_promo_id                VARCHAR(16)           NOT NULL,
@@ -355,10 +339,9 @@ CREATE FOREIGN TABLE promotion
     p_channel_details         VARCHAR(100),
     p_purpose                 VARCHAR(15),
     p_discount_active         "char"
-)
-SERVER swarm64da_server OPTIONS (range_index 'p_promo_sk');
+);
 
-CREATE FOREIGN TABLE catalog_page
+CREATE TABLE catalog_page
 (
     cp_catalog_page_sk        INTEGER               NOT NULL,
     cp_catalog_page_id        VARCHAR(16)           NOT NULL,
@@ -369,19 +352,17 @@ CREATE FOREIGN TABLE catalog_page
     cp_catalog_page_number    BIGINT,
     cp_description            VARCHAR(100),
     cp_type                   VARCHAR(100)
-)
-SERVER swarm64da_server OPTIONS (range_index 'cp_catalog_page_sk');
+);
 
-CREATE FOREIGN TABLE inventory
+CREATE TABLE inventory
 (
     inv_date_sk               INTEGER               NOT NULL,
     inv_item_sk               INTEGER               NOT NULL,
     inv_warehouse_sk          INTEGER               NOT NULL,
     inv_quantity_on_hand      BIGINT
-)
-SERVER swarm64da_server OPTIONS (range_index 'inv_date_sk, inv_item_sk, inv_warehouse_sk');
+);
 
-CREATE FOREIGN TABLE catalog_returns
+CREATE TABLE catalog_returns
 (
     cr_returned_date_sk       INTEGER,
     cr_returned_time_sk       INTEGER,
@@ -401,19 +382,18 @@ CREATE FOREIGN TABLE catalog_returns
     cr_reason_sk              INTEGER,
     cr_order_number           INTEGER               NOT NULL,
     cr_return_quantity        BIGINT,
-    cr_return_amount          DECIMAL(7,2),
-    cr_return_tax             DECIMAL(7,2),
-    cr_return_amt_inc_tax     DECIMAL(7,2),
-    cr_fee                    DECIMAL(7,2),
-    cr_return_ship_cost       DECIMAL(7,2),
-    cr_refunded_cash          DECIMAL(7,2),
-    cr_reversed_charge        DECIMAL(7,2),
-    cr_store_credit           DECIMAL(7,2),
-    cr_net_loss               DECIMAL(7,2)
-)
-SERVER swarm64da_server OPTIONS (range_index 'cr_return_quantity, cr_return_amount');
+    cr_return_amount          DOUBLE PRECISION,
+    cr_return_tax             DOUBLE PRECISION,
+    cr_return_amt_inc_tax     DOUBLE PRECISION,
+    cr_fee                    DOUBLE PRECISION,
+    cr_return_ship_cost       DOUBLE PRECISION,
+    cr_refunded_cash          DOUBLE PRECISION,
+    cr_reversed_charge        DOUBLE PRECISION,
+    cr_store_credit           DOUBLE PRECISION,
+    cr_net_loss               DOUBLE PRECISION
+);
 
-CREATE FOREIGN TABLE web_returns
+CREATE TABLE web_returns
 (
     wr_returned_date_sk       INTEGER,
     wr_returned_time_sk       INTEGER,
@@ -430,19 +410,18 @@ CREATE FOREIGN TABLE web_returns
     wr_reason_sk              INTEGER,
     wr_order_number           INTEGER               NOT NULL,
     wr_return_quantity        BIGINT,
-    wr_return_amt             DECIMAL(7,2),
-    wr_return_tax             DECIMAL(7,2),
-    wr_return_amt_inc_tax     DECIMAL(7,2),
-    wr_fee                    DECIMAL(7,2),
-    wr_return_ship_cost       DECIMAL(7,2),
-    wr_refunded_cash          DECIMAL(7,2),
-    wr_reversed_charge        DECIMAL(7,2),
-    wr_account_credit         DECIMAL(7,2),
-    wr_net_loss               DECIMAL(7,2)
-)
-SERVER swarm64da_server OPTIONS (range_index 'wr_return_amt');
+    wr_return_amt             DOUBLE PRECISION,
+    wr_return_tax             DOUBLE PRECISION,
+    wr_return_amt_inc_tax     DOUBLE PRECISION,
+    wr_fee                    DOUBLE PRECISION,
+    wr_return_ship_cost       DOUBLE PRECISION,
+    wr_refunded_cash          DOUBLE PRECISION,
+    wr_reversed_charge        DOUBLE PRECISION,
+    wr_account_credit         DOUBLE PRECISION,
+    wr_net_loss               DOUBLE PRECISION
+);
 
-CREATE FOREIGN TABLE web_sales
+CREATE TABLE web_sales
 (
     ws_sold_date_sk           INTEGER,
     ws_sold_time_sk           INTEGER,
@@ -463,25 +442,24 @@ CREATE FOREIGN TABLE web_sales
     ws_promo_sk               INTEGER,
     ws_order_number           INTEGER               NOT NULL,
     ws_quantity               BIGINT,
-    ws_wholesale_cost         DECIMAL(7,2),
-    ws_list_price             DECIMAL(7,2),
-    ws_sales_price            DECIMAL(7,2),
-    ws_ext_discount_amt       DECIMAL(7,2),
-    ws_ext_sales_price        DECIMAL(7,2),
-    ws_ext_wholesale_cost     DECIMAL(7,2),
-    ws_ext_list_price         DECIMAL(7,2),
-    ws_ext_tax                DECIMAL(7,2),
-    ws_coupon_amt             DECIMAL(7,2),
-    ws_ext_ship_cost          DECIMAL(7,2),
-    ws_net_paid               DECIMAL(7,2),
-    ws_net_paid_inc_tax       DECIMAL(7,2),
-    ws_net_paid_inc_ship      DECIMAL(7,2),
-    ws_net_paid_inc_ship_tax  DECIMAL(7,2),
-    ws_net_profit             DECIMAL(7,2)
-)
-SERVER swarm64da_server OPTIONS (range_index 'ws_net_profit, ws_quantity');
+    ws_wholesale_cost         DOUBLE PRECISION,
+    ws_list_price             DOUBLE PRECISION,
+    ws_sales_price            DOUBLE PRECISION,
+    ws_ext_discount_amt       DOUBLE PRECISION,
+    ws_ext_sales_price        DOUBLE PRECISION,
+    ws_ext_wholesale_cost     DOUBLE PRECISION,
+    ws_ext_list_price         DOUBLE PRECISION,
+    ws_ext_tax                DOUBLE PRECISION,
+    ws_coupon_amt             DOUBLE PRECISION,
+    ws_ext_ship_cost          DOUBLE PRECISION,
+    ws_net_paid               DOUBLE PRECISION,
+    ws_net_paid_inc_tax       DOUBLE PRECISION,
+    ws_net_paid_inc_ship      DOUBLE PRECISION,
+    ws_net_paid_inc_ship_tax  DOUBLE PRECISION,
+    ws_net_profit             DOUBLE PRECISION
+);
 
-CREATE FOREIGN TABLE catalog_sales
+CREATE TABLE catalog_sales
 (
     cs_sold_date_sk           INTEGER,
     cs_sold_time_sk           INTEGER,
@@ -502,25 +480,24 @@ CREATE FOREIGN TABLE catalog_sales
     cs_promo_sk               INTEGER,
     cs_order_number           INTEGER               NOT NULL,
     cs_quantity               BIGINT,
-    cs_wholesale_cost         DECIMAL(7,2),
-    cs_list_price             DECIMAL(7,2),
-    cs_sales_price            DECIMAL(7,2),
-    cs_ext_discount_amt       DECIMAL(7,2),
-    cs_ext_sales_price        DECIMAL(7,2),
-    cs_ext_wholesale_cost     DECIMAL(7,2),
-    cs_ext_list_price         DECIMAL(7,2),
-    cs_ext_tax                DECIMAL(7,2),
-    cs_coupon_amt             DECIMAL(7,2),
-    cs_ext_ship_cost          DECIMAL(7,2),
-    cs_net_paid               DECIMAL(7,2),
-    cs_net_paid_inc_tax       DECIMAL(7,2),
-    cs_net_paid_inc_ship      DECIMAL(7,2),
-    cs_net_paid_inc_ship_tax  DECIMAL(7,2),
-    cs_net_profit             DECIMAL(7,2)
-)
-SERVER swarm64da_server OPTIONS (range_index 'cs_net_profit, cs_quantity');
+    cs_wholesale_cost         DOUBLE PRECISION,
+    cs_list_price             DOUBLE PRECISION,
+    cs_sales_price            DOUBLE PRECISION,
+    cs_ext_discount_amt       DOUBLE PRECISION,
+    cs_ext_sales_price        DOUBLE PRECISION,
+    cs_ext_wholesale_cost     DOUBLE PRECISION,
+    cs_ext_list_price         DOUBLE PRECISION,
+    cs_ext_tax                DOUBLE PRECISION,
+    cs_coupon_amt             DOUBLE PRECISION,
+    cs_ext_ship_cost          DOUBLE PRECISION,
+    cs_net_paid               DOUBLE PRECISION,
+    cs_net_paid_inc_tax       DOUBLE PRECISION,
+    cs_net_paid_inc_ship      DOUBLE PRECISION,
+    cs_net_paid_inc_ship_tax  DOUBLE PRECISION,
+    cs_net_profit             DOUBLE PRECISION
+);
 
-CREATE FOREIGN TABLE store_sales
+CREATE TABLE store_sales
 (
     ss_sold_date_sk           INTEGER,
     ss_sold_time_sk           INTEGER,
@@ -531,19 +508,503 @@ CREATE FOREIGN TABLE store_sales
     ss_addr_sk                INTEGER,
     ss_store_sk               INTEGER,
     ss_promo_sk               INTEGER,
-    ss_ticket_number          BIGINT                NOT NULL,
+    ss_ticket_number          INTEGER               NOT NULL,
     ss_quantity               BIGINT,
-    ss_wholesale_cost         DECIMAL(7,2),
-    ss_list_price             DECIMAL(7,2),
-    ss_sales_price            DECIMAL(7,2),
-    ss_ext_discount_amt       DECIMAL(7,2),
-    ss_ext_sales_price        DECIMAL(7,2),
-    ss_ext_wholesale_cost     DECIMAL(7,2),
-    ss_ext_list_price         DECIMAL(7,2),
-    ss_ext_tax                DECIMAL(7,2),
-    ss_coupon_amt             DECIMAL(7,2),
-    ss_net_paid               DECIMAL(7,2),
-    ss_net_paid_inc_tax       DECIMAL(7,2),
-    ss_net_profit             DECIMAL(7,2)
-)
-SERVER swarm64da_server OPTIONS (range_index 'ss_sales_price, ss_net_profit, ss_quantity');
+    ss_wholesale_cost         DOUBLE PRECISION,
+    ss_list_price             DOUBLE PRECISION,
+    ss_sales_price            DOUBLE PRECISION,
+    ss_ext_discount_amt       DOUBLE PRECISION,
+    ss_ext_sales_price        DOUBLE PRECISION,
+    ss_ext_wholesale_cost     DOUBLE PRECISION,
+    ss_ext_list_price         DOUBLE PRECISION,
+    ss_ext_tax                DOUBLE PRECISION,
+    ss_coupon_amt             DOUBLE PRECISION,
+    ss_net_paid               DOUBLE PRECISION,
+    ss_net_paid_inc_tax       DOUBLE PRECISION,
+    ss_net_profit             DOUBLE PRECISION
+);
+
+CREATE INDEX customer_address_cache ON customer_address USING columnstore (
+    ca_address_sk,
+    ca_address_id,
+    ca_street_number,
+    ca_street_name,
+    ca_street_type,
+    ca_suite_number,
+    ca_city,
+    ca_county,
+    ca_state,
+    ca_zip,
+    ca_country,
+    ca_gmt_offset,
+    ca_location_type
+);
+
+CREATE INDEX customer_demographics_cache ON customer_demographics USING columnstore (
+    cd_demo_sk,
+    cd_gender,
+    cd_marital_status,
+    cd_education_status,
+    cd_purchase_estimate,
+    cd_credit_rating,
+    cd_dep_count,
+    cd_dep_employed_count,
+    cd_dep_college_count
+);
+
+CREATE INDEX date_dim_cache ON date_dim USING columnstore (
+    d_date_sk,
+    d_date_id,
+    d_date,
+    d_month_seq,
+    d_week_seq,
+    d_quarter_seq,
+    d_year,
+    d_dow,
+    d_moy,
+    d_dom,
+    d_qoy,
+    d_fy_year,
+    d_fy_quarter_seq,
+    d_fy_week_seq,
+    d_day_name,
+    d_quarter_name,
+    d_holiday,
+    d_weekend,
+    d_following_holiday,
+    d_first_dom,
+    d_last_dom,
+    d_same_day_ly,
+    d_same_day_lq,
+    d_current_day,
+    d_current_week,
+    d_current_month,
+    d_current_quarter,
+    d_current_year
+);
+
+CREATE INDEX warehouse_cache ON warehouse USING columnstore (
+    w_warehouse_sk,
+    w_warehouse_id,
+    w_warehouse_name,
+    w_warehouse_sq_ft,
+    w_street_number,
+    w_street_name,
+    w_street_type,
+    w_suite_number,
+    w_city,
+    w_county,
+    w_state,
+    w_zip,
+    w_country,
+    w_gmt_offset
+);
+
+CREATE INDEX ship_mode_cache ON ship_mode USING columnstore (
+    sm_ship_mode_sk,
+    sm_ship_mode_id,
+    sm_type,
+    sm_code,
+    sm_carrier,
+    sm_contract
+);
+
+CREATE INDEX time_dim_cache ON time_dim USING columnstore (
+    t_time_sk,
+    t_time_id,
+    t_time,
+    t_hour,
+    t_minute,
+    t_second,
+    t_am_pm,
+    t_shift,
+    t_sub_shift,
+    t_meal_time
+);
+
+CREATE INDEX reason_cache ON reason USING columnstore (
+    r_reason_sk,
+    r_reason_id,
+    r_reason_desc
+);
+
+CREATE INDEX income_band_cache ON income_band USING columnstore (
+    ib_income_band_sk,
+    ib_lower_bound,
+    ib_upper_bound
+);
+
+CREATE INDEX item_cache ON item USING columnstore (
+    i_item_sk,
+    i_item_id,
+    i_rec_start_date,
+    i_rec_end_date,
+    i_item_desc,
+    i_current_price,
+    i_wholesale_cost,
+    i_brand_id,
+    i_brand,
+    i_class_id,
+    i_class,
+    i_category_id,
+    i_category,
+    i_manufact_id,
+    i_manufact,
+    i_size,
+    i_formulation,
+    i_color,
+    i_units,
+    i_container,
+    i_manager_id,
+    i_product_name
+);
+
+CREATE INDEX store_cache ON store USING columnstore (
+    s_store_sk,
+    s_store_id,
+    s_rec_start_date,
+    s_rec_end_date,
+    s_closed_date_sk,
+    s_store_name,
+    s_number_employees,
+    s_floor_space,
+    s_hours,
+    s_manager,
+    s_market_id,
+    s_geography_class,
+    s_market_desc,
+    s_market_manager,
+    s_division_id,
+    s_division_name,
+    s_company_id,
+    s_company_name,
+    s_street_number,
+    s_street_name,
+    s_street_type,
+    s_suite_number,
+    s_city,
+    s_county,
+    s_state,
+    s_zip,
+    s_country,
+    s_gmt_offset,
+    s_tax_precentage
+);
+
+CREATE INDEX call_center_cache ON call_center USING columnstore (
+    cc_call_center_sk,
+    cc_call_center_id,
+    cc_rec_start_date,
+    cc_rec_end_date,
+    cc_closed_date_sk,
+    cc_open_date_sk,
+    cc_name,
+    cc_class,
+    cc_employees,
+    cc_sq_ft,
+    cc_hours,
+    cc_manager,
+    cc_mkt_id,
+    cc_mkt_class,
+    cc_mkt_desc,
+    cc_market_manager,
+    cc_division,
+    cc_division_name,
+    cc_company,
+    cc_company_name,
+    cc_street_number,
+    cc_street_name,
+    cc_street_type,
+    cc_suite_number,
+    cc_city,
+    cc_county,
+    cc_state,
+    cc_zip,
+    cc_country,
+    cc_gmt_offset,
+    cc_tax_percentage
+);
+
+CREATE INDEX customer_cache ON customer USING columnstore (
+    c_customer_sk,
+    c_customer_id,
+    c_current_cdemo_sk,
+    c_current_hdemo_sk,
+    c_current_addr_sk,
+    c_first_shipto_date_sk,
+    c_first_sales_date_sk,
+    c_salutation,
+    c_first_name,
+    c_last_name,
+    c_preferred_cust_flag,
+    c_birth_day,
+    c_birth_month,
+    c_birth_year,
+    c_birth_country,
+    c_login,
+    c_email_address,
+    c_last_review_date_sk
+);
+
+CREATE INDEX web_site_cache ON web_site USING columnstore (
+    web_site_sk,
+    web_site_id,
+    web_rec_start_date,
+    web_rec_end_date,
+    web_name,
+    web_open_date_sk,
+    web_close_date_sk,
+    web_class,
+    web_manager,
+    web_mkt_id,
+    web_mkt_class,
+    web_mkt_desc,
+    web_market_manager,
+    web_company_id,
+    web_company_name,
+    web_street_number,
+    web_street_name,
+    web_street_type,
+    web_suite_number,
+    web_city,
+    web_county,
+    web_state,
+    web_zip,
+    web_country,
+    web_gmt_offset,
+    web_tax_percentage
+);
+
+
+CREATE INDEX household_demographics_cache ON household_demographics USING columnstore (
+    hd_demo_sk,
+    hd_income_band_sk,
+    hd_buy_potential,
+    hd_dep_count,
+    hd_vehicle_count
+);
+
+CREATE INDEX web_page_cache ON web_page USING columnstore (
+    wp_web_page_sk,
+    wp_web_page_id,
+    wp_rec_start_date,
+    wp_rec_end_date,
+    wp_creation_date_sk,
+    wp_access_date_sk,
+    wp_autogen_flag,
+    wp_customer_sk,
+    wp_url,
+    wp_type,
+    wp_char_count,
+    wp_link_count,
+    wp_image_count,
+    wp_max_ad_count
+);
+
+CREATE INDEX promotion_cache ON promotion USING columnstore (
+    p_promo_sk,
+    p_promo_id,
+    p_start_date_sk,
+    p_end_date_sk,
+    p_item_sk,
+    p_cost,
+    p_response_target,
+    p_promo_name,
+    p_channel_dmail,
+    p_channel_email,
+    p_channel_catalog,
+    p_channel_tv,
+    p_channel_radio,
+    p_channel_press,
+    p_channel_event,
+    p_channel_demo,
+    p_channel_details,
+    p_purpose,
+    p_discount_active
+);
+
+CREATE INDEX catalog_page_cache ON catalog_page USING columnstore (
+    cp_catalog_page_sk,
+    cp_catalog_page_id,
+    cp_start_date_sk,
+    cp_end_date_sk,
+    cp_department,
+    cp_catalog_number,
+    cp_catalog_page_number,
+    cp_description,
+    cp_type
+);
+
+CREATE INDEX inventory_cache ON inventory USING columnstore (
+    inv_date_sk,
+    inv_item_sk,
+    inv_warehouse_sk,
+    inv_quantity_on_hand
+);
+
+CREATE INDEX store_returns_cache ON store_returns USING columnstore (
+    sr_returned_date_sk,
+    sr_return_time_sk,
+    sr_item_sk,
+    sr_customer_sk,
+    sr_cdemo_sk,
+    sr_hdemo_sk,
+    sr_addr_sk,
+    sr_store_sk,
+    sr_reason_sk,
+    sr_ticket_number,
+    sr_return_quantity,
+    sr_return_amt,
+    sr_return_tax,
+    sr_return_amt_inc_tax,
+    sr_fee,
+    sr_return_ship_cost,
+    sr_refunded_cash,
+    sr_reversed_charge,
+    sr_store_credit,
+    sr_net_loss
+);
+
+CREATE INDEX catalog_returns_cache ON catalog_returns USING columnstore (
+    cr_returned_date_sk,
+    cr_returned_time_sk,
+    cr_item_sk,
+    cr_refunded_customer_sk,
+    cr_refunded_cdemo_sk,
+    cr_refunded_hdemo_sk,
+    cr_refunded_addr_sk,
+    cr_returning_customer_sk,
+    cr_returning_cdemo_sk,
+    cr_returning_hdemo_sk,
+    cr_returning_addr_sk,
+    cr_call_center_sk,
+    cr_catalog_page_sk,
+    cr_ship_mode_sk,
+    cr_warehouse_sk,
+    cr_reason_sk,
+    cr_order_number,
+    cr_return_quantity,
+    cr_return_amount,
+    cr_return_tax,
+    cr_return_amt_inc_tax,
+    cr_fee,
+    cr_return_ship_cost,
+    cr_refunded_cash,
+    cr_reversed_charge,
+    cr_store_credit,
+    cr_net_loss
+);
+
+CREATE INDEX web_returns_cache ON web_returns USING columnstore (
+    wr_returned_date_sk,
+    wr_returned_time_sk,
+    wr_item_sk,
+    wr_refunded_customer_sk,
+    wr_refunded_cdemo_sk,
+    wr_refunded_hdemo_sk,
+    wr_refunded_addr_sk,
+    wr_returning_customer_sk,
+    wr_returning_cdemo_sk,
+    wr_returning_hdemo_sk,
+    wr_returning_addr_sk,
+    wr_web_page_sk,
+    wr_reason_sk,
+    wr_order_number,
+    wr_return_quantity,
+    wr_return_amt,
+    wr_return_tax,
+    wr_return_amt_inc_tax,
+    wr_fee,
+    wr_return_ship_cost,
+    wr_refunded_cash,
+    wr_reversed_charge,
+    wr_account_credit,
+    wr_net_loss
+);
+
+-- columns removed from the sales tables
+CREATE INDEX web_sales_cache ON web_sales USING columnstore (
+    ws_sold_date_sk,
+    ws_sold_time_sk,
+    ws_ship_date_sk,
+    ws_item_sk,
+    ws_bill_customer_sk,
+    ws_bill_addr_sk,
+    ws_ship_hdemo_sk,
+    ws_ship_addr_sk,
+    ws_web_page_sk,
+    ws_web_site_sk,
+    ws_ship_mode_sk,
+    ws_warehouse_sk,
+    ws_promo_sk,
+    ws_order_number,
+    ws_quantity,
+    ws_wholesale_cost,
+    ws_list_price,
+    ws_sales_price,
+    ws_ext_discount_amt,
+    ws_ext_sales_price,
+    ws_ext_wholesale_cost,
+    ws_ext_list_price,
+    ws_ext_ship_cost,
+    ws_net_paid,
+    ws_net_paid_inc_ship_tax,
+    ws_net_profit
+);
+
+CREATE INDEX catalog_sales_cache ON catalog_sales USING columnstore (
+    cs_sold_date_sk,
+    cs_sold_time_sk,
+    cs_ship_date_sk,
+    cs_bill_customer_sk,
+    cs_bill_cdemo_sk,
+    cs_bill_hdemo_sk,
+    cs_bill_addr_sk,
+    cs_ship_customer_sk,
+    cs_ship_addr_sk,
+    cs_call_center_sk,
+    cs_catalog_page_sk,
+    cs_ship_mode_sk,
+    cs_warehouse_sk,
+    cs_item_sk,
+    cs_promo_sk,
+    cs_order_number,
+    cs_quantity,
+    cs_wholesale_cost,
+    cs_list_price,
+    cs_sales_price,
+    cs_ext_discount_amt,
+    cs_ext_sales_price,
+    cs_ext_wholesale_cost,
+    cs_ext_list_price,
+    cs_coupon_amt,
+    cs_ext_ship_cost,
+    cs_net_paid,
+    cs_net_paid_inc_ship_tax,
+    cs_net_profit
+);
+
+CREATE INDEX store_sales_cache ON store_sales USING columnstore (
+    ss_sold_date_sk,
+    ss_sold_time_sk,
+    ss_item_sk,
+    ss_customer_sk,
+    ss_cdemo_sk,
+    ss_hdemo_sk,
+    ss_addr_sk,
+    ss_store_sk,
+    ss_promo_sk,
+    ss_ticket_number,
+    ss_quantity,
+    ss_wholesale_cost,
+    ss_list_price,
+    ss_sales_price,
+    ss_ext_discount_amt,
+    ss_ext_sales_price,
+    ss_ext_wholesale_cost,
+    ss_ext_list_price,
+    ss_ext_tax,
+    ss_coupon_amt,
+    ss_net_paid,
+    ss_net_profit
+);
