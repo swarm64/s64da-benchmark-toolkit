@@ -154,5 +154,3 @@ CREATE INDEX lineitem_cache ON lineitem USING columnstore (
     l_shipmode,
     l_comment --unused
 );
-
-CREATE STATISTICS lineitem_ndistinct (ndistinct) ON l_suppkey, l_partkey FROM lineitem;

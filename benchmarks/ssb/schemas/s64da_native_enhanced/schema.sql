@@ -82,8 +82,7 @@ CREATE INDEX supplier_cache ON supplier USING columnstore (
 );
 CREATE INDEX lineorder_cache ON lineorder USING columnstore (
   lo_orderkey, lo_linenumber, lo_custkey, lo_partkey, lo_suppkey,
-  lo_orderdate, lo_orderpriority, lo_shippriority, lo_quantity, 
+  lo_orderdate, lo_orderpriority, lo_shippriority, lo_quantity,
   lo_extendedprice, lo_ordertotalprice, lo_discount, lo_revenue,
   lo_supplycost, lo_tax, lo_commitdate, lo_shipmode
 );
-CREATE STATISTICS lineorder_ndistinct (ndistinct) ON lo_orderkey, lo_linenumber FROM lineorder;
