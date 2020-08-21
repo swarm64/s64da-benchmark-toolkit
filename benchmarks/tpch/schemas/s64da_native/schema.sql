@@ -82,3 +82,5 @@ CREATE TABLE lineitem (
     l_shipmode character varying(10) NOT NULL,
     l_comment character varying(44) NOT NULL
 );
+
+CREATE STATISTICS lineitem_ndistinct (ndistinct) ON l_suppkey, l_partkey FROM lineitem;
