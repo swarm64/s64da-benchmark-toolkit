@@ -108,17 +108,16 @@ class PrepareBenchmarkFactory:
                 return stdout
 
     def _run_tasks_parallel(self, tasks):
+        def get_future(executor, task):
+            if callable(task):
+                return executor.submit(task)
+            else:
+                return executor.submit(self._run_shell_task, task)
+
         # randomize the tasks to decrease lock contention
         random.shuffle(tasks)
         with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
-            futures = []
-            for task in tasks:
-                if callable(task):
-                    future = executor.submit(task)
-                else:
-                    future = executor.submit(self._run_shell_task, task)
-                futures.append(future)
-
+            futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
                 exc = completed_future.exception()
                 if exc:
