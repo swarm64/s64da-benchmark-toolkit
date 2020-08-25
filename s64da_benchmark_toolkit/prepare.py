@@ -261,7 +261,7 @@ class PrepareBenchmarkFactory:
         return []
 
     def add_indexes(self):
-        for sql_file in ('primary-keys.sql', 'foreign-keys.sql', 'indexes.sql'):
+        for sql_file in ('primary-keys.sql', 'foreign-keys.sql', 'indexes.sql', 's64da_indexes.sql'):
             sql_file_path = os.path.join(s64_benchmark_toolkit_root_dir, self.schema_dir, sql_file)
             if not os.path.isfile(sql_file_path):
                 continue
