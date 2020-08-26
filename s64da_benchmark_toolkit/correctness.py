@@ -186,6 +186,8 @@ class Correctness:
             return CorrectnessResult.make_ok_result()
 
         elif result_detail == ResultDetail.VALUE_MISMATCH:
+            truth = self.prepare(truth)
+            result = self.prepare(result)
             return CorrectnessResult.make_mismatch_result(
                 result_detail,
                 truth.loc[mismatch_indexes],
