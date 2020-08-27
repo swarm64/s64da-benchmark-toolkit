@@ -5,8 +5,8 @@ import threading
 import time
 import random
 
-from collections import namedtuple
 from sys import exit
+from traceback import print_tb
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from jinja2 import Environment, FileSystemLoader
@@ -108,14 +108,21 @@ class PrepareBenchmarkFactory:
                 return stdout
 
     def _run_tasks_parallel(self, tasks):
+        def get_future(executor, task):
+            if callable(task):
+                return executor.submit(task)
+            else:
+                return executor.submit(self._run_shell_task, task)
+
         # randomize the tasks to decrease lock contention
         random.shuffle(tasks)
         with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
-            futures = [executor.submit(self._run_shell_task, task) for task in tasks]
+            futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
                 exc = completed_future.exception()
                 if exc:
                     print(f'Task threw an exception: {exc}')
+                    print_tb(exc.__traceback__)
                     for future in futures:
                         future.cancel()
                     exit(1)
