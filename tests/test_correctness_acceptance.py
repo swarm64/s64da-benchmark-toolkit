@@ -151,6 +151,14 @@ def test_tpch_precision(correctness):
     assert result_detail == ResultDetail.OK
     assert mismatch_idx == None
 
+def test_tpch_precision_big_numbers(correctness):
+    truth = pandas.DataFrame([[326663512979.5298]])
+    result = pandas.DataFrame([[326663512979.33]])
+
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx == None
+
 
 def test_correctness_full_equal_within_precision(correctness):
     truth = get_dataframe(CSV_BASE)

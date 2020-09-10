@@ -77,7 +77,11 @@ class Correctness:
 
     @classmethod
     def round_to_precision(cls, value):
-        return '%.12g' % float('%.2f' % value)
+        rounded = ('%.2f' % value)
+        if "." in rounded:
+            return rounded[0:13]
+        else:
+            return rounded[0:12]
 
     @classmethod
     def match_double_precision(cls, truth_value, result_value):
