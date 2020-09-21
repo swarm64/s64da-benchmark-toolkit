@@ -78,6 +78,10 @@ if __name__ == '__main__':
         'The path to the S64 DA license.'
     ))
 
+    args_to_parse.add_argument('--start-date', default=None, help=(
+        'The start date for TPC-C.'
+    ))
+
     args = args_to_parse.parse_args()
     for benchmark in benchmarks:
         if benchmark.name == args.benchmark:

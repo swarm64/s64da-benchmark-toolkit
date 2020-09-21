@@ -7,16 +7,17 @@ from benchmarks.tpcc.helpers import Random
 
 MAXITEMS = 100000
 DIST_PER_WARE = 10
-CUST_PER_DIST = 3000
+CUST_PER_DIST = 3000 # Standard says: 30k customers total (for all districts)
 NUM_ORDERS = 3000
 STOCKS = 100000
 
 
 class TPCCLoader():
-    def __init__(self, dsn, w_id):
+    def __init__(self, dsn, w_id, start_date=None):
         self.dsn = dsn
         self.w_id = w_id
         self.random = Random(w_id)
+        self.start_date = start_date
 
     def insert_data(self, table, buffer, columns=None):
         print(f'Loading { table }')
@@ -79,7 +80,7 @@ class TPCCLoader():
                     Random.get_state(),
                     Random.numstring(5, prefix='zip-'),
                     Random.numstring(16),
-                    'NOW()',
+                    self.start_date or 'NOW()',
                     'GC' if Random.randint_inclusive(1, 100) > 10 else 'BC',
                     50000,
                     Random.sample() * 0.5,
@@ -101,7 +102,7 @@ class TPCCLoader():
                     self.w_id,
                     d_id,
                     self.w_id,
-                    'NOW()',
+                    self.start_date or 'NOW()',
                     10,
                     Random.string(Random.randint_inclusive(12, 24))
                 ])
@@ -147,7 +148,7 @@ class TPCCLoader():
                     d_id,
                     self.w_id,
                     c_ids[o_id - 1],
-                    'NOW()',
+                    self.start_date or 'NOW()',
                     Random.randint_inclusive(1, 10) if o_id < 2101 else None,
                     order_line_counts[-1],
                     1
@@ -176,7 +177,7 @@ class TPCCLoader():
                         ol_id,
                         Random.randint_inclusive(1, MAXITEMS),
                         self.w_id,
-                        'NOW()' if o_id < 2101 else None,
+                        (self.start_date or 'NOW()') if o_id < 2101 else None,
                         5,
                         0 if o_id < 2101 else Random.sample() * 9999.99,
                         Random.string(24)
@@ -188,9 +189,9 @@ class TPCCLoader():
         self._load_order_line(order_line_counts)
 
 
-def load_warehouse(dsn, w_id):
+def load_warehouse(dsn, w_id, start_date):
     print(f'Loading warehouse { w_id }')
-    loader = TPCCLoader(dsn, w_id)
+    loader = TPCCLoader(dsn, w_id, start_date=start_date)
     loader.load_customer()
     loader.load_district()
     loader.load_history()

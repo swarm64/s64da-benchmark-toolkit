@@ -1,8 +1,9 @@
-DROP FUNCTION IF EXISTS delivery(INT, INT, INT);
+DROP FUNCTION IF EXISTS delivery(INT, INT, INT, TIMESTAMPTZ);
 CREATE FUNCTION delivery(
     in_w_id INT
   , in_o_carrier_id INT
   , in_dist_per_ware INT
+  , in_timestamp TIMESTAMPTZ
 ) RETURNS VOID AS $$
 DECLARE
   d_id INT;
@@ -36,7 +37,7 @@ BEGIN
       AND o_w_id = in_w_id;
 
     UPDATE order_line
-    SET ol_delivery_d = NOW()
+    SET ol_delivery_d = in_timestamp
     WHERE ol_o_id = this_no_o_id
       AND ol_d_id = d_id
       AND ol_w_id = in_w_id;

@@ -23,11 +23,12 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
 
     def get_ingest_tasks(self, table):
         dsn = self.args.dsn
+        start_date = self.args.start_date
         if table == 'item':
             return [(load_item, dsn)]
 
         if table == 'warehouse':
             warehouses = range(1, self.args.scale_factor + 1)
-            return [(load_warehouse, dsn, w_id) for w_id in warehouses]
+            return [(load_warehouse, dsn, w_id, start_date) for w_id in warehouses]
 
         raise ValueError(f'Unknown table {table}')

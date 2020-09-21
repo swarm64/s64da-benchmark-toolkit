@@ -1,4 +1,4 @@
-DROP FUNCTION IF EXISTS new_order(INT, INT, INT, INT, INT, INT[], INT[], INT[]);
+DROP FUNCTION IF EXISTS new_order(INT, INT, INT, INT, INT, INT[], INT[], INT[], TIMESTAMPTZ);
 CREATE FUNCTION new_order(
     in_w_id INT
   , in_c_id INT
@@ -8,6 +8,7 @@ CREATE FUNCTION new_order(
   , in_itemids INT[]
   , in_supware INT[]
   , in_qty INT[]
+  , in_timestamp TIMESTAMPTZ
 ) RETURNS TABLE(
     out_w_id INT
   , out_d_id INT
@@ -19,7 +20,7 @@ CREATE FUNCTION new_order(
   , out_d_tax NUMERIC(4,2)
   , out_o_ol_cnt INT
   , out_o_id INT
-  , out_o_entry_d TIMESTAMP WITH TIME ZONE
+  , out_o_entry_d TIMESTAMPTZ
   , out_total_amount NUMERIC(13,2)
   , out_ol_supply_w_id INT
   , out_ol_i_id INT
@@ -84,7 +85,7 @@ BEGIN
     , in_d_id
     , in_w_id
     , in_c_id
-    , NOW()
+    , in_timestamp
     , in_ol_cnt
     , in_all_local
   );
@@ -173,7 +174,7 @@ BEGIN
       , b.d_tax
       , in_ol_cnt
       , b.d_next_o_id
-      , NOW()
+      , in_timestamp
       , ROUND(
           SUM(ol_amount) * (1 - a.c_discount) * (1 + a.w_tax + b.d_tax), 2
         ) AS amount

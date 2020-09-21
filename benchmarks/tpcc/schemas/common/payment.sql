@@ -1,4 +1,4 @@
-DROP FUNCTION IF EXISTS payment(INT, INT, INT, INT, INT, NUMERIC(12,2), BOOL, CHARACTER VARYING(16));
+DROP FUNCTION IF EXISTS payment(INT, INT, INT, INT, INT, NUMERIC(12,2), BOOL, CHARACTER VARYING(16), TIMESTAMPTZ);
 CREATE FUNCTION payment(
     in_w_id INT
   , in_d_id INT
@@ -8,6 +8,7 @@ CREATE FUNCTION payment(
   , in_h_amount NUMERIC(12,2)
   , in_byname BOOL
   , in_c_last CHARACTER VARYING(16)
+  , in_timestamp TIMESTAMPTZ
 ) RETURNS TABLE(
     out_w_id INT
   , out_d_id INT
@@ -176,7 +177,7 @@ BEGIN
     , in_c_id
     , in_d_id
     , in_w_id
-    , NOW()
+    , in_timestamp
     , in_h_amount
     , format('%10s %10s    ', w_record.w_name, d_record.d_name)
   );
@@ -188,7 +189,7 @@ BEGIN
     , in_c_d_id
     , in_c_w_id
     , in_h_amount
-    , NOW()
+    , in_timestamp
     , w_record.w_street_1
     , w_record.w_street_2
     , w_record.w_city

@@ -3,6 +3,7 @@
 import argparse
 import time
 
+from datetime import datetime, timezone
 from multiprocessing.pool import Pool
 from multiprocessing import Value, Lock
 
@@ -23,6 +24,10 @@ class TPCC:
     def __init__(self, seed, scale_factor):
         self.random = Random(seed)
         self.scale_factor = scale_factor
+
+    @property
+    def timestamp(self):
+        return datetime.now(timezone.utc)
 
     def other_ware(self, home_ware):
         if self.scale_factor == 1:
@@ -68,8 +73,8 @@ class TPCC:
 
             qty.append(self.random.randint_inclusive(1, 10))
 
-        sql = 'SELECT new_order(%s, %s, %s, %s, %s, %s, %s, %s)'
-        args = (w_id, c_id, d_id, order_line_count, all_local, itemid, supware, qty)
+        sql = 'SELECT new_order(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
+        args = (w_id, c_id, d_id, order_line_count, all_local, itemid, supware, qty, self.timestamp)
         return TPCC.execute_sql(conn, sql, args)
 
     def payment(self, conn):
@@ -87,8 +92,8 @@ class TPCC:
             c_w_id = self.other_ware(w_id)
             c_d_id = self.random.randint_inclusive(1, DIST_PER_WARE)
 
-        sql = 'SELECT payment(%s, %s, %s, %s, %s, %s, %s, %s)'
-        args = (w_id, d_id, c_d_id, c_id, c_w_id, h_amount, byname, c_last)
+        sql = 'SELECT payment(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
+        args = (w_id, d_id, c_d_id, c_id, c_w_id, h_amount, byname, c_last, self.timestamp)
         return TPCC.execute_sql(conn, sql, args)
 
     def order_status(self, conn):
@@ -106,8 +111,8 @@ class TPCC:
         w_id = self.random.randint_inclusive(1, self.scale_factor)
         o_carrier_id = self.random.randint_inclusive(1, 10)
 
-        sql = 'SELECT * FROM delivery(%s, %s, %s)'
-        args = (w_id, o_carrier_id, DIST_PER_WARE)
+        sql = 'SELECT * FROM delivery(%s, %s, %s, %s)'
+        args = (w_id, o_carrier_id, DIST_PER_WARE, self.timestamp)
         return TPCC.execute_sql(conn, sql, args)
 
     def stocklevel(self, conn):
@@ -123,6 +128,7 @@ if __name__ == '__main__':
     args_to_parse = argparse.ArgumentParser()
     args_to_parse.add_argument('--scale-factor', required=True, type=int)
     args_to_parse.add_argument('--workers', required=True, type=int)
+    # args_to_parse.add_argument('--start-date', required=True)
     args = args_to_parse.parse_args()
 
     counter_ok = Value('i', 0)
