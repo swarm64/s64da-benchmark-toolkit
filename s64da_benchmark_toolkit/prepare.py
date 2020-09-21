@@ -1,3 +1,5 @@
+
+import glob
 import os
 import re
 import shutil
@@ -8,7 +10,7 @@ import random
 from sys import exit
 from traceback import print_tb
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, ProcessPoolExecutor
 from jinja2 import Environment, FileSystemLoader
 from packaging.version import Version
 from pathlib import Path
@@ -42,6 +44,7 @@ class PrepareBenchmarkFactory:
     TABLES_ANALYZE = None
     SIZING_FACTORS = {}
     CLUSTER_SPEC = {}
+    PYTHON_LOADER = False
 
     def __init__(self, args, benchmark):
         schemas_dir = os.path.join(s64_benchmark_toolkit_root_dir, benchmark.base_dir, "schemas")
@@ -107,16 +110,19 @@ class PrepareBenchmarkFactory:
                 stdout, _ = p.communicate()
                 return stdout
 
-    def _run_tasks_parallel(self, tasks):
+    def _run_tasks_parallel(self, tasks, executor_class=ThreadPoolExecutor):
         def get_future(executor, task):
+            if isinstance(task, tuple):
+                task, task_args = (task[0], task[1:])
+
             if callable(task):
-                return executor.submit(task)
+                return executor.submit(task, *task_args)
             else:
                 return executor.submit(self._run_shell_task, task)
 
         # randomize the tasks to decrease lock contention
         random.shuffle(tasks)
-        with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
+        with executor_class(max_workers=self.args.max_jobs) as executor:
             futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
                 exc = completed_future.exception()
@@ -167,12 +173,20 @@ class PrepareBenchmarkFactory:
                 tasks = self.get_ingest_tasks(table)
                 assert isinstance(tasks, list), 'Returned object is not a list'
                 ingest_tasks.extend(tasks)
-            self._run_tasks_parallel(ingest_tasks)
+
+            if PrepareBenchmarkFactory.PYTHON_LOADER:
+                self._run_tasks_parallel(ingest_tasks, executor_class=ProcessPoolExecutor)
+            else:
+                self._run_tasks_parallel(ingest_tasks)
+
         ingest_duration = time.time() - start_ingest
 
         print('Adding indices')
         start_optimize = time.time()
         self.add_indexes()
+
+        print('Adding common')
+        self.add_common()
 
         if self.supports_cluster:
             print('Swarm64 DA CLUSTER')
@@ -273,13 +287,17 @@ class PrepareBenchmarkFactory:
             if not os.path.isfile(sql_file_path):
                 continue
 
-            with DBConn(self.args.dsn) as conn:
-                print(f'Applying {sql_file_path}')
-                with open(sql_file_path, 'r') as sql_file:
-                    sql = sql_file.read()
+            print(f'Applying {sql_file_path}')
+            with open(sql_file_path, 'r') as sql_file:
+                sql = sql_file.read()
 
-                tasks = [self.psql_exec_cmd(cmd) for cmd in sqlparse_split(sql)]
-                self._run_tasks_parallel(tasks)
+            tasks = [self.psql_exec_cmd(cmd) for cmd in sqlparse_split(sql)]
+            self._run_tasks_parallel(tasks)
+
+    def add_common(self):
+        common_path = os.path.join(self.schema_dir, '..', 'common', '*.sql')
+        tasks = [self.psql_exec_file(sql_file) for sql_file in glob.glob(common_path)]
+        self._run_tasks_parallel(tasks)
 
     def vacuum_analyze(self):
         print(f'Running VACUUM-ANALYZE on {self.args.dsn}')
