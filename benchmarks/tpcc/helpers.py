@@ -55,3 +55,7 @@ class Random:
     @classmethod
     def get_state(cls):
         return cls.string(2).upper()
+
+    @classmethod
+    def from_list(cls, l):
+        return random.choice(l)

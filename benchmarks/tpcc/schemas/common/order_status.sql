@@ -13,7 +13,7 @@ CREATE FUNCTION order_status(
   , out_c_middle CHAR(2)
   , out_c_last VARCHAR(16)
   , out_c_balance DECIMAL(12,2)
-  , out_o_id INT
+  , out_o_id BIGINT
   , out_o_entry_d TIMESTAMP
   , out_o_carrier_id SMALLINT
   , out_ol_i_id INT
