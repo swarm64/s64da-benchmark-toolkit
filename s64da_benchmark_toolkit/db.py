@@ -93,7 +93,6 @@ class DB:
     @staticmethod
     def get_explain_output(connection, sql):
         try:
-
             with connection.cursor() as explain_plan_cursor:
                 explain_plan_cursor.execute(sql.replace('-- EXPLAIN (FORMAT JSON)', 'EXPLAIN (FORMAT JSON)'))
                 return json.dumps(explain_plan_cursor.fetchone()[0], indent=4)
@@ -104,3 +103,6 @@ class DB:
         except json.JSONDecodeError as e:
             LOG.warning('Explain Output failed with a JSON Decode Error')
             return f'Explain Output failed with a JSON Decode Error: {str(e)}'
+
+        except TypeError as e:
+            return f'{{"Explain Output failed": "{str(e)}"}}'
