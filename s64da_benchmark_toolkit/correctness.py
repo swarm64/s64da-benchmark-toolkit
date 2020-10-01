@@ -6,6 +6,7 @@ from enum import Enum
 
 import numpy as np
 import pandas as pd
+from decimal import Decimal
 
 from natsort import index_natsorted, order_by_index
 
@@ -65,6 +66,8 @@ class ResultDetail(Enum):
 
 
 class Correctness:
+    BIG_NUM_VALUABLE_DIGITS = 11
+
     def __init__(self, scale_factor, benchmark):
         self.scale_factor = scale_factor
         self.query_output_folder = os.path.join('results', 'query_results')
@@ -76,7 +79,14 @@ class Correctness:
         return filepath
 
     @classmethod
+    def round_big_int(cls, value):
+        _, dc, exp = Decimal(value).as_tuple()
+        return round(value, cls.BIG_NUM_VALUABLE_DIGITS - len(dc) - exp)
+
+    @classmethod
     def round_to_precision(cls, value):
+        if abs(value) > 10**cls.BIG_NUM_VALUABLE_DIGITS:
+            return cls.round_big_int(value)
         rounded = ('%.2f' % value)
         if "." in rounded:
             return rounded[0:13]
@@ -170,7 +180,7 @@ class Correctness:
             LOG.debug(f'Query {query_number} is empty in correctness results.')
             truth = pd.DataFrame(columns=['col'])
         except FileNotFoundError:
-            LOG.debug(f'Correctness results for {query_number} not found. Skipping correctness checking.')
+            LOG.debug(f'Correctness results {correctness_path} not found. Skipping correctness checking')
             return CorrectnessResult.make_ok_result()
 
         # Reading Benchmark results
@@ -180,8 +190,7 @@ class Correctness:
             LOG.debug(f'{stream_id}_{query_number}.csv empty in benchmark results.')
             result = pd.DataFrame(columns=['col'])
         except FileNotFoundError:
-            msg = f'Query results for {stream_id}-{query_number} not found. Reporting as mismatch.'
-            LOG.debug(msg)
+            LOG.debug(f'Query results {benchmark_path} not found. Reporting as mismatch')
             return CorrectnessResult.make_mismatch_result(
                 ResultDetail.RESULT_EMPTY, [], [])
 

@@ -143,7 +143,7 @@ def test_correctness_precision(correctness):
     assert mismatch_idx == [0]
 
 
-def test_tpch_precision(correctness):
+def test_precision(correctness):
     truth = pandas.DataFrame([[0.05000012926042882], [0.04999679231408742]])
     result = pandas.DataFrame([[0.0499967923141588], [0.0500001292604431]])
 
@@ -151,13 +151,83 @@ def test_tpch_precision(correctness):
     assert result_detail == ResultDetail.OK
     assert mismatch_idx == None
 
-def test_tpch_precision_big_numbers(correctness):
-    truth = pandas.DataFrame([[326663512979.5298]])
-    result = pandas.DataFrame([[326663512979.33]])
+
+def test_precision_big_numbers(correctness):
+    truth = pandas.DataFrame([[326663512979.5298], [53785665800278.98]])
+    result = pandas.DataFrame([[326663512979.33], [53785665800280.0]])
 
     result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
     assert result_detail == ResultDetail.OK
     assert mismatch_idx == None
+
+
+def test_precision_negative_big_numbers(correctness):
+    truth = pandas.DataFrame([[-432612486418.88]])
+    result = pandas.DataFrame([[-432612486417.994]])
+
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx is None
+
+
+def test_natsort_no_effect_1(correctness):
+    CSV_PRECISION_A = '''
+        brand,brand_id,ext_price,t_hour,t_minute
+        amalgscholar,6009003,85.76,7,5
+        amalgscholar,6009003,85.76,19,18
+    '''
+    truth = get_dataframe(CSV_PRECISION_A)
+
+    CSV_PRECISION_B = '''
+        brand,brand_id,ext_price,t_hour,t_minute
+        amalgscholar,6009003,85.76,7,5
+        amalgscholar,6009003,85.75999999999999,19,18
+    '''
+    result = get_dataframe(CSV_PRECISION_B)
+
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx is None
+
+
+def test_natsort_no_effect_1(correctness):
+    CSV_PRECISION_A = '''
+        brand,brand_id,ext_price,t_hour,t_minute
+        amalgscholar,6009003,85.76,7,5
+        amalgscholar,6009003,85.76,19,18
+    '''
+    truth = get_dataframe(CSV_PRECISION_A)
+
+    CSV_PRECISION_B = '''
+        brand,brand_id,ext_price,t_hour,t_minute
+        amalgscholar,6009003,85.76,19,18
+        amalgscholar,6009003,85.75999999999999,7,5
+    '''
+    result = get_dataframe(CSV_PRECISION_B)
+
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx is None
+
+
+def test_natsort_no_effect_2(correctness):
+    CSV_PRECISION_A = '''
+        brand,brand_id,ext_price,t_hour,t_minute
+        amalgscholar,6009003,85.76,7,5
+        amalgscholar,6009003,85.76,19,18
+    '''
+    truth = get_dataframe(CSV_PRECISION_A)
+
+    CSV_PRECISION_B = '''
+        brand,brand_id,ext_price,t_hour,t_minute
+        amalgscholar,6009003,85.76,7,5
+        amalgscholar,6009003,85.75999999999999,19,18
+    '''
+    result = get_dataframe(CSV_PRECISION_B)
+
+    result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
+    assert result_detail == ResultDetail.OK
+    assert mismatch_idx is None
 
 
 def test_correctness_full_equal_within_precision(correctness):
