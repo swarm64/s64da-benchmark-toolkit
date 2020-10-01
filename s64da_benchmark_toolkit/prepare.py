@@ -245,10 +245,8 @@ class PrepareBenchmarkFactory:
             print(f'Creating Database {dbname}')
             conn.cursor.execute(f"CREATE DATABASE {dbname} TEMPLATE template0 ENCODING 'UTF-8'")
 
-        applied_schema_path = os.path.join(s64_benchmark_toolkit_root_dir, 'applied_schema.sql')
 
-        if self.num_partitions:
-            print(f'Applying partitions on schema with {self.num_partitions} partitions.\nResult schema: {applied_schema_path}')
+        applied_schema_path = os.path.join(s64_benchmark_toolkit_root_dir, 'applied_schema.sql')
 
         jinja_env = Environment(loader=FileSystemLoader(self.schema_dir))
         applied_schema = jinja_env.get_template("schema.sql").render(num_partitions=self.num_partitions)
@@ -257,6 +255,12 @@ class PrepareBenchmarkFactory:
             applied_schema_file.write(applied_schema)
 
         with DBConn(self.args.dsn) as conn:
+            if self.num_partitions:
+                print('Adding helper functions.')
+                common_file_path = os.path.join(s64_benchmark_toolkit_root_dir, 'benchmarks', 'common', 'functions.sql')    
+                with open(common_file_path, 'r') as common_sql:
+                    conn.cursor.execute(common_sql.read())
+
             self._load_pre_schema(conn)
 
             if self.swarm64da_version:
