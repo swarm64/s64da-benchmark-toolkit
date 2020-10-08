@@ -6,6 +6,7 @@ import logging
 import os
 import sys
 
+from checks import check_program_exists
 from logging.config import fileConfig
 from s64da_benchmark_toolkit.streams import Streams, Benchmark
 
@@ -17,6 +18,8 @@ if __name__ == '__main__':
     if py_version_info < (3, 6):
         logger.error('Your python version does not match the requirements.')
         sys.exit()
+
+    check_program_exists('psql')
 
     args_to_parse = argparse.ArgumentParser(
         argument_default=argparse.SUPPRESS,
