@@ -55,8 +55,10 @@ class Netdata:
 
     def _get_netdata_per_query(self, df, output):
         data = {}
-
         for _, row in df.iterrows():
+            if row['status'] == 'IGNORED':
+                continue
+
             timerange = (
                 Netdata.make_timestamp(row['timestamp_start']),
                 Netdata.make_timestamp(row['timestamp_stop'])
