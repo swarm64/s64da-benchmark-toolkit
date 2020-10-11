@@ -4,6 +4,7 @@ import logging
 import requests
 import pandas
 
+from dateutil.tz import tzlocal
 from natsort import natsorted
 
 LOG = logging.getLogger()
@@ -51,7 +52,8 @@ class Netdata:
 
     @classmethod
     def make_timestamp(cls, value):
-        return int(value.timestamp())
+        ts = int(value.tz_localize(tzlocal()).timestamp())
+        return ts
 
     def _get_netdata_per_query(self, df, output):
         data = {}
