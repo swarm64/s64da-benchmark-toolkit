@@ -1,0 +1,48 @@
+-- The Important Stock Identification Query finds, from scanning the available
+-- stock of suppliers in a given nation, all the parts that represent a
+-- significant percentage of the total value of all available parts. The query
+-- displays the part number and the value of those parts in descending order of
+-- value.
+--
+-- Notes:
+--   * Assumes 85% supply cost on item price
+
+-- DISABLED FOR NOW, NATION/REGION vs DISTRICT YET UNCLEAR
+
+-- DROP FUNCTION IF EXISTS important_stock_identification(VARCHAR(10));
+-- CREATE FUNCTION important_stock_identification(in_district_name VARCHAR(10)) RETURNS TABLE(
+--     item_name VARCHAR(24)
+--   , value NUMERIC
+-- ) AS $$
+-- BEGIN
+--   CREATE TEMP TABLE important_stock_identification AS
+--   SELECT
+--       i_name AS item_name
+--     , SUM(i_price * 0.85 * s_quantity) AS value
+--   FROM item
+--   JOIN stock ON i_id = s_i_id
+--   -- JOIN district ON s_w_id = d_
+--   WHERE d_name = in_district_na
+-- 
+-- 
+-- where
+--     ps_suppkey = s_suppkey
+--     and s_nationkey = n_nationkey
+--     and n_name = 'ROMANIA'
+-- group by
+--     ps_partkey having
+--         sum(ps_supplycost * ps_availqty) > (
+--             select
+--                 sum(ps_supplycost * ps_availqty) * 0.0001000000
+--             from
+--                 partsupp,
+--                 supplier,
+--                 nation
+--             where
+--                 ps_suppkey = s_suppkey
+--                 and s_nationkey = n_nationkey
+--                 and n_name = 'ROMANIA'
+--         )
+-- order by
+--     value desc;
+-- 
