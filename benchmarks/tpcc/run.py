@@ -32,7 +32,7 @@ def add_args(subparsers):
         '--orders-per-day', required=True, type=int, help=(
         'How many orders per day to generate.'))
 
-def run(args)
+def run(args):
     try:
         workers.run_all(args)
     except KeyboardInterrupt:
