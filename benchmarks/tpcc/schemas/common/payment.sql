@@ -141,7 +141,7 @@ BEGIN
               , in_d_id
               , in_w_id
               , to_char(in_h_amount, '9999999.99')
-              , extract(epoch from clock_timestamp())
+              , extract(epoch from in_timestamp)
               , c_data
             ), 1, 500
           )

@@ -125,42 +125,70 @@ class TPCC:
 
 if __name__ == '__main__':
     args_to_parse = argparse.ArgumentParser()
-    args_to_parse.add_argument('--scale-factor', required=True, type=int)
-    args_to_parse.add_argument('--workers', required=True, type=int)
-    args_to_parse.add_argument('--start-date', required=True)
-    args_to_parse.add_argument('--orders-per-day', required=True, type=int)
+    args_to_parse.add_argument(
+        '--scale-factor', required=True, type=int, help=(
+        'Scale factor to use. Set to same as when preparing the DB.'))
+
+    args_to_parse.add_argument(
+        '--oltp-workers', required=True, type=int, help=(
+        'How many workers to generate new orders.'))
+
+    args_to_parse.add_argument(
+        '--olap-workers', required=True, type=int, help=(
+        'How many query streams to run in parallel'))
+
+    args_to_parse.add_argument(
+        '--olap-timestamp', type=datetime.fromisoformat, help=(
+        'Timestamp to use for OLAP query when there is no OLTP'))
+
+    args_to_parse.add_argument(
+        '--start-date', required=True, type=datetime.fromisoformat, help=(
+        'First date of new orders, should be one day after ingestion date.'))
+
+    args_to_parse.add_argument(
+        '--end-date', required=True, type=datetime.fromisoformat, help=(
+        'Date until to run. Process will abort once this date is hit first.'))
+
+    args_to_parse.add_argument(
+        '--orders-per-day', required=True, type=int, help=(
+        'How many orders per day to generate.'))
+
     args = args_to_parse.parse_args()
 
     counter_ok = Value('i', 0)
     counter_err = Value('i', 0)
     order_timestamp = Value('f', 0.0)
     queries_queue = Queue()
-    increment = timedelta(seconds=86400.0 / (args.orders_per_day * (1 / 0.44)) * args.workers)
+    increment = timedelta(seconds=86400.0 / (
+        args.orders_per_day * (1 / 0.44)) * args.oltp_workers)
     lock = Lock()
 
-    def run_worker(worker_id, scale_factor, initial_timestamp):
-        # print(f'Starting worker {worker_id}')
-        tpcc = TPCC(worker_id, scale_factor)
-        timestamp = initial_timestamp
-        with DBConn('postgresql://postgres@localhost/tpcc_test') as conn:
-            while True:
+    dsn = 'postgresql://postgres@localhost/tpcc_test'
 
+    def run_oltp_worker(worker_id, scale_factor, start_timestamp):
+        tpcc = TPCC(worker_id, scale_factor)
+        timestamp = start_timestamp
+        with DBConn(dsn) as conn:
+            while True:
+                inc_ts = False
                 # Randomify the timestamp for each worker
                 timestamp_to_use = timestamp + tpcc.random.sample() * increment
 
                 trx_type = tpcc.random.randint_inclusive(1, 23)
                 if trx_type <= 10:
-                    tpcc.new_order(conn, timestamp=timestamp_to_use)
+                    success = tpcc.new_order(conn, timestamp=timestamp_to_use)
+                    inc_ts = True
                 elif trx_type <= 20:
-                    tpcc.payment(conn)
+                    success = tpcc.payment(conn, timestamp=timestamp_to_use)
+                    inc_ts = True
                 elif trx_type <= 21:
-                    tpcc.order_status(conn)
+                    success = tpcc.order_status(conn)
                 elif trx_type <= 22:
-                    tpcc.delivery(conn)
+                    success = tpcc.delivery(conn, timestamp=timestamp_to_use)
+                    inc_ts = True
                 elif trx_type <= 23:
-                    tpcc.stocklevel(conn)
+                    success = tpcc.stocklevel(conn)
 
-                success = tpcc.new_order(conn)
                 with lock:
                     order_timestamp.value = timestamp.timestamp()
                     if success:
@@ -168,12 +196,11 @@ if __name__ == '__main__':
                     else:
                         counter_err.value += 1
 
-                timestamp += increment
+                if success and inc_ts:
+                    timestamp += increment
 
-    def run_queries():
-        # print('Running queries')
-        dsn = 'postgresql://postgres@localhost/tpcc_test'
-        queries = Queries(dsn, 0)
+    def run_queries(stream_id):
+        queries = Queries(dsn, stream_id)
         while True:
             date = str(datetime.fromtimestamp(order_timestamp.value).date())
             queries.run_next_query(date, queries_queue)
@@ -183,15 +210,28 @@ if __name__ == '__main__':
         sys.exit(1)
 
     try:
-        initial_timestamp = datetime.fromisoformat(args.start_date)
-        worker_args = [(worker_id, args.scale_factor, initial_timestamp) for
-                       worker_id in range(args.workers)]
+        oltp_worker_args = [
+            (worker_id, args.scale_factor, args.start_date) for worker_id
+            in range(args.oltp_workers)]
 
-        output = Output()
+        olap_worker_args = [worker_id for worker_id in range(args.olap_workers)]
 
-        with Pool(processes=args.workers + 2) as pool:
-            pool.starmap_async(run_worker, worker_args, error_callback=on_error)
-            pool.apply_async(run_queries)
-            pool.apply_async(output.display(lock, counter_ok, counter_err, order_timestamp, queries_queue))
+        output = Output('postgresql://postgres@localhost/htap_stats')
+
+        total_workers = args.oltp_workers + args.olap_workers + 1
+        with Pool(processes=total_workers) as pool:
+            if args.oltp_workers > 0:
+                pool.starmap_async(run_oltp_worker, oltp_worker_args, error_callback=on_error)
+            else:
+                with lock:
+                    order_timestamp.value = args.olap_timestamp.timestamp()
+
+            if args.olap_workers > 0:
+                pool.map_async(run_queries, olap_worker_args, error_callback=on_error)
+
+            # Will block until args.end_date is reached
+            output.display(
+                lock, counter_ok, counter_err, order_timestamp, queries_queue,
+                args.end_date, args.oltp_workers)
     except KeyboardInterrupt:
         pass

@@ -1,12 +1,17 @@
 
+import sys
 import time
 
 from datetime import datetime
+from uuid import uuid4
 
+from psycopg2.extras import execute_values, register_uuid
 from reprint import output
 
 from benchmarks.tpcc.queries import QUERIES
+from s64da_benchmark_toolkit.dbconn import DBConn
 
+register_uuid()
 
 QUERIES_LIST = sorted(QUERIES.keys())
 QUERIES_OUTPUT_MAP = {QUERIES_LIST[idx]: idx for idx in range(len(QUERIES_LIST))}
@@ -14,30 +19,62 @@ QUERIES_OUTPUT_MAP = {QUERIES_LIST[idx]: idx for idx in range(len(QUERIES_LIST))
 
 class TxView:
     def __init__(self):
-        self.ok_current = 0
-        self.ok_sum = 0
-        self.err_current = 0
-        self.err_sum = 0
-        self.total_current = 0
-        self.total_sum = 0
         self.counter = 0
+        self.metrics = {
+            'ok': {
+                'min': sys.maxsize,
+                'max': 0,
+                'avg': 0,
+                'current': 0,
+                'total': 0
+            },
+            'err': {
+                'min': sys.maxsize,
+                'max': 0,
+                'avg': 0,
+                'current': 0,
+                'total': 0
+            },
+            'total': {
+                'min': sys.maxsize,
+                'max': 0,
+                'avg': 0,
+                'current': 0,
+                'total': 0
+            }
+        }
 
     def add_tx_info(self, ok, err):
-        self.ok_current = ok
-        self.ok_sum += ok
-        self.err_current = err
-        self.err_sum += err
-        self.total_current = ok + err
-        self.total_sum += (ok + err)
+        self.metrics['ok']['current'] = ok
+        self.metrics['ok']['total'] += ok
+
+        self.metrics['err']['current'] = err
+        self.metrics['err']['total'] += err
+
+        self.metrics['total']['current'] = (ok + err)
+        self.metrics['total']['total'] += (ok + err)
+
         self.counter += 1
+
+        for key in ('ok', 'err', 'total'):
+            entry = self.metrics[key]
+            entry['avg'] = entry['total'] / self.counter
+            entry['min'] = min(entry['min'], entry['current'])
+            entry['max'] = max(entry['max'], entry['current'])
 
     @property
     def output(self):
-        return (
-            f'Tx OK    : {self.ok_current:>10.0f} AVG: {(self.ok_sum / self.counter):>10.0f} Total: {self.ok_sum:,}',
-            f'Tx ERR   : {self.err_current:>10.0f} AVG: {(self.err_sum / self.counter):>10.0f} Total: {self.err_sum:,}',
-            f'Tx Total : {self.total_current:>10.0f} AVG: {(self.total_sum / self.counter):>10.0f} Total: {self.total_sum:,}'
-        )
+        output = []
+        for key in ('ok', 'err', 'total'):
+            entry = self.metrics[key]
+            s  = f"Tx {key:>6} - "
+            s += f"Now: {entry['current']:>5.0f} tps  "
+            s += f"AVG: {entry['avg']:>5.0f} tps  "
+            s += f"MIN: {entry['min']:>5.0f} tps  "
+            s += f"MAX: {entry['max']:>5.0f} tps  "
+            s += f"TOTAL: {entry['total']: >10,.0f}"
+            output.append(s)
+        return output
 
 class QueryRuntimeView:
     class Buffer:
@@ -72,35 +109,57 @@ class QueryRuntimeView:
 
 
 class Output:
-    def __init__(self):
+    def __init__(self, dsn):
+        self.uuid = uuid4()
+        self.dsn = dsn
         self.tx_view = TxView()
         self.query_runtimes = []
         for query in QUERIES_LIST:
             self.query_runtimes.append(QueryRuntimeView(query))
 
-    def display(self, lock, counter_ok, counter_err, order_timestamp, query_queue):
-        with output(output_type="list", initial_len=18, interval=0) as output_list:
-            for idx in range(15):
-                output_list[idx] = ' '
+    def display(self, lock, counter_ok, counter_err, order_timestamp,
+                query_queue, end_timestamp, oltp_workers):
+        with output(output_type="list", initial_len=20, interval=0) as output_list:
+            output_list[0] = self.uuid
+            with DBConn(self.dsn) as dbconn:
+                for idx in range(1,20):
+                    output_list[idx] = ' '
 
-            while True:
-                time.sleep(1)
-                with lock:
-                    self.tx_view.add_tx_info(counter_ok.value, counter_err.value)
+                while True:
+                    counter_ok_tmp = 0
+                    counter_err_tmp = 0
+                    time.sleep(1)
+                    with lock:
+                        counter_ok_tmp = counter_ok.value
+                        counter_err_tmp = counter_err.value
+                        counter_ok.value = 0
+                        counter_err.value = 0
+
+                    current_timestamp = datetime.now()
                     timestamp = datetime.fromtimestamp(order_timestamp.value)
-                    counter_ok.value = 0
-                    counter_err.value = 0
+                    self.tx_view.add_tx_info(counter_ok_tmp, counter_err_tmp)
 
-                while not query_queue.empty():
-                    query, runtime = query_queue.get_nowait()
-                    output_idx = QUERIES_OUTPUT_MAP.get(query, None)
-                    if output_idx is not None and isinstance(runtime, float):
-                        self.query_runtimes[output_idx].add_runtime(runtime)
-                        self.query_runtimes[output_idx].set_status('done')
-                    elif output_idx:
-                        self.query_runtimes[output_idx].set_status(runtime)
+                    dbconn.cursor.execute(
+                        'INSERT INTO oltp_stats VALUES(%s, %s, %s, %s)',
+                        (self.uuid, current_timestamp, counter_ok_tmp, counter_err_tmp))
 
-                output_list[0] = f'Current timestamp: {timestamp}'
-                output_list[1], output_list[2], output_list[3] = self.tx_view.output
-                for idx, entry in enumerate(self.query_runtimes):
-                    output_list[idx + 5] = str(entry)
+                    db_buffer = []
+                    while not query_queue.empty():
+                        worker_id, query, runtime = query_queue.get_nowait()
+                        output_idx = QUERIES_OUTPUT_MAP.get(query, None)
+                        if output_idx is not None and isinstance(runtime, float):
+                            self.query_runtimes[output_idx].add_runtime(runtime)
+                            self.query_runtimes[output_idx].set_status('done')
+                            db_buffer.append((self.uuid, current_timestamp, worker_id, query, runtime))
+
+                    if db_buffer:
+                        sql = 'INSERT INTO olap_stats VALUES %s'
+                        execute_values(dbconn.cursor, sql, db_buffer)
+
+                    output_list[1] = f'Current timestamp: {timestamp}'
+                    output_list[2], output_list[3], output_list[4] = self.tx_view.output
+                    for idx, entry in enumerate(self.query_runtimes):
+                        output_list[idx + 6] = str(entry)
+
+                    if oltp_workers > 0 and timestamp > end_timestamp:
+                        return True

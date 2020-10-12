@@ -28,7 +28,7 @@ CREATE INDEX idx_customer_s64da ON customer USING columnstore(
   , c_payment_cnt
   , c_delivery_cnt
   , c_data
-);
+) WITH(compression_type='lz4');
 
 CREATE INDEX idx_district_tuple ON district(d_id, d_w_id);
 
@@ -41,9 +41,9 @@ CREATE INDEX idx_orders_s64da ON orders USING columnstore(
   , o_carrier_id
   , o_ol_cnt
   , o_all_local
-);
+) WITH(compression_type='lz4');
 
-CREATE INDEX idx_order_line ON order_line USING columnstore(
+CREATE INDEX idx_order_line_s64da ON order_line USING columnstore(
     ol_o_id
   , ol_d_id
   , ol_w_id
@@ -54,4 +54,4 @@ CREATE INDEX idx_order_line ON order_line USING columnstore(
   , ol_quantity
   , ol_amount
   , ol_dist_info
-);
+) WITH(compression_type='lz4');

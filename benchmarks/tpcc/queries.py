@@ -30,6 +30,7 @@ QUERIES = {
 class Queries:
     def __init__(self, dsn, stream_id):
         self.random = Random(stream_id)
+        self.stream_id = stream_id
         self.dsn = dsn
         with open('benchmarks/tpcc/queries/streams.yaml', 'r') as streams_file:
             sequence = yaml.load(streams_file.read(), Loader=yaml.FullLoader)[stream_id]
@@ -64,12 +65,12 @@ class Queries:
             sql = sql.replace('__ITEM_PART__', Random.from_list(self.items).split('-')[1])
 
         try:
-            queries_queue.put((next_query, 'Running'))
+            queries_queue.put((self.stream_id, next_query, 'Running'))
             with DBConn(self.dsn) as conn:
                 tstart = time.time()
                 conn.cursor.execute(sql)
                 tstop = time.time()
-            queries_queue.put((next_query, tstop - tstart))
+            queries_queue.put((self.stream_id, next_query, tstop - tstart))
             # print(f'Q{ next_query }: { tstop - tstart }s')
         except Exception as exc:
             print(f'!!! Error Q{next_query}: {exc}')

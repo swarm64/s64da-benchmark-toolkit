@@ -8,6 +8,8 @@ import sys
 
 import importlib.util
 
+from datetime import datetime
+
 from logging.config import fileConfig
 from s64da_benchmark_toolkit.streams import Streams, Benchmark
 
@@ -78,7 +80,8 @@ if __name__ == '__main__':
         'The path to the S64 DA license.'
     ))
 
-    args_to_parse.add_argument('--start-date', default=None, help=(
+    args_to_parse.add_argument(
+        '--start-date', default=None, type=datetime.fromisoformat, help=(
         'The start date for TPC-C.'
     ))
 

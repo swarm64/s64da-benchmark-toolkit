@@ -211,7 +211,6 @@ class PrepareBenchmarkFactory:
                 conn.cursor.execute(pre_schema_file.read())
 
     def _load_license(self, conn):
-
         license_loaded = True
 
         try:
