@@ -32,12 +32,8 @@ def add_args(subparsers):
         '--orders-per-day', required=True, type=int, help=(
         'How many orders per day to generate.'))
 
-def run(args):
-    def on_error(what):
-        print(f'Error called: {what}')
-        sys.exit(1)
-
+def run(args)
     try:
-        workers.run_all(args, on_error)
+        workers.run_all(args)
     except KeyboardInterrupt:
         pass

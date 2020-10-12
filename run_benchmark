@@ -55,8 +55,8 @@ if __name__ == '__main__':
     ))
 
     args_to_parse.add_argument('--streams', type=int, default=0, help=(
-        'How many streams (virtual users) to run in parallel for the selected benchmark. '
-        'Pass "0" to run a single stream. The default is "0".'
+        'How many streams (virtual users) to run in parallel for the selected '
+        'benchmark. Pass "0" to run a single stream. The default is "0".'
     ))
 
     args_to_parse.add_argument('--stream-offset', type=int, default=1, help=(
@@ -68,7 +68,8 @@ if __name__ == '__main__':
         'present in configuration.'
     ))
 
-    args_to_parse.add_argument('--output', choices=['csv', 'print'], default='print', nargs='+',
+    args_to_parse.add_argument('--output', choices=['csv', 'print'],
+                               default='print', nargs='+',
         help=('How the results output should look like. '
               'Multiple options possible, separated by space')
     )
@@ -78,17 +79,21 @@ if __name__ == '__main__':
         'The default is results.csv in the current directory.'
     ))
 
-    args_to_parse.add_argument('--check-correctness', action='store_true', default=False, help=(
-        'Flag to check correctness.'
-        'Additionally, each query output will be stored in the query_results folder.'
+    args_to_parse.add_argument('--check-correctness', action='store_true',
+                               default=False, help=(
+        'Flag to check correctness. Additionally, each query output will be '
+        'stored in the query_results folder.'
     ))
 
-    args_to_parse.add_argument('--scale-factor', choices=(10, 100, 300, 1000, 3000, 8000), type=int, default=None,
-                               required=(any(arg in ['--check-correctness','tpcds'] for arg in sys.argv)), help=(
+    scale_factors = (10, 100, 300, 1000, 3000, 8000)
+    scale_factor_required = any(arg in ['--check-correctness','tpcds'] for arg in sys.argv)
+    args_to_parse.add_argument('--scale-factor', choices=scale_factors, type=int,
+                               default=None, required=scale_factor_required, help=(
         'Scale Factor of correctness result to compare with the query output.'
     ))
 
-    args_to_parse.add_argument('--explain-analyze', action='store_true', default=False, help=(
+    args_to_parse.add_argument('--explain-analyze', action='store_true',
+                               default=False, help=(
         'Whether to run EXPLAIN ANALYZE. Will save plans into the "plan" directory.'
     ))
 

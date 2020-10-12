@@ -59,7 +59,11 @@ def _olap_worker(dsn, stream_id, shared):
         date = str(datetime.fromtimestamp(shared.order_timestamp.value).date())
         queries.run_next_query(date, shared.queries_queue)
 
-def run_all(args, on_error):
+def run_all(args):
+    def on_error(what):
+        print(f'Error called: {what}')
+        sys.exit(1)
+
     shared = Shared()
     output = Output('postgresql://postgres@localhost/htap_stats')
     total_workers = args.oltp_workers + args.olap_workers + 1
