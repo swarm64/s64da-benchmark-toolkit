@@ -6,6 +6,8 @@ import logging
 import os
 import sys
 
+from importlib import import_module
+
 from logging.config import fileConfig
 from s64da_benchmark_toolkit.streams import Streams, Benchmark
 
@@ -42,7 +44,8 @@ if __name__ == '__main__':
         pass
 
     benchmark_names = sorted([benchmark.name for benchmark in benchmarks])
-    args_to_parse.add_argument('--benchmark', required=True, choices=benchmark_names, help=(
+    args_to_parse.add_argument('--benchmark', required='tpcc' not in sys.argv,
+                               choices=benchmark_names, help=(
         'Which benchmark to run.'
     ))
 
@@ -89,10 +92,18 @@ if __name__ == '__main__':
         'Whether to run EXPLAIN ANALYZE. Will save plans into the "plan" directory.'
     ))
 
-    args = args_to_parse.parse_args()
-    for benchmark in benchmarks:
-        if benchmark.name == args.benchmark:
-            benchmark_to_run = benchmark
-            break
+    # Note: this needs to be wrapped in a try-except block
+    tpcc = import_module('benchmarks.tpcc.run')
+    subparsers = args_to_parse.add_subparsers(dest='subcommand')
+    tpcc.add_args(subparsers)
+    # Until here
 
-    Streams(args, benchmark_to_run).run()
+    args = args_to_parse.parse_args()
+    if args.subcommand == 'tpcc':
+        tpcc.run(args)
+    else:
+        for benchmark in benchmarks:
+            if benchmark.name == args.benchmark:
+                benchmark_to_run = benchmark
+                break
+        Streams(args, benchmark_to_run).run()

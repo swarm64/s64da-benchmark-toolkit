@@ -117,8 +117,7 @@ class Output:
         for query in QUERIES_LIST:
             self.query_runtimes.append(QueryRuntimeView(query))
 
-    def display(self, lock, counter_ok, counter_err, order_timestamp,
-                query_queue, end_timestamp, oltp_workers):
+    def display(self, shared, end_timestamp, oltp_workers):
         with output(output_type="list", initial_len=20, interval=0) as output_list:
             output_list[0] = self.uuid
             with DBConn(self.dsn) as dbconn:
@@ -129,14 +128,14 @@ class Output:
                     counter_ok_tmp = 0
                     counter_err_tmp = 0
                     time.sleep(1)
-                    with lock:
-                        counter_ok_tmp = counter_ok.value
-                        counter_err_tmp = counter_err.value
-                        counter_ok.value = 0
-                        counter_err.value = 0
+                    with shared.lock:
+                        counter_ok_tmp = shared.counter_ok.value
+                        counter_err_tmp = shared.counter_err.value
+                        shared.counter_ok.value = 0
+                        shared.counter_err.value = 0
 
                     current_timestamp = datetime.now()
-                    timestamp = datetime.fromtimestamp(order_timestamp.value)
+                    timestamp = datetime.fromtimestamp(shared.order_timestamp.value)
                     self.tx_view.add_tx_info(counter_ok_tmp, counter_err_tmp)
 
                     dbconn.cursor.execute(
@@ -144,8 +143,8 @@ class Output:
                         (self.uuid, current_timestamp, counter_ok_tmp, counter_err_tmp))
 
                     db_buffer = []
-                    while not query_queue.empty():
-                        worker_id, query, runtime = query_queue.get_nowait()
+                    while not shared.queries_queue.empty():
+                        worker_id, query, runtime = shared.queries_queue.get_nowait()
                         output_idx = QUERIES_OUTPUT_MAP.get(query, None)
                         if output_idx is not None and isinstance(runtime, float):
                             self.query_runtimes[output_idx].add_runtime(runtime)
