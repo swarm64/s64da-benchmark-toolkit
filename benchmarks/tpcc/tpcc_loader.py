@@ -2,7 +2,7 @@
 from psycopg2.extras import execute_values
 
 from s64da_benchmark_toolkit.dbconn import DBConn
-from benchmarks.tpcc.helpers import Random
+from benchmarks.tpcc.lib.helpers import Random
 
 
 MAXITEMS = 100000
