@@ -124,7 +124,7 @@ class Output:
                 for idx in range(1,20):
                     output_list[idx] = ' '
 
-                while True:
+                while not shared.stop.is_set():
                     counter_ok_tmp = 0
                     counter_err_tmp = 0
                     time.sleep(1)

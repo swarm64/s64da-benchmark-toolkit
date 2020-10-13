@@ -34,6 +34,7 @@ def add_args(subparsers):
 
 def run(args):
     try:
-        workers.run_all(args)
+        shared = workers.Shared()
+        workers.run_all(args, shared)
     except KeyboardInterrupt:
-        pass
+        shared.stop.set()

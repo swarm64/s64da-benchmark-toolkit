@@ -1,4 +1,6 @@
 
+import sys
+
 from datetime import datetime, timedelta
 from multiprocessing.pool import Pool
 from multiprocessing import Manager
@@ -18,12 +20,13 @@ class Shared:
         self.order_timestamp = manager.Value('f', 0.0)
         self.queries_queue = manager.Queue()
         self.lock = manager.Lock()
+        self.stop = manager.Event()
 
 def _oltp_worker(worker_id, dsn, scale_factor, start_timestamp, increment, shared):
     tpcc = TPCC(worker_id, scale_factor)
     timestamp = start_timestamp
     with DBConn(dsn) as conn:
-        while True:
+        while not shared.stop.is_set():
             inc_ts = False
             # Randomify the timestamp for each worker
             timestamp_to_use = timestamp + tpcc.random.sample() * increment
@@ -55,16 +58,15 @@ def _oltp_worker(worker_id, dsn, scale_factor, start_timestamp, increment, share
 
 def _olap_worker(dsn, stream_id, shared):
     queries = Queries(dsn, stream_id)
-    while True:
+    while not shared.stop.is_set():
         date = str(datetime.fromtimestamp(shared.order_timestamp.value).date())
         queries.run_next_query(date, shared.queries_queue)
 
-def run_all(args):
+def run_all(args, shared):
     def on_error(what):
         print(f'Error called: {what}')
         sys.exit(1)
 
-    shared = Shared()
     output = Output('postgresql://postgres@localhost/htap_stats')
     total_workers = args.oltp_workers + args.olap_workers + 1
     with Pool(processes=total_workers) as pool:
