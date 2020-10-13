@@ -71,4 +71,4 @@ CREATE TABLE lineorder (
   lo_shipmode          VARCHAR(10) NOT NULL
 );
 
-CREATE STATISTICS lineitem_ndistinct (ndistinct) ON l_suppkey, l_partkey FROM lineitem;
+CREATE STATISTICS lineitem_ndistinct (ndistinct) ON lo_suppkey, lo_partkey FROM lineorder;
