@@ -8,6 +8,7 @@ import sys
 
 import importlib.util
 
+from checks import check_program_exists
 from logging.config import fileConfig
 from s64da_benchmark_toolkit.streams import Streams, Benchmark
 
@@ -19,6 +20,8 @@ if __name__ == '__main__':
     if py_version_info < (3, 6):
         logger.error('Your python version does not match the requirements.')
         sys.exit()
+
+    check_program_exists('psql')
 
     args_to_parse = argparse.ArgumentParser(
         argument_default=argparse.SUPPRESS,
@@ -43,7 +46,7 @@ if __name__ == '__main__':
         'Which benchmark to run.'
     ))
 
-    scale_factor_required = any(x in sys.argv for x in ('tpcds', 'tpch', 'ssb'))
+    scale_factor_required = any(x in ''.join(sys.argv) for x in ('tpcds', 'tpch', 'ssb'))
     args_to_parse.add_argument('--scale-factor', type=int, default=None,
                                required=scale_factor_required, help=(
         'Scale factor for specific benchmarks (e.g. TPC-DS/H, SSB).'
@@ -83,6 +86,13 @@ if __name__ == '__main__':
         if benchmark.name == args.benchmark:
             benchmark_to_run = benchmark
             break
+
+    if args.benchmark == 'ssb':
+        # Parameter --check-diskspace-of-directory not supported for ssb yet
+        args.check_diskspace_of_directory = ''
+    
+    if args.benchmark == 'tpcds':
+            check_program_exists('recode')
 
     spec = importlib.util.spec_from_file_location(
         's64da_benchmark_toolkit.prepare',

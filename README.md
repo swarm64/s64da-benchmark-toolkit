@@ -1,7 +1,10 @@
 # Summary
 
-This toolkit provides methods to execute the TPC-H, TPC-DS, and SSB benchmark on
-Swarm64 DA and native PostgreSQL.
+This toolkit provides methods to execute the TPC-H, TPC-DS, and SSB benchmark on:
+- PostgreSQL
+- EDB Postgres Advanced Server (EPAS)
+- PostgreSQL with Swarm64 DA
+- EPAS with Swarm64 DA
 
 Important notice: In order to guarantee compatibility between S64 DA and s64da-benchmark-toolkit, please checkout the GIT Tag that corresponds to your version of S64 DA. For example, if your version of S64 DA is 5.0.0-beta, clone this repository and execute git checkout v5.0.0-beta within the the repository root folder before proceeding. For S64 DA versions 4.0.0 and below checkout v4.0.0_and_below
 
@@ -12,44 +15,42 @@ Important notice: In order to guarantee compatibility between S64 DA and s64da-b
 - Install additional packages, for Python 3.6 eg. with: `/usr/bin/python3.6 -m pip install -r requirements.txt`
 - The `psql` PostgreSQL client
 - For loading the data, the database must be accessible with the user
-  `postgres` *without password*
+  `postgres` or `enterprisedb` *without password*
 
 
 # Create a database and load data
 
-1. To load a database with a dataset, go to the correct benchmark directory:\
-   For TPC-H: `cd schemas/tpch`\
-   For TPC-DS: `cd schemas/tpcds`\
-   For SSB: `cd schemas/ssb`
+Load a database with a dataset. If the database does not exist, it will be created. If it does exist, it will be deleted and recreated.
 
-2. Run the `loader.sh` script with the following parameters:
-
-    ./loader.sh \
+    ./prepare_benchmark \
+        --dsn postgresql://postgres@localhost/<target-db> \
+        --benchmark <tpch|tpcds|ssb> \
         --schema=<schema-to-deploy> \
         --scale-factor=<scale-factor-to-use> \
-        --dbname=<target-db>
   
-    For example in `schemas/tpch`:
+  For example in order to load tpch dataset using PostgreSQL with Swarm64 DA performance schema:
 ```
-        ./loader.sh --schema=s64da_columnstore --scale-factor=1000 --dbname=example-database
+    ./prepare_benchmark --dsn=postgresql://postgres@localhost:5432/example-database \
+    --benchmark=tpch --scale-factor=1000 --schema=s64da_performance
 ```
-  
+
 ### Required Parameters
 
    | Parameter      | Description                                            |
    | -------------- | ------------------------------------------------------ |
+   | `dsn`          | The full DSN of the DB to connect to. DSN layout: <br> ``postgresql://<user>@<host>:<target-port>/<target-db>`` <br> The port is optional and the default is 5432.<br> Example with port 5444 and use of EPAS: ``--dsn postgresql://enterprisedb@localhost:5444/example-database``|
+   | `benchmark`    | The benchmark to use: `tpch`, `tpcds` or `ssb`         |
    | `schema`       | The schema to deploy. Schemas are directories in the benchmarks/\<benchmark\>/schemas directory and each benchmark has the following schemas: <br> - `psql_native`: standard PostgreSQL schema;<br> - `s64da_native`: as `psql_native` but with S64 DA enabled and only its default features;<br> - `s64da_native_enhanced`: as `s6da_native`, but with using some S64 DA opt-in features, such as the columnstore index; <br> - `s64da_performance`: schema that provides the best performance for S64 DA. <br>The schema name equals the directory name. |
-   | `scale-factor` | The scale factor to use, such as `10`, `100` or `1000`.      |
-   | `dbname`       | The name of the target database. If the database does not exist, it will be created. If it does exist, it will be deleted and recreated.    |
+   | `scale-factor` | The scale factor to use, such as `10`, `100` or `1000`.|
 
 ### Optional Parameters
 
-   | Parameter       | Description                                           |
-   | ---------------- | ---------------------------------------------------- |
-   | `num-partitions` | The number of partitions to use, if applicable. Default: 32 |
-   | `chunks`         | Chunk large tables into smaller pieces during ingestion. Default: 10 |
-   | `db-host`        | Alternative host for the database. Default: localhost |
-   | `db-port`        | Alternative port for the database. Default: 5432|
+   | Parameter                      | Description                                          |
+   | ----------------               | ---------------------------------------------------- |
+   | `chunks`                       | Chunk large tables into smaller pieces during ingestion. Default: `10` |
+   | `max-jobs`                     | Limit the overall loading parallelism to this amount of jobs. Default: `8` |
+   | `check-diskspace-of-directory` | If flag is present, a disk space check on the passed storage directory will be performed prior to ingestion. |
+   | `s64da-license-path`           | The path to the S64 DA license. Default: `/s64da.license` |
 
    Depending on the scale factor you choose, the time it takes for the script
    to finish might take up to several hours. After the script creates the
@@ -72,8 +73,8 @@ use the `--timeout` parameter to adjust this limit.
 
 | Parameter   | Description                                     |
 | ----------- | ----------------------------------------------- |
-| `dsn`       | The full DSN of the DB to connect to. DSN layout: <br> ``postgresql://<user>@<host>:<target-port>/<target-db>`` <br> The port is optional and the default is 5432.<br> Example with port 5433: ``--dsn postgresql://postgres@localhost:5433/example-database``|
-| `benchmark` | The benchmark to use: `tpch`, `tpcds` or `ssb`        |
+| `dsn`       | The full DSN of the DB to connect to. DSN layout: <br> ``postgresql://<user>@<host>:<target-port>/<target-db>`` <br> The port is optional and the default is 5432.<br> Example with port 5444 and use of EPAS: ``--dsn postgresql://enterprisedb@localhost:5444/example-database``|
+| `benchmark` | The benchmark to use: `tpch`, `tpcds` or `ssb`  |
 
 ### Optional Parameters
 
