@@ -4,6 +4,7 @@ import logging
 import requests
 import pandas
 
+from dateutil.tz import tzlocal
 from natsort import natsorted
 
 LOG = logging.getLogger()
@@ -31,6 +32,8 @@ class Netdata:
             if status_code != 200:
                 LOG.warning(f'Netdata response not 200, but {status_code} '
                             f'for chart {chart}.')
+                LOG.warning(response.text)
+                LOG.warning(timerange)
                 continue
 
             result = response.json()
@@ -49,12 +52,15 @@ class Netdata:
 
     @classmethod
     def make_timestamp(cls, value):
-        return int(value.timestamp())
+        ts = int(value.tz_localize(tzlocal()).timestamp())
+        return ts
 
     def _get_netdata_per_query(self, df, output):
         data = {}
-
         for _, row in df.iterrows():
+            if row['status'] == 'IGNORED':
+                continue
+
             timerange = (
                 Netdata.make_timestamp(row['timestamp_start']),
                 Netdata.make_timestamp(row['timestamp_stop'])
@@ -83,28 +89,28 @@ class Netdata:
                 output_file.write('\n')
 
     def _write_stats_no_breakdown(self, df, output):
-        LOG.info('Running more than one stream. Netdata stats are written '
-                 'out without analysis.')
         netdata_df = self.get_system_stats(df, 1)
-
         with open(output, 'w') as output_file:
             netdata_df.to_csv(output_file)
             output_file.write('\n')
 
     def write_stats(self, df, output):
-
         if len(df['stream_id'].unique()) == 1:
             flname, flext = os.path.splitext(output)
             self._write_stats_per_query(df, f'{flname}_single_stream{flext}')
+        else:
+            LOG.info('Running more than one stream. Netdata stats are written '
+                     'out without analysis.')
 
         self._write_stats_no_breakdown(df, output)
 
     def is_netdata_set_and_running(self):
         try:
-            response = requests.get(self.url)
+            response = requests.get(f'{self.url}?chart=system.cpu')
             status_code = response.status_code
             if status_code != 200:
                 LOG.warning(f'Netdata url response ({self.url}) does not return 200, but {status_code}')
+                LOG.warning(response.text)
                 return False
 
         except requests.exceptions.ConnectionError as e:
