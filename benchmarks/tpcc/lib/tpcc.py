@@ -121,13 +121,13 @@ class TPCC:
         args = (w_id, d_id, level)
         return self.execute_sql(sql, args)
 
-    def next_transaction(self, dummy_db):
+    def next_transaction(self, timestamp, dummy_db):
         inc_ts = False
         # Randomify the timestamp
-        timestamp_to_use = self.timestamp + self.random.sample() * self.increment
+        # timestamp_to_use = self.timestamp + self.random.sample() * self.increment
+        timestamp_to_use = timestamp
 
         trx_type = self.random.randint_inclusive(1, 23)
-        success = True
         if not dummy_db:
             if trx_type <= 10:
                 success = self.new_order(timestamp=timestamp_to_use)
@@ -142,11 +142,13 @@ class TPCC:
                 inc_ts = True
             elif trx_type <= 23:
                 success = self.stocklevel()
-
-        if success and inc_ts:
-            self.timestamp += self.increment
+        else:
+            success = True
+            inc_ts = True
 
         if success:
             self.ok_count += 1
         else:
             self.err_count += 1
+
+        return success and inc_ts

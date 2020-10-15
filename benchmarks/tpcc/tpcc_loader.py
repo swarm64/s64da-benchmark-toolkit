@@ -32,13 +32,13 @@ class TPCCLoader():
     def load_warehouse(self):
         self.insert_data('warehouse', [[
             self.w_id,
-            Random.string(5, prefix='name-'),
-            Random.string(10, prefix='street1-'),
-            Random.string(10, prefix='street2-'),
-            Random.string(10, prefix='city-'),
-            Random.get_state(),
-            Random.numstring(5, prefix='zip-'),
-            Random.sample() * 0.2,
+            self.random.string(5, prefix='name-'),
+            self.random.string(10, prefix='street1-'),
+            self.random.string(10, prefix='street2-'),
+            self.random.string(10, prefix='city-'),
+            self.random.get_state(),
+            self.random.numstring(5, prefix='zip-'),
+            self.random.sample() * 0.2,
             300000,
         ],])
 
@@ -48,13 +48,13 @@ class TPCCLoader():
             buffer.append([
                 d_id,
                 self.w_id,
-                Random.string(5, prefix='name-'),
-                Random.string(10, prefix='street1-'),
-                Random.string(10, prefix='street2-'),
-                Random.string(10, prefix='city-'),
-                Random.get_state(),
-                Random.numstring(5, prefix='zip-'),
-                Random.sample() * 0.2,
+                self.random.string(5, prefix='name-'),
+                self.random.string(10, prefix='street1-'),
+                self.random.string(10, prefix='street2-'),
+                self.random.string(10, prefix='city-'),
+                self.random.get_state(),
+                self.random.numstring(5, prefix='zip-'),
+                self.random.sample() * 0.2,
                 30000,
                 3001,
             ])
@@ -64,31 +64,31 @@ class TPCCLoader():
         buffer = []
         for d_id in range(1, DIST_PER_WARE + 1):
             for c_id in range(1, CUST_PER_DIST + 1):
-                c_last = Random.lastname(c_id - 1) if c_id < 1000 else \
-                         Random.lastname(self.random.nurand(255, 0, 999))
+                c_last = self.random.lastname(c_id - 1) if c_id < 1000 else \
+                         self.random.lastname(self.random.nurand(255, 0, 999))
 
                 buffer.append([
                     c_id,
                     d_id,
                     self.w_id,
-                    Random.string(Random.randint_inclusive(2, 10), prefix='first-'),
+                    self.random.string(self.random.randint_inclusive(2, 10), prefix='first-'),
                     'OE',
                     c_last,
-                    Random.string(10, prefix='street1-'),
-                    Random.string(10, prefix='street2-'),
-                    Random.string(10, prefix='city-'),
-                    Random.get_state(),
-                    Random.numstring(5, prefix='zip-'),
-                    Random.numstring(16),
+                    self.random.string(10, prefix='street1-'),
+                    self.random.string(10, prefix='street2-'),
+                    self.random.string(10, prefix='city-'),
+                    self.random.get_state(),
+                    self.random.numstring(5, prefix='zip-'),
+                    self.random.numstring(16),
                     self.start_date or 'NOW()',
-                    'GC' if Random.randint_inclusive(1, 100) > 10 else 'BC',
+                    'GC' if self.random.randint_inclusive(1, 100) > 10 else 'BC',
                     50000,
-                    Random.sample() * 0.5,
+                    self.random.sample() * 0.5,
                     -10,
                     10,
                     1,
                     0,
-                    Random.string(Random.randint_inclusive(300, 500))
+                    self.random.string(self.random.randint_inclusive(300, 500))
                 ])
         self.insert_data('customer', buffer)
 
@@ -104,7 +104,7 @@ class TPCCLoader():
                     self.w_id,
                     self.start_date or 'NOW()',
                     10,
-                    Random.string(Random.randint_inclusive(12, 24))
+                    self.random.string(self.random.randint_inclusive(12, 24))
                 ])
         self.insert_data('history', buffer, columns=(
             'h_c_id', 'h_c_d_id', 'h_c_w_id', 'h_d_id', 'h_w_id', 'h_date',
@@ -116,40 +116,40 @@ class TPCCLoader():
             buffer.append([
                 s_id,
                 self.w_id,
-                Random.randint_inclusive(10, 100),
-                Random.string(24),
-                Random.string(24),
-                Random.string(24),
-                Random.string(24),
-                Random.string(24),
-                Random.string(24),
-                Random.string(24),
-                Random.string(24),
-                Random.string(24),
-                Random.string(24),
+                self.random.randint_inclusive(10, 100),
+                self.random.string(24),
+                self.random.string(24),
+                self.random.string(24),
+                self.random.string(24),
+                self.random.string(24),
+                self.random.string(24),
+                self.random.string(24),
+                self.random.string(24),
+                self.random.string(24),
+                self.random.string(24),
                 0,
                 0,
                 0,
-                Random.string(Random.randint_inclusive(26, 50))
+                self.random.string(self.random.randint_inclusive(26, 50))
             ])
         self.insert_data('stock', buffer)
 
     def _load_orders_impl(self):
         c_ids = list(range(1, NUM_ORDERS + 1))
-        Random.shuffle(c_ids)
+        self.random.shuffle(c_ids)
 
         order_line_counts = []
         buffer = []
         for d_id in range(1, DIST_PER_WARE + 1):
             for o_id in range(1, NUM_ORDERS + 1):
-                order_line_counts.append(Random.randint_inclusive(5, 15))
+                order_line_counts.append(self.random.randint_inclusive(5, 15))
                 buffer.append([
                     o_id,
                     d_id,
                     self.w_id,
                     c_ids[o_id - 1],
                     self.start_date or 'NOW()',
-                    Random.randint_inclusive(1, 10) if o_id < 2101 else None,
+                    self.random.randint_inclusive(1, 10) if o_id < 2101 else None,
                     order_line_counts[-1],
                     1
                 ])
@@ -175,12 +175,12 @@ class TPCCLoader():
                         d_id,
                         self.w_id,
                         ol_id,
-                        Random.randint_inclusive(1, MAXITEMS),
+                        self.random.randint_inclusive(1, MAXITEMS),
                         self.w_id,
                         (self.start_date or 'NOW()') if o_id < 2101 else None,
                         5,
-                        0 if o_id < 2101 else Random.sample() * 9999.99,
-                        Random.string(24)
+                        0 if o_id < 2101 else self.random.sample() * 9999.99,
+                        self.random.string(24)
                     ])
         self.insert_data('order_line', buffer)
 
@@ -204,13 +204,13 @@ def load_item(dsn):
     loader = TPCCLoader(dsn, 0)
     buffer = []
     for i_id in range(1, MAXITEMS + 1):
-        i_im_id = Random.randint_inclusive(1, 10000)
-        i_price = Random.sample() * 100 + 1
+        i_im_id = loader.random.randint_inclusive(1, 10000)
+        i_price = loader.random.sample() * 100 + 1
 
-        i_name_suffix = Random.string(5)
+        i_name_suffix = loader.random.string(5)
         i_name = f'item-{i_im_id}-{i_price}-{i_name_suffix}'
 
-        i_data_suffix = Random.string(5)
+        i_data_suffix = loader.random.string(5)
         i_data = f'data-{i_name}-{i_data_suffix}'
 
         buffer.append([
