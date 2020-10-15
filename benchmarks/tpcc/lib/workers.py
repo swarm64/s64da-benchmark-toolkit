@@ -1,90 +1,67 @@
 
+import asyncio
+import signal
 import sys
+import time
 
 from datetime import datetime, timedelta
-from multiprocessing.pool import Pool
-from multiprocessing import Manager
 
-from .queries import Queries
-from .output import Output
-from .tpcc import TPCC
+from multiprocessing import Array, Event, Queue
+from multiprocessing.pool import Pool
+
+import asyncpg
+
+# from faster_fifo import Queue
+
+from benchmarks.tpcc.lib.tpcc import TPCC
+from benchmarks.tpcc.lib.queries import Queries
+from benchmarks.tpcc.lib.monitor import Monitor
 
 from s64da_benchmark_toolkit.dbconn import DBConn
 
+reporting_queue = Queue()
+timestamps = Array('f', [0.0] * 1000)
 
-class Shared:
-    def __init__(self):
-        manager = Manager()
-        self.counter_ok = manager.Value('i', 0)
-        self.counter_err = manager.Value('i', 0)
-        self.order_timestamp = manager.Value('f', 0.0)
-        self.queries_queue = manager.Queue()
-        self.lock = manager.Lock()
-        self.stop = manager.Event()
+def tpcc_worker(worker_id, args):
+    increment = timedelta(seconds=86400.0 /
+        (args.orders_per_day * (1 / 0.44)) * args.oltp_workers)
+    tpcc = TPCC(worker_id, args.scale_factor, args.start_date, increment)
 
-def _oltp_worker(worker_id, dsn, scale_factor, start_timestamp, increment, shared):
-    tpcc = TPCC(worker_id, scale_factor)
-    timestamp = start_timestamp
-    with DBConn(dsn) as conn:
-        while not shared.stop.is_set():
-            inc_ts = False
-            # Randomify the timestamp for each worker
-            timestamp_to_use = timestamp + tpcc.random.sample() * increment
+    with DBConn(args.dsn) as conn:
+        while True:
+            tpcc.next_transaction(conn, args.dummy_db)
+            if (tpcc.ok_count + tpcc.err_count + 1) % 100 == 0:
+                reporting_queue.put_nowait(('tpcc', tpcc.stats(worker_id)))
+                timestamps[worker_id] = tpcc.timestamp.timestamp()
 
-            trx_type = tpcc.random.randint_inclusive(1, 23)
-            if trx_type <= 10:
-                success = tpcc.new_order(conn, timestamp=timestamp_to_use)
-                inc_ts = True
-            elif trx_type <= 20:
-                success = tpcc.payment(conn, timestamp=timestamp_to_use)
-                inc_ts = True
-            elif trx_type <= 21:
-                success = tpcc.order_status(conn)
-            elif trx_type <= 22:
-                success = tpcc.delivery(conn, timestamp=timestamp_to_use)
-                inc_ts = True
-            elif trx_type <= 23:
-                success = tpcc.stocklevel(conn)
+def tpch_worker(worker_id, args):
+    queries = Queries(args.dsn, worker_id)
+    while True:
+        max_timestamp = max(timestamps)
+        date = str(datetime.fromtimestamp(max_timestamp).date())
+        queries.run_next_query(date, reporting_queue)
 
-            with shared.lock:
-                shared.order_timestamp.value = timestamp.timestamp()
-                if success:
-                    shared.counter_ok.value += 1
-                else:
-                    shared.counter_err.value += 1
-
-            if success and inc_ts:
-                timestamp += increment
-
-def _olap_worker(dsn, stream_id, shared):
-    queries = Queries(dsn, stream_id)
-    while not shared.stop.is_set():
-        date = str(datetime.fromtimestamp(shared.order_timestamp.value).date())
-        queries.run_next_query(date, shared.queries_queue)
-
-def run_all(args, shared):
+def run_impl(args):
     def on_error(what):
-        print(f'Error called: {what}')
+        print(f'Caught error: {what}')
         sys.exit(1)
 
-    output = Output('postgresql://postgres@localhost/htap_stats')
-    total_workers = args.oltp_workers + args.olap_workers + 1
-    with Pool(processes=total_workers) as pool:
-        if args.oltp_workers > 0:
-            increment = timedelta(
-                seconds=86400.0 / (args.orders_per_day * (1 / 0.44)) * args.oltp_workers)
-            oltp_worker_args = [(worker_id, args.dsn, args.scale_factor,
-                                 args.start_date, increment, shared) for worker_id
-                                in range(args.oltp_workers)]
-            pool.starmap_async(_oltp_worker, oltp_worker_args, error_callback=on_error)
-        else:
-            with shared.lock:
-                order_timestamp.value = args.olap_timestamp.timestamp()
+    try:
+        original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
 
-        if args.olap_workers > 0:
-            olap_worker_args = [(args.dsn, worker_id, shared) for worker_id
-                                in range(args.olap_workers)]
-            pool.starmap_async(_olap_worker, olap_worker_args, error_callback=on_error)
+        total_workers = args.oltp_workers + args.olap_workers + 1
+        with Pool(processes=total_workers) as pool:
+            signal.signal(signal.SIGINT, original_sigint_handler)
+            for tpcc_worker_id in range(args.oltp_workers):
+                pool.apply_async(tpcc_worker, (tpcc_worker_id, args),
+                                 error_callback=on_error)
 
-        # Will block until args.end_date is reached
-        output.display(shared, args.end_date, args.oltp_workers)
+            for tpch_worker_id in range(args.olap_workers):
+                pool.apply_async(tpch_worker, (tpch_worker_id, args),
+                                 error_callback=on_error)
+
+            monitor = Monitor(args)
+            monitor.display(reporting_queue, timestamps)
+
+    except KeyboardInterrupt:
+        pool.terminate()

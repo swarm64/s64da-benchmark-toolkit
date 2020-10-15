@@ -32,9 +32,9 @@ def add_args(subparsers):
         '--orders-per-day', required=True, type=int, help=(
         'How many orders per day to generate.'))
 
+    parser.add_argument(
+        '--dummy-db', action='store_true', help=(
+        'Do not actually write to the DB. Useful to measure script capacity.'))
+
 def run(args):
-    try:
-        shared = workers.Shared()
-        workers.run_all(args, shared)
-    except KeyboardInterrupt:
-        shared.stop.set()
+    workers.run_impl(args)

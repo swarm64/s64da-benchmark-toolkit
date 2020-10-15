@@ -44,7 +44,7 @@ class TxView:
             }
         }
 
-    def add_tx_info(self, ok, err):
+    def add_tx_info(self, tps_ok, tps_err, counter_ok, counter_err):
         self.metrics['ok']['current'] = ok
         self.metrics['ok']['total'] += ok
 
@@ -117,48 +117,59 @@ class Output:
         for query in QUERIES_LIST:
             self.query_runtimes.append(QueryRuntimeView(query))
 
-    def display(self, shared, end_timestamp, oltp_workers):
-        with output(output_type="list", initial_len=20, interval=0) as output_list:
-            output_list[0] = self.uuid
-            with DBConn(self.dsn) as dbconn:
-                for idx in range(1,20):
-                    output_list[idx] = ' '
+    def display(self, args, reporting_queue, stop_event):
+        # with output(output_type="list", initial_len=20, interval=0) as output_list:
+        #     output_list[0] = self.uuid
+        #     with DBConn(self.dsn) as dbconn:
+        #         for idx in range(1,20):
+        #             output_list[idx] = ' '
 
-                while not shared.stop.is_set():
-                    counter_ok_tmp = 0
-                    counter_err_tmp = 0
-                    time.sleep(1)
-                    with shared.lock:
-                        counter_ok_tmp = shared.counter_ok.value
-                        counter_err_tmp = shared.counter_err.value
-                        shared.counter_ok.value = 0
-                        shared.counter_err.value = 0
+        while not stop_event.is_set():
+            time.sleep(1)
 
-                    current_timestamp = datetime.now()
-                    timestamp = datetime.fromtimestamp(shared.order_timestamp.value)
-                    self.tx_view.add_tx_info(counter_ok_tmp, counter_err_tmp)
+            tps_ok = 0
+            tps_err = 0
+            timestamp = []
+            db_buffer = []
+            current_timestamp = datetime.now()
 
-                    dbconn.cursor.execute(
-                        'INSERT INTO oltp_stats VALUES(%s, %s, %s, %s)',
-                        (self.uuid, current_timestamp, counter_ok_tmp, counter_err_tmp))
+            while not reporting_queue.empty():
+                item = reporting_queue.get_nowait()
+                if 'stream' in item:
+                    worker_id = item['stream']
+                    query = item['query']
+                    runtime = item.get('runtime')
+                    output_idx = QUERIES_OUTPUT_MAP.get(query, None)
+                    if output_idx is not None and isinstance(runtime, float):
+                        self.query_runtimes[output_idx].add_runtime(runtime)
+                        self.query_runtimes[output_idx].set_status('done')
+                        db_buffer.append((self.uuid, current_timestamp, worker_id, query, runtime))
 
-                    db_buffer = []
-                    while not shared.queries_queue.empty():
-                        worker_id, query, runtime = shared.queries_queue.get_nowait()
-                        output_idx = QUERIES_OUTPUT_MAP.get(query, None)
-                        if output_idx is not None and isinstance(runtime, float):
-                            self.query_runtimes[output_idx].add_runtime(runtime)
-                            self.query_runtimes[output_idx].set_status('done')
-                            db_buffer.append((self.uuid, current_timestamp, worker_id, query, runtime))
+                elif 'oltp_worker' in item:
+                    tps_ok += item['tps_ok']
+                    tps_err += item['tps_err']
+                    timestamp.append(item['timestamp'])
 
-                    if db_buffer:
-                        sql = 'INSERT INTO olap_stats VALUES %s'
-                        execute_values(dbconn.cursor, sql, db_buffer)
+            print(tps_ok, tps_err)
+            # self.tx_view.add_tx_info(tps_ok, tps_err, counter_ok, counter_err)
 
-                    output_list[1] = f'Current timestamp: {timestamp}'
-                    output_list[2], output_list[3], output_list[4] = self.tx_view.output
-                    for idx, entry in enumerate(self.query_runtimes):
-                        output_list[idx + 6] = str(entry)
+            # dbconn.cursor.execute(
+            #     'INSERT INTO oltp_stats VALUES(%s, %s, %s, %s)',
+            #     (self.uuid, current_timestamp, counter_ok, counter_err))
 
-                    if oltp_workers > 0 and timestamp > end_timestamp:
-                        return True
+            # if db_buffer:
+            #     sql = 'INSERT INTO olap_stats VALUES %s'
+            #     execute_values(dbconn.cursor, sql, db_buffer)
+
+            # min_ts = min(timestamp) if timestamp else None
+            # max_ts = max(timestamp) if timestamp else None
+            # output_list[1] = f'Timestamps - Min: {min_ts} Max: {max_ts}'
+            # output_list[2], output_list[3], output_list[4] = self.tx_view.output
+            # for idx, entry in enumerate(self.query_runtimes):
+            #     output_list[idx + 6] = str(entry)
+
+            # if not max_ts:
+            #     continue
+
+            # if args.oltp_workers > 0 and max_ts >= args.end_date:
+            #     return True

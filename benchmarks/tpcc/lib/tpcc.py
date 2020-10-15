@@ -11,9 +11,20 @@ STOCKS = 100000
 NAMES = ['BAR', 'OUGHT', 'ABLE', 'PRI', 'PRES', 'ESE', 'ANTI', 'CALLY', 'ATION', 'EING']
 
 class TPCC:
-    def __init__(self, seed, scale_factor):
+    def __init__(self, seed, scale_factor, initial_timestamp, increment):
         self.random = Random(seed)
         self.scale_factor = scale_factor
+        self.timestamp = initial_timestamp
+        self.increment = increment
+        self.ok_count = 0
+        self.err_count = 0
+
+    def stats(self, worker_id):
+        return {
+            'worker_id': worker_id,
+            'ok_count': self.ok_count,
+            'err_count': self.err_count
+        }
 
     def other_ware(self, home_ware):
         if self.scale_factor == 1:
@@ -32,7 +43,6 @@ class TPCC:
             # assert len(result) == order_line_count
         except psycopg2.Error:
             return False
-
         return True
 
     def new_order(self, conn, timestamp='NOW()'):
@@ -109,3 +119,33 @@ class TPCC:
         sql = 'SELECT * FROM stocklevel(%s, %s, %s)'
         args = (w_id, d_id, level)
         return TPCC.execute_sql(conn, sql, args)
+
+    def next_transaction(self, conn, dummy_db):
+        inc_ts = False
+        # Randomify the timestamp
+        timestamp_to_use = self.timestamp + self.random.sample() * self.increment
+
+        trx_type = self.random.randint_inclusive(1, 23)
+        success = True
+        if not dummy_db:
+            if trx_type <= 10:
+                success = self.new_order(conn, timestamp=timestamp_to_use)
+                inc_ts = True
+            elif trx_type <= 20:
+                success = self.payment(conn, timestamp=timestamp_to_use)
+                inc_ts = True
+            elif trx_type <= 21:
+                success = self.order_status(conn)
+            elif trx_type <= 22:
+                success = self.delivery(conn, timestamp=timestamp_to_use)
+                inc_ts = True
+            elif trx_type <= 23:
+                success = self.stocklevel(conn)
+
+        if success and inc_ts:
+            self.timestamp += self.increment
+
+        if success:
+            self.ok_count += 1
+        else:
+            self.err_count += 1

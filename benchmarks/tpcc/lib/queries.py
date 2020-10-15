@@ -65,12 +65,22 @@ class Queries:
             sql = sql.replace('__ITEM_PART__', Random.from_list(self.items).split('-')[1])
 
         try:
-            queries_queue.put((self.stream_id, next_query, 'Running'))
+            queries_queue.put(('tpch', {
+                'query': next_query,
+                'stream': self.stream_id,
+                'status': 'Running'
+            }))
+
             with DBConn(self.dsn) as conn:
                 tstart = time.time()
                 conn.cursor.execute(sql)
                 tstop = time.time()
-            queries_queue.put((self.stream_id, next_query, tstop - tstart))
-            # print(f'Q{ next_query }: { tstop - tstart }s')
+
+            queries_queue.put(('tpch', {
+                'query': next_query,
+                'stream': self.stream_id,
+                'status': 'Finished',
+                'runtime': tstop - tstart
+            }))
         except Exception as exc:
             print(f'!!! Error Q{next_query}: {exc}')
