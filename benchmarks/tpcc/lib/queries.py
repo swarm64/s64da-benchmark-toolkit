@@ -3,6 +3,7 @@ import time
 
 from itertools import cycle
 
+import psycopg2
 import yaml
 
 from s64da_benchmark_toolkit.dbconn import DBConn
@@ -32,7 +33,7 @@ class Queries:
         self.random = Random(stream_id)
         self.stream_id = stream_id
         self.dsn = dsn
-        self.timeout = timeout
+        self.timeout = timeout * 1000
         with open('benchmarks/tpcc/queries/streams.yaml', 'r') as streams_file:
             sequence = yaml.load(streams_file.read(), Loader=yaml.FullLoader)[stream_id]
             self.next_query_it = cycle(sequence)
@@ -74,7 +75,10 @@ class Queries:
 
             with DBConn(self.dsn, statement_timeout=self.timeout) as conn:
                 tstart = time.time()
-                conn.cursor.execute(sql)
+                try:
+                    conn.cursor.execute(sql)
+                except psycopg2.extensions.QueryCanceledError:
+                    pass
                 tstop = time.time()
 
             queries_queue.put(('tpch', {

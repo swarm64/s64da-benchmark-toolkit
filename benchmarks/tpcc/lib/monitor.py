@@ -120,7 +120,7 @@ class Monitor:
         def convert_ts(ts):
             return datetime.fromtimestamp(ts)
 
-        with output(output_type="list", initial_len=20, interval=0) as output_list:
+        with output(output_type="list", initial_len=22, interval=0) as output_list:
             while True:
                 time.sleep(1.0)
                 self.display_idx = 0
