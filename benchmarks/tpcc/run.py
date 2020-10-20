@@ -16,9 +16,9 @@ def add_args(subparsers):
         '--olap-workers', required=True, type=int, help=(
         'How many query streams to run in parallel'))
 
-    parser.add_argument(
-        '--olap-timestamp', type=datetime.fromisoformat, help=(
-        'Timestamp to use for OLAP query when there is no OLTP'))
+#    parser.add_argument(
+#        '--olap-timestamp', type=datetime.fromisoformat, help=(
+#        'Timestamp to use for OLAP query when there is no OLTP'))
 
     parser.add_argument(
         '--start-date', required=True, type=datetime.fromisoformat, help=(
@@ -35,6 +35,10 @@ def add_args(subparsers):
     parser.add_argument(
         '--dummy-db', action='store_true', help=(
         'Do not actually write to the DB. Useful to measure script capacity.'))
+
+    parser.add_argument(
+        '--olap-timeout', default=900, type=int, help=(
+        'Query timeout for OLAP queries in seconds. Default: 900'))
 
 def run(args):
     workers.run_impl(args)

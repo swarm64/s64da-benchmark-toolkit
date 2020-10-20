@@ -45,6 +45,7 @@ class PrepareBenchmarkFactory:
     SIZING_FACTORS = {}
     CLUSTER_SPEC = {}
     PYTHON_LOADER = False
+    DO_SHUFFLE = True
 
     def __init__(self, args, benchmark):
         schemas_dir = os.path.join(s64_benchmark_toolkit_root_dir, benchmark.base_dir, "schemas")
@@ -121,7 +122,9 @@ class PrepareBenchmarkFactory:
                 return executor.submit(self._run_shell_task, task)
 
         # randomize the tasks to decrease lock contention
-        random.shuffle(tasks)
+        if PrepareBenchmarkFactory.DO_SHUFFLE:
+            random.shuffle(tasks)
+
         with executor_class(max_workers=self.args.max_jobs) as executor:
             futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):

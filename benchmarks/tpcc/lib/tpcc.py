@@ -44,6 +44,10 @@ class TPCC:
             if 'Item record is null' in err.pgerror:
                 return False
             raise
+
+        except psycopg2.errors.DeadlockDetected as err:
+            print(err)
+
         return True
 
     def new_order(self, timestamp='NOW()'):

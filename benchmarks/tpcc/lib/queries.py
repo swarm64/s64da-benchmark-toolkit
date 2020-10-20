@@ -28,10 +28,11 @@ QUERIES = {
 
 
 class Queries:
-    def __init__(self, dsn, stream_id):
+    def __init__(self, dsn, stream_id, timeout):
         self.random = Random(stream_id)
         self.stream_id = stream_id
         self.dsn = dsn
+        self.timeout = timeout
         with open('benchmarks/tpcc/queries/streams.yaml', 'r') as streams_file:
             sequence = yaml.load(streams_file.read(), Loader=yaml.FullLoader)[stream_id]
             self.next_query_it = cycle(sequence)
@@ -56,13 +57,13 @@ class Queries:
             sql = sql.replace('__DATE__', in_date)
 
         if '__WAREHOUSE__' in sql:
-            sql = sql.replace('__WAREHOUSE__', Random.from_list(self.warehouses))
+            sql = sql.replace('__WAREHOUSE__', self.random.from_list(self.warehouses))
 
         if '__ITEM__' in sql:
-            sql = sql.replace('__ITEM__', Random.from_list(self.items))
+            sql = sql.replace('__ITEM__', self.random.from_list(self.items))
 
         if '__ITEM_PART__' in sql:
-            sql = sql.replace('__ITEM_PART__', Random.from_list(self.items).split('-')[1])
+            sql = sql.replace('__ITEM_PART__', self.random.from_list(self.items).split('-')[1])
 
         try:
             queries_queue.put(('tpch', {
@@ -71,7 +72,7 @@ class Queries:
                 'status': 'Running'
             }))
 
-            with DBConn(self.dsn) as conn:
+            with DBConn(self.dsn, statement_timeout=self.timeout) as conn:
                 tstart = time.time()
                 conn.cursor.execute(sql)
                 tstop = time.time()
