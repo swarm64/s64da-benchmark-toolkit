@@ -40,8 +40,8 @@ BEGIN
       SELECT 0.5 * SUM(ol_quantity)
       FROM order_line
       JOIN item ON ol_i_id = i_id
-      WHERE ol_delivery_d >= date_trunc('year', in_date)
-        AND ol_delivery_d <  date_trunc('year', in_date) + INTERVAL '1 year'
+      WHERE ol_delivery_d >  in_date - INTERVAL '1 year'
+        AND ol_delivery_d <= in_date
         AND ol_w_id = w_id
     )
   )

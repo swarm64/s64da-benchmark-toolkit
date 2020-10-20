@@ -25,8 +25,8 @@ BEGIN
   JOIN item ON ol_i_id = i_id
   JOIN customer ON o_c_id = c_id AND o_d_id = c_d_id AND o_w_id = c_w_id
   JOIN district ON o_d_id = d_id AND o_w_id = d_w_id
-  WHERE o_entry_d >= date_trunc('year', in_date)
-    AND o_entry_d <  date_trunc('year', in_date) + INTERVAL '1 year'
+  WHERE o_entry_d >   in_date - INTERVAL '1 year'
+    AND o_entry_d <=  in_date
   GROUP BY d_name
   ORDER BY revenue DESC;
 

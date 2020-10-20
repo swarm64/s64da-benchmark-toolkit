@@ -44,8 +44,8 @@ BEGIN
     WHERE (
         (ds.d_name = in_district_1 AND dc.d_name = in_district_2) OR
         (ds.d_name = in_district_2 AND dc.d_name = in_district_1)
-      ) AND ol_delivery_d >= date_trunc('year', in_date)
-        AND ol_delivery_d <  date_trunc('year', in_date) + INTERVAL '2 year'
+      ) AND ol_delivery_d >  in_date - INTERVAL '2 year'
+        AND ol_delivery_d <= in_date
   ) AS shipping
   GROUP BY shipping.order_district_name, shipping.customer_district_name, shipping.delivery_year
   ORDER BY shipping.order_district_name, shipping.customer_district_name, shipping.delivery_year;

@@ -12,12 +12,12 @@ CREATE FUNCTION priority_checking(in_date DATE) RETURNS TABLE(
 BEGIN
   CREATE TEMP TABLE priority_checking AS
   SELECT
-      date_trunc('quarter', in_date)::DATE AS quarter_begin
-    , (date_trunc('quarter', in_date) + INTERVAL '3 month' - INTERVAL '1 day')::DATE AS quarter_end
+      (date_trunc('quarter', in_date) - INTERVAL '3 month')::DATE AS quarter_begin
+    , (date_trunc('quarter', in_date)                     )::DATE AS quarter_end
     , count(*) AS order_count
   FROM orders
-  WHERE o_entry_d >= date_trunc('quarter', in_date)
-    AND o_entry_d <  date_trunc('quarter', in_date) + INTERVAL '3 month'
+  WHERE o_entry_d >= date_trunc('quarter', in_date) - INTERVAL '3 month'
+    AND o_entry_d <  date_trunc('quarter', in_date)
     AND EXISTS (
       SELECT *
       FROM order_line

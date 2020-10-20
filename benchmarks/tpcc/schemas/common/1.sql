@@ -35,7 +35,7 @@ BEGIN
   JOIN customer ON o_c_id = c_id AND o_d_id = c_d_id AND o_w_id = c_w_id
   JOIN item ON ol_i_id = i_id
   JOIN warehouse ON ol_w_id = w_id
-  WHERE ol_delivery_d <= in_date - INTERVAL '90 day';
+  WHERE ol_delivery_d <= in_date::DATE - INTERVAL '90 day';
 
   RETURN QUERY SELECT * FROM rettable;
 END;

@@ -18,8 +18,8 @@ BEGIN
   JOIN item ON ol_i_id = i_id
   JOIN orders ON ol_o_id = o_id AND ol_w_id = o_w_id AND ol_d_id = o_d_id
   JOIN customer ON o_c_id = c_id AND o_w_id = c_w_id AND o_d_id = c_d_id
-  WHERE ol_delivery_d >= date_trunc('month', in_date)
-    AND ol_delivery_d <  date_trunc('month', in_date) + INTERVAL '1 month'
+  WHERE ol_delivery_d >= date_trunc('month', in_date) - INTERVAL '1 month'
+    AND ol_delivery_d <  date_trunc('month', in_date)
   INTO promo_revenue;
 
   RETURN promo_revenue;

@@ -28,8 +28,8 @@ BEGIN
     JOIN orders ON ol_o_id = o_id AND ol_w_id = o_w_id AND ol_d_id = o_d_id
     JOIN customer ON o_c_id = c_id AND o_w_id = c_w_id AND o_d_id = c_d_id
     JOIN warehouse w ON o_w_id = w.w_id
-    WHERE ol_delivery_d >= date_trunc('month', in_date)
-      AND ol_delivery_d <  date_trunc('month', in_date) + INTERVAL '3 month'
+    WHERE ol_delivery_d >= date_trunc('quarter', in_date) - INTERVAL '3 month'
+      AND ol_delivery_d <  date_trunc('quarter', in_date)
     GROUP BY w.w_id
   ) SELECT
       w.w_id
