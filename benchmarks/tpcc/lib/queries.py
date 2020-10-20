@@ -21,9 +21,9 @@ QUERIES = {
     14: "SELECT * FROM promotion_effect('__DATE__', '__ITEM__');",
     15: "SELECT * FROM top_warehouse('__DATE__');",
     17: "SELECT * FROM small_quantity_order_revenue('__ITEM__');",
-    # 18: "SELECT * FROM large_volume_customer();",
+    18: "SELECT * FROM large_volume_customer();",
     20: "SELECT * FROM potential_part_promotion('__DATE__', '__ITEM__');",
-    # 21: "SELECT * FROM waiting_orders();"
+    21: "SELECT * FROM waiting_orders();"
 }
 
 
