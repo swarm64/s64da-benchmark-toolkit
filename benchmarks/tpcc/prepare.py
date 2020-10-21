@@ -16,7 +16,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
     #    TableGroup('warehouse')
         'district',
         'customer',
-        'history',
+    #    'history',
         'orders',
         'new_orders',
         'order_line',
