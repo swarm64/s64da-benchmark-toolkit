@@ -5,6 +5,7 @@ CREATE INDEX fkey_order_line_2 ON order_line (ol_supply_w_id,ol_i_id);
 CREATE INDEX fkey_history_1 ON history (h_c_w_id,h_c_d_id,h_c_id);
 CREATE INDEX fkey_history_2 ON history (h_w_id,h_d_id );
 
+
 CREATE INDEX idx_customer_triplet ON customer(c_id, c_w_id, c_d_id);
 CREATE INDEX idx_district_tuple ON district(d_id, d_w_id);
 

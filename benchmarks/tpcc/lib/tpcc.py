@@ -19,6 +19,7 @@ class TPCC:
         self.increment = increment
         self.ok_count = 0
         self.err_count = 0
+        self.outstanding_deliveries = []
 
     def stats(self, worker_id):
         return {

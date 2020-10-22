@@ -1,21 +1,4 @@
-CREATE FUNCTION create_warehouse_partitions(
-      table_name VARCHAR
-    , num_warehouses INT
-) RETURNS VOID AS $BODY$
-DECLARE
-  w_id BIGINT;
-BEGIN
-    FOR w_id IN SELECT * FROM generate_series(1, num_warehouses)
-    LOOP
-        RAISE NOTICE 'Creating partition for warehouse %', w_id;
-        EXECUTE format(
-          'CREATE TABLE %s__part_%s PARTITION OF %s '
-          'FOR VALUES IN(%s);',
-          table_name, w_id, table_name, w_id
-        );
-    END LOOP;
-END;
-$BODY$ LANGUAGE plpgsql;
+CREATE EXTENSION swarm64da;
 
 CREATE FUNCTION create_order_partitions(
       table_name VARCHAR
@@ -40,7 +23,6 @@ BEGIN
     END LOOP;
 END;
 $BODY$ LANGUAGE plpgsql;
-
 
 CREATE TABLE IF NOT EXISTS warehouse(
   w_id smallint not null,
@@ -117,7 +99,8 @@ create table IF NOT EXISTS orders(
   o_ol_cnt smallint,
   o_all_local smallint,
   PRIMARY KEY(o_w_id, o_d_id, o_id)
-);
+) PARTITION BY RANGE(o_id);
+SELECT * FROM create_order_partitions('orders', 100, 5000);
 
 create table IF NOT EXISTS new_orders(
   no_o_id bigint not null,
@@ -138,7 +121,8 @@ create table IF NOT EXISTS order_line(
   ol_amount decimal(6,2),
   ol_dist_info char(24),
   PRIMARY KEY(ol_w_id, ol_d_id, ol_o_id, ol_number)
-);
+) PARTITION BY RANGE(ol_o_id);
+SELECT * FROM create_order_partitions('order_line', 100, 5000);
 
 create table IF NOT EXISTS stock(
   s_i_id int not null,
