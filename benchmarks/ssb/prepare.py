@@ -16,7 +16,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
                       table in ('customer', 'lineorder'))
         table_code = table[0]
 
-        dbgen_cmd = f'./dbgen -s {self.args.scale_factor} -T {table_code} -o'
+        dbgen_cmd = f'./dbgen -s {self.args.scale_factor} -T {table_code} -O o'
         psql_copy = self.psql_exec_cmd(f"COPY {table} FROM STDIN WITH DELIMITER '|'")
         sed_cmd = "sed 's/|$//'"
 
