@@ -11,9 +11,11 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
     PrepareBenchmarkFactory.PYTHON_LOADER = False
     PrepareBenchmarkFactory.DO_SHUFFLE = False
 
-    PrepareBenchmarkFactory.TABLES = (TableGroup(
-    #    TableGroup('item'),
-    #    TableGroup('warehouse')
+    PrepareBenchmarkFactory.TABLES = (
+        TableGroup('item'),
+        TableGroup('warehouse')
+    ) if PrepareBenchmarkFactory.PYTHON_LOADER else (
+        TableGroup(
         'district',
         'customer',
     #    'history',
@@ -46,11 +48,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
             return [f'cat {data_file} | {copy_cmd}']
 
     def get_ingest_tasks(self, table):
-        data_dir = self.args.data_dir
-        if data_dir:
-            return self.get_copy_cmds(table)
-
-        else:
+        if PrepareBenchmarkFactory.PYTHON_LOADER:
             dsn = self.args.dsn
             start_date = self.args.start_date
             if table == 'item':
@@ -61,3 +59,9 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
                 return [(load_warehouse, dsn, w_id, start_date) for w_id in warehouses]
 
             raise ValueError(f'Unknown table {table}')
+
+        else:
+            data_dir = self.args.data_dir
+            assert data_dir, 'Non-Python loading selected, but no data dir present'
+            return self.get_copy_cmds(table)
+

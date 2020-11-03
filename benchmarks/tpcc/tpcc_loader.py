@@ -1,4 +1,6 @@
 
+from io import StringIO
+
 from psycopg2.extras import execute_values
 
 from s64da_benchmark_toolkit.dbconn import DBConn
@@ -10,6 +12,7 @@ DIST_PER_WARE = 10
 CUST_PER_DIST = 3000 # Standard says: 30k customers total (for all districts)
 NUM_ORDERS = 3000
 STOCKS = 100000
+SEPARATOR = '|'
 
 
 class TPCCLoader():
@@ -19,15 +22,23 @@ class TPCCLoader():
         self.random = Random(w_id)
         self.start_date = start_date
 
+    @classmethod
+    def _buffer_to_stringio(cls, buffer):
+        data = StringIO()
+        for row in buffer:
+            line = SEPARATOR.join([str(item) for item in row])
+            line = line.replace('None','\\N')
+            data.write(line + '\n')
+        data.seek(0)
+        return data
+
     def insert_data(self, table, buffer, columns=None):
         print(f'Loading { table }')
-        with DBConn(self.dsn) as conn:
-            if columns:
-                sql = f'INSERT INTO {table} ({ ",".join(columns) }) VALUES %s'
-            else:
-                sql = f'INSERT INTO {table} VALUES %s'
 
-            execute_values(conn.cursor, sql, buffer)
+        buffer = TPCCLoader._buffer_to_stringio(buffer)
+        with DBConn(self.dsn) as conn:
+            conn.cursor.copy_from(buffer, table, sep=SEPARATOR, columns=columns,
+                                  size=8*1024*1024)
 
     def load_warehouse(self):
         self.insert_data('warehouse', [[
