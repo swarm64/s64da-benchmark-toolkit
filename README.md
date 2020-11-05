@@ -8,8 +8,8 @@ This toolkit provides methods to execute the TPC-H, TPC-DS, and SSB benchmarks o
 
 Important note: in order to guarantee compatibility between S64 DA and
 s64da-benchmark-toolkit, please check out the Git tag that corresponds to your
-version of S64 DA. For example, if your version of S64 DA is 5.0.0, clone this
-repository and run `git checkout v5.0.0` in the the repository’s root folder
+version of S64 DA. For example, if your version of S64 DA is 5.1.0, clone this
+repository and run `git checkout v5.1.0` in the the repository’s root folder
 before proceeding. For S64 DA versions 4.0.0 and below checkout v4.0.0_and_below.
 
 # Prerequisites
