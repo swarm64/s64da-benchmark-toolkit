@@ -4,12 +4,14 @@ CREATE TABLE nation (
     n_regionkey int NOT NULL,
     n_comment character varying(152) NOT NULL
 );
+ALTER TABLE nation set (parallel_workers =52);
 
 CREATE TABLE region (
     r_regionkey int NOT NULL,
     r_name character varying(25) NOT NULL,
     r_comment character varying(152) NOT NULL
 );
+ALTER TABLE region set (parallel_workers =52);
 
 CREATE TABLE part (
     p_partkey int NOT NULL,
@@ -22,6 +24,7 @@ CREATE TABLE part (
     p_retailprice double precision NOT NULL,
     p_comment character varying(23) NOT NULL
 );
+ALTER TABLE part set (parallel_workers =52);
 
 CREATE TABLE supplier (
     s_suppkey int NOT NULL,
@@ -32,6 +35,7 @@ CREATE TABLE supplier (
     s_acctbal double precision NOT NULL,
     s_comment character varying(101) NOT NULL
 );
+ALTER TABLE supplier set (parallel_workers =52);
 
 CREATE TABLE partsupp (
     ps_partkey int NOT NULL,
@@ -40,6 +44,7 @@ CREATE TABLE partsupp (
     ps_supplycost double precision NOT NULL,
     ps_comment character varying(199) NOT NULL
 );
+ALTER TABLE partsupp set (parallel_workers =52);
 
 CREATE TABLE customer (
     c_custkey int NOT NULL,
@@ -51,6 +56,7 @@ CREATE TABLE customer (
     c_mktsegment character varying(10) NOT NULL,
     c_comment character varying(117) NOT NULL
 );
+ALTER TABLE customer set (parallel_workers =52);
 
 CREATE TABLE orders (
     o_orderkey bigint NOT NULL,
@@ -63,6 +69,7 @@ CREATE TABLE orders (
     o_shippriority int NOT NULL,
     o_comment character varying(79) NOT NULL
 );
+ALTER TABLE  orders set (parallel_workers =52);
 
 CREATE TABLE lineitem (
     l_orderkey bigint NOT NULL,
@@ -82,5 +89,6 @@ CREATE TABLE lineitem (
     l_shipmode character varying(10) NOT NULL,
     l_comment character varying(44) NOT NULL
 );
+ALTER TABLE lineitem set (parallel_workers =52);
 
 CREATE STATISTICS lineitem_ndistinct (ndistinct) ON l_suppkey, l_partkey FROM lineitem;
