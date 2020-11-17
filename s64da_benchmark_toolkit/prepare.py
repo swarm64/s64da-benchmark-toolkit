@@ -257,7 +257,7 @@ class PrepareBenchmarkFactory:
         with DBConn(self.args.dsn) as conn:
             if self.num_partitions:
                 print('Adding helper functions.')
-                common_file_path = os.path.join(s64_benchmark_toolkit_root_dir, 'benchmarks', 'common', 'functions.sql')    
+                common_file_path = os.path.join(s64_benchmark_toolkit_root_dir, 'benchmarks', 'common', 'functions.sql')
                 with open(common_file_path, 'r') as common_sql:
                     conn.cursor.execute(common_sql.read())
 
