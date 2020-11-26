@@ -163,6 +163,7 @@ class PrepareBenchmarkFactory:
         self.prepare_db()
 
         print('Ingesting data')
+        LOG.info(f"log after the print")
         self.cancel_event.clear()
         start_ingest = time.time()
         for table_group in PrepareBenchmarkFactory.TABLES:
