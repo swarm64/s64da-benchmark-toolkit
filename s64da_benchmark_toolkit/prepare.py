@@ -103,8 +103,6 @@ class PrepareBenchmarkFactory:
                 self.cancel_event.set()
                 exit(task)
 
-            stdout, _ = p.communicate()
-            print(f"output of run_shell_task: {stdout}")
             if return_output:
                 stdout, _ = p.communicate()
                 print(f"output of run_shell_task: {stdout}")
@@ -112,6 +110,7 @@ class PrepareBenchmarkFactory:
 
     def _run_tasks_parallel(self, tasks):
         def get_future(executor, task):
+            print(f"executor: {executor}, task: {tasks}")
             if callable(task):
                 return executor.submit(task)
             else:
