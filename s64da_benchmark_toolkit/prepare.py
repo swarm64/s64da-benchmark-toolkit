@@ -119,6 +119,8 @@ class PrepareBenchmarkFactory:
         with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
             futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
+                result = completed_future.result()
+                print(f"completed_future.result is {result}")
                 exc = completed_future.exception()
                 if exc:
                     print(f'Task threw an exception: {exc}')
@@ -257,7 +259,7 @@ class PrepareBenchmarkFactory:
         with DBConn(self.args.dsn) as conn:
             if self.num_partitions:
                 print('Adding helper functions.')
-                common_file_path = os.path.join(s64_benchmark_toolkit_root_dir, 'benchmarks', 'common', 'functions.sql')    
+                common_file_path = os.path.join(s64_benchmark_toolkit_root_dir, 'benchmarks', 'common', 'functions.sql')
                 with open(common_file_path, 'r') as common_sql:
                     conn.cursor.execute(common_sql.read())
 
