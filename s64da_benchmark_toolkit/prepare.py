@@ -1,4 +1,3 @@
-import logging
 import os
 import re
 import shutil
@@ -21,7 +20,6 @@ from urllib.parse import urlparse
 from .dbconn import DBConn
 
 s64_benchmark_toolkit_root_dir = Path(os.path.abspath(__file__)).parents[1]
-LOG = logging.getLogger()
 
 class TableGroup:
     def __init__(self, *args):
@@ -107,6 +105,7 @@ class PrepareBenchmarkFactory:
 
             if return_output:
                 stdout, _ = p.communicate()
+                print(f"output of run_shell_task: {stdout}")
                 return stdout
 
     def _run_tasks_parallel(self, tasks):
@@ -121,8 +120,6 @@ class PrepareBenchmarkFactory:
         with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
             futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
-                result = completed_future.result()
-                LOG.info(f"completed_future.result is {result}")
                 exc = completed_future.exception()
                 if exc:
                     print(f'Task threw an exception: {exc}')
@@ -163,7 +160,6 @@ class PrepareBenchmarkFactory:
         self.prepare_db()
 
         print('Ingesting data')
-        LOG.info(f"log after the print")
         self.cancel_event.clear()
         start_ingest = time.time()
         for table_group in PrepareBenchmarkFactory.TABLES:
