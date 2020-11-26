@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import shutil
@@ -20,6 +21,7 @@ from urllib.parse import urlparse
 from .dbconn import DBConn
 
 s64_benchmark_toolkit_root_dir = Path(os.path.abspath(__file__)).parents[1]
+LOG = logging.getLogger()
 
 class TableGroup:
     def __init__(self, *args):
@@ -120,7 +122,7 @@ class PrepareBenchmarkFactory:
             futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
                 result = completed_future.result()
-                print(f"completed_future.result is {result}")
+                LOG.info(f"completed_future.result is {result}")
                 exc = completed_future.exception()
                 if exc:
                     print(f'Task threw an exception: {exc}')
