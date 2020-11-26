@@ -103,6 +103,8 @@ class PrepareBenchmarkFactory:
                 self.cancel_event.set()
                 exit(task)
 
+            stdout, _ = p.communicate()
+            print(f"output of run_shell_task: {stdout}")
             if return_output:
                 stdout, _ = p.communicate()
                 print(f"output of run_shell_task: {stdout}")
