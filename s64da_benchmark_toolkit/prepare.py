@@ -113,6 +113,7 @@ class PrepareBenchmarkFactory:
             if callable(task):
                 return executor.submit(task)
             else:
+                print(f"it is a callable task")
                 return executor.submit(self._run_shell_task, task)
 
         # randomize the tasks to decrease lock contention
@@ -127,7 +128,7 @@ class PrepareBenchmarkFactory:
                     for future in futures:
                         future.cancel()
                     exit(1)
-                print(f"Result: {completed_future.result()}")
+                # print(f"Result: {completed_future.result()}")
 
     def _check_diskspace(self, diskpace_check_dir):
         db_type = os.path.basename(self.schema_dir).split('_')[0]
