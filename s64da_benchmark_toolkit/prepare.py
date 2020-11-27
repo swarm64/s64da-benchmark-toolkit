@@ -21,6 +21,9 @@ from .dbconn import DBConn
 
 s64_benchmark_toolkit_root_dir = Path(os.path.abspath(__file__)).parents[1]
 
+class NoIngestException(Exception):
+    """Exception when no rows inserted into the table."""
+
 class TableGroup:
     def __init__(self, *args):
         self.data = args
@@ -94,6 +97,13 @@ class PrepareBenchmarkFactory:
     def psql_exec_cmd(self, sql):
         return f'psql {self.args.dsn} -c "{sql}"'
 
+    def check_ingest(self, output):
+        if output.startswith("COPY"):
+            cnt = int(output.split()[1])
+            if cnt == 0:
+                raise NoIngestException("Ingest failed.")
+
+
     def _run_shell_task(self, task, return_output=False):
         if not self.cancel_event.is_set():
             p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
@@ -105,7 +115,7 @@ class PrepareBenchmarkFactory:
 
             if return_output:
                 stdout, _ = p.communicate()
-                print(f"output of run_shell_task: {stdout}")
+                print(f"output of run_shell_task: {stdout.decode('utf-8').strip()}")
                 return stdout
 
     def _run_tasks_parallel(self, tasks):
@@ -127,7 +137,6 @@ class PrepareBenchmarkFactory:
                     for future in futures:
                         future.cancel()
                     exit(1)
-                # print(f"Result: {completed_future.result()}")
 
     def _check_diskspace(self, diskpace_check_dir):
         db_type = os.path.basename(self.schema_dir).split('_')[0]
