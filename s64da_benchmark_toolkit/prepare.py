@@ -119,7 +119,6 @@ class PrepareBenchmarkFactory:
         random.shuffle(tasks)
         with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
             futures = [get_future(executor, task) for task in tasks]
-            print(f"Futures: {futures}")
             for completed_future in as_completed(futures):
                 exc = completed_future.exception()
                 if exc:
@@ -128,6 +127,7 @@ class PrepareBenchmarkFactory:
                     for future in futures:
                         future.cancel()
                     exit(1)
+                print(f"Result: {completed_future.result()}")
 
     def _check_diskspace(self, diskpace_check_dir):
         db_type = os.path.basename(self.schema_dir).split('_')[0]
