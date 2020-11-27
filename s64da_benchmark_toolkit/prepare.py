@@ -154,6 +154,7 @@ class PrepareBenchmarkFactory:
             f'Not enough disk space available. Needed [GBytes]: {space_needed>>30}, free: {free>>30}'
 
     def run(self):
+        print(f"Must be first output")
         diskpace_check_dir = self.args.check_diskspace_of_directory
         if diskpace_check_dir:
             self._check_diskspace(diskpace_check_dir)
