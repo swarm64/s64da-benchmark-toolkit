@@ -133,7 +133,7 @@ class PrepareBenchmarkFactory:
             futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
                 exc = completed_future.exception()
-                PrepareBenchmarkFactory.check_ingest(completed_future.result())
+                print(f"completed future: {completed_future.result()}")
                 if exc:
                     print(f'Task threw an exception: {exc}')
                     print_tb(exc.__traceback__)
