@@ -118,7 +118,7 @@ class PrepareBenchmarkFactory:
             if return_output:
                 stdout, _ = p.communicate()
                 print(f"output of run_shell_task: {stdout.decode('utf-8').strip()}")
-                return stdout
+                return stdout.decode('utf-8').strip()
 
     def _run_tasks_parallel(self, tasks):
         def get_future(executor, task):
@@ -133,7 +133,7 @@ class PrepareBenchmarkFactory:
             futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
                 exc = completed_future.exception()
-                print(f"completed future: {completed_future.result()}")
+                PrepareBenchmarkFactory.check_ingest(completed_future.result())
                 if exc:
                     print(f'Task threw an exception: {exc}')
                     print_tb(exc.__traceback__)
