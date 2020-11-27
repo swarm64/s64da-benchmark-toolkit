@@ -101,7 +101,6 @@ class PrepareBenchmarkFactory:
     def check_ingest(output):
         if output.startswith("COPY"):
             cnt = int(output.split()[1])
-            print(f"ingested row count {cnt}")
             if cnt == 0:
                 raise NoIngestException("Ingest failed.")
 
