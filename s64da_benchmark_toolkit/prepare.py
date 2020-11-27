@@ -97,9 +97,11 @@ class PrepareBenchmarkFactory:
     def psql_exec_cmd(self, sql):
         return f'psql {self.args.dsn} -c "{sql}"'
 
-    def check_ingest(self, output):
+    @staticmethod
+    def check_ingest(output):
         if output.startswith("COPY"):
             cnt = int(output.split()[1])
+            print(f"ingested row count {cnt}")
             if cnt == 0:
                 raise NoIngestException("Ingest failed.")
 
@@ -131,6 +133,7 @@ class PrepareBenchmarkFactory:
             futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
                 exc = completed_future.exception()
+                PrepareBenchmarkFactory.check_ingest(completed_future.result())
                 if exc:
                     print(f'Task threw an exception: {exc}')
                     print_tb(exc.__traceback__)
