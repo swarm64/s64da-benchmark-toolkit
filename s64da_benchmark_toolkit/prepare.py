@@ -113,8 +113,7 @@ class PrepareBenchmarkFactory:
             if callable(task):
                 return executor.submit(task)
             else:
-                print(f"it is a callable task")
-                return executor.submit(self._run_shell_task, task)
+                return executor.submit(self._run_shell_task, task, True)
 
         # randomize the tasks to decrease lock contention
         random.shuffle(tasks)
@@ -154,7 +153,6 @@ class PrepareBenchmarkFactory:
             f'Not enough disk space available. Needed [GBytes]: {space_needed>>30}, free: {free>>30}'
 
     def run(self):
-        print(f"Must be first output")
         diskpace_check_dir = self.args.check_diskspace_of_directory
         if diskpace_check_dir:
             self._check_diskspace(diskpace_check_dir)
