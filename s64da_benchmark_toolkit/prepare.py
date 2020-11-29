@@ -22,7 +22,7 @@ from .dbconn import DBConn
 s64_benchmark_toolkit_root_dir = Path(os.path.abspath(__file__)).parents[1]
 
 class NoIngestException(Exception):
-    """Exception when no rows inserted into the table."""
+    """Exception when no rows have been inserted into the table."""
 
 class TableGroup:
     def __init__(self, *args):
@@ -116,8 +116,8 @@ class PrepareBenchmarkFactory:
 
             if return_output:
                 stdout, _ = p.communicate()
-                print(f"output of run_shell_task: {stdout.decode('utf-8').strip()}")
-                return stdout.decode('utf-8').strip()
+                print(f"{stdout.decode('utf-8')}")
+                return stdout.decode('utf-8')
 
     def _run_tasks_parallel(self, tasks):
         def get_future(executor, task):
