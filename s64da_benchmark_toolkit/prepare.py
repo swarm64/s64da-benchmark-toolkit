@@ -132,13 +132,18 @@ class PrepareBenchmarkFactory:
             futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
                 exc = completed_future.exception()
-                PrepareBenchmarkFactory.check_ingest(completed_future.result())
+                ingest_check_failed = False
+                try:
+                    PrepareBenchmarkFactory.check_ingest(completed_future.result())
+                except NoIngestException:
+                    ingest_check_failed = True
                 if exc:
                     print(f'Task threw an exception: {exc}')
                     print_tb(exc.__traceback__)
-                    for future in futures:
-                        future.cancel()
-                    exit(1)
+                if exc or ingest_check_failed:
+                        for future in futures:
+                            future.cancel()
+                        exit(1)
 
     def _check_diskspace(self, diskpace_check_dir):
         db_type = os.path.basename(self.schema_dir).split('_')[0]
