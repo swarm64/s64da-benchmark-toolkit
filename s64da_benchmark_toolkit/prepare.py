@@ -100,7 +100,7 @@ class PrepareBenchmarkFactory:
     @staticmethod
     def check_ingest(output):
         if output.startswith("COPY"):
-            cnt = int(output.split()[1])
+            cnt = int(output.strip().split()[1])
             if cnt == 0:
                 raise NoIngestException("Ingest failed.")
 
