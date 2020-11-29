@@ -101,6 +101,7 @@ class PrepareBenchmarkFactory:
     def check_ingest(output):
         if output.startswith("COPY"):
             cnt = int(output.strip().split()[1])
+            print(f"Count: {cnt}")
             if cnt == 0:
                 raise NoIngestException("Ingest failed.")
 
