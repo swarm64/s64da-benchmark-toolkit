@@ -116,7 +116,7 @@ class PrepareBenchmarkFactory:
 
             if return_output:
                 stdout, _ = p.communicate()
-                print({stdout.decode('utf-8')})
+                print(stdout.decode('utf-8'))
                 return stdout.decode('utf-8')
 
     def _run_tasks_parallel(self, tasks):
