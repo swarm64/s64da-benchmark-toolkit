@@ -21,6 +21,9 @@ from .dbconn import DBConn
 
 s64_benchmark_toolkit_root_dir = Path(os.path.abspath(__file__)).parents[1]
 
+class NoIngestException(Exception):
+    """Exception when no rows have been inserted into the table."""
+
 class TableGroup:
     def __init__(self, *args):
         self.data = args
@@ -94,6 +97,14 @@ class PrepareBenchmarkFactory:
     def psql_exec_cmd(self, sql):
         return f'psql {self.args.dsn} -c "{sql}"'
 
+    @staticmethod
+    def check_ingest(output):
+        if output.startswith("COPY"):
+            cnt = int(output.strip().split()[1])
+            if cnt == 0:
+                raise NoIngestException("Ingest failed.")
+
+
     def _run_shell_task(self, task, return_output=False):
         if not self.cancel_event.is_set():
             p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
@@ -105,14 +116,15 @@ class PrepareBenchmarkFactory:
 
             if return_output:
                 stdout, _ = p.communicate()
-                return stdout
+                print(stdout.decode('utf-8'))
+                return stdout.decode('utf-8')
 
     def _run_tasks_parallel(self, tasks):
         def get_future(executor, task):
             if callable(task):
                 return executor.submit(task)
             else:
-                return executor.submit(self._run_shell_task, task)
+                return executor.submit(self._run_shell_task, task, True)
 
         # randomize the tasks to decrease lock contention
         random.shuffle(tasks)
@@ -120,12 +132,18 @@ class PrepareBenchmarkFactory:
             futures = [get_future(executor, task) for task in tasks]
             for completed_future in as_completed(futures):
                 exc = completed_future.exception()
+                ingest_check_failed = False
+                try:
+                    PrepareBenchmarkFactory.check_ingest(completed_future.result())
+                except NoIngestException:
+                    ingest_check_failed = True
                 if exc:
                     print(f'Task threw an exception: {exc}')
                     print_tb(exc.__traceback__)
-                    for future in futures:
-                        future.cancel()
-                    exit(1)
+                if exc or ingest_check_failed:
+                        for future in futures:
+                            future.cancel()
+                        exit(1)
 
     def _check_diskspace(self, diskpace_check_dir):
         db_type = os.path.basename(self.schema_dir).split('_')[0]
@@ -257,7 +275,7 @@ class PrepareBenchmarkFactory:
         with DBConn(self.args.dsn) as conn:
             if self.num_partitions:
                 print('Adding helper functions.')
-                common_file_path = os.path.join(s64_benchmark_toolkit_root_dir, 'benchmarks', 'common', 'functions.sql')    
+                common_file_path = os.path.join(s64_benchmark_toolkit_root_dir, 'benchmarks', 'common', 'functions.sql')
                 with open(common_file_path, 'r') as common_sql:
                     conn.cursor.execute(common_sql.read())
 
