@@ -101,7 +101,6 @@ class PrepareBenchmarkFactory:
     def check_ingest(output):
         if output.startswith("COPY"):
             cnt = int(output.strip().split()[1])
-            print(f"Count: {cnt}")
             if cnt == 0:
                 raise NoIngestException("Ingest failed.")
 
@@ -117,7 +116,7 @@ class PrepareBenchmarkFactory:
 
             if return_output:
                 stdout, _ = p.communicate()
-                print(f"{stdout.decode('utf-8')}")
+                print({stdout.decode('utf-8')})
                 return stdout.decode('utf-8')
 
     def _run_tasks_parallel(self, tasks):
