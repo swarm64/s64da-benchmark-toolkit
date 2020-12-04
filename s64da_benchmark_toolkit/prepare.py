@@ -1,3 +1,5 @@
+
+import glob
 import os
 import re
 import shutil
@@ -8,7 +10,7 @@ import random
 from sys import exit
 from traceback import print_tb
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, ProcessPoolExecutor
 from jinja2 import Environment, FileSystemLoader
 from packaging.version import Version
 from pathlib import Path
@@ -45,6 +47,8 @@ class PrepareBenchmarkFactory:
     TABLES_ANALYZE = None
     SIZING_FACTORS = {}
     CLUSTER_SPEC = {}
+    PYTHON_LOADER = False
+    DO_SHUFFLE = True
 
     def __init__(self, args, benchmark):
         schemas_dir = os.path.join(s64_benchmark_toolkit_root_dir, benchmark.base_dir, "schemas")
@@ -99,7 +103,7 @@ class PrepareBenchmarkFactory:
 
     @staticmethod
     def check_ingest(output):
-        if output.startswith("COPY"):
+        if output is not None and output.startswith("COPY"):
             cnt = int(output.strip().split()[1])
             if cnt == 0:
                 raise NoIngestException("Ingest failed.")
@@ -110,40 +114,64 @@ class PrepareBenchmarkFactory:
             p = Popen(task, cwd=self.benchmark.base_dir, shell=True, executable='/bin/bash',
                       stdout=PIPE if return_output else None)
             p.wait()
-            if(p.returncode != 0):
+            if p.returncode != 0:
                 self.cancel_event.set()
                 exit(task)
 
             if return_output:
                 stdout, _ = p.communicate()
-                print(stdout.decode('utf-8'))
+                print(stdout.decode('utf-8'), end='')
                 return stdout.decode('utf-8')
 
-    def _run_tasks_parallel(self, tasks):
-        def get_future(executor, task):
+    def _run_tasks_parallel(self, tasks, executor_class=ThreadPoolExecutor):
+        def get_runnable_task(task):
+            if isinstance(task, tuple):
+                task, task_args = (task[0], task[1:])
+
             if callable(task):
-                return executor.submit(task)
+                return (task, *task_args)
             else:
-                return executor.submit(self._run_shell_task, task, True)
+                return (self._run_shell_task, task, True)
+
+        def get_future(task):
+            runnable = get_runnable_task(task)
+            return executor.submit(runnable[0], *runnable[1:])
+
+        def ingest_succeeded(task_result):
+            try:
+                PrepareBenchmarkFactory.check_ingest(task_result)
+            except NoIngestException:
+                return False
+
+            return True
 
         # randomize the tasks to decrease lock contention
-        random.shuffle(tasks)
-        with ThreadPoolExecutor(max_workers=self.args.max_jobs) as executor:
-            futures = [get_future(executor, task) for task in tasks]
-            for completed_future in as_completed(futures):
-                exc = completed_future.exception()
-                ingest_check_failed = False
-                try:
-                    PrepareBenchmarkFactory.check_ingest(completed_future.result())
-                except NoIngestException:
-                    ingest_check_failed = True
-                if exc:
-                    print(f'Task threw an exception: {exc}')
-                    print_tb(exc.__traceback__)
-                if exc or ingest_check_failed:
-                        for future in futures:
-                            future.cancel()
-                        exit(1)
+        if PrepareBenchmarkFactory.DO_SHUFFLE:
+            random.shuffle(tasks)
+
+        # If we're asked to use only with one job, run the tasks directly
+        # in the main process to ease profiling.
+        if self.args.max_jobs == 1:
+            for task in tasks:
+                runnable = get_runnable_task(task)
+                result = runnable[0](*runnable[1:]) if len(runnable) > 1 else runnable[0]()
+                if not ingest_succeeded(result):
+                    print('Ingest failed!')
+                    exit(1)
+        else:
+            with executor_class(max_workers=self.args.max_jobs) as executor:
+                futures = [get_future(task) for task in tasks]
+                for completed_future in as_completed(futures):
+                    ingest_failed = not ingest_succeeded(completed_future.result())
+                    exc = completed_future.exception()
+                    if exc:
+                        print(f'Task threw an exception: {exc}')
+                        print_tb(exc.__traceback__)
+                    if exc or ingest_failed:
+                            for future in futures:
+                                future.cancel()
+                            print('Ingest failed!')
+                            exit(1)
 
     def _check_diskspace(self, diskpace_check_dir):
         db_type = os.path.basename(self.schema_dir).split('_')[0]
@@ -185,12 +213,20 @@ class PrepareBenchmarkFactory:
                 tasks = self.get_ingest_tasks(table)
                 assert isinstance(tasks, list), 'Returned object is not a list'
                 ingest_tasks.extend(tasks)
-            self._run_tasks_parallel(ingest_tasks)
+
+            if PrepareBenchmarkFactory.PYTHON_LOADER:
+                self._run_tasks_parallel(ingest_tasks, executor_class=ProcessPoolExecutor)
+            else:
+                self._run_tasks_parallel(ingest_tasks)
+
         ingest_duration = time.time() - start_ingest
 
         print('Adding indices')
         start_optimize = time.time()
         self.add_indexes()
+
+        print('Adding common')
+        self.add_common()
 
         if self.supports_cluster:
             print('Swarm64 DA CLUSTER')
@@ -215,7 +251,6 @@ class PrepareBenchmarkFactory:
                 conn.cursor.execute(pre_schema_file.read())
 
     def _load_license(self, conn):
-
         license_loaded = True
 
         try:
@@ -295,13 +330,17 @@ class PrepareBenchmarkFactory:
             if not os.path.isfile(sql_file_path):
                 continue
 
-            with DBConn(self.args.dsn) as conn:
-                print(f'Applying {sql_file_path}')
-                with open(sql_file_path, 'r') as sql_file:
-                    sql = sql_file.read()
+            print(f'Applying {sql_file_path}')
+            with open(sql_file_path, 'r') as sql_file:
+                sql = sql_file.read()
 
-                tasks = [self.psql_exec_cmd(cmd) for cmd in sqlparse_split(sql)]
-                self._run_tasks_parallel(tasks)
+            tasks = [self.psql_exec_cmd(cmd) for cmd in sqlparse_split(sql)]
+            self._run_tasks_parallel(tasks)
+
+    def add_common(self):
+        common_path = os.path.join(self.schema_dir, '..', 'common', '*.sql')
+        tasks = [self.psql_exec_file(sql_file) for sql_file in glob.glob(common_path)]
+        self._run_tasks_parallel(tasks)
 
     def vacuum_analyze(self):
         print(f'Running VACUUM-ANALYZE on {self.args.dsn}')

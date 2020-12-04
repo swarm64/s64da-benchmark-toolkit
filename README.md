@@ -23,14 +23,14 @@ before proceeding. For S64 DA versions 4.0.0 and below checkout v4.0.0_and_below
   `postgres` or `enterprisedb` *without password*
 
 
-# Creating a database and loading data
+# Creating a Database and Loading Data
 
 Load a database with a dataset. If the database does not exist, it will be
 created. If it does exist, it will be deleted and recreated.
 
     ./prepare_benchmark \
         --dsn postgresql://postgres@localhost/<target-db> \
-        --benchmark <tpch|tpcds|ssb> \
+        --benchmark <tpch|tpcds|ssb|htap> \
         --schema=<schema-to-deploy> \
         --scale-factor=<scale-factor-to-use>
 
@@ -43,7 +43,7 @@ performance schema:
         --schema=s64da_performance \
         --scale-factor=1000
 
-### Required Parameters
+## Required Parameters
 
 Parameter      | Description
 -------------- | -----------
@@ -52,7 +52,7 @@ Parameter      | Description
 `schema`       | The schema to deploy. Schemas are directories in the benchmarks/\<benchmark\>/schemas directory. See the table below for the supported schemas.
 `scale-factor` | The scale factor to use, such as `10`, `100` or `1000`.
 
-#### Schema Parameter Values
+### Schema Parameter Values
 
 Value                   | Description
 ----------------------- | -----------
@@ -61,7 +61,7 @@ Value                   | Description
 `s64da_native_enhanced` | as above, but with some of the S64 DA opt-in features enabled, such as `columnstore` index
 `s64da_performance`     | schema that provides the best performance for S64 DA
 
-### Optional Parameters
+## Optional Parameters
 
 Parameter                      | Description
 ------------------------------ | -----------------------------------------------
@@ -71,6 +71,7 @@ Parameter                      | Description
 `s64da-license-path`           | The path to the S64 DA license. Default: `/s64da.license`
 `data-dir`                     | The directory holding the data files to ingest from. Default: none
 `num-partitions`               | The number of partitions for partitioned schemas. Default: none
+`start-date`                   | The data start date for HTAP benchmark
 
 Depending on the scale factor you chose, it might take several hours for the
 script to finish. After the script creates the database, it loads the data,
@@ -78,28 +79,37 @@ creates primary keys, foreign keys, and indices. Afterwards, it runs VACUUM
 and ANALYZE.
 
 
-# Runnning a benchmark
+# Runnning a Benchmark
 
 Start a benchmark:
 
     ./run_benchmark \
         --dsn postgresql://postgres@localhost/<target-db> \
-        --benchmark <tpch|tpcds|ssb>
+        [--benchmark] <tpch|tpcds|ssb|htap> \
+        <optional benchmark-specific arguments>
 
-This runs the benchmark with a 15 minute runtime restriction per query. You can
-use the `--timeout` parameter to adjust this limit.
+This runs the benchmark with the default runtime restriction per query.
+Some benchmarks support a `--timeout` parameter to adjust this limit.
 
-### Required Parameters
+Note: The `--benchmark` parameter has been deprecated and is ignored. The name of the benchmark
+should directly follow the specification of `--dsn`.
+
+## Required Parameters
 
 Parameter   | Description
 ----------- | -----------------------------------------------
 `dsn`       | The full DSN of the DB to connect to. DSN layout: <pre>postgresql://&lt;user&gt;@&lt;host&gt;:&lt;target-port&gt;/&lt;target-db&gt;</pre> The port is optional and the default is 5432. Example with port 5444 and use of EPAS: <pre>--dsn postgresql://enterprisedb@localhost:5444/example-database</pre>
-`benchmark` | The benchmark to use: `tpch`, `tpcds` or `ssb`
+&nbsp;      | Name of the the benchmark to use: `tpch`, `tpcds`, `ssb`, or `htap`
 
 Note: if you enable correctness checks with the `--check-correctness` flag, the
 parameter `--scale-factor` is required.
 
-### Optional Parameters
+## Optional Parameters
+
+The optional parameters differ by benchmark.
+The ones for TPC-H, TPC-DS, and SSB are described in this section.
+The parameters supported by HTAP are described in a separate section below.
+
 
 Parameter             | Description
 --------------------- | -----------
@@ -114,8 +124,7 @@ Parameter             | Description
 `scale-factor`        | Scale factor for the correctness comparison. Default: none
 `explain-analyze`     | Whether to run EXPLAIN ANALYZE. Query plans will be saved into the `plans` directory.
 
-
-# Test parameterization with additional YAML configuration
+# Test Parameterization with Additional YAML Configuration
 
 You can modify the existing configuration files located under the configs
 directory. By default, the toolkit loads loads the respective `default.yaml`
@@ -149,3 +158,92 @@ PostgreSQL configuration file after the benchmark completes.
 Some options can be passed on the command line and in a config file.
 Any such option passed on the command line will override the value set in the
 config file.
+
+Note: This feature is not supported by HTAP benchmark.
+
+
+# HTAP Benchmark
+
+A mixed workload benchmark implementation using a hybrid TPC-C/TPC-H schema is available in `benchmarks/htap`.
+It draws inspiration from [sysbench-tpcc](https://github.com/Percona-Lab/sysbench-tpcc), [CHbenCHmark](https://db.in.tum.de/research/projects/CHbenCHmark/?lang=en), and [HTAPBench](https://github.com/faclc4/HTAPBench).
+
+Data preparation is identical to the other benchmarks (see "Creating a database and loading data"
+above).
+
+The HTAP benchmark requires command line arguments that differ from the ones described above.
+The `--dsn` argument is shared with the other benchmarks and must be provided.
+The `--benchmark` argument is not used, instead the name `htap` must be provided directly after the `--dsn` argument.
+To run an HTAP benchmark with 4 OLTP workers and 2 OLAP workers for 30 minutes, run the folowing:
+
+    ./run_benchmark \
+        --dsn postgresql://postgres@localhost/htap
+        [--benchmark] htap \
+        --oltp-workers 4 \
+        --olap-workers 2 \
+        --duration 1800
+
+## Required Parameters
+
+Parameter      | Description
+-------------- | -----------------------------------------------
+`dsn`          | The full DSN of the DB to connect to. DSN layout: <pre>postgresql://&lt;user&gt;@&lt;host&gt;:&lt;target-port&gt;/&lt;target-db&gt;</pre> The port is optional and the default is 5432. Example with port 5444 and use of EPAS: <pre>--dsn postgresql://enterprisedb@localhost:5444/example-database</pre>
+`htap`         | Enables parsing of the command line arguments below, do not prefix with `--`.
+
+## Optional Parameters
+
+Parameter             | Description
+--------------------- | -----------------------------------------------
+`oltp-workers`        | The number of OLTP workers executing TPC-C transactions (i.e. simulated clients), default: 1
+`olap-workers`        | The number of OLAP workers running modified TPC-H queries, default: 1.
+`duration`            | The number of seconds the benchmark should run for, default: 60 seconds
+`olap-timeout`        | Timeout for OLAP queries in seconds, default: 900
+`dry-run`             | Only generate transactions and queries but don't send them to the DB. Can be useful for measuring script throughput.
+`monitoring-interval` | Number of seconds to wait between updates of the monitoring display, default: 1
+`stats-dsn`           | The DSN to use for collecting statistics into a database. Not defining it will disable statistics collection.
+
+## Monitoring
+
+During a benchmark run the HTAP benchmark presents you with the following monitoring screen.
+This requires a VT100 compatible terminal emulator.
+
+    Detected scale factor: 1                                 <- scale factor, detected by counting the number of warehouses
+    Database statistics collection is disabled.              <- this will be shown if you didn't provide a `stats-dsn`
+    OK  -> Total TX:         87 | Current rate:   58.0 tps   <- the current transaction rate (tansactions per second)
+    ERR -> Total TX:          1 | Current rate:    0.0 tps   <- the current error rate (failed transactions per second)
+
+    Stream   |    1      |    2      |                       <- one column per OLAP stream
+    ----------------------------------
+    Query  1 |           |           |                       <- The state of each query that was
+    Query  2 |      0.43 |           |                          recently run or is running currently.
+    Query  3 |           |      0.72 |                          Also shows when a query timed out or
+    Query  4 |           |           |                          caused an error in the database.
+    Query  5 |           |           |                          For finished queries the runtime is
+    Query  6 |      0.07 |           |                          displayed.
+    Query  7 |           |           |
+    Query  8 |           |           |
+    Query  9 |      0.63 |           |
+    Query 10 |           |           |
+    Query 11 |           |           |
+    Query 12 |           |           |
+    Query 13 |           |           |
+    Query 14 |      0.25 |           |
+    Query 15 |           |           |
+    Query 16 |           |           |
+    Query 17 |  Running  |           |
+    Query 18 |           |  Running  |
+    Query 19 |           |           |
+    Query 20 |      0.45 |           |
+    Query 21 |           |      0.74 |
+    Query 22 |           |           |
+
+    Elapsed: 2 seconds
+
+
+# Testing
+
+For testing, install the test requirements,
+
+    /usr/bin/python3.6 -m pip install -r requirements-test.txt
+
+and run `python -m pytest tests`. Some benchmark modules provide their own tests. To run, for example
+the test for the HTAP benchmark, execute `python -m pytest benchmarks/htap/tests`.

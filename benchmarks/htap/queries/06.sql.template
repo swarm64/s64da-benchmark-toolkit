@@ -1,0 +1,9 @@
+-- vim: set ft=sql:
+select
+    sum(ol_amount) as revenue
+from
+    order_line
+where
+    ol_delivery_d >= '$date'
+    and ol_delivery_d < timestamp '$date' + interval '1 year'
+    and ol_quantity between 1 and 100000;

@@ -17,3 +17,5 @@ natsort==7.0.1
 tabulate==0.8.6
 packaging==20.4
 sqlparse==0.3.1
+asyncpg==0.21.0
+python-dateutil==2.8.0

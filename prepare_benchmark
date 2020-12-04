@@ -9,6 +9,8 @@ import sys
 import importlib.util
 
 from checks import check_program_exists
+from dateutil import parser
+
 from logging.config import fileConfig
 from s64da_benchmark_toolkit.streams import Streams, Benchmark
 
@@ -79,6 +81,11 @@ if __name__ == '__main__':
 
     args_to_parse.add_argument('--s64da-license-path', default='/s64da.license', help=(
         'The path to the S64 DA license.'
+    ))
+
+    args_to_parse.add_argument(
+        '--start-date', default=None, type=parser.isoparse, help=(
+        'The start date for TPC-C.'
     ))
 
     args = args_to_parse.parse_args()
