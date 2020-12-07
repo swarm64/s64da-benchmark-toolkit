@@ -40,3 +40,15 @@ class DBConn:
     def __exit__(self, *args):
         self.cursor.close()
         self.conn.close()
+
+    def autocommit(self):
+        return self.conn.autocommit
+
+    def set_autocommit(self, autocommit):
+        self.conn.autocommit = autocommit
+
+    def commit(self):
+        return self.conn.commit()
+
+    def rollback(self):
+        return self.conn.rollback()

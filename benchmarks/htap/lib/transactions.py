@@ -25,6 +25,8 @@ class Transactions:
         self.outstanding_deliveries = []
         self.latest_delivery_date = None
 
+        self.conn.set_autocommit(False)
+
     def stats(self, worker_id):
         return {
                 'worker_id': worker_id,
@@ -48,8 +50,10 @@ class Transactions:
             try:
                 self.conn.cursor.execute(sql, args)
                 result = self.conn.cursor.fetchall()
+                self.conn.commit()
             except psycopg2.errors.RaiseException as err:
                 if 'Item record is null' in err.pgerror:
+                    self.conn.rollback()
                     return False
                 raise
 
