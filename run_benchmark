@@ -114,8 +114,18 @@ if __name__ == '__main__':
     check_requirements()
 
     # Remove deprecated `--benchmark` parameter as these are now subparsers and warn if it was there
-    argv = list(filter(lambda x: x != '--benchmark', sys.argv))
-    if len(argv) < len(sys.argv):
+    benchmark_param_found = False
+    argv = []
+    for item in sys.argv:
+        if item.startswith('--benchmark='):
+            benchmark_param_found = True
+            argv.append(item.replace('--benchmark=', ''))
+        elif item == '--benchmark':
+            benchmark_param_found = True
+            continue
+        else:
+            argv.append(item)
+    if benchmark_param_found:
         logger.warn('The parameter `--benchmark` is deprecated. Provide the name of the benchmark '
                     'you want to run as a positional argument after the `--dsn` parameter common '
                     'to all benchmarks.')
