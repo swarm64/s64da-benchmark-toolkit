@@ -1,4 +1,4 @@
 timeout: 15min
-ignore:
-  - 18
-  - 21
+#ignore:
+#  - 18
+#  - 21
