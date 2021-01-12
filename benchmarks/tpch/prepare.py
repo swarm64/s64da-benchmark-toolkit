@@ -1,4 +1,5 @@
-
+import os
+from glob import glob
 from s64da_benchmark_toolkit.prepare import PrepareBenchmarkFactory, TableGroup
 
 class PrepareBenchmark(PrepareBenchmarkFactory):
@@ -47,7 +48,15 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         'supplier': 's'
     }
 
+    def get_copy_cmds(self, table):
+        copy_cmd = self.psql_exec_cmd(f'COPY {table} FROM STDIN WITH (FORMAT CSV, DELIMITER \'|\')')
+        full_path = os.path.join(self.args.data_dir, f'{table}.*gz')
+        return [f'gunzip -c {data_file} | {copy_cmd}' for data_file in glob(full_path)]
+
     def get_ingest_tasks(self, table):
+        if self.args.data_dir:
+            return self.get_copy_cmds(table)
+
         use_chunks = self.args.chunks > 1 and table not in ('nation', 'region')
 
         table_code = PrepareBenchmark.TABLE_CODES[table]
