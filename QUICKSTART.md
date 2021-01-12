@@ -7,7 +7,7 @@ run the following command:
 
     ./prepare_benchmark \
         --dsn postgresql://postgres@localhost:5432/swarm64_benchmark \
-        tpch \
+        --benchmark tpch \
         --scale-factor 10 \
         --schema s64da_performance
 
@@ -24,8 +24,8 @@ execute the following command:
         --dsn postgresql://postgres@localhost:5432/swarm64_benchmark \
         tpch
 
-Adapt the value for the `--benchmark` parameter if you ingested data for a
-different benchmark in the step above.
+Change `tpch` to a different value if you ingested data for a different
+benchmark in the step above.
 
 Please refer to `README.md` for a detailed description of all the available
 parameters and options.
