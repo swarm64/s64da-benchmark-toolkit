@@ -49,6 +49,7 @@ class Streams:
         self.scale_factor = args.scale_factor
         self.query_dir = self._get_query_dir()
         self.explain_analyze = args.explain_analyze
+        self.use_server_side_cursors = args.use_server_side_cursors
         self.reporting = Reporting(benchmark, args, self.config)
 
     @staticmethod
@@ -127,7 +128,7 @@ class Streams:
         query_sql = Streams.apply_sql_modifications(query_sql, (
             ('revenue0', f'revenue{stream_id}'),))
         timeout = self.config.get('timeout', 0)
-        return self.db.run_query(query_sql, timeout, self.explain_analyze)
+        return self.db.run_query(query_sql, timeout, self.explain_analyze, self.use_server_side_cursors)
 
     def _run_stream(self, reporting_queue, stream_id):
         sequence = self.get_stream_sequence(stream_id)

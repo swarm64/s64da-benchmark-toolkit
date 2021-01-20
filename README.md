@@ -86,6 +86,7 @@ Start a benchmark:
     ./run_benchmark \
         --dsn postgresql://postgres@localhost/<target-db> \
         [--benchmark] <tpch|tpcds|ssb|htap> \
+	--use-server-side-cursors
         <optional benchmark-specific arguments>
 
 This runs the benchmark with the default runtime restriction per query.
@@ -105,6 +106,10 @@ Note: if you enable correctness checks with the `--check-correctness` flag, the
 parameter `--scale-factor` is required.
 
 ## Optional Parameters
+
+Parameter                 | Description
+--------------------------|-------------------------------------
+`use-server-side-cursors` | Use server-side cursors for executing the queries.
 
 The optional parameters differ by benchmark.
 The ones for TPC-H, TPC-DS, and SSB are described in this section.
