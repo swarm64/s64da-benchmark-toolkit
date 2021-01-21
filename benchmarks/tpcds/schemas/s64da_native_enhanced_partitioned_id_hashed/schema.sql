@@ -16,7 +16,7 @@ CREATE TABLE customer_address
     ca_state                  VARCHAR(2),
     ca_zip                    VARCHAR(10),
     ca_country                VARCHAR(20),
-    ca_gmt_offset             DOUBLE PRECISION,
+    ca_gmt_offset             DECIMAL(5,2),
     ca_location_type          VARCHAR(20)
 ) PARTITION BY HASH(ca_address_sk);
 SELECT * FROM partition_by_hash('customer_address', 50);
@@ -82,7 +82,7 @@ CREATE TABLE warehouse
     w_state                   VARCHAR(2),
     w_zip                     VARCHAR(10),
     w_country                 VARCHAR(20),
-    w_gmt_offset              DOUBLE PRECISION
+    w_gmt_offset              DECIMAL(5,2)
 );
 
 CREATE TABLE ship_mode
@@ -130,8 +130,8 @@ CREATE TABLE item
     i_rec_start_date          DATE,
     i_rec_end_date            DATE,
     i_item_desc               VARCHAR(200),
-    i_current_price           DOUBLE PRECISION,
-    i_wholesale_cost          DOUBLE PRECISION,
+    i_current_price           DECIMAL(7,2),
+    i_wholesale_cost          DECIMAL(7,2),
     i_brand_id                BIGINT,
     i_brand                   VARCHAR(50),
     i_class_id                BIGINT,
@@ -178,8 +178,8 @@ CREATE TABLE store
     s_state                   VARCHAR(2),
     s_zip                     VARCHAR(10),
     s_country                 VARCHAR(20),
-    s_gmt_offset              DOUBLE PRECISION,
-    s_tax_precentage          DOUBLE PRECISION
+    s_gmt_offset              DECIMAL(5,2),
+    s_tax_precentage          DECIMAL(5,2)
 );
 
 CREATE TABLE call_center
@@ -213,8 +213,8 @@ CREATE TABLE call_center
     cc_state                  VARCHAR(2),
     cc_zip                    VARCHAR(10),
     cc_country                VARCHAR(20),
-    cc_gmt_offset             DOUBLE PRECISION,
-    cc_tax_percentage         DOUBLE PRECISION
+    cc_gmt_offset             DECIMAL(5,2),
+    cc_tax_percentage         DECIMAL(5,2)
 );
 
 CREATE TABLE customer
@@ -266,8 +266,8 @@ CREATE TABLE web_site
     web_state                 VARCHAR(2),
     web_zip                   VARCHAR(10),
     web_country               VARCHAR(20),
-    web_gmt_offset            DOUBLE PRECISION,
-    web_tax_percentage        DOUBLE PRECISION
+    web_gmt_offset            DECIMAL(5,2),
+    web_tax_percentage        DECIMAL(5,2)
 );
 
 CREATE TABLE store_returns
@@ -283,15 +283,15 @@ CREATE TABLE store_returns
     sr_reason_sk              INTEGER,
     sr_ticket_number          INTEGER               NOT NULL,
     sr_return_quantity        BIGINT,
-    sr_return_amt             DOUBLE PRECISION,
-    sr_return_tax             DOUBLE PRECISION,
-    sr_return_amt_inc_tax     DOUBLE PRECISION,
-    sr_fee                    DOUBLE PRECISION,
-    sr_return_ship_cost       DOUBLE PRECISION,
-    sr_refunded_cash          DOUBLE PRECISION,
-    sr_reversed_charge        DOUBLE PRECISION,
-    sr_store_credit           DOUBLE PRECISION,
-    sr_net_loss               DOUBLE PRECISION
+    sr_return_amt             DECIMAL(7,2),
+    sr_return_tax             DECIMAL(7,2),
+    sr_return_amt_inc_tax     DECIMAL(7,2),
+    sr_fee                    DECIMAL(7,2),
+    sr_return_ship_cost       DECIMAL(7,2),
+    sr_refunded_cash          DECIMAL(7,2),
+    sr_reversed_charge        DECIMAL(7,2),
+    sr_store_credit           DECIMAL(7,2),
+    sr_net_loss               DECIMAL(7,2)
 ) PARTITION BY HASH(sr_item_sk);
 SELECT * FROM partition_by_hash('store_returns', 50);
 
@@ -387,15 +387,15 @@ CREATE TABLE catalog_returns
     cr_reason_sk              INTEGER,
     cr_order_number           INTEGER               NOT NULL,
     cr_return_quantity        BIGINT,
-    cr_return_amount          DOUBLE PRECISION,
-    cr_return_tax             DOUBLE PRECISION,
-    cr_return_amt_inc_tax     DOUBLE PRECISION,
-    cr_fee                    DOUBLE PRECISION,
-    cr_return_ship_cost       DOUBLE PRECISION,
-    cr_refunded_cash          DOUBLE PRECISION,
-    cr_reversed_charge        DOUBLE PRECISION,
-    cr_store_credit           DOUBLE PRECISION,
-    cr_net_loss               DOUBLE PRECISION
+    cr_return_amount          DECIMAL(7,2),
+    cr_return_tax             DECIMAL(7,2),
+    cr_return_amt_inc_tax     DECIMAL(7,2),
+    cr_fee                    DECIMAL(7,2),
+    cr_return_ship_cost       DECIMAL(7,2),
+    cr_refunded_cash          DECIMAL(7,2),
+    cr_reversed_charge        DECIMAL(7,2),
+    cr_store_credit           DECIMAL(7,2),
+    cr_net_loss               DECIMAL(7,2)
 ) PARTITION BY HASH(cr_item_sk);
 SELECT * FROM partition_by_hash('catalog_returns', 50);
 
@@ -416,15 +416,15 @@ CREATE TABLE web_returns
     wr_reason_sk              INTEGER,
     wr_order_number           INTEGER               NOT NULL,
     wr_return_quantity        BIGINT,
-    wr_return_amt             DOUBLE PRECISION,
-    wr_return_tax             DOUBLE PRECISION,
-    wr_return_amt_inc_tax     DOUBLE PRECISION,
-    wr_fee                    DOUBLE PRECISION,
-    wr_return_ship_cost       DOUBLE PRECISION,
-    wr_refunded_cash          DOUBLE PRECISION,
-    wr_reversed_charge        DOUBLE PRECISION,
-    wr_account_credit         DOUBLE PRECISION,
-    wr_net_loss               DOUBLE PRECISION
+    wr_return_amt             DECIMAL(7,2),
+    wr_return_tax             DECIMAL(7,2),
+    wr_return_amt_inc_tax     DECIMAL(7,2),
+    wr_fee                    DECIMAL(7,2),
+    wr_return_ship_cost       DECIMAL(7,2),
+    wr_refunded_cash          DECIMAL(7,2),
+    wr_reversed_charge        DECIMAL(7,2),
+    wr_account_credit         DECIMAL(7,2),
+    wr_net_loss               DECIMAL(7,2)
 ) PARTITION BY HASH(wr_item_sk);
 SELECT * FROM partition_by_hash('web_returns', 50);
 
@@ -449,21 +449,21 @@ CREATE TABLE web_sales
     ws_promo_sk               INTEGER,
     ws_order_number           INTEGER               NOT NULL,
     ws_quantity               BIGINT,
-    ws_wholesale_cost         DOUBLE PRECISION,
-    ws_list_price             DOUBLE PRECISION,
-    ws_sales_price            DOUBLE PRECISION,
-    ws_ext_discount_amt       DOUBLE PRECISION,
-    ws_ext_sales_price        DOUBLE PRECISION,
-    ws_ext_wholesale_cost     DOUBLE PRECISION,
-    ws_ext_list_price         DOUBLE PRECISION,
-    ws_ext_tax                DOUBLE PRECISION,
-    ws_coupon_amt             DOUBLE PRECISION,
-    ws_ext_ship_cost          DOUBLE PRECISION,
-    ws_net_paid               DOUBLE PRECISION,
-    ws_net_paid_inc_tax       DOUBLE PRECISION,
-    ws_net_paid_inc_ship      DOUBLE PRECISION,
-    ws_net_paid_inc_ship_tax  DOUBLE PRECISION,
-    ws_net_profit             DOUBLE PRECISION
+    ws_wholesale_cost         DECIMAL(7,2),
+    ws_list_price             DECIMAL(7,2),
+    ws_sales_price            DECIMAL(7,2),
+    ws_ext_discount_amt       DECIMAL(7,2),
+    ws_ext_sales_price        DECIMAL(7,2),
+    ws_ext_wholesale_cost     DECIMAL(7,2),
+    ws_ext_list_price         DECIMAL(7,2),
+    ws_ext_tax                DECIMAL(7,2),
+    ws_coupon_amt             DECIMAL(7,2),
+    ws_ext_ship_cost          DECIMAL(7,2),
+    ws_net_paid               DECIMAL(7,2),
+    ws_net_paid_inc_tax       DECIMAL(7,2),
+    ws_net_paid_inc_ship      DECIMAL(7,2),
+    ws_net_paid_inc_ship_tax  DECIMAL(7,2),
+    ws_net_profit             DECIMAL(7,2)
 ) PARTITION BY HASH(ws_item_sk);
 SELECT * FROM partition_by_hash('web_sales', 50);
 
@@ -488,21 +488,21 @@ CREATE TABLE catalog_sales
     cs_promo_sk               INTEGER,
     cs_order_number           INTEGER               NOT NULL,
     cs_quantity               BIGINT,
-    cs_wholesale_cost         DOUBLE PRECISION,
-    cs_list_price             DOUBLE PRECISION,
-    cs_sales_price            DOUBLE PRECISION,
-    cs_ext_discount_amt       DOUBLE PRECISION,
-    cs_ext_sales_price        DOUBLE PRECISION,
-    cs_ext_wholesale_cost     DOUBLE PRECISION,
-    cs_ext_list_price         DOUBLE PRECISION,
-    cs_ext_tax                DOUBLE PRECISION,
-    cs_coupon_amt             DOUBLE PRECISION,
-    cs_ext_ship_cost          DOUBLE PRECISION,
-    cs_net_paid               DOUBLE PRECISION,
-    cs_net_paid_inc_tax       DOUBLE PRECISION,
-    cs_net_paid_inc_ship      DOUBLE PRECISION,
-    cs_net_paid_inc_ship_tax  DOUBLE PRECISION,
-    cs_net_profit             DOUBLE PRECISION
+    cs_wholesale_cost         DECIMAL(7,2),
+    cs_list_price             DECIMAL(7,2),
+    cs_sales_price            DECIMAL(7,2),
+    cs_ext_discount_amt       DECIMAL(7,2),
+    cs_ext_sales_price        DECIMAL(7,2),
+    cs_ext_wholesale_cost     DECIMAL(7,2),
+    cs_ext_list_price         DECIMAL(7,2),
+    cs_ext_tax                DECIMAL(7,2),
+    cs_coupon_amt             DECIMAL(7,2),
+    cs_ext_ship_cost          DECIMAL(7,2),
+    cs_net_paid               DECIMAL(7,2),
+    cs_net_paid_inc_tax       DECIMAL(7,2),
+    cs_net_paid_inc_ship      DECIMAL(7,2),
+    cs_net_paid_inc_ship_tax  DECIMAL(7,2),
+    cs_net_profit             DECIMAL(7,2)
 ) PARTITION BY HASH(cs_item_sk);
 SELECT * FROM partition_by_hash('catalog_sales', 50);
 
@@ -519,17 +519,17 @@ CREATE TABLE store_sales
     ss_promo_sk               INTEGER,
     ss_ticket_number          INTEGER               NOT NULL,
     ss_quantity               BIGINT,
-    ss_wholesale_cost         DOUBLE PRECISION,
-    ss_list_price             DOUBLE PRECISION,
-    ss_sales_price            DOUBLE PRECISION,
-    ss_ext_discount_amt       DOUBLE PRECISION,
-    ss_ext_sales_price        DOUBLE PRECISION,
-    ss_ext_wholesale_cost     DOUBLE PRECISION,
-    ss_ext_list_price         DOUBLE PRECISION,
-    ss_ext_tax                DOUBLE PRECISION,
-    ss_coupon_amt             DOUBLE PRECISION,
-    ss_net_paid               DOUBLE PRECISION,
-    ss_net_paid_inc_tax       DOUBLE PRECISION,
-    ss_net_profit             DOUBLE PRECISION
+    ss_wholesale_cost         DECIMAL(7,2),
+    ss_list_price             DECIMAL(7,2),
+    ss_sales_price            DECIMAL(7,2),
+    ss_ext_discount_amt       DECIMAL(7,2),
+    ss_ext_sales_price        DECIMAL(7,2),
+    ss_ext_wholesale_cost     DECIMAL(7,2),
+    ss_ext_list_price         DECIMAL(7,2),
+    ss_ext_tax                DECIMAL(7,2),
+    ss_coupon_amt             DECIMAL(7,2),
+    ss_net_paid               DECIMAL(7,2),
+    ss_net_paid_inc_tax       DECIMAL(7,2),
+    ss_net_profit             DECIMAL(7,2)
 ) PARTITION BY HASH(ss_item_sk);
 SELECT * FROM partition_by_hash('store_sales', 50);
