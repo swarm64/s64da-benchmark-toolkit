@@ -54,12 +54,14 @@ Parameter      | Description
 
 ### Schema Parameter Values
 
-Value                   | Description
------------------------ | -----------
-`psql_native`           | the standard PostgreSQL schema
-`s64da_native`          | as above but with the S64 DA extension with its default feature set enabled
-`s64da_native_enhanced` | as above, but with some of the S64 DA opt-in features enabled, such as `columnstore` index
-`s64da_performance`     | schema that provides the best performance for S64 DA
+Value                         | Description
+----------------------------- | -----------
+`psql_native`                 | the standard PostgreSQL schema
+`s64da_native`                | as above but with the S64 DA extension with its default feature set enabled
+`s64da_native_enhanced`       | as above but with some of the S64 DA opt-in features enabled, such as `columnstore` index
+`s64da_performance`           | schema that provides the best performance for S64 DA (includes removal of btree indexes, keys, and use of floating point)
+`*_partitioned_id_hashed`     | schema like one of first four schemas but partitioning some tables using hash on main id column of the table
+`*_partitioned_date_week`     | schema like one of first four schemas but partitioning tables with dates by weeks
 
 ## Optional Parameters
 
