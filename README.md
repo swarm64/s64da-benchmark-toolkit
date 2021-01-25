@@ -86,7 +86,6 @@ Start a benchmark:
     ./run_benchmark \
         --dsn postgresql://postgres@localhost/<target-db> \
         [--benchmark] <tpch|tpcds|ssb|htap> \
-	--use-server-side-cursors
         <optional benchmark-specific arguments>
 
 This runs the benchmark with the default runtime restriction per query.
