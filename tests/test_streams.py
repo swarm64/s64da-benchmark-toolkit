@@ -16,6 +16,7 @@ def args():
         csv_file = 'results.csv'
         scale_factor = None
         explain_analyze = False
+        use_server_side_cursors = False
         check_correctness = False
         netdata_output_file = 'foobar.dat'
 

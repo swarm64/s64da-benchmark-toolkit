@@ -103,6 +103,10 @@ def parse_arguments(argv, benchmarks):
         'Supply with DB, e.g. postgresql://postgres@localhost/dbname'
     ))
 
+    common_parser.add_argument('--use-server-side-cursors', default=False, action='store_true',
+        required=False, help=('Use server-side cursors for executing the queries')
+    )
+
     subparsers = common_parser.add_subparsers(dest='benchmark')
     add_streams_parsers(subparsers, benchmarks)
     htap.add_parser(subparsers)

@@ -39,7 +39,7 @@ class DB:
             conn.cursor.execute('ALTER SYSTEM RESET ALL')
             conn.cursor.execute('SELECT pg_reload_conf()')
 
-    def run_query(self, sql, timeout, auto_explain=False):
+    def run_query(self, sql, timeout, auto_explain=False, use_server_side_cursors=False):
         status = Status.ERROR
         query_result = None
         plan = None
@@ -50,10 +50,23 @@ class DB:
                 if auto_explain:
                     DB.auto_explain_on(conn)
 
-                conn.cursor.execute(sql)
-                if conn.cursor.description is not None:
-                    query_result_columns = [colname[0] for colname in conn.cursor.description]
-                    query_result = query_result_columns, conn.cursor.fetchall()
+                cursor = conn.cursor;
+                if use_server_side_cursors:
+                    # See https://github.com/psycopg/psycopg2/issues/941 for why
+                    # starting a new connection is so weird.
+                    conn.conn.rollback()
+                    conn.conn.autocommit = False
+                    cursor = conn.server_side_cursor
+
+                cursor.execute(sql)
+                rows = cursor.fetchall()
+
+                if use_server_side_cursors:
+                    conn.autocommit = True
+
+                if rows is not None:
+                    query_result_columns = [colname[0] for colname in cursor.description]
+                    query_result = query_result_columns, rows
                 else:
                     query_result = None
                 status = Status.OK

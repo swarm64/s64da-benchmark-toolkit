@@ -108,6 +108,10 @@ parameter `--scale-factor` is required.
 
 ## Optional Parameters
 
+Parameter                 | Description
+--------------------------|-------------------------------------
+`use-server-side-cursors` | Use server-side cursors for executing the queries.
+
 The optional parameters differ by benchmark.
 The ones for TPC-H, TPC-DS, and SSB are described in this section.
 The parameters supported by HTAP are described in a separate section below.

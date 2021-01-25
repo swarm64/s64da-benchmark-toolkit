@@ -13,6 +13,7 @@ class DBConn:
         self.dsn = dsn
         self.conn = None
         self.cursor = None
+        self.server_side_cursor = None
         self.statement_timeout = statement_timeout
         self.num_retries = num_retries
         self.retry_wait = retry_wait
@@ -25,6 +26,7 @@ class DBConn:
                 self.conn = psycopg2.connect(self.dsn, options=options)
                 self.conn.autocommit = True
                 self.cursor = self.conn.cursor()
+                self.server_side_cursor = self.conn.cursor('server-side-cursor')
                 break
 
             except psycopg2.Error as exc:
@@ -34,6 +36,7 @@ class DBConn:
 
         assert self.conn, 'There is no connection.'
         assert self.cursor, 'There is no cursor.'
+        assert self.server_side_cursor, 'There is no server-side cursor.'
 
         return self
 
