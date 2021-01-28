@@ -1,1 +1,1 @@
-create extension swarm64da;
+CREATE EXTENSION IF NOT EXISTS swarm64da;
