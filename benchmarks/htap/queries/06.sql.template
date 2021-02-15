@@ -4,6 +4,6 @@ select
 from
     order_line
 where
-    ol_delivery_d >= '$date'
-    and ol_delivery_d < timestamp '$date' + interval '1 year'
+    ol_delivery_d >= '$begin_date'
+    and ol_delivery_d < '$end_date'
     and ol_quantity between 1 and 100000;

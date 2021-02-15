@@ -22,7 +22,8 @@ where
                     i_data like 'co%'
             )
             and ol_i_id = s_i_id
-            and ol_delivery_d > '$date'
+            and ol_delivery_d >= '$begin_date'
+            and ol_delivery_d < '$end_date'
         group by
             s_i_id, s_w_id, s_quantity
         having

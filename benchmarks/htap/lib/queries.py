@@ -54,59 +54,61 @@ class Queries:
         return sorted(QUERY_TEMPLATES.keys())
 
     @staticmethod
-    def tpch_date_to_benchmark_date(tpch_date, highest_delivery_date):
-        tpch_highest_delivery_date = isoparse('1998-12-01')
-        delta = tpch_highest_delivery_date - tpch_date
-        return highest_delivery_date - delta
+    def tpch_date_to_benchmark_date(tpch_date, min_date, max_date):
+        tpch_lowest_delivery_date = isoparse('1992-01-01')
+        tpch_highest_delivery_date = isoparse('1998-12-31')
+        tpch_delta = tpch_date - tpch_lowest_delivery_date
+        tpch_total = tpch_highest_delivery_date - tpch_lowest_delivery_date
+        tpch_fraction = tpch_delta / tpch_total
+        benchmark_delta = max_date - min_date
+        benchmark_start = min_date + benchmark_delta * tpch_fraction
+        return benchmark_start
 
-    def _query_args(self, query_id, timestamp):
+    def _query_args(self, query_id):
         if query_id == 1:
-            tpch_date = isoparse('1998-12-01')
-            return {'date': self.tpch_date_to_benchmark_date(tpch_date, timestamp)
-                            - timedelta(days=90)}
+            return {'date': isoparse('1998-09-22')} # 1998-12-01 - 70 days
         elif query_id == 3:
-            tpch_date = isoparse('1995-03-15')
-            return {'date': self.tpch_date_to_benchmark_date(tpch_date, timestamp)}
+            return {'date': isoparse('1995-03-07')}
         elif query_id == 4:
-            tpch_date = isoparse('1993-07-01')
-            return {'date': self.tpch_date_to_benchmark_date(tpch_date, timestamp)}
+            return {'begin_date': isoparse('1994-01-01'), 
+                    'end_date': isoparse('1994-04-01')}
         elif query_id == 5:
-            tpch_date = isoparse('1994-01-01')
-            return {'date': self.tpch_date_to_benchmark_date(tpch_date, timestamp)}
+            return {'begin_date': isoparse('1993-01-01'), 
+                    'end_date': isoparse('1994-01-01')}
         elif query_id == 6:
-            tpch_date = isoparse('1994-01-01')
-            return {'date': self.tpch_date_to_benchmark_date(tpch_date, timestamp)}
+            return {'begin_date': isoparse('1993-01-01'), 
+                    'end_date': isoparse('1994-01-01')}
         elif query_id == 7 or query_id == 8:
-            tpch_begin_date = isoparse('1995-01-01')
-            tpch_end_date = isoparse('1996-12-31')
-            return {'begin_date': self.tpch_date_to_benchmark_date(tpch_begin_date, timestamp),
-                    'end_date': self.tpch_date_to_benchmark_date(tpch_end_date, timestamp)}
+            return {'begin_date': isoparse('1995-01-01'), 
+                    'end_date': isoparse('1996-12-31')}
         elif query_id == 10:
-            tpch_date = isoparse('1993-10-01')
-            return {'date': self.tpch_date_to_benchmark_date(tpch_date, timestamp)}
+            return {'begin_date': isoparse('1993-07-01'), 
+                    'end_date': isoparse('1993-10-01')}
         elif query_id == 12:
-            tpch_date = isoparse('1994-01-01')
-            return {'date': self.tpch_date_to_benchmark_date(tpch_date, timestamp)}
+            return {'begin_date': isoparse('1996-01-01'), 
+                    'end_date': isoparse('1997-01-01')}
         elif query_id == 14:
-            tpch_date = isoparse('1995-09-01')
-            return {'date': self.tpch_date_to_benchmark_date(tpch_date, timestamp)}
+            return {'begin_date': isoparse('1996-01-01'), 
+                    'end_date': isoparse('1996-02-01')}
         elif query_id == 15:
-            tpch_date = isoparse('1996-01-01')
-            return {'date': self.tpch_date_to_benchmark_date(tpch_date, timestamp)}
+            return {'begin_date': isoparse('1995-10-01'), 
+                    'end_date': isoparse('1996-01-01')}
         elif query_id == 20:
-            tpch_date = isoparse('1994-01-01')
-            return {'date': self.tpch_date_to_benchmark_date(tpch_date, timestamp)}
+            return {'begin_date': isoparse('1994-01-01'), 
+                    'end_date': isoparse('1995-04-01')}
         else:
             return {}
 
-    def get_query(self, query_id, timestamp):
+    def get_query(self, query_id, min_date, timestamp):
         query_template = QUERY_TEMPLATES.get(query_id)
-        query_args = self._query_args(query_id, timestamp)
+        query_args = self._query_args(query_id)
+        for [arg, date] in query_args.items():
+            query_args[arg] = self.tpch_date_to_benchmark_date(date, min_date, timestamp)
         return query_template.substitute(**query_args)
 
-    def run_next_query(self, benchmark_start_date, query_queue, dry_run):
+    def run_next_query(self, min_date, benchmark_start_date, query_queue, dry_run):
         query_id = next(self.next_query_it)
-        sql = self.get_query(query_id, benchmark_start_date)
+        sql = self.get_query(query_id, min_date, benchmark_start_date)
 
         query_queue.put(('tpch', {
             'query': query_id,

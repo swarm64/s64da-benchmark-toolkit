@@ -13,7 +13,8 @@ where
     and ol_d_id = o_d_id
     and ol_o_id = o_id
     and o_entry_d <= ol_delivery_d
-    and ol_delivery_d < '$date'
+    and ol_delivery_d >= '$begin_date'
+    and ol_delivery_d < '$end_date'
 group by
     o_ol_cnt
 order by
