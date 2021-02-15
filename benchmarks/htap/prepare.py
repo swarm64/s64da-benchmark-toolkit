@@ -7,8 +7,8 @@ from benchmarks.htap import htap_loader as loader
 
 
 class PrepareBenchmark(PrepareBenchmarkFactory):
-    PrepareBenchmarkFactory.PYTHON_LOADER = False
-    PrepareBenchmarkFactory.DO_SHUFFLE = False
+    PrepareBenchmarkFactory.PYTHON_LOADER = True
+    PrepareBenchmarkFactory.DO_SHUFFLE = True
 
     PrepareBenchmarkFactory.TABLES = (TableGroup(
         'warehouse',
@@ -29,19 +29,10 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
         'warehouse',
     ),)
 
-    def get_copy_cmds(self, table):
-        copy_cmd = self.psql_exec_cmd(f'COPY {table} FROM STDIN CSV')
-        if table in ('history', 'order_line', 'orders'):
-            full_path = os.path.join(self.args.data_dir, f'{table}*.gz')
-            return [f'gunzip -c {data_file} | {copy_cmd}' for data_file in glob(full_path)]
-        else:
-            data_file = os.path.join(self.args.data_dir, f'{table}.csv')
-            return [f'cat {data_file} | {copy_cmd}']
-
     def get_ingest_tasks(self, table):
         data_dir = self.args.data_dir
         if data_dir:
-            return self.get_copy_cmds(table)
+            raise ValueError("Cannot use data dir with htap as this doesn't work with the process executor")
 
         else:
             dsn = self.args.dsn
