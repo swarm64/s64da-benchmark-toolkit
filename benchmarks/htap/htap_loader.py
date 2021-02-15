@@ -6,29 +6,22 @@ from psycopg2.extras import execute_values
 from s64da_benchmark_toolkit.dbconn import DBConn
 
 from benchmarks.htap.lib.helpers import (
-        Random, TPCCText, TPCHText, NATIONS, REGIONS, TimestampGenerator, StringIteratorIO
+        Random, TPCCText, TPCHText, NATIONS, REGIONS, TimestampGenerator, StringIteratorIO,
+        DIST_PER_WARE, CUST_PER_DIST, NUM_ORDERS, MAXITEMS, STOCKS,
+        NUM_SUPPLIERS, NUM_NATIONS, NUM_REGIONS
 )
-
-MAXITEMS = 100000
-DIST_PER_WARE = 10
-CUST_PER_DIST = 30000 // DIST_PER_WARE
-NUM_ORDERS = 3000
-STOCKS = 100000
-NUM_SUPPLIERS = 10000
-NUM_NATIONS = 62
-NUM_REGIONS = 5
 
 COPY_SIZE=16384
 
 class TPCCLoader():
-    def __init__(self, dsn, warehouse_id, scale_factor, start_date=None):
+    def __init__(self, dsn, warehouse_id = 0, start_date=None):
         self.dsn = dsn
         self.warehouse_id = warehouse_id
         self.random = Random(seed=warehouse_id)
         self.tpcc_text = TPCCText(self.random)
         self.tpch_text = TPCHText(self.random)
         self.start_date = start_date or datetime.now()
-        self.timestamp_generator = TimestampGenerator(self.start_date, scale_factor, self.random)
+        self.timestamp_generator = TimestampGenerator(self.start_date, self.random)
 
     def insert_data(self, table, data):
         with DBConn(self.dsn) as conn:
@@ -278,8 +271,8 @@ class TPCCLoader():
             conn.cursor.copy_from(it, 'supplier', null='None', size=COPY_SIZE)
 
 
-def load_warehouse(dsn, warehouse_id, scale_factor, start_date):
-    loader = TPCCLoader(dsn, warehouse_id, scale_factor, start_date)
+def load_warehouse(dsn, warehouse_id, start_date):
+    loader = TPCCLoader(dsn, warehouse_id, start_date)
     loader.load_customer()
     loader.load_district()
     loader.load_history()
@@ -288,21 +281,21 @@ def load_warehouse(dsn, warehouse_id, scale_factor, start_date):
     loader.load_warehouse()
 
 
-def load_item(dsn, scale_factor):
-    loader = TPCCLoader(dsn, 0, scale_factor)
+def load_item(dsn):
+    loader = TPCCLoader(dsn)
     loader.load_item()
 
 
-def load_region(dsn, scale_factor):
-    loader = TPCCLoader(dsn, 0, scale_factor)
+def load_region(dsn):
+    loader = TPCCLoader(dsn)
     loader.load_region()
 
 
-def load_nation(dsn, scale_factor):
-    loader = TPCCLoader(dsn, 0, scale_factor)
+def load_nation(dsn):
+    loader = TPCCLoader(dsn)
     loader.load_nation()
 
 
-def load_supplier(dsn, scale_factor):
-    loader = TPCCLoader(dsn, 0, scale_factor)
+def load_supplier(dsn):
+    loader = TPCCLoader(dsn)
     loader.load_supplier()

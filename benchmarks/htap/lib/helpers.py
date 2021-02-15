@@ -6,6 +6,20 @@ from dateutil.parser import isoparse
 from typing import Iterator, Optional
 import io
 
+# see section 4.2.2.12, page 81 of http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v2.17.2.pdf
+TPCH_DATE_RANGE = [isoparse('1992-01-01'), isoparse('1998-12-31')]
+
+# see http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-c_v5.11.0.pdf page 62
+DIST_PER_WARE = 10
+CUST_PER_DIST = 30000
+NUM_ORDERS = 30000
+MAXITEMS = 100000
+STOCKS = 100000
+# tpch constants
+NUM_SUPPLIERS = 10000
+NUM_NATIONS = 62
+NUM_REGIONS = 5
+
 ALPHA_LOWER = list('abcdefghijklmnopqrstuvwxyz')
 
 ALPHA_UPPER = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -284,21 +298,13 @@ class TPCHText:
 
 
 class TimestampGenerator:
-    def __init__(self, start_date, scale_factor, random):
+    def __init__(self, start_date, random, scalar = 1.0):
         self.random = random
         self.current = start_date
-        self.increment = self.timestamp_distance(scale_factor)
 
-    @staticmethod
-    def timestamp_distance(scale_factor):
-        tpch_num_orders_per_sf = 1500000
-        tpch_data_duration = isoparse('1998-08-02') - isoparse('1992-01-01')
-        tpcc_inverse_order_frac = 1 / 0.44
-        seconds_per_transaction = (
-                tpch_data_duration / (tpcc_inverse_order_frac * tpch_num_orders_per_sf)
-        )
-
-        return seconds_per_transaction / scale_factor
+        orders_per_warehouse = NUM_ORDERS * DIST_PER_WARE
+        date_range = TPCH_DATE_RANGE[1] - TPCH_DATE_RANGE[0]
+        self.increment = (date_range / orders_per_warehouse) * scalar
 
     def next(self):
         self.current += self.increment * self.random.gaussian(mean=1, variance=0.05)
