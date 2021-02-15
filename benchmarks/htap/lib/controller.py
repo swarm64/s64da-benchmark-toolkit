@@ -60,7 +60,7 @@ class HTAPController:
                 self.monitoring_interval
         )
 
-        print(f'Detected scale factor: {self.scale_factor}')
+        print(f'Warehouses: {self.scale_factor}')
 
     def _sql_error(self, msg):
         import sys

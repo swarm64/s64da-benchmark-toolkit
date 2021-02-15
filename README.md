@@ -51,6 +51,7 @@ Parameter      | Description
 `benchmark`    | The benchmark to use: `tpch`, `tpcds` or `ssb`
 `schema`       | The schema to deploy. Schemas are directories in the benchmarks/\<benchmark\>/schemas directory. See the table below for the supported schemas.
 `scale-factor` | The scale factor to use, such as `10`, `100` or `1000`.
+`warehouses`   | The amount of warehouses to use, such as `10`, `100` or `1000`; used in HTAP
 
 ### Schema Parameter Values
 
