@@ -18,7 +18,8 @@ where
     and ol_w_id = o_w_id
     and ol_d_id = o_d_id
     and ol_o_id = o_id
-    and o_entry_d >= '$date'
+    and o_entry_d >= '$begin_date'
+    and o_entry_d < '$end_date'
     and o_entry_d <= ol_delivery_d
     and n_nationkey = ascii(substr(c_state, 1, 1))
 group by

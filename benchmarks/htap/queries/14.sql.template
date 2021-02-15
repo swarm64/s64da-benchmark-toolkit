@@ -7,5 +7,5 @@ from
     item
 where
     ol_i_id = i_id
-    and ol_delivery_d >= '$date'
-    and ol_delivery_d < timestamp '$date' + interval '1 month'
+    and ol_delivery_d >= '$begin_date'
+    and ol_delivery_d < '$end_date'

@@ -33,12 +33,12 @@ def oltp_worker(
                 last_reporting_time = now
 
 
-def olap_worker(worker_id, dsn, olap_timeout_seconds, dry_run, reporting_queue, date_value):
+def olap_worker(worker_id, dsn, olap_timeout_seconds, dry_run, reporting_queue, date_value, min_date):
     with DBConn(dsn, statement_timeout=olap_timeout_seconds * 1000) as conn:
         queries = Queries(worker_id, conn)
         while True:
             max_date = datetime.fromtimestamp(date_value.value)
-            queries.run_next_query(max_date, reporting_queue, dry_run)
+            queries.run_next_query(min_date, max_date, reporting_queue, dry_run)
 
 
 class HTAPController:
@@ -67,11 +67,12 @@ class HTAPController:
         print(f'ERROR: {msg} Did you run `prepare_benchmark`?')
         sys.exit(-1)
 
-    def _query_latest_delivery_date(self):
+    def _query_range_delivery_date(self):
         with DBConn(self.dsn) as conn:
             try:
-                conn.cursor.execute('SELECT max(ol_delivery_d) FROM order_line')
-                return conn.cursor.fetchone()[0]
+                conn.cursor.execute('SELECT min(ol_delivery_d), max(ol_delivery_d) FROM order_line')
+                result = conn.cursor.fetchone()
+                return [result[0], result[1]]
             except ProgrammingError:
                 self._sql_error('Could not query the latest delivery date.')
 
@@ -83,7 +84,7 @@ class HTAPController:
             except ProgrammingError:
                 self._sql_error('Could not query number of warehouses.')
 
-    def _launch_workers(self, pool, queue, date_value):
+    def _launch_workers(self, pool, queue, date_value, min_date):
         def worker_error(err):
             import sys
             print(f'Exception in worker: {err}')
@@ -101,7 +102,7 @@ class HTAPController:
         for olap_worker_id in range(self.num_olap_workers):
             worker_args = (
                     olap_worker_id, self.dsn, self.olap_query_timeout, self.dry_run, queue,
-                    date_value
+                    date_value, min_date
             )
             pool.apply_async(olap_worker, worker_args, error_callback=worker_error)
 
@@ -126,7 +127,8 @@ class HTAPController:
 
     def run(self):
         begin = datetime.now()
-        latest_delivery_date = self._query_latest_delivery_date()
+        range_delivery_date = self._query_range_delivery_date()
+        min_date = range_delivery_date[0]
 
         if self.collect_stats:
             print(f"Statistics will be collected in '{self.stats_dsn}'.")
@@ -144,9 +146,9 @@ class HTAPController:
             with Pool(num_total_workers, worker_init) as pool:
                 manager = Manager()
                 queue = manager.Queue()
-                shared_value = manager.Value('d', latest_delivery_date.timestamp())
-                self.stats.set_latest_delivery_date(latest_delivery_date)
-                self._launch_workers(pool, queue, shared_value)
+                shared_value = manager.Value('d', range_delivery_date[1].timestamp())
+                self.stats.set_latest_delivery_date(range_delivery_date[1])
+                self._launch_workers(pool, queue, shared_value, min_date)
 
                 try:
                     while True:

@@ -9,7 +9,8 @@ with revenue (supplier_no, total_revenue) as (
     where
         ol_i_id = s_i_id
         and ol_supply_w_id = s_w_id
-        and ol_delivery_d >= '$date'
+        and ol_delivery_d >= '$begin_date'
+        and ol_delivery_d < '$end_date'
     group by
         mod((s_w_id * s_i_id), 10000)
 )

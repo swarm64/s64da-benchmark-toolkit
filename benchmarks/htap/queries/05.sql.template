@@ -24,8 +24,8 @@ where
     and su_nationkey = n_nationkey
     and n_regionkey = r_regionkey
     and r_name = 'Europe'
-    and o_entry_d >= '$date'
-    and o_entry_d < timestamp '$date' + interval '1 year'
+    and o_entry_d >= '$begin_date'
+    and o_entry_d < '$end_date'
 group by
     n_name
 order by
