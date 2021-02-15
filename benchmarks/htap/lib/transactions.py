@@ -16,6 +16,7 @@ class Transactions:
         self.random = Random(seed)
         self.tpcc_text = TPCCText(self.random)
         self.scale_factor = scale_factor
+        print(f"Starting at {initial_timestamp}")
         self.timestamp_generator = TimestampGenerator(
                 initial_timestamp, self.scale_factor, self.random
         )
