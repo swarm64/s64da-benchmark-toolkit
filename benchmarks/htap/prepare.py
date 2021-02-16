@@ -40,10 +40,10 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
             if table in ['item', 'region', 'nation', 'supplier']:
                 func_name = 'load_{}'.format(table)
                 func = getattr(loader, func_name)
-                return [(func, dsn, self.args.scale_factor)]
+                return [(func, dsn)]
             elif table == 'warehouse':
                 warehouses = range(1, self.args.scale_factor + 1)
-                return [(loader.load_warehouse, dsn, w_id, self.args.scale_factor, start_date)
+                return [(loader.load_warehouse, dsn, w_id, start_date)
                         for w_id in warehouses]
 
             raise ValueError(f'Unknown table {table}')

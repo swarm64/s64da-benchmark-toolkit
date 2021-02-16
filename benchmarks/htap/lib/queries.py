@@ -10,6 +10,7 @@ import psycopg2
 import yaml
 
 from .helpers import Random
+from .helpers import TPCH_DATE_RANGE
 
 
 TEMPLATE_DIR = path.join('benchmarks', 'htap', 'queries')
@@ -55,10 +56,8 @@ class Queries:
 
     @staticmethod
     def tpch_date_to_benchmark_date(tpch_date, min_date, max_date):
-        tpch_lowest_delivery_date = isoparse('1992-01-01')
-        tpch_highest_delivery_date = isoparse('1998-12-31')
-        tpch_delta = tpch_date - tpch_lowest_delivery_date
-        tpch_total = tpch_highest_delivery_date - tpch_lowest_delivery_date
+        tpch_delta = tpch_date - TPCH_DATE_RANGE[0]
+        tpch_total = TPCH_DATE_RANGE[1] - TPCH_DATE_RANGE[0]
         tpch_fraction = tpch_delta / tpch_total
         benchmark_delta = max_date - min_date
         benchmark_start = min_date + benchmark_delta * tpch_fraction

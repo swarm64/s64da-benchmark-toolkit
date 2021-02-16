@@ -16,9 +16,16 @@ class Transactions:
         self.random = Random(seed)
         self.tpcc_text = TPCCText(self.random)
         self.scale_factor = scale_factor
-        print(f"Starting at {initial_timestamp}")
+
+        # the loader only generates timestamps for the orders table, and
+        # generates a timestamp stream per warehouse.
+        # here we generate a tsx for any warehouse and therefore have to scale
+        # for both: 10/23 and scale_factor. the 10/23 comes from next_transaction
+        # and is the ratio between calls to new_order() and timestamp_generator.next()
+        timestamp_scalar = (10/23.0) / self.scale_factor
+
         self.timestamp_generator = TimestampGenerator(
-                initial_timestamp, self.scale_factor, self.random
+                initial_timestamp, self.random, timestamp_scalar
         )
         self.ok_count = 0
         self.err_count = 0
@@ -137,23 +144,20 @@ class Transactions:
         return self.execute_sql(sql, args, dry_run)
 
     def next_transaction(self, dry_run):
-        inc_ts = False
         timestamp_to_use = self.timestamp_generator.next()
 
+        # WARNING: keep in sync with initialization of scalar of timestamp generator!
         trx_type = self.random.randint_inclusive(1, 23)
         if trx_type <= 10:
             success = self.new_order(timestamp_to_use, dry_run)
-            inc_ts = True
             # Both, commited and rolled-back count towards the number of new-order transactions
             self.new_order_count += 1
         elif trx_type <= 20:
             success = self.payment(timestamp_to_use, dry_run)
-            inc_ts = True
         elif trx_type <= 21:
             success = self.order_status(dry_run)
         elif trx_type <= 22:
             success = self.delivery(timestamp_to_use, dry_run)
-            inc_ts = True
         elif trx_type <= 23:
             success = self.stock_level(dry_run)
 
@@ -161,5 +165,3 @@ class Transactions:
             self.ok_count += 1
         else:
             self.err_count += 1
-
-        return success and inc_ts
