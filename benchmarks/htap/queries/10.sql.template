@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     c_id,
     c_last,
@@ -22,6 +23,7 @@ where
     and o_entry_d < '$end_date'
     and o_entry_d <= ol_delivery_d
     and n_nationkey = ascii(substr(c_state, 1, 1))
+    and ol_delivery_d >= '$min_date'
 group by
     c_id,
     c_last,

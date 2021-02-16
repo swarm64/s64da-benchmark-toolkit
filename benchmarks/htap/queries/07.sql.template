@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     su_nationkey as supp_nation,
     substr(c_state, 1, 1) as cust_nation,
@@ -30,6 +31,7 @@ where
         (n1.n_name = 'Cambodia' and n2.n_name = 'Germany')
     )
     and ol_delivery_d between '$begin_date' and '$end_date'
+    and o_entry_d >= '$min_date'
 group by
     su_nationkey,
     substr(c_state, 1, 1),

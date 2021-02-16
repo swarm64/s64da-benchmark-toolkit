@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     su_suppkey,
     su_name,

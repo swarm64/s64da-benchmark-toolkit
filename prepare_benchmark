@@ -84,7 +84,7 @@ if __name__ == '__main__':
     ))
 
     args_to_parse.add_argument(
-        '--start-date', default=None, type=parser.isoparse, help=(
+        '--start-date', default='1992-01-01', type=parser.isoparse, help=(
         'The start date for TPC-C.'
     ))
 

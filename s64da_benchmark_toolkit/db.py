@@ -70,7 +70,14 @@ class DB:
                 else:
                     query_result = None
                 status = Status.OK
-                plan = '\n'.join(conn.conn.notices)
+                # each notice can take multiple lines; we just want all lines separately
+                # so we can filter easily as we don't want the lines that have "LOG:" in them
+                # but only want the real json output
+                notice_lines = '\n'.join(conn.conn.notices).split('\n')
+                plan = '\n'.join(filter(lambda line: not line.startswith("LOG:"), notice_lines))
+                # make it proper json
+                if plan.strip() != '':
+                    plan = f'[{plan}]'
 
             except psycopg2.extensions.QueryCanceledError:
                 status = Status.TIMEOUT

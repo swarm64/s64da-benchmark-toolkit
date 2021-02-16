@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     s_i_id,
     sum(s_order_cnt) as order_count

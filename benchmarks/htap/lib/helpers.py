@@ -5,16 +5,23 @@ from contextlib import AbstractContextManager
 from dateutil.parser import isoparse
 from typing import Iterator, Optional
 import io
+from datetime import datetime
+import multiprocessing
 
 # see section 4.2.2.12, page 81 of http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v2.17.2.pdf
 TPCH_DATE_RANGE = [isoparse('1992-01-01'), isoparse('1998-12-31')]
 
 # see http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-c_v5.11.0.pdf page 62
+# and to check resulting sizes after ingest, use figure 1.2.1 on page 11
+# WARNING: most of the counts like CUST_PER_DIST and NUM_ORDERS are scaled with
+# DIST_PER_WARE which makes the resulting row counts higher!
 DIST_PER_WARE = 10
-CUST_PER_DIST = 30000
-NUM_ORDERS = 30000
-MAXITEMS = 100000
+CUST_PER_DIST = 3000
+NUM_ORDERS = 3000
+MAX_ITEMS = 100000
 STOCKS = 100000
+# see 3.3.2.11 in tpc-c spec.
+FIRST_UNPROCESSED_O_ID = 2101
 # tpch constants
 NUM_SUPPLIERS = 10000
 NUM_NATIONS = 62
@@ -299,17 +306,26 @@ class TPCHText:
 
 class TimestampGenerator:
     def __init__(self, start_date, random, scalar = 1.0):
-        self.random = random
+        # use the start date as value directly so that we can easily use shared counters
+        # as well by simply feeding in the right type
         self.current = start_date
+        self.random = random
 
         orders_per_warehouse = NUM_ORDERS * DIST_PER_WARE
         date_range = TPCH_DATE_RANGE[1] - TPCH_DATE_RANGE[0]
         self.increment = (date_range / orders_per_warehouse) * scalar
 
     def next(self):
-        self.current += self.increment * self.random.gaussian(mean=1, variance=0.05)
-        return self.current
-
+        # support both process-local counters as well as multiprocessing value proxies
+        if isinstance(self.current, datetime):
+            self.current += self.increment * self.random.gaussian(mean=1, variance=0.05)
+            return self.current
+        elif isinstance(self.current, multiprocessing.sharedctypes.Synchronized):
+            with self.current.get_lock():
+                self.current.value += self.increment.total_seconds() * self.random.gaussian(mean=1, variance=0.05)
+                return datetime.fromtimestamp(self.current.value)
+        else:
+            raise ValueError("Unsupported datatype for TimestampGenerator")
 
 # Taken from CPython 3.7 for compatibility with Python 3.6
 class nullcontext(AbstractContextManager):

@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     ol_o_id,
     ol_w_id,
@@ -21,6 +22,7 @@ where c_state like 'A%'
     and ol_d_id = o_d_id
     and ol_o_id = o_id
     and o_entry_d > '$date'
+    and ol_delivery_d >= '$min_date'
 group by
     ol_o_id,
     ol_w_id,

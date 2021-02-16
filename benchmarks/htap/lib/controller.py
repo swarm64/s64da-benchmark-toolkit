@@ -4,8 +4,8 @@ import time
 import traceback
 
 from datetime import datetime, timedelta
-from multiprocessing import Manager, Pool, Value
 from urllib.parse import urlparse
+from multiprocessing import Manager, Pool, Value, Queue
 
 from psycopg2.errors import DuplicateDatabase, DuplicateTable, ProgrammingError
 
@@ -16,51 +16,60 @@ from benchmarks.htap.lib.transactions import Transactions
 
 from s64da_benchmark_toolkit.dbconn import DBConn
 
-
-def oltp_worker(
-        worker_id, dsn, scale_factor, dry_run, monitoring_interval, reporting_queue, date_value
-):
-    with DBConn(dsn) as conn:
-        start_date = datetime.fromtimestamp(date_value.value)
-        tpcc_worker = Transactions(worker_id, scale_factor, start_date, conn)
-        reporting_interval = timedelta(seconds=monitoring_interval) / 2
-        last_reporting_time = None
-        while True:
-            tpcc_worker.next_transaction(dry_run)
-            now = datetime.now()
-            if last_reporting_time is None or (now - last_reporting_time) >= reporting_interval:
-                reporting_queue.put_nowait(('tpcc', tpcc_worker.stats(worker_id)))
-                last_reporting_time = now
-
-
-def olap_worker(worker_id, dsn, olap_timeout_seconds, dry_run, reporting_queue, date_value, min_date):
-    with DBConn(dsn, statement_timeout=olap_timeout_seconds * 1000) as conn:
-        queries = Queries(worker_id, conn)
-        while True:
-            max_date = datetime.fromtimestamp(date_value.value)
-            queries.run_next_query(min_date, max_date, reporting_queue, dry_run)
-
-
 class HTAPController:
-    def __init__(self, args):
-        self.dsn = args.dsn
-        self.scale_factor = self._query_num_warehouses()
-        self.dry_run = args.dry_run
-        self.num_oltp_workers = args.oltp_workers
-        self.num_olap_workers = args.olap_workers
-        self.benchmark_duration = args.duration
-        self.olap_query_timeout = args.olap_timeout
-        self.monitoring_interval = args.monitoring_interval
-        self.collect_stats = args.stats_dsn is not None
-        self.stats_dsn = args.stats_dsn
+    # have the shared-memory primitives static as otherwise the multiprocessing
+    # inheritance scheme doesn't work. we want these primitives so we can use
+    # "simple" synchronized primitives.
+    latest_timestamp = Value('d', 0) # database record timestamp
+    next_tsx_timestamp = Value('d', 0) # rtc time at which we can do the next tpcc tsx
+    stats_queue = Queue() # queue for communicating statistics
 
-        self.stats = Stats(self.num_oltp_workers, self.num_olap_workers)
+    def __init__(self, args):
+        self.args = args
+        self.next_tsx_timestamp.value = time.time()
+        self.tsx_timestamp_increment = 1.0 / self.args.target_tps if self.args.target_tps is not None else 0
+        self.scale_factor = self._query_num_warehouses()
+        self.range_delivery_date = self._query_range_delivery_date()
+
+        # update the shared value to the actual last ingested timestamp
+        self.latest_timestamp.value = self.range_delivery_date[1].timestamp()
+
+        self.stats = Stats(self.args.dsn, self.args.oltp_workers, self.args.olap_workers, self.args.tpcc_csv_interval)
         self.monitor = Monitor(
-                self.stats, self.num_oltp_workers, self.num_olap_workers, self.scale_factor,
-                self.monitoring_interval
+                self.stats, self.args.oltp_workers, self.args.olap_workers, self.scale_factor,
+                self.range_delivery_date[0]
         )
 
         print(f'Warehouses: {self.scale_factor}')
+
+    def oltp_sleep(self):
+        with self.next_tsx_timestamp.get_lock():
+            self.next_tsx_timestamp.value = max(time.time(), self.next_tsx_timestamp.value + self.tsx_timestamp_increment)
+            sleep_until = self.next_tsx_timestamp.value
+        sleep_period = (sleep_until - time.time()) / 10
+        while time.time() < sleep_until:
+            time.sleep(sleep_period)
+
+    def oltp_worker(self, worker_id):
+        # do NOT introduce timeouts for the tpcc queries! this will make that
+        # the workload gets inbalanaced and eventually the whole benchmark stalls
+        with DBConn(self.args.dsn) as conn:
+            tpcc_worker = Transactions(worker_id, self.scale_factor, self.latest_timestamp, conn, self.args.dry_run)
+            reporting_interval = timedelta(seconds=self.args.monitoring_interval) / 10
+            next_reporting_time = datetime.now()
+            while True:
+                self.oltp_sleep()
+                tpcc_worker.next_transaction()
+                if next_reporting_time <= datetime.now():
+                    self.stats_queue.put(('tpcc', tpcc_worker.stats(worker_id)))
+                    next_reporting_time += reporting_interval
+
+
+    def olap_worker(self, worker_id):
+        queries = Queries(worker_id, self.args, self.range_delivery_date[0],
+                          self.latest_timestamp, self.stats_queue)
+        while True:
+            queries.run_next_query()
 
     def _sql_error(self, msg):
         import sys
@@ -68,46 +77,23 @@ class HTAPController:
         sys.exit(-1)
 
     def _query_range_delivery_date(self):
-        with DBConn(self.dsn) as conn:
+        with DBConn(self.args.dsn) as conn:
             try:
                 conn.cursor.execute('SELECT min(ol_delivery_d), max(ol_delivery_d) FROM order_line')
-                result = conn.cursor.fetchone()
-                return [result[0], result[1]]
+                return conn.cursor.fetchone()
             except ProgrammingError:
                 self._sql_error('Could not query the latest delivery date.')
 
     def _query_num_warehouses(self):
-        with DBConn(self.dsn) as conn:
+        with DBConn(self.args.dsn) as conn:
             try:
                 conn.cursor.execute('SELECT count(distinct(w_id)) from warehouse')
                 return conn.cursor.fetchone()[0]
             except ProgrammingError:
                 self._sql_error('Could not query number of warehouses.')
 
-    def _launch_workers(self, pool, queue, date_value, min_date):
-        def worker_error(err):
-            import sys
-            print(f'Exception in worker: {err}')
-            # FIXME: not all exceptions have __traceback__ set
-            traceback.print_exception(type(err), err, err.__traceback__)
-            sys.exit(1)
-
-        for oltp_worker_id in range(self.num_oltp_workers):
-            worker_args = (
-                    oltp_worker_id, self.dsn, self.scale_factor, self.dry_run,
-                    self.monitoring_interval, queue, date_value
-            )
-            pool.apply_async(oltp_worker, worker_args, error_callback=worker_error)
-
-        for olap_worker_id in range(self.num_olap_workers):
-            worker_args = (
-                    olap_worker_id, self.dsn, self.olap_query_timeout, self.dry_run, queue,
-                    date_value, min_date
-            )
-            pool.apply_async(olap_worker, worker_args, error_callback=worker_error)
-
     def _prepare_stats_db(self):
-        dsn_url = urlparse(self.stats_dsn)
+        dsn_url = urlparse(self.args.stats_dsn)
         dbname = dsn_url.path[1:]
 
         with DBConn(f'{dsn_url.scheme}://{dsn_url.netloc}/postgres') as conn:
@@ -116,7 +102,7 @@ class HTAPController:
             except DuplicateDatabase:
                 pass
 
-        with DBConn(self.stats_dsn) as conn:
+        with DBConn(self.args.stats_dsn) as conn:
             stats_schema_path = os.path.join('benchmarks', 'htap', 'stats_schema.sql')
             with open(stats_schema_path, 'r') as schema:
                 schema_sql = schema.read()
@@ -127,13 +113,12 @@ class HTAPController:
 
     def run(self):
         begin = datetime.now()
-        range_delivery_date = self._query_range_delivery_date()
-        min_date = range_delivery_date[0]
+        elapsed = timedelta()
 
-        if self.collect_stats:
-            print(f"Statistics will be collected in '{self.stats_dsn}'.")
+        if self.args.stats_dsn is not None:
+            print(f"Statistics will be collected in '{self.args.stats_dsn}'.")
             self._prepare_stats_db()
-            stats_conn_holder = DBConn(self.stats_dsn)
+            stats_conn_holder = DBConn(self.args.stats_dsn)
         else:
             print(f'Database statistics collection is disabled.')
             stats_conn_holder = nullcontext()
@@ -141,29 +126,33 @@ class HTAPController:
         def worker_init():
             signal.signal(signal.SIGINT, signal.SIG_IGN)
 
-        num_total_workers = self.num_oltp_workers + self.num_olap_workers
+        num_total_workers = self.args.oltp_workers + self.args.olap_workers
         with stats_conn_holder as stats_conn:
             with Pool(num_total_workers, worker_init) as pool:
-                manager = Manager()
-                queue = manager.Queue()
-                shared_value = manager.Value('d', range_delivery_date[1].timestamp())
-                self.stats.set_latest_delivery_date(range_delivery_date[1])
-                self._launch_workers(pool, queue, shared_value, min_date)
+                oltp_workers = pool.map_async(self.oltp_worker, range(self.args.oltp_workers))
+                olap_workers = pool.map_async(self.olap_worker, range(self.args.olap_workers))
 
                 try:
                     while True:
-                        time.sleep(self.monitoring_interval)
+                        # the workers are not supposed to ever stop.
+                        # so test for errors by testing for ready() and if so propagate them
+                        # by calling .get()
+                        if self.args.oltp_workers > 0 and oltp_workers.ready():
+                            oltp_workers.get()
+                        if self.args.olap_workers > 0 and olap_workers.ready():
+                            olap_workers.get()
+
+                        time.sleep(self.args.monitoring_interval)
                         time_now = datetime.now()
                         elapsed = time_now - begin
-                        self.stats.update(queue, time_now)
-                        shared_value.value = self.stats.get_latest_delivery_date().timestamp()
-                        self.monitor.update_display(elapsed.total_seconds(), time_now, stats_conn)
-                        if (datetime.now() - begin).total_seconds() >= self.benchmark_duration:
+                        if elapsed.total_seconds() >= self.args.duration:
                             break
-
+                        self.stats.update(self.stats_queue)
+                        self.monitor.update_display(elapsed.total_seconds(), time_now, stats_conn,
+                            datetime.fromtimestamp(self.latest_timestamp.value))
                 except KeyboardInterrupt:
-                    pool.terminate()
-
+                    pass
                 finally:
-                    elapsed = datetime.now() - begin
                     self.monitor.display_summary(elapsed)
+
+

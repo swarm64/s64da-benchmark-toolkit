@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     extract(year from o_entry_d) as l_year,
     sum(case when n2.n_name = 'Germany' then ol_amount else 0 end)
@@ -32,6 +33,7 @@ where
     and o_entry_d between '$begin_date' and '$end_date'
     and i_data like '%b'
     and i_id = ol_i_id
+    and ol_delivery_d >= '$min_date'
 group by
     extract(year from o_entry_d)
 order by

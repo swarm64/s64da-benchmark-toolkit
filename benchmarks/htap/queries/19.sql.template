@@ -1,10 +1,14 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     sum(ol_amount) as revenue
 from
     order_line,
     item
-where (
+where
+    ol_delivery_d >= '$min_date'
+    and
+    (
         ol_i_id = i_id
         and i_data like '%a'
         and ol_quantity >= 1
