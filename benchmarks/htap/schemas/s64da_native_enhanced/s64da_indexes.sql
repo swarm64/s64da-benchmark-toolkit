@@ -46,33 +46,34 @@ CREATE INDEX idx_order_line_cache ON order_line USING columnstore (
   , ol_dist_info
 );
 
-CREATE INDEX idx_item_cache ON item USING columnstore (
-    i_id
-  , i_im_id
-  , i_name
-  , i_price
-  , i_data
+CREATE INDEX idx_stock_cache ON stock USING columnstore (
+    s_i_id
+  , s_w_id
+  , s_quantity
+  , s_dist_01
+  , s_dist_02
+  , s_dist_03
+  , s_dist_04
+  , s_dist_05
+  , s_dist_06
+  , s_dist_07
+  , s_dist_08
+  , s_dist_09
+  , s_dist_10
+  , s_ytd
+  , s_order_cnt
+  , s_remote_cnt
+  , s_data
 );
 
-CREATE INDEX idx_region_cache ON region USING columnstore (
-    r_regionkey
-  , r_name
-  , r_comment
-);
-
-CREATE INDEX idx_nation_cache ON nation USING columnstore (
-    n_nationkey
-  , n_name
-  , n_regionkey
-  , n_comment
-);
-
-CREATE INDEX idx_supplier_cache ON supplier USING columnstore (
-    su_suppkey
-  , su_name
-  , su_address
-  , su_nationkey
-  , su_phone
-  , su_acctbal
-  , su_comment
+CREATE INDEX idx_history_cache ON history USING columnstore (
+    id
+  , h_c_id
+  , h_c_d_id
+  , h_c_w_id
+  , h_d_id
+  , h_w_id
+  , h_date
+  , h_amount
+  , h_data
 );

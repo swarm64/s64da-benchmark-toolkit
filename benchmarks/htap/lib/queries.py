@@ -1,6 +1,8 @@
 import time
+import os
+import json
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 from dateutil.parser import isoparse
 from itertools import cycle
 from os import path
@@ -12,6 +14,7 @@ import yaml
 from .helpers import Random
 from .helpers import TPCH_DATE_RANGE
 
+from s64da_benchmark_toolkit.db import Status, DB, Timing
 
 TEMPLATE_DIR = path.join('benchmarks', 'htap', 'queries')
 
@@ -40,28 +43,25 @@ QUERY_TEMPLATES = {
     22: Template(open(path.join(TEMPLATE_DIR, '22.sql.template'), 'r').read()),
 }
 
-
 class Queries:
-    def __init__(self, stream_id, connection):
+    def __init__(self, stream_id, args, min_timestamp, latest_timestamp, stats_queue):
         self.random = Random(stream_id)
         self.stream_id = stream_id
         with open('benchmarks/htap/queries/streams.yaml', 'r') as streams_file:
             sequence = yaml.load(streams_file.read(), Loader=yaml.FullLoader)[stream_id]
             self.next_query_it = cycle(sequence)
-        self.conn = connection
+        self.min_timestamp = min_timestamp
+        self.latest_timestamp = latest_timestamp
+        self.stats_queue = stats_queue
+        self.args = args
 
     @staticmethod
     def query_ids():
         return sorted(QUERY_TEMPLATES.keys())
 
-    @staticmethod
-    def tpch_date_to_benchmark_date(tpch_date, min_date, max_date):
-        tpch_delta = tpch_date - TPCH_DATE_RANGE[0]
-        tpch_total = TPCH_DATE_RANGE[1] - TPCH_DATE_RANGE[0]
-        tpch_fraction = tpch_delta / tpch_total
-        benchmark_delta = max_date - min_date
-        benchmark_start = min_date + benchmark_delta * tpch_fraction
-        return benchmark_start
+    def tpch_date_to_benchmark_date(self, tpch_date):
+        current_date = datetime.fromtimestamp(self.latest_timestamp.value)
+        return current_date - (TPCH_DATE_RANGE[1] - tpch_date)
 
     def _query_args(self, query_id):
         if query_id == 1:
@@ -98,46 +98,81 @@ class Queries:
         else:
             return {}
 
-    def get_query(self, query_id, min_date, timestamp):
+    def get_query(self, query_id):
         query_template = QUERY_TEMPLATES.get(query_id)
         query_args = self._query_args(query_id)
         for [arg, date] in query_args.items():
-            query_args[arg] = self.tpch_date_to_benchmark_date(date, min_date, timestamp)
+            query_args[arg] = self.tpch_date_to_benchmark_date(date)
+        query_args['min_date'] = self.tpch_date_to_benchmark_date(TPCH_DATE_RANGE[0])
         return query_template.substitute(**query_args)
 
-    def run_next_query(self, min_date, benchmark_start_date, query_queue, dry_run):
-        query_id = next(self.next_query_it)
-        sql = self.get_query(query_id, min_date, benchmark_start_date)
+    def wait_until_enough_data(self, query_id):
+        wanted_range = TPCH_DATE_RANGE[1] - TPCH_DATE_RANGE[0]
+        while True:
+            available_data = datetime.fromtimestamp(self.latest_timestamp.value) - self.min_timestamp
+            if available_data < wanted_range:
+                self.stats_queue.put(('tpch', {
+                    'query': query_id,
+                    'stream': self.stream_id,
+                    'status': 'Waiting'
+                }))
+                time.sleep(1)
+            else:
+                return
 
-        query_queue.put(('tpch', {
+    def parse_plan(self, plan):
+        planned = plan["Plan Rows"] if "Plan Rows" in plan else 0
+        processed = plan["Actual Rows"] if "Actual Rows" in plan else 0
+        if "Plans" in plan:
+            for child in plan["Plans"]:
+                planned_child, processed_child = self.parse_plan(child)
+                planned += planned_child
+                processed += processed_child
+        return (planned, processed)
+
+
+    def run_next_query(self):
+        query_id = next(self.next_query_it)
+        sql = self.get_query(query_id)
+
+        self.wait_until_enough_data(query_id)
+
+        self.stats_queue.put(('tpch', {
             'query': query_id,
             'stream': self.stream_id,
             'status': 'Running'
         }))
 
-        if not dry_run:
-            tstart = time.time()
-            try:
-                self.conn.cursor.execute(sql)
-                status = 'Finished'
-            except psycopg2.extensions.QueryCanceledError:
-                status = 'Canceled'
-            except psycopg2.ProgrammingError:
-                status = 'Error'
-            tstop = time.time()
+        if not self.args.dry_run:
+            db = DB(self.args.dsn)
+            timing, _, plan = DB(self.args.dsn).run_query(
+                    sql, self.args.olap_timeout*1000,
+                    self.args.explain_analyze, self.args.use_server_side_cursors)
 
-            query_queue.put(('tpch', {
+            # sum up rows processed
+            planned_rows, processed_rows = self.parse_plan(json.loads(plan)[0]["Plan"])
+
+            self.stats_queue.put(('tpch', {
                 'query': query_id,
                 'stream': self.stream_id,
-                'status': status,
-                'runtime': tstop - tstart
+                'status': timing.status.name,
+                'runtime': timing.stop - timing.start,
+                'planned_rows': planned_rows,
+                'processed_rows': processed_rows
             }))
+
+            # save plan output
+            plan_file =  f'{self.stream_id}_{query_id}.txt'
+            plan_dir = f'results/query_plans'
+            os.makedirs(plan_dir, exist_ok=True)
+            with open(f'{plan_dir}/{plan_file}', 'w') as f:
+                f.write(plan)
         else:
             # Artificially slow down queries in dry-run mode to allow monitoring to keep up
             time.sleep(0.01)
-            query_queue.put(('tpch', {
+            self.stats_queue.put(('tpch', {
                 'query': query_id,
                 'stream': self.stream_id,
-                'status': 'Finished',
+                'status': 'OK',
                 'runtime': 0.001
             }))

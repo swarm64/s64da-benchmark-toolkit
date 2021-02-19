@@ -12,254 +12,167 @@ class MockQueue:
     def empty(self):
         return len(self.data) == 0
 
-    def get_nowait(self):
+    def get(self):
         return self.data.pop(0)
 
+dsn = "postgresql://postgres@127.0.0.1/htap"
 
-def same_stats(lhs, rhs):
-    if 'worker_id' in rhs:
-        rhs = rhs.copy()
-        del rhs['worker_id']
-
-    return lhs == rhs
-
+def fill_waiting_queries(stats):
+    for query in range(22):
+        if not (query+1) in stats['queries']:
+            stats['queries'][query+1] = {'runtime': 0, 'status': 'Waiting'}
+    return stats
 
 def test_storage():
-    now = datetime.now()
-    fixture = Stats(num_oltp_slots=4, num_olap_slots=0)
+    fixture = Stats(dsn, num_oltp_slots=4, num_olap_slots=0, tpcc_csv_interval=1)
 
     # yapf: disable
     data = [
-            ('tpcc', { 'worker_id': 0, 'ok_count': 0, 'err_count': 100, 'new_order_count': 44 }),
-            ('tpcc', { 'worker_id': 1, 'ok_count': 100, 'err_count': 0, 'new_order_count': 43 }),
-            ('tpcc', { 'worker_id': 2, 'ok_count': 0, 'err_count': 0, 'new_order_count': 0 }),
-            ('tpcc', { 'worker_id': 2, 'ok_count': 3, 'err_count': 0, 'new_order_count': 1 }),
-            ('tpcc', { 'worker_id': 3, 'ok_count': 100, 'err_count': 100, 'new_order_count': 87 }),
-            ('tpcc', { 'worker_id': 0, 'ok_count': 0, 'err_count': 97, 'new_order_count': 42 }),
-    ]
+            # this will be not be kept
+            ('tpcc', [{ 'timestamp': 0, 'query': 1, 'runtime': 0.01 }]),
+            ('tpcc', [{ 'timestamp': 0, 'query': 'ok', 'runtime': 0.01 }]),
+            # from here on we have a 60s window
+            ('tpcc', [{ 'timestamp': 10.1, 'query': 1, 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 10.1, 'query': 'ok', 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 11, 'query': 2, 'runtime': 0.02 }]),
+            ('tpcc', [{ 'timestamp': 11, 'query': 'ok', 'runtime': 0.02 }]),
+            ('tpcc', [{ 'timestamp': 11, 'query': 3, 'runtime': 0.03 }]),
+            ('tpcc', [{ 'timestamp': 11, 'query': 'ok', 'runtime': 0.03 }]),
+            ('tpcc', [{ 'timestamp': 11, 'query': 4, 'runtime': 0.04 }]),
+            ('tpcc', [{ 'timestamp': 11, 'query': 'error', 'runtime': 0.04 }]),
+            ('tpcc', [{ 'timestamp': 11.1, 'query': 1, 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 11.1, 'query': 'ok', 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 12.1, 'query': 1, 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 12.1, 'query': 'ok', 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 12.2, 'query': 1, 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 12.2, 'query': 'ok', 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 70, 'query': 1, 'runtime': 1 }]),
+            ('tpcc', [{ 'timestamp': 70, 'query': 'ok', 'runtime': 1 }]),
+                ]
     # yapf: enable
     queue = MockQueue(data.copy())
-    fixture.update(queue, now)
-    # Newer values overwrite older values
-    assert same_stats(fixture.tpcc_stats_for_stream_id(0), data[5][1])
-    assert same_stats(fixture.tpcc_stats_for_stream_id(1), data[1][1])
-    assert same_stats(fixture.tpcc_stats_for_stream_id(2), data[3][1])
-    assert same_stats(fixture.tpcc_stats_for_stream_id(3), data[4][1])
+    fixture.update_stats(queue)
+
+    # test:
+    # - all samples up to 60s are kept
+    # - tps needs at least 3 seconds and all stats are properly computed
+    # - latencies are in ms and all stats are properly computed
+    assert fixture.tpcc_tps(2) == (0, 0, 0, 0)
+    assert fixture.tpcc_tps(3) == (0, 0, 0, 0)
+    assert fixture.tpcc_tps(4) == (0, 0, 0, 0)
+    # 1 surviving sample with 1tps and 1 with 2 tps, avg floored is therefore 1
+    assert fixture.tpcc_tps(1) == (2, 1, 1, 2)
+    # 3 tps @ 11s, 2tps @ 12
+    assert fixture.tpcc_tps('ok') == (2, 2, 2, 3)
+
+    assert fixture.tpcc_latency(2) == (20, 20, 20, 20)
+    assert fixture.tpcc_latency(3) == (30, 30, 30, 30)
+    assert fixture.tpcc_latency(4) == (40, 40, 40, 40)
+    assert fixture.tpcc_latency(1) == (1000, 100, int((100+100+100+100+1000)/5), 1000)
+    assert fixture.tpcc_latency('ok') == (1000, 20, int((100+20+30+100+100+100+1000)/7), 1000)
+    
+    assert fixture.tpcc_total('ok') == 8
+    assert fixture.tpcc_total(1) == 6
+    assert fixture.tpcc_total('error') == 1
 
     # yapf: disable
     data = [
             ('tpch', {'stream': 0, 'query': 1, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 1, 'status': 'Finished', 'runtime': 1.0}),
+            ('tpch', {'stream': 0, 'query': 1, 'status': 'TIMEOUT', 'runtime': 10.0}),
+            ('tpch', {'stream': 0, 'query': 1, 'status': 'Running'}),
+            ('tpch', {'stream': 0, 'query': 1, 'status': 'OK', 'runtime': 1.0}),
             ('tpch', {'stream': 1, 'query': 3, 'status': 'Running'}),
             ('tpch', {'stream': 2, 'query': 9, 'status': 'Running'}),
-            ('tpch', {'stream': 2, 'query': 9, 'status': 'Canceled'}),
-            ('tpch', {'stream': 1, 'query': 3, 'status': 'Error'}),
+            ('tpch', {'stream': 2, 'query': 9, 'status': 'TIMEOUT', 'runtime': 13.5}),
+            ('tpch', {'stream': 1, 'query': 3, 'status': 'ERROR', 'runtime': 0.1}),
             ('tpch', {'stream': 0, 'query': 7, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 7, 'status': 'Finished', 'runtime': 7.0}),
+            ('tpch', {'stream': 0, 'query': 7, 'status': 'OK', 'runtime': 7.0}),
             ('tpch', {'stream': 3, 'query': 1, 'status': 'Running'}),
-            ('tpch', {'stream': 3, 'query': 1, 'status': 'Error'}),
+            ('tpch', {'stream': 3, 'query': 1, 'status': 'ERROR', 'runtime': 0.2}),
             ('tpch', {'stream': 0, 'query': 1, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 1, 'status': 'Finished', 'runtime': 2.3}),
+            ('tpch', {'stream': 0, 'query': 1, 'status': 'OK', 'runtime': 2.3}),
     ]
     # yapf: enable
-    fixture = Stats(num_oltp_slots=0, num_olap_slots=4)
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=4, tpcc_csv_interval=1)
     queue = MockQueue(data)
-    fixture.update(queue, 0)
+    fixture.update_stats(queue)
     # Newer values extend older values (except for query runtimes)
     # yapf: disable
     expected = {
-            'queries': {1: 2.3, 7: 7.0}, 'finished_count': 3, 'error_count': 0, 'timeout_count': 0
+            'queries': {1: {'query': 1, 'runtime': 2.3, 'status': 'OK', 'stream': 0}, 
+                        7: {'query': 7, 'runtime': 7.0, 'status': 'OK', 'stream': 0},
+                       },
+            'ok_count': 3, 'error_count': 0, 'timeout_count': 1
     }
-    assert fixture.tpch_stats_for_stream_id(0) == expected
+    assert fixture.tpch_stats_for_stream_id(0) == fill_waiting_queries(expected)
     expected = {
-            'queries': {3: 'Error'}, 'finished_count': 0, 'error_count': 1, 'timeout_count': 0
+            'queries': {3: {'query': 3, 'runtime': 0.1, 'status': 'ERROR', 'stream': 1}},
+            'ok_count': 0, 'error_count': 1, 'timeout_count': 0
     }
-    assert fixture.tpch_stats_for_stream_id(1) == expected
+    assert fixture.tpch_stats_for_stream_id(1) == fill_waiting_queries(expected)
     expected = {
-            'queries': {9: 'Timeout'}, 'finished_count': 0, 'error_count': 0, 'timeout_count': 1
+            'queries': {9: {'query': 9, 'runtime': 13.5, 'status': 'TIMEOUT', 'stream': 2}},
+            'ok_count': 0, 'error_count': 0, 'timeout_count': 1
     }
-    assert fixture.tpch_stats_for_stream_id(2) == expected
+    assert fixture.tpch_stats_for_stream_id(2) == fill_waiting_queries(expected)
     expected = {
-            'queries': {1: 'Error'}, 'finished_count': 0, 'error_count': 1, 'timeout_count': 0
+            'queries': {1: {'query': 1, 'runtime': 0.2, 'status': 'ERROR', 'stream': 3}},
+            'ok_count': 0, 'error_count': 1, 'timeout_count': 0
     }
-    assert fixture.tpch_stats_for_stream_id(3) == expected
+    assert fixture.tpch_stats_for_stream_id(3) == fill_waiting_queries(expected)
     # yapf: enable
-
-
-def test_tpcc_totals():
-    now = datetime.now()
-    fixture = Stats(num_oltp_slots=1, num_olap_slots=0)
-    queue = MockQueue()
-    fixture.update(queue, now)
-    assert fixture.tpcc_totals() == (0, 0, 0)
-    assert fixture.tpch_totals() == (0, 0, 0)
-
-    # yapf: disable
-    data = [( 'tpcc', { 'worker_id': 0, 'ok_count': 100, 'err_count': 10, 'new_order_count': 4 })]
-    # yapf: enable
-    queue = MockQueue(data)
-    fixture.update(queue, now)
-    assert fixture.tpcc_totals() == (100, 10, 4)
-    assert fixture.tpch_totals() == (0, 0, 0)
-
-    fixture = Stats(num_oltp_slots=4, num_olap_slots=0)
-    # yapf: disable
-    data = [
-            ('tpcc', { 'worker_id': 0, 'ok_count': 0, 'err_count': 100, 'new_order_count': 44 }),
-            ('tpcc', { 'worker_id': 1, 'ok_count': 100, 'err_count': 0, 'new_order_count': 43 }),
-            ('tpcc', { 'worker_id': 2, 'ok_count': 0, 'err_count': 0, 'new_order_count': 0 }),
-            ('tpcc', { 'worker_id': 3, 'ok_count': 100, 'err_count': 100, 'new_order_count': 87 })
-    ]
-    # yapf: enable
-    queue = MockQueue(data)
-    fixture.update(queue, now)
-    assert fixture.tpcc_totals() == (100 + 100, 100 + 100, 44 + 43 + 87)
-    assert fixture.tpch_totals() == (0, 0, 0)
-
-    fixture = Stats(num_oltp_slots=2, num_olap_slots=0)
-    # yapf: disable
-    data = [
-            ('tpcc', { 'worker_id': 0, 'ok_count': 12, 'err_count': 1, 'new_order_count': 5 }),
-            ('tpcc', { 'worker_id': 1, 'ok_count': 100, 'err_count': 2, 'new_order_count': 45 }),
-            ('tpcc', { 'worker_id': 0, 'ok_count': 23, 'err_count': 4, 'new_order_count': 44 }),
-    ]
-    # yapf: enable
-    queue = MockQueue(data)
-    fixture.update(queue, now)
-    assert fixture.tpcc_totals() == (100 + 23, 2 + 4, 45 + 44)
-    assert fixture.tpch_totals() == (0, 0, 0)
-
 
 def test_tpch_totals():
-    fixture = Stats(num_oltp_slots=0, num_olap_slots=1)
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, tpcc_csv_interval=1)
     queue = MockQueue()
-    fixture.update(queue, 0)
-    assert fixture.tpcc_totals() == (0, 0, 0)
+    fixture.update_stats(queue)
     assert fixture.tpch_totals() == (0, 0, 0)
 
     # yapf: disable
     data = [
             ('tpch', {'stream': 0, 'query': 1, 'status': 'Running'}),
             ('tpch', {'stream': 0, 'query': 3, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 3, 'status': 'Error'}),
+            ('tpch', {'stream': 0, 'query': 3, 'status': 'ERROR', 'runtime': 0.1}),
             ('tpch', {'stream': 0, 'query': 7, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 1, 'status': 'Finished', 'runtime': 1.0}),
-            ('tpch', {'stream': 0, 'query': 7, 'status': 'Canceled'}),
+            ('tpch', {'stream': 0, 'query': 1, 'status': 'OK', 'runtime': 1.0}),
+            ('tpch', {'stream': 0, 'query': 7, 'status': 'TIMEOUT', 'runtime': 10.0}),
     ]
     # yapf: enable
-    fixture = Stats(num_oltp_slots=0, num_olap_slots=1)
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, tpcc_csv_interval=1)
     queue = MockQueue(data)
-    fixture.update(queue, 0)
-    assert fixture.tpcc_totals() == (0, 0, 0)
+    fixture.update_stats(queue)
     assert fixture.tpch_totals() == (1, 1, 1)
 
     # yapf: disable
     data = [
             ('tpch', {'stream': 0, 'query': 1, 'status': 'Running'}),
             ('tpch', {'stream': 0, 'query': 1, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 1, 'status': 'Error'}),
-            ('tpch', {'stream': 0, 'query': 1, 'status': 'Finished', 'runtime': 1.3}),
+            ('tpch', {'stream': 0, 'query': 1, 'status': 'ERROR', 'runtime': 0.2}),
+            ('tpch', {'stream': 0, 'query': 1, 'status': 'OK', 'runtime': 1.3}),
             ('tpch', {'stream': 0, 'query': 1, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 1, 'status': 'Canceled'}),
+            ('tpch', {'stream': 0, 'query': 1, 'status': 'TIMEOUT', 'runtime': 11.3}),
     ]
     # yapf: enable
-    fixture = Stats(num_oltp_slots=0, num_olap_slots=1)
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, tpcc_csv_interval=1)
     queue = MockQueue(data)
-    fixture.update(queue, 0)
-    assert fixture.tpcc_totals() == (0, 0, 0)
+    fixture.update_stats(queue)
     assert fixture.tpch_totals() == (1, 1, 1)
 
     # yapf: disable
     data = [
             ('tpch', {'stream': 0, 'query': 1, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 1, 'status': 'Finished', 'runtime': 1.0}),
+            ('tpch', {'stream': 0, 'query': 1, 'status': 'OK', 'runtime': 1.0}),
             ('tpch', {'stream': 1, 'query': 3, 'status': 'Running'}),
             ('tpch', {'stream': 2, 'query': 9, 'status': 'Running'}),
-            ('tpch', {'stream': 2, 'query': 9, 'status': 'Canceled'}),
-            ('tpch', {'stream': 1, 'query': 3, 'status': 'Error'}),
+            ('tpch', {'stream': 2, 'query': 9, 'status': 'TIMEOUT', 'runtime': 14.5}),
+            ('tpch', {'stream': 1, 'query': 3, 'status': 'ERROR', 'runtime': 0.3}),
             ('tpch', {'stream': 0, 'query': 7, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 7, 'status': 'Finished', 'runtime': 7.0}),
+            ('tpch', {'stream': 0, 'query': 7, 'status': 'OK', 'runtime': 7.0}),
             ('tpch', {'stream': 3, 'query': 1, 'status': 'Running'}),
-            ('tpch', {'stream': 3, 'query': 1, 'status': 'Error'}),
+            ('tpch', {'stream': 3, 'query': 1, 'status': 'ERROR', 'runtime': 0.4}),
     ]
     # yapf: enable
-    fixture = Stats(num_oltp_slots=0, num_olap_slots=4)
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=4, tpcc_csv_interval=1)
     queue = MockQueue(data)
-    fixture.update(queue, 0)
-    assert fixture.tpcc_totals() == (0, 0, 0)
+    fixture.update_stats(queue)
     assert fixture.tpch_totals() == (2, 2, 1)
-
-
-def test_mixed_totals():
-    # yapf: disable
-    data = [
-            ('tpcc', { 'worker_id': 0, 'ok_count': 0, 'err_count': 100, 'new_order_count': 44 }),
-            ('tpch', {'stream': 0, 'query': 1, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 1, 'status': 'Finished', 'runtime': 1.0}),
-            ('tpch', {'stream': 1, 'query': 3, 'status': 'Running'}),
-            ('tpch', {'stream': 2, 'query': 9, 'status': 'Running'}),
-            ('tpch', {'stream': 2, 'query': 9, 'status': 'Canceled'}),
-            ('tpcc', { 'worker_id': 1, 'ok_count': 100, 'err_count': 0, 'new_order_count': 43 }),
-            ('tpcc', { 'worker_id': 2, 'ok_count': 0, 'err_count': 0, 'new_order_count': 0 }),
-            ('tpch', {'stream': 1, 'query': 3, 'status': 'Error'}),
-            ('tpch', {'stream': 0, 'query': 7, 'status': 'Running'}),
-            ('tpch', {'stream': 0, 'query': 7, 'status': 'Finished', 'runtime': 7.0}),
-            ('tpcc', { 'worker_id': 0, 'ok_count': 100, 'err_count': 100, 'new_order_count': 87 }),
-            ('tpch', {'stream': 3, 'query': 1, 'status': 'Running'}),
-            ('tpch', {'stream': 3, 'query': 1, 'status': 'Error'}),
-    ]
-    # yapf: enable
-    fixture = Stats(num_oltp_slots=4, num_olap_slots=4)
-    queue = MockQueue(data)
-    fixture.update(queue, 0)
-    assert fixture.tpcc_totals() == (200, 100, 130)
-    assert fixture.tpch_totals() == (2, 2, 1)
-
-
-def test_comsume_stats():
-    now = datetime.now()
-    fixture = Stats(num_oltp_slots=4, num_olap_slots=0)
-    # yapf: disable
-    data = [
-            ('tpcc', { 'worker_id': 0, 'ok_count': 0, 'err_count': 99, 'new_order_count': 44 }),
-            ('tpcc', { 'worker_id': 1, 'ok_count': 100, 'err_count': 0, 'new_order_count': 43 }),
-            ('tpcc', { 'worker_id': 2, 'ok_count': 0, 'err_count': 0, 'new_order_count': 0 }),
-            ('tpcc', { 'worker_id': 3, 'ok_count': 100, 'err_count': 98, 'new_order_count': 87 })
-    ]
-    # yapf: enable
-    queue = MockQueue(data)
-    fixture.update(queue, now)
-    assert fixture.tpcc_totals() == (100 + 100, 99 + 98, 44 + 43 + 87)
-    assert fixture.tpch_totals() == (0, 0, 0)
-
-    tpcc_ok_sum, tpcc_ok_rate, tpcc_err_sum, tpcc_err_rate = fixture.consume_stats()
-    assert(tpcc_ok_sum == 100 + 100)
-    assert(tpcc_ok_rate == 100 + 100)
-    assert(tpcc_err_sum == 99 + 98)
-    assert(tpcc_err_rate == 99 + 98)
-
-    # Rate stats have been consumed
-    tpcc_ok_sum, tpcc_ok_rate, tpcc_err_sum, tpcc_err_rate = fixture.consume_stats()
-    assert(tpcc_ok_sum == 100 + 100)
-    assert(tpcc_ok_rate == 0)
-    assert(tpcc_err_sum == 99 + 98)
-    assert(tpcc_err_rate == 0)
-
-    # yapf: disable
-    data = [
-            ('tpcc', { 'worker_id': 0, 'ok_count': 12, 'err_count': 101, 'new_order_count': 44 }),
-            ('tpcc', { 'worker_id': 1, 'ok_count': 100, 'err_count': 2, 'new_order_count': 45 }),
-            ('tpcc', { 'worker_id': 0, 'ok_count': 23, 'err_count': 107, 'new_order_count': 47 }),
-    ]
-    # yapf: enable
-    queue = MockQueue(data)
-    fixture.update(queue, now)
-    # Data for provided streams has been replaced, for other streams it's untouched
-    assert fixture.tpcc_totals() == (100 + 100 + 23, 98 + 2 + 107, 87 + 45 + 47)
-    assert fixture.tpch_totals() == (0, 0, 0)
-
-    tpcc_ok_sum, tpcc_ok_rate, tpcc_err_sum, tpcc_err_rate = fixture.consume_stats()
-    assert tpcc_ok_sum == 100 + 100 + 23
-    assert tpcc_ok_rate == 23
-    assert tpcc_err_sum == 98 + 2 + 107
-    assert tpcc_err_rate == 10

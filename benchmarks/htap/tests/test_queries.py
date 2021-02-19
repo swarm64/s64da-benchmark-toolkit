@@ -3,20 +3,17 @@ import pytest
 from datetime import datetime
 from dateutil.parser import isoparse
 
+from benchmarks.htap.lib.helpers import TPCH_DATE_RANGE
 from benchmarks.htap.lib.queries import Queries
 
+class DateValue:
+    value = isoparse('2198-12-31').timestamp()
 
 def test_tpch_date_to_benchmark_date():
-    tpch_min_date = isoparse('1992-01-01')
-    tpch_max_date = isoparse('1998-12-31')
+    queries = Queries(0, {}, None, DateValue(), None)
 
-    # date ranges that are in the same range should get the same result
-    date1 = isoparse('1993-01-01')
-    date2 = isoparse('1995-01-01')
-    date3 = isoparse('2011-04-05')
-    date4 = isoparse('1900-03-06')
-    assert Queries.tpch_date_to_benchmark_date(date1, tpch_min_date, tpch_max_date) == date1
-    assert Queries.tpch_date_to_benchmark_date(date2, tpch_min_date, tpch_max_date) == date2
-    assert Queries.tpch_date_to_benchmark_date(date3, tpch_min_date, tpch_max_date) == date3
-    assert Queries.tpch_date_to_benchmark_date(date4, tpch_min_date, tpch_max_date) == date4
+    assert queries.tpch_date_to_benchmark_date(isoparse('1993-01-01')) == isoparse('2193-01-01')
+    assert queries.tpch_date_to_benchmark_date(isoparse('1995-01-01')) == isoparse('2195-01-01')
+    assert queries.tpch_date_to_benchmark_date(isoparse('2211-01-01')) == isoparse('2411-01-01')
+    assert queries.tpch_date_to_benchmark_date(isoparse('1801-01-01')) == isoparse('2001-01-01')
 

@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     su_name, count(*) as numwait
 from
@@ -24,9 +25,12 @@ where
             and l2.ol_w_id = l1.ol_w_id
             and l2.ol_d_id = l1.ol_d_id
             and l2.ol_delivery_d > l1.ol_delivery_d
+            and l2.ol_delivery_d >= '$min_date'
     )
     and su_nationkey = n_nationkey
     and n_name = 'Cambodia'
+    and o_entry_d >= '$min_date'
+    and l1.ol_delivery_d >= '$min_date'
 group by
     su_name
 order by

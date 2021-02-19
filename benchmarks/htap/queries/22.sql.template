@@ -1,6 +1,7 @@
 -- vim: set ft=sql:
 -- FIXME: This query produces an empty result as there are
 -- no customers who never ordered.
+-- EXPLAIN (FORMAT JSON)
 select
     substr(c_state, 1, 1) as country,
     count(*) as numcust,
@@ -8,15 +9,16 @@ select
 from
     customer
 where
-    substr(c_phone, 1, 1) in ('1', '2', '3', '4', '5', '6', '7')
+    substring(c_phone from 1 for 2) in ('32', '27', '31', '25', '26', '24', '19')
     and c_balance > (
+
         select
             avg(c_balance)
         from
             customer
         where
             c_balance > 0.00
-            and substr(c_phone, 1, 1) in ('1', '2', '3', '4', '5', '6', '7')
+            and substring(c_phone from 1 for 2) in ('32', '27', '31', '25', '26', '24', '19')
     )
     and not exists (
         select
@@ -27,6 +29,7 @@ where
             o_c_id = c_id
             and o_w_id = c_w_id
             and o_d_id = c_d_id
+            and o_entry_d >= '$min_date'
     )
 group by
     substr(c_state, 1, 1)

@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     n_name,
     sum(ol_amount) as revenue
@@ -26,6 +27,7 @@ where
     and r_name = 'Europe'
     and o_entry_d >= '$begin_date'
     and o_entry_d < '$end_date'
+    and ol_delivery_d >= '$min_date'
 group by
     n_name
 order by

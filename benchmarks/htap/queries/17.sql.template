@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     sum(ol_amount) / 2.0 as avg_yearly
 from
@@ -11,8 +12,10 @@ from
         where
             i_data like '%b'
             and ol_i_id = i_id
+            and ol_delivery_d >= '$min_date'
         group by
             i_id) t
 where
     ol_i_id = t.i_id
-    and ol_quantity < t.a;
+    and ol_quantity < t.a
+    and ol_delivery_d >= '$min_date';

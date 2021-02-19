@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     c_last,
     c_id o_id,
@@ -14,6 +15,8 @@ where
     and ol_w_id = o_w_id
     and ol_d_id = o_d_id
     and ol_o_id = o_id
+    and o_entry_d >= '$min_date'
+    and ol_delivery_d >= '$min_date'
 group by
     o_id,
     o_w_id,

@@ -1,4 +1,5 @@
 -- vim: set ft=sql:
+-- EXPLAIN (FORMAT JSON)
 select
     ol_number,
     sum(ol_quantity) as sum_qty,
@@ -8,7 +9,8 @@ select
     count(*) as count_order
 from
     order_line
-    where ol_delivery_d > '$date'
+where
+    ol_delivery_d > '$date'
 group by
     ol_number
 order by
