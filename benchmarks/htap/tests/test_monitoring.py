@@ -31,39 +31,40 @@ def test_storage():
             # this will be not be kept
             ('tpcc', [{ 'timestamp': 0, 'query': 1, 'runtime': 0.01 }]),
             ('tpcc', [{ 'timestamp': 0, 'query': 'ok', 'runtime': 0.01 }]),
-            # from here on we have a 60s window
-            ('tpcc', [{ 'timestamp': 10.1, 'query': 1, 'runtime': 0.1 }]),
-            ('tpcc', [{ 'timestamp': 10.1, 'query': 'ok', 'runtime': 0.1 }]),
-            ('tpcc', [{ 'timestamp': 11, 'query': 2, 'runtime': 0.02 }]),
-            ('tpcc', [{ 'timestamp': 11, 'query': 'ok', 'runtime': 0.02 }]),
-            ('tpcc', [{ 'timestamp': 11, 'query': 3, 'runtime': 0.03 }]),
-            ('tpcc', [{ 'timestamp': 11, 'query': 'ok', 'runtime': 0.03 }]),
-            ('tpcc', [{ 'timestamp': 11, 'query': 4, 'runtime': 0.04 }]),
-            ('tpcc', [{ 'timestamp': 11, 'query': 'error', 'runtime': 0.04 }]),
-            ('tpcc', [{ 'timestamp': 11.1, 'query': 1, 'runtime': 0.1 }]),
-            ('tpcc', [{ 'timestamp': 11.1, 'query': 'ok', 'runtime': 0.1 }]),
-            ('tpcc', [{ 'timestamp': 12.1, 'query': 1, 'runtime': 0.1 }]),
-            ('tpcc', [{ 'timestamp': 12.1, 'query': 'ok', 'runtime': 0.1 }]),
-            ('tpcc', [{ 'timestamp': 12.2, 'query': 1, 'runtime': 0.1 }]),
-            ('tpcc', [{ 'timestamp': 12.2, 'query': 'ok', 'runtime': 0.1 }]),
-            ('tpcc', [{ 'timestamp': 70, 'query': 1, 'runtime': 1 }]),
-            ('tpcc', [{ 'timestamp': 70, 'query': 'ok', 'runtime': 1 }]),
+            # from here on we have a 10s window
+            ('tpcc', [{ 'timestamp': 1.1, 'query': 1, 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 1.1, 'query': 'ok', 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 2, 'query': 2, 'runtime': 0.02 }]),
+            ('tpcc', [{ 'timestamp': 2, 'query': 'ok', 'runtime': 0.02 }]),
+            ('tpcc', [{ 'timestamp': 2, 'query': 3, 'runtime': 0.03 }]),
+            ('tpcc', [{ 'timestamp': 2, 'query': 'ok', 'runtime': 0.03 }]),
+            ('tpcc', [{ 'timestamp': 2, 'query': 4, 'runtime': 0.04 }]),
+            ('tpcc', [{ 'timestamp': 2, 'query': 'error', 'runtime': 0.04 }]),
+            ('tpcc', [{ 'timestamp': 2.1, 'query': 1, 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 2.1, 'query': 'ok', 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 3.1, 'query': 1, 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 3.1, 'query': 'ok', 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 3.2, 'query': 1, 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 3.2, 'query': 'ok', 'runtime': 0.1 }]),
+            ('tpcc', [{ 'timestamp': 11, 'query': 1, 'runtime': 1 }]),
+            ('tpcc', [{ 'timestamp': 11, 'query': 'ok', 'runtime': 1 }]),
                 ]
     # yapf: enable
     queue = MockQueue(data.copy())
-    fixture.update_stats(queue)
+    fixture.process_queue(queue)
+    fixture.cleanup_tpcc_stats(11.1)
 
     # test:
-    # - all samples up to 60s are kept
+    # - all samples up to 10s are kept
     # - tps needs at least 3 seconds and all stats are properly computed
     # - latencies are in ms and all stats are properly computed
     assert fixture.tpcc_tps(2) == (0, 0, 0, 0)
     assert fixture.tpcc_tps(3) == (0, 0, 0, 0)
     assert fixture.tpcc_tps(4) == (0, 0, 0, 0)
     # 1 surviving sample with 1tps and 1 with 2 tps, avg floored is therefore 1
-    assert fixture.tpcc_tps(1) == (2, 1, 1, 2)
+    assert fixture.tpcc_tps(1) == (2, 0, 0, 2)
     # 3 tps @ 11s, 2tps @ 12
-    assert fixture.tpcc_tps('ok') == (2, 2, 2, 3)
+    assert fixture.tpcc_tps('ok') == (2, 0, 0, 3)
 
     assert fixture.tpcc_latency(2) == (20, 20, 20, 20)
     assert fixture.tpcc_latency(3) == (30, 30, 30, 30)
@@ -95,7 +96,7 @@ def test_storage():
     # yapf: enable
     fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=4, tpcc_csv_interval=1)
     queue = MockQueue(data)
-    fixture.update_stats(queue)
+    fixture.process_queue(queue)
     # Newer values extend older values (except for query runtimes)
     # yapf: disable
     expected = {
@@ -125,7 +126,7 @@ def test_storage():
 def test_tpch_totals():
     fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, tpcc_csv_interval=1)
     queue = MockQueue()
-    fixture.update_stats(queue)
+    fixture.process_queue(queue)
     assert fixture.tpch_totals() == (0, 0, 0)
 
     # yapf: disable
@@ -140,7 +141,7 @@ def test_tpch_totals():
     # yapf: enable
     fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, tpcc_csv_interval=1)
     queue = MockQueue(data)
-    fixture.update_stats(queue)
+    fixture.process_queue(queue)
     assert fixture.tpch_totals() == (1, 1, 1)
 
     # yapf: disable
@@ -155,7 +156,7 @@ def test_tpch_totals():
     # yapf: enable
     fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, tpcc_csv_interval=1)
     queue = MockQueue(data)
-    fixture.update_stats(queue)
+    fixture.process_queue(queue)
     assert fixture.tpch_totals() == (1, 1, 1)
 
     # yapf: disable
@@ -174,5 +175,5 @@ def test_tpch_totals():
     # yapf: enable
     fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=4, tpcc_csv_interval=1)
     queue = MockQueue(data)
-    fixture.update_stats(queue)
+    fixture.process_queue(queue)
     assert fixture.tpch_totals() == (2, 2, 1)

@@ -1,6 +1,7 @@
 import time
 import math
 import os
+import psycopg2
 from copy import deepcopy
 
 from datetime import datetime
@@ -18,6 +19,7 @@ from s64da_benchmark_toolkit.dbconn import DBConn
 register_uuid()
 
 QUERY_TYPES = ['ok', 'error', 'new_order', 'payment', 'order_status', 'delivery', 'stock_level']
+HISTORY_LENGTH = 10
 
 class Stats:
     """
@@ -30,7 +32,7 @@ class Stats:
     the end state of a transaction is sent through the queue. Per reporting interval
     all accumulated events are sent, which contain the timestamp, query id and runtime
     for each transaction.
-    This is kept in a list where the last 60 seconds of samples are stored.
+    This is kept in a list where the last HISTORY_LENGTH seconds of samples are stored.
     When we want to report the actual statistics we then simply aggregate the results
     based on the raw, possibly filtered, samples.
 
@@ -64,11 +66,11 @@ class Stats:
             self.data['tpcc'][stat['query']].append(stat)
             self.data['tpcc_totals'][stat['query']] += 1
 
-    def _cleanup_tpcc_stats(self):
+    def cleanup_tpcc_stats(self, time_now):
+        cutoff = int(time_now - HISTORY_LENGTH)
         for query_type in self.data['tpcc'].keys():
-            last_ts = self.data['tpcc'][query_type][-1]['timestamp']
             # keep one minute of history
-            self.data['tpcc'][query_type] = list(filter(lambda x: x['timestamp'] >= last_ts - 60, self.data['tpcc'][query_type]))
+            self.data['tpcc'][query_type] = list(filter(lambda x: x['timestamp'] >= cutoff, self.data['tpcc'][query_type]))
 
     def _update_tpch_stats(self, stats):
         stream_id = stats['stream']
@@ -86,7 +88,7 @@ class Stats:
         status_count = stats['status'].lower() + '_count'
         self.data['tpch'][stream_id][status_count] += 1
 
-    def _update_stats(self, src, item):
+    def _process_queue(self, src, item):
         if src == 'tpcc':
             self._update_tpcc_stats(item)
         elif src == 'tpch':
@@ -94,19 +96,20 @@ class Stats:
 
     def _update_cached_stats(self):
         with self.conn as conn:
-            conn.cursor.execute("select * from swarm64da.stat_all_column_store_indexes")
-            self.cached_columnstore_stats = conn.cursor.fetchall()
+            try:
+                conn.cursor.execute("select table_name,relation_blocks,compressed_blocks,cache_pages_usable from swarm64da.stat_all_column_store_indexes")
+                self.cached_columnstore_stats = conn.cursor.fetchall()
+            except:
+                self.cached_columnstore_stats = []
             self.conn.cursor.execute(f"select pg_database_size('{self.database}')")
             self.cached_database_size = conn.cursor.fetchone()[0]
 
-    def update_stats(self, reporting_queue):
+    def process_queue(self, reporting_queue):
         while not reporting_queue.empty():
             src, item = reporting_queue.get()
-            self._update_stats(src, item)
+            self._process_queue(src, item)
 
-        self._cleanup_tpcc_stats()
-
-    def update(self, reporting_queue):
+    def update(self):
         # open the files and connections lazily to avoid serialization problems when forking
         os.makedirs('results', exist_ok=True)
         if not self.csv_tpcc:
@@ -117,14 +120,13 @@ class Stats:
             self.conn = DBConn(self.dsn, use_dict_cursor = True)
             self._update_cached_stats()
 
-        self.update_stats(reporting_queue)
+        self.cleanup_tpcc_stats(time.time())
 
         self.updates += 1
         if self.updates % 10 == 0:
             self._update_cached_stats()
         if self.updates % self.tpcc_csv_interval == 0:
             self.write_tpcc_stats()
-
 
     def tpch_stats_for_stream_id(self, stream_id):
         return self.data['tpch'][stream_id]
@@ -139,6 +141,11 @@ class Stats:
 
         stats = self.data['tpcc'][query]
         per_sec = defaultdict(int)
+
+        time_now = int(time.time())
+        # fill up the whole timestamp range, but not the first and last second
+        for timestamp in range(time_now-HISTORY_LENGTH+1, time_now-1):
+            per_sec[timestamp] = 0
         for stat in stats:
             bucket = int(stat['timestamp'])
             per_sec[bucket] += 1
@@ -272,7 +279,6 @@ class Monitor:
         table_name = row['table_name']
         table_size = row['relation_blocks']*8/1024/1024;
         index_size = row['compressed_blocks']*8/1024/1024;
-        empty_sets = row['empty_cache_sets']
         compression_ratio = table_size * 1.0 / index_size
         cached = row['cache_pages_usable'] * 1.0 / row['relation_blocks'] * 100
         return f'| {table_name:^12} | {table_size:7.2f}GB | {index_size:7.2f}GB | {compression_ratio:6.2f}x | {cached:4.2f}% |'
@@ -285,16 +291,16 @@ class Monitor:
         data_warning = "(not enough for OLAP queries)" if date_range.years < 7 else ""
 
         self._add_display_line(f'Data range: {self.min_timestamp} - {latest_time} = {date_range.years} years, {date_range.months} months and {date_range.days} days {data_warning}')
-
         self._add_display_line(f'DB size: {self.stats.db_size()}')
-        self._add_display_line('-----------------------------------------------------------')
-        self._add_display_line('|    table     | heap size |  colstore |  ratio  | cached |')
-        self._add_display_line('-----------------------------------------------------------')
-        for row in self.stats.columnstore_stats():
-            self._add_display_line(self.get_columnstore_row(row))
+        if self.stats.columnstore_stats():
+            self._add_display_line('-----------------------------------------------------------')
+            self._add_display_line('|    table     | heap size |  colstore |  ratio  | cached |')
+            self._add_display_line('-----------------------------------------------------------')
+            for row in self.stats.columnstore_stats():
+                self._add_display_line(self.get_columnstore_row(row))
 
         self._add_display_line('-------------------------------------------------------------------------------------------')
-        self._add_display_line('|     TYPE     |  TOTALS  |         TPS (last 60s)        |   LATENCY (last 60s, in ms)   |')
+        self._add_display_line('|     TYPE     |  TOTALS  |         TPS (last {}s)        |   LATENCY (last {}s, in ms)   |'.format(HISTORY_LENGTH, HISTORY_LENGTH))
         self._add_display_line('|              |          |  CURR |  MIN  |  AVG  |  MAX  |  CURR |  MIN  |  AVG  |  MAX  |')
         self._add_display_line('|------------------------------------------------------------------------------------------')
         for query_type in QUERY_TYPES:

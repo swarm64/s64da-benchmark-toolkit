@@ -44,25 +44,25 @@ class HTAPController:
 
     def oltp_sleep(self):
         with self.next_tsx_timestamp.get_lock():
-            self.next_tsx_timestamp.value = max(time.time(), self.next_tsx_timestamp.value + self.tsx_timestamp_increment)
+            self.next_tsx_timestamp.value = self.next_tsx_timestamp.value + self.tsx_timestamp_increment
             sleep_until = self.next_tsx_timestamp.value
-        sleep_period = (sleep_until - time.time()) / 10
-        while time.time() < sleep_until:
-            time.sleep(sleep_period)
+        time_now = time.time()
+        if time_now < sleep_until:
+            time.sleep(sleep_until - time_now)
 
     def oltp_worker(self, worker_id):
         # do NOT introduce timeouts for the tpcc queries! this will make that
         # the workload gets inbalanaced and eventually the whole benchmark stalls
         with DBConn(self.args.dsn) as conn:
             tpcc_worker = Transactions(worker_id, self.scale_factor, self.latest_timestamp, conn, self.args.dry_run)
-            reporting_interval = timedelta(seconds=self.args.monitoring_interval) / 10
-            next_reporting_time = datetime.now()
+            next_reporting_time = time.time() + 0.1
             while True:
                 self.oltp_sleep()
                 tpcc_worker.next_transaction()
-                if next_reporting_time <= datetime.now():
-                    self.stats_queue.put(('tpcc', tpcc_worker.stats(worker_id)))
-                    next_reporting_time += reporting_interval
+                if next_reporting_time <= time.time():
+                    # its beneficial to send in chunks so try to batch the stats by accumulating 0.1s of samples
+                    self.stats_queue.put(('tpcc', tpcc_worker.stats()))
+                    next_reporting_time += 0.1
 
 
     def olap_worker(self, worker_id):
@@ -133,6 +133,8 @@ class HTAPController:
                 olap_workers = pool.map_async(self.olap_worker, range(self.args.olap_workers))
 
                 try:
+                    display_interval = timedelta(seconds=self.args.monitoring_interval)
+                    next_display = datetime.now() + display_interval
                     while True:
                         # the workers are not supposed to ever stop.
                         # so test for errors by testing for ready() and if so propagate them
@@ -142,17 +144,19 @@ class HTAPController:
                         if self.args.olap_workers > 0 and olap_workers.ready():
                             olap_workers.get()
 
-                        time.sleep(self.args.monitoring_interval)
+                        while datetime.now() < next_display:
+                            self.stats.process_queue(self.stats_queue)
+                            time.sleep(0.1)
+
+                        next_display += display_interval
                         time_now = datetime.now()
                         elapsed = time_now - begin
                         if elapsed.total_seconds() >= self.args.duration:
                             break
-                        self.stats.update(self.stats_queue)
+                        self.stats.update()
                         self.monitor.update_display(elapsed.total_seconds(), time_now, stats_conn,
                             datetime.fromtimestamp(self.latest_timestamp.value))
                 except KeyboardInterrupt:
                     pass
                 finally:
                     self.monitor.display_summary(elapsed)
-
-
