@@ -35,7 +35,7 @@ class Transactions:
         # append the state as a query type too to ease showing it in the monitor
         self.query_stats.append({'timestamp': now, 'query': state, 'runtime': now - start})
 
-    def stats(self, worker_id):
+    def stats(self):
         query_stats = self.query_stats
         self.query_stats = deque()
         return query_stats
