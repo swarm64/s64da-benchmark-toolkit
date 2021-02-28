@@ -24,8 +24,8 @@ def add_parser(subparsers):
         'Timeout for OLAP queries in seconds, default: 900'))
 
     parser.add_argument(
-        '--tpcc-csv-interval', default=60, type=int, help=(
-        'How often to report tpcc stats to the csv file in seconds, default: 60'))
+        '--csv-interval', default=10, type=int, help=(
+        'How often to report stats to the csv files in seconds, default: 10'))
 
     parser.add_argument(
         '--dry-run', action='store_true', help=(

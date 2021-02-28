@@ -22,7 +22,7 @@ where c_state like 'A%'
     and ol_d_id = o_d_id
     and ol_o_id = o_id
     and o_entry_d > '$date'
-    and ol_delivery_d >= '$min_date'
+-- do NOT filter on ol_delivery_d as we want the ones that have NOT been delivered yet :)
 group by
     ol_o_id,
     ol_w_id,

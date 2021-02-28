@@ -22,7 +22,7 @@ where
     and o_entry_d >= '$begin_date'
     and o_entry_d < '$end_date'
     and o_entry_d <= ol_delivery_d
-    and n_nationkey = ascii(substr(c_state, 1, 1))
+    and n_nationkey = c_nationkey
     and ol_delivery_d >= '$min_date'
 group by
     c_id,

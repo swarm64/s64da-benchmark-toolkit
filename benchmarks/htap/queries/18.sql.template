@@ -26,7 +26,7 @@ group by
     o_entry_d,
     o_ol_cnt
 having
-    sum(ol_amount) > 200
+    sum(ol_amount) > 110000
 order by
     sum(ol_amount) desc,
     o_entry_d;
