@@ -30,6 +30,12 @@ ALTER TABLE customer ADD CONSTRAINT fkey_customer_1 FOREIGN KEY (
   , d_id
 );
 
+ALTER TABLE customer ADD CONSTRAINT fkey_customer_nation FOREIGN KEY (
+    c_nationkey
+) REFERENCES nation (
+    n_nationkey
+);
+
 ALTER TABLE history ADD CONSTRAINT fkey_history_1 FOREIGN KEY (
     h_c_w_id
   , h_c_d_id

@@ -41,7 +41,7 @@ class Stats:
     For TPC-H the status of each individual query (Running, Ok, Error,
     Timeout) is put into the monitoring queue, regardless of monitoring interval.
     """
-    def __init__(self, dsn, num_oltp_slots, num_olap_slots, tpcc_csv_interval):
+    def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval):
         self.data = {}
         self.data['tpcc'] = defaultdict(list)
         self.data['tpcc_totals'] = defaultdict(int)
@@ -54,11 +54,12 @@ class Stats:
         self.uuid = uuid4()
         self.num_oltp_slots = num_oltp_slots
         self.updates = 0
-        self.tpcc_csv_interval = tpcc_csv_interval
+        self.csv_interval = csv_interval
         self.dsn = dsn
         self.database = urlparse(self.dsn).path[1:]
         self.csv_tpch = None
         self.csv_tpcc = None
+        self.csv_dbstats = None
         self.conn = None
         
     def _update_tpcc_stats(self, stats):
@@ -116,6 +117,8 @@ class Stats:
             self.csv_tpcc = open('results/tpcc.csv', 'w')
         if not self.csv_tpch:
             self.csv_tpch = open('results/tpch.csv', 'w')
+        if not self.csv_dbstats:
+            self.csv_dbstats = open('results/dbstats.csv', 'w')
         if not self.conn:
             self.conn = DBConn(self.dsn, use_dict_cursor = True)
             self._update_cached_stats()
@@ -125,8 +128,9 @@ class Stats:
         self.updates += 1
         if self.updates % 10 == 0:
             self._update_cached_stats()
-        if self.updates % self.tpcc_csv_interval == 0:
+        if self.updates % self.csv_interval == 0:
             self.write_tpcc_stats()
+            self.write_dbstats()
 
     def tpch_stats_for_stream_id(self, stream_id):
         return self.data['tpch'][stream_id]
@@ -181,13 +185,27 @@ class Stats:
         return "{:7.2f}GB".format(self.cached_database_size / (1024*1024*1024.0))
 
     def columnstore_stats(self):
-        return self.cached_columnstore_stats
+        result = []
+        for row in self.cached_columnstore_stats:
+            table_name = row['table_name']
+            table_size = row['relation_blocks']*8/1024/1024;
+            index_size = row['compressed_blocks']*8/1024/1024;
+            compression_ratio = table_size * 1.0 / index_size
+            cached = row['cache_pages_usable'] * 1.0 / row['relation_blocks'] * 100
+            result.append([table_name, table_size, index_size, compression_ratio, cached])
+        return result
 
     def write_tpcc_stats(self):
         for query_type in QUERY_TYPES:
             row = [datetime.now(), query_type, self.tpcc_total(query_type), *self.tpcc_tps(query_type), *self.tpcc_latency(query_type)]
             self.csv_tpcc.write(', '.join(map(str, row)) + "\n")
         self.csv_tpcc.flush()
+
+    def write_dbstats(self):
+        for row in self.columnstore_stats():
+            self.csv_dbstats.write(', '.join(map(str, row)) + "\n")
+        self.csv_dbstats.flush()
+
 
 class Monitor:
     def __init__(self, stats, num_oltp_workers, num_olap_workers, scale_factor, min_timestamp):
@@ -276,12 +294,7 @@ class Monitor:
         return row
 
     def get_columnstore_row(self, row):
-        table_name = row['table_name']
-        table_size = row['relation_blocks']*8/1024/1024;
-        index_size = row['compressed_blocks']*8/1024/1024;
-        compression_ratio = table_size * 1.0 / index_size
-        cached = row['cache_pages_usable'] * 1.0 / row['relation_blocks'] * 100
-        return f'| {table_name:^12} | {table_size:7.2f}GB | {index_size:7.2f}GB | {compression_ratio:6.2f}x | {cached:4.2f}% |'
+        return f'| {row[0]:^12} | {row[1]:7.2f}GB | {row[2]:7.2f}GB | {row[3]:6.2f}x | {row[4]:4.2f}% |'
 
     def update_display(self, time_elapsed, time_now, stats_conn, latest_timestamp):
         latest_time = latest_timestamp.date()

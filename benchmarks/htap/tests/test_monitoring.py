@@ -24,7 +24,7 @@ def fill_waiting_queries(stats):
     return stats
 
 def test_storage():
-    fixture = Stats(dsn, num_oltp_slots=4, num_olap_slots=0, tpcc_csv_interval=1)
+    fixture = Stats(dsn, num_oltp_slots=4, num_olap_slots=0, csv_interval=1)
 
     # yapf: disable
     data = [
@@ -94,7 +94,7 @@ def test_storage():
             ('tpch', {'stream': 0, 'query': 1, 'status': 'OK', 'runtime': 2.3}),
     ]
     # yapf: enable
-    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=4, tpcc_csv_interval=1)
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=4, csv_interval=1)
     queue = MockQueue(data)
     fixture.process_queue(queue)
     # Newer values extend older values (except for query runtimes)
@@ -124,7 +124,7 @@ def test_storage():
     # yapf: enable
 
 def test_tpch_totals():
-    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, tpcc_csv_interval=1)
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, csv_interval=1)
     queue = MockQueue()
     fixture.process_queue(queue)
     assert fixture.tpch_totals() == (0, 0, 0)
@@ -139,7 +139,7 @@ def test_tpch_totals():
             ('tpch', {'stream': 0, 'query': 7, 'status': 'TIMEOUT', 'runtime': 10.0}),
     ]
     # yapf: enable
-    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, tpcc_csv_interval=1)
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, csv_interval=1)
     queue = MockQueue(data)
     fixture.process_queue(queue)
     assert fixture.tpch_totals() == (1, 1, 1)
@@ -154,7 +154,7 @@ def test_tpch_totals():
             ('tpch', {'stream': 0, 'query': 1, 'status': 'TIMEOUT', 'runtime': 11.3}),
     ]
     # yapf: enable
-    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, tpcc_csv_interval=1)
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, csv_interval=1)
     queue = MockQueue(data)
     fixture.process_queue(queue)
     assert fixture.tpch_totals() == (1, 1, 1)
@@ -173,7 +173,7 @@ def test_tpch_totals():
             ('tpch', {'stream': 3, 'query': 1, 'status': 'ERROR', 'runtime': 0.4}),
     ]
     # yapf: enable
-    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=4, tpcc_csv_interval=1)
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=4, csv_interval=1)
     queue = MockQueue(data)
     fixture.process_queue(queue)
     assert fixture.tpch_totals() == (2, 2, 1)

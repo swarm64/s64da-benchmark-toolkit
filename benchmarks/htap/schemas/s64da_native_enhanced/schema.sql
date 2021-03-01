@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS customer (
   c_id int NOT NULL,
   c_d_id smallint NOT NULL,
   c_w_id smallint NOT NULL,
+  c_nationkey int NOT NULL,
   c_first varchar(16),
   c_middle char(2),
   c_last varchar(16),

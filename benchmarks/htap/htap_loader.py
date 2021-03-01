@@ -100,14 +100,17 @@ class TPCCLoader():
         c_last = self.tpcc_text.lastname(c_id - 1) if c_id < 1000 else \
             self.tpcc_text.lastname(self.random.nurand(255, 0, 999))
 
+        state = self.tpcc_text.state()
+
         return self.row_for_copy([
             c_id, d_id, self.warehouse_id,
+            ord(state[0]),
             self.tpcc_text.string(self.random.randint_inclusive(2, 10), prefix='first-'),
             'OE', c_last,
             self.tpcc_text.string(10, prefix='street1-'),
             self.tpcc_text.string(10, prefix='street2-'),
             self.tpcc_text.string(10, prefix='city-'),
-            self.tpcc_text.state(),
+            state,
             self.tpcc_text.numstring(5, prefix='zip-'),
             self.tpcc_text.numstring(16), self.start_date,
             'GC' if self.random.randint_inclusive(1, 100) > 10 else 'BC', 50000,

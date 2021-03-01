@@ -2,7 +2,6 @@ CREATE INDEX idx_customer ON customer (
     c_w_id
   , c_d_id
   , c_last
-  , c_first
 );
 
 CREATE INDEX idx_orders ON orders (
@@ -12,27 +11,7 @@ CREATE INDEX idx_orders ON orders (
   , o_id
 );
 
-CREATE INDEX fkey_stock ON stock (
-    s_i_id
-);
-
 CREATE INDEX fkey_order_line ON order_line (
     ol_supply_w_id
   , ol_i_id
-);
-
-CREATE INDEX fkey_history_1 ON history (
-    h_c_w_id
-  , h_c_d_id
-  , h_c_id
-);
-
-CREATE INDEX fkey_history_2 ON history (
-    h_w_id
-  , h_d_id
-);
-
-CREATE INDEX idx_district ON district (
-    d_id
-  , d_w_id
 );

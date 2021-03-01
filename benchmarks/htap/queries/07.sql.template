@@ -2,7 +2,7 @@
 -- EXPLAIN (FORMAT JSON)
 select
     su_nationkey as supp_nation,
-    substr(c_state, 1, 1) as cust_nation,
+    c_nationkey,
     extract(year from o_entry_d) as l_year,
     sum(ol_amount) as revenue
 from
@@ -24,7 +24,7 @@ where
     and c_w_id = o_w_id
     and c_d_id = o_d_id
     and su_nationkey = n1.n_nationkey
-    and ascii(substr(c_state, 1, 1)) = n2.n_nationkey
+    and c_nationkey = n2.n_nationkey
     and (
         (n1.n_name = 'Germany' and n2.n_name = 'Cambodia')
         or
@@ -34,9 +34,9 @@ where
     and o_entry_d >= '$min_date'
 group by
     su_nationkey,
-    substr(c_state, 1, 1),
+    c_nationkey,
     extract(year from o_entry_d)
 order by
     su_nationkey,
-    cust_nation,
+    c_nationkey,
     l_year;

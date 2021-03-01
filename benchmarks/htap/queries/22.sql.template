@@ -3,7 +3,7 @@
 -- no customers who never ordered.
 -- EXPLAIN (FORMAT JSON)
 select
-    substr(c_state, 1, 1) as country,
+    c_nationkey,
     count(*) as numcust,
     sum(c_balance) as totacctbal
 from
@@ -32,6 +32,6 @@ where
             and o_entry_d >= '$min_date'
     )
 group by
-    substr(c_state, 1, 1)
+    c_nationkey
 order by
-    substr(c_state, 1, 1);
+    c_nationkey;
