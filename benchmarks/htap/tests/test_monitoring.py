@@ -15,13 +15,16 @@ class MockQueue:
     def get(self):
         return self.data.pop(0)
 
+
 dsn = "postgresql://postgres@127.0.0.1/htap"
+
 
 def fill_waiting_queries(stats):
     for query in range(22):
-        if not (query+1) in stats['queries']:
-            stats['queries'][query+1] = {'runtime': 0, 'status': 'Waiting'}
+        if not (query + 1) in stats["queries"]:
+            stats["queries"][query + 1] = {"runtime": 0, "status": "Waiting"}
     return stats
+
 
 def test_storage():
     fixture = Stats(dsn, num_oltp_slots=4, num_olap_slots=0, csv_interval=1)
@@ -64,17 +67,27 @@ def test_storage():
     # 1 surviving sample with 1tps and 1 with 2 tps, avg floored is therefore 1
     assert fixture.tpcc_tps(1) == (2, 0, 0, 2)
     # 3 tps @ 11s, 2tps @ 12
-    assert fixture.tpcc_tps('ok') == (2, 0, 0, 3)
+    assert fixture.tpcc_tps("ok") == (2, 0, 0, 3)
 
     assert fixture.tpcc_latency(2) == (20, 20, 20, 20)
     assert fixture.tpcc_latency(3) == (30, 30, 30, 30)
     assert fixture.tpcc_latency(4) == (40, 40, 40, 40)
-    assert fixture.tpcc_latency(1) == (1000, 100, int((100+100+100+100+1000)/5), 1000)
-    assert fixture.tpcc_latency('ok') == (1000, 20, int((100+20+30+100+100+100+1000)/7), 1000)
-    
-    assert fixture.tpcc_total('ok') == 8
+    assert fixture.tpcc_latency(1) == (
+        1000,
+        100,
+        int((100 + 100 + 100 + 100 + 1000) / 5),
+        1000,
+    )
+    assert fixture.tpcc_latency("ok") == (
+        1000,
+        20,
+        int((100 + 20 + 30 + 100 + 100 + 100 + 1000) / 7),
+        1000,
+    )
+
+    assert fixture.tpcc_total("ok") == 8
     assert fixture.tpcc_total(1) == 6
-    assert fixture.tpcc_total('error') == 1
+    assert fixture.tpcc_total("error") == 1
 
     # yapf: disable
     data = [
@@ -122,6 +135,7 @@ def test_storage():
     }
     assert fixture.tpch_stats_for_stream_id(3) == fill_waiting_queries(expected)
     # yapf: enable
+
 
 def test_tpch_totals():
     fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, csv_interval=1)

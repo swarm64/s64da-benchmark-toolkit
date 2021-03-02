@@ -16,38 +16,39 @@ from .helpers import TPCH_DATE_RANGE
 
 from s64da_benchmark_toolkit.db import Status, DB, Timing
 
-TEMPLATE_DIR = path.join('benchmarks', 'htap', 'queries')
+TEMPLATE_DIR = path.join("benchmarks", "htap", "queries")
 
 QUERY_TEMPLATES = {
-     1: Template(open(path.join(TEMPLATE_DIR, '01.sql.template'), 'r').read()),
-     2: Template(open(path.join(TEMPLATE_DIR, '02.sql.template'), 'r').read()),
-     3: Template(open(path.join(TEMPLATE_DIR, '03.sql.template'), 'r').read()),
-     4: Template(open(path.join(TEMPLATE_DIR, '04.sql.template'), 'r').read()),
-     5: Template(open(path.join(TEMPLATE_DIR, '05.sql.template'), 'r').read()),
-     6: Template(open(path.join(TEMPLATE_DIR, '06.sql.template'), 'r').read()),
-     7: Template(open(path.join(TEMPLATE_DIR, '07.sql.template'), 'r').read()),
-     8: Template(open(path.join(TEMPLATE_DIR, '08.sql.template'), 'r').read()),
-     9: Template(open(path.join(TEMPLATE_DIR, '09.sql.template'), 'r').read()),
-    10: Template(open(path.join(TEMPLATE_DIR, '10.sql.template'), 'r').read()),
-    11: Template(open(path.join(TEMPLATE_DIR, '11.sql.template'), 'r').read()),
-    12: Template(open(path.join(TEMPLATE_DIR, '12.sql.template'), 'r').read()),
-    13: Template(open(path.join(TEMPLATE_DIR, '13.sql.template'), 'r').read()),
-    14: Template(open(path.join(TEMPLATE_DIR, '14.sql.template'), 'r').read()),
-    15: Template(open(path.join(TEMPLATE_DIR, '15.sql.template'), 'r').read()),
-    16: Template(open(path.join(TEMPLATE_DIR, '16.sql.template'), 'r').read()),
-    17: Template(open(path.join(TEMPLATE_DIR, '17.sql.template'), 'r').read()),
-    18: Template(open(path.join(TEMPLATE_DIR, '18.sql.template'), 'r').read()),
-    19: Template(open(path.join(TEMPLATE_DIR, '19.sql.template'), 'r').read()),
-    20: Template(open(path.join(TEMPLATE_DIR, '20.sql.template'), 'r').read()),
-    21: Template(open(path.join(TEMPLATE_DIR, '21.sql.template'), 'r').read()),
-    22: Template(open(path.join(TEMPLATE_DIR, '22.sql.template'), 'r').read()),
+    1: Template(open(path.join(TEMPLATE_DIR, "01.sql.template"), "r").read()),
+    2: Template(open(path.join(TEMPLATE_DIR, "02.sql.template"), "r").read()),
+    3: Template(open(path.join(TEMPLATE_DIR, "03.sql.template"), "r").read()),
+    4: Template(open(path.join(TEMPLATE_DIR, "04.sql.template"), "r").read()),
+    5: Template(open(path.join(TEMPLATE_DIR, "05.sql.template"), "r").read()),
+    6: Template(open(path.join(TEMPLATE_DIR, "06.sql.template"), "r").read()),
+    7: Template(open(path.join(TEMPLATE_DIR, "07.sql.template"), "r").read()),
+    8: Template(open(path.join(TEMPLATE_DIR, "08.sql.template"), "r").read()),
+    9: Template(open(path.join(TEMPLATE_DIR, "09.sql.template"), "r").read()),
+    10: Template(open(path.join(TEMPLATE_DIR, "10.sql.template"), "r").read()),
+    11: Template(open(path.join(TEMPLATE_DIR, "11.sql.template"), "r").read()),
+    12: Template(open(path.join(TEMPLATE_DIR, "12.sql.template"), "r").read()),
+    13: Template(open(path.join(TEMPLATE_DIR, "13.sql.template"), "r").read()),
+    14: Template(open(path.join(TEMPLATE_DIR, "14.sql.template"), "r").read()),
+    15: Template(open(path.join(TEMPLATE_DIR, "15.sql.template"), "r").read()),
+    16: Template(open(path.join(TEMPLATE_DIR, "16.sql.template"), "r").read()),
+    17: Template(open(path.join(TEMPLATE_DIR, "17.sql.template"), "r").read()),
+    18: Template(open(path.join(TEMPLATE_DIR, "18.sql.template"), "r").read()),
+    19: Template(open(path.join(TEMPLATE_DIR, "19.sql.template"), "r").read()),
+    20: Template(open(path.join(TEMPLATE_DIR, "20.sql.template"), "r").read()),
+    21: Template(open(path.join(TEMPLATE_DIR, "21.sql.template"), "r").read()),
+    22: Template(open(path.join(TEMPLATE_DIR, "22.sql.template"), "r").read()),
 }
+
 
 class Queries:
     def __init__(self, stream_id, args, min_timestamp, latest_timestamp, stats_queue):
         self.random = Random(stream_id)
         self.stream_id = stream_id
-        with open('benchmarks/htap/queries/streams.yaml', 'r') as streams_file:
+        with open("benchmarks/htap/queries/streams.yaml", "r") as streams_file:
             sequence = yaml.load(streams_file.read(), Loader=yaml.FullLoader)[stream_id]
             self.next_query_it = cycle(sequence)
         self.min_timestamp = min_timestamp
@@ -65,36 +66,54 @@ class Queries:
 
     def _query_args(self, query_id):
         if query_id == 1:
-            return {'date': isoparse('1998-09-22')} # 1998-12-01 - 70 days
+            return {"date": isoparse("1998-09-22")}  # 1998-12-01 - 70 days
         elif query_id == 3:
-            return {'date': isoparse('1995-03-07')}
+            return {"date": isoparse("1995-03-07")}
         elif query_id == 4:
-            return {'begin_date': isoparse('1994-01-01'), 
-                    'end_date': isoparse('1994-04-01')}
+            return {
+                "begin_date": isoparse("1994-01-01"),
+                "end_date": isoparse("1994-04-01"),
+            }
         elif query_id == 5:
-            return {'begin_date': isoparse('1993-01-01'), 
-                    'end_date': isoparse('1994-01-01')}
+            return {
+                "begin_date": isoparse("1993-01-01"),
+                "end_date": isoparse("1994-01-01"),
+            }
         elif query_id == 6:
-            return {'begin_date': isoparse('1993-01-01'), 
-                    'end_date': isoparse('1994-01-01')}
+            return {
+                "begin_date": isoparse("1993-01-01"),
+                "end_date": isoparse("1994-01-01"),
+            }
         elif query_id == 7 or query_id == 8:
-            return {'begin_date': isoparse('1995-01-01'), 
-                    'end_date': isoparse('1996-12-31')}
+            return {
+                "begin_date": isoparse("1995-01-01"),
+                "end_date": isoparse("1996-12-31"),
+            }
         elif query_id == 10:
-            return {'begin_date': isoparse('1993-07-01'), 
-                    'end_date': isoparse('1993-10-01')}
+            return {
+                "begin_date": isoparse("1993-07-01"),
+                "end_date": isoparse("1993-10-01"),
+            }
         elif query_id == 12:
-            return {'begin_date': isoparse('1996-01-01'), 
-                    'end_date': isoparse('1997-01-01')}
+            return {
+                "begin_date": isoparse("1996-01-01"),
+                "end_date": isoparse("1997-01-01"),
+            }
         elif query_id == 14:
-            return {'begin_date': isoparse('1996-01-01'), 
-                    'end_date': isoparse('1996-02-01')}
+            return {
+                "begin_date": isoparse("1996-01-01"),
+                "end_date": isoparse("1996-02-01"),
+            }
         elif query_id == 15:
-            return {'begin_date': isoparse('1995-10-01'), 
-                    'end_date': isoparse('1996-01-01')}
+            return {
+                "begin_date": isoparse("1995-10-01"),
+                "end_date": isoparse("1996-01-01"),
+            }
         elif query_id == 20:
-            return {'begin_date': isoparse('1994-01-01'), 
-                    'end_date': isoparse('1995-04-01')}
+            return {
+                "begin_date": isoparse("1994-01-01"),
+                "end_date": isoparse("1995-04-01"),
+            }
         else:
             return {}
 
@@ -103,19 +122,26 @@ class Queries:
         query_args = self._query_args(query_id)
         for [arg, date] in query_args.items():
             query_args[arg] = self.tpch_date_to_benchmark_date(date)
-        query_args['min_date'] = self.tpch_date_to_benchmark_date(TPCH_DATE_RANGE[0])
+        query_args["min_date"] = self.tpch_date_to_benchmark_date(TPCH_DATE_RANGE[0])
         return query_template.substitute(**query_args)
 
     def wait_until_enough_data(self, query_id):
         wanted_range = TPCH_DATE_RANGE[1] - TPCH_DATE_RANGE[0]
         while True:
-            available_data = datetime.fromtimestamp(self.latest_timestamp.value) - self.min_timestamp
+            available_data = (
+                datetime.fromtimestamp(self.latest_timestamp.value) - self.min_timestamp
+            )
             if available_data < wanted_range:
-                self.stats_queue.put(('tpch', {
-                    'query': query_id,
-                    'stream': self.stream_id,
-                    'status': 'Waiting'
-                }))
+                self.stats_queue.put(
+                    (
+                        "tpch",
+                        {
+                            "query": query_id,
+                            "stream": self.stream_id,
+                            "status": "Waiting",
+                        },
+                    )
+                )
                 time.sleep(1)
             else:
                 return
@@ -130,49 +156,59 @@ class Queries:
                 processed += processed_child
         return (planned, processed)
 
-
     def run_next_query(self):
         query_id = next(self.next_query_it)
         sql = self.get_query(query_id)
 
         self.wait_until_enough_data(query_id)
 
-        self.stats_queue.put(('tpch', {
-            'query': query_id,
-            'stream': self.stream_id,
-            'status': 'Running'
-        }))
+        self.stats_queue.put(
+            ("tpch", {"query": query_id, "stream": self.stream_id, "status": "Running"})
+        )
 
         if not self.args.dry_run:
             db = DB(self.args.dsn)
             timing, _, plan = DB(self.args.dsn).run_query(
-                    sql, self.args.olap_timeout*1000,
-                    self.args.explain_analyze, self.args.use_server_side_cursors)
+                sql,
+                self.args.olap_timeout * 1000,
+                self.args.explain_analyze,
+                self.args.use_server_side_cursors,
+            )
 
             # sum up rows processed
             planned_rows, processed_rows = self.parse_plan(json.loads(plan)[0]["Plan"])
 
-            self.stats_queue.put(('tpch', {
-                'query': query_id,
-                'stream': self.stream_id,
-                'status': timing.status.name,
-                'runtime': timing.stop - timing.start,
-                'planned_rows': planned_rows,
-                'processed_rows': processed_rows
-            }))
+            self.stats_queue.put(
+                (
+                    "tpch",
+                    {
+                        "query": query_id,
+                        "stream": self.stream_id,
+                        "status": timing.status.name,
+                        "runtime": timing.stop - timing.start,
+                        "planned_rows": planned_rows,
+                        "processed_rows": processed_rows,
+                    },
+                )
+            )
 
             # save plan output
-            plan_file =  f'{self.stream_id}_{query_id}.txt'
-            plan_dir = f'results/query_plans'
+            plan_file = f"{self.stream_id}_{query_id}.txt"
+            plan_dir = f"results/query_plans"
             os.makedirs(plan_dir, exist_ok=True)
-            with open(f'{plan_dir}/{plan_file}', 'w') as f:
+            with open(f"{plan_dir}/{plan_file}", "w") as f:
                 f.write(plan)
         else:
             # Artificially slow down queries in dry-run mode to allow monitoring to keep up
             time.sleep(0.01)
-            self.stats_queue.put(('tpch', {
-                'query': query_id,
-                'stream': self.stream_id,
-                'status': 'OK',
-                'runtime': 0.001
-            }))
+            self.stats_queue.put(
+                (
+                    "tpch",
+                    {
+                        "query": query_id,
+                        "stream": self.stream_id,
+                        "status": "OK",
+                        "runtime": 0.001,
+                    },
+                )
+            )

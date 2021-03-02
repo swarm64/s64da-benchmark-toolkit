@@ -6,5 +6,9 @@ import sys
 
 def check_program_exists(program):
     if which(program) is None:
-        print('ERROR: Could not find {}. Is it installed? Is PATH setup properly?'.format(program))
+        print(
+            "ERROR: Could not find {}. Is it installed? Is PATH setup properly?".format(
+                program
+            )
+        )
         sys.exit()
