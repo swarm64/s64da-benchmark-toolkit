@@ -9,7 +9,7 @@ from datetime import datetime
 import multiprocessing
 
 # see section 4.2.2.12, page 81 of http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v2.17.2.pdf
-TPCH_DATE_RANGE = [isoparse('1992-01-01'), isoparse('1998-12-31')]
+TPCH_DATE_RANGE = [isoparse("1992-01-01"), isoparse("1998-12-31")]
 
 # see http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-c_v5.11.0.pdf page 62
 # and to check resulting sizes after ingest, use figure 1.2.1 on page 11
@@ -27,21 +27,21 @@ NUM_SUPPLIERS = 10000
 NUM_NATIONS = 62
 NUM_REGIONS = 5
 
-ALPHA_LOWER = list('abcdefghijklmnopqrstuvwxyz')
+ALPHA_LOWER = list("abcdefghijklmnopqrstuvwxyz")
 
-ALPHA_UPPER = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+ALPHA_UPPER = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-NUM = list('0123456789')
+NUM = list("0123456789")
 
 ALPHA = ALPHA_LOWER + ALPHA_UPPER
 
-ALPHA54 = ALPHA_LOWER + list('?@') + ALPHA_UPPER
+ALPHA54 = ALPHA_LOWER + list("?@") + ALPHA_UPPER
 
 ALPHANUM = ALPHA + NUM
 
 ALPHANUM64 = ALPHA54 + NUM
 
-NAMES = ['BAR', 'OUGHT', 'ABLE', 'PRI', 'PRES', 'ESE', 'ANTI', 'CALLY', 'ATION', 'EING']
+NAMES = ["BAR", "OUGHT", "ABLE", "PRI", "PRES", "ESE", "ANTI", "CALLY", "ATION", "EING"]
 
 # yapf: disable
 NATIONS = [
@@ -73,53 +73,225 @@ NATIONS = [
 ]
 # yapf: enable
 
-REGIONS = [(1, 'Africa'), (2, 'America'), (3, 'Asia'), (4, 'Australia'), (5, 'Europe')]
+REGIONS = [(1, "Africa"), (2, "America"), (3, "Asia"), (4, "Australia"), (5, "Europe")]
 
 NOUNS = [
-        'foxes', 'ideas', 'theodolites', 'pinto beans', 'instructions', 'dependencies', 'excuses',
-        'platelets', 'asymptotes', 'courts', 'dolphins', 'multipliers', 'sauternes', 'warthogs',
-        'frets', 'dinos', 'attainments', 'somas', 'Tiresias', 'patterns', 'forges', 'braids',
-        'hockey players', 'frays', 'warhorses', 'dugouts', 'notornis', 'epitaphs', 'pearls',
-        'tithes', 'waters', 'orbits', 'gifts', 'sheaves', 'depths', 'sentiments', 'decoys',
-        'realms', 'pains', 'grouches', 'escapades'
+    "foxes",
+    "ideas",
+    "theodolites",
+    "pinto beans",
+    "instructions",
+    "dependencies",
+    "excuses",
+    "platelets",
+    "asymptotes",
+    "courts",
+    "dolphins",
+    "multipliers",
+    "sauternes",
+    "warthogs",
+    "frets",
+    "dinos",
+    "attainments",
+    "somas",
+    "Tiresias",
+    "patterns",
+    "forges",
+    "braids",
+    "hockey players",
+    "frays",
+    "warhorses",
+    "dugouts",
+    "notornis",
+    "epitaphs",
+    "pearls",
+    "tithes",
+    "waters",
+    "orbits",
+    "gifts",
+    "sheaves",
+    "depths",
+    "sentiments",
+    "decoys",
+    "realms",
+    "pains",
+    "grouches",
+    "escapades",
 ]
 
 VERBS = [
-        'sleep', 'wake', 'are', 'cajole', 'haggle', 'nag', 'use', 'boost', 'affix', 'detect',
-        'integrate', 'maintain', 'nod', 'was', 'lose', 'sublate', 'solve', 'thrash', 'promise',
-        'engage', 'hinder', 'print', 'x-ray', 'breach', 'eat', 'grow', 'impress', 'mold', 'poach',
-        'serve', 'run', 'dazzle', 'snooze', 'doze', 'unwind', 'kindle', 'play', 'hang', 'believe',
-        'doubt'
+    "sleep",
+    "wake",
+    "are",
+    "cajole",
+    "haggle",
+    "nag",
+    "use",
+    "boost",
+    "affix",
+    "detect",
+    "integrate",
+    "maintain",
+    "nod",
+    "was",
+    "lose",
+    "sublate",
+    "solve",
+    "thrash",
+    "promise",
+    "engage",
+    "hinder",
+    "print",
+    "x-ray",
+    "breach",
+    "eat",
+    "grow",
+    "impress",
+    "mold",
+    "poach",
+    "serve",
+    "run",
+    "dazzle",
+    "snooze",
+    "doze",
+    "unwind",
+    "kindle",
+    "play",
+    "hang",
+    "believe",
+    "doubt",
 ]
 
 ADJECTIVES = [
-        'furious', 'sly', 'careful', 'blithe', 'quick', 'fluffy', 'slow', 'quiet', 'ruthless',
-        'thin', 'close', 'dogged', 'daring', 'brave', 'stealthy', 'permanent', 'enticing', 'idle',
-        'busy', 'regular', 'final', 'ironic', 'even', 'bold', 'silent'
+    "furious",
+    "sly",
+    "careful",
+    "blithe",
+    "quick",
+    "fluffy",
+    "slow",
+    "quiet",
+    "ruthless",
+    "thin",
+    "close",
+    "dogged",
+    "daring",
+    "brave",
+    "stealthy",
+    "permanent",
+    "enticing",
+    "idle",
+    "busy",
+    "regular",
+    "final",
+    "ironic",
+    "even",
+    "bold",
+    "silent",
 ]
 
 ADVERBS = [
-        'sometimes', 'always', 'never', 'furiously', 'slyly', 'carefully', 'blithely', 'quickly',
-        'fluffily', 'slowly', 'quietly', 'ruthlessly', 'thinly', 'closely', 'doggedly', 'daringly',
-        'bravely', 'stealthily', 'permanently', 'enticingly', 'idly', 'busily', 'regularly',
-        'finally', 'ironically', 'evenly', 'boldly', 'silently'
+    "sometimes",
+    "always",
+    "never",
+    "furiously",
+    "slyly",
+    "carefully",
+    "blithely",
+    "quickly",
+    "fluffily",
+    "slowly",
+    "quietly",
+    "ruthlessly",
+    "thinly",
+    "closely",
+    "doggedly",
+    "daringly",
+    "bravely",
+    "stealthily",
+    "permanently",
+    "enticingly",
+    "idly",
+    "busily",
+    "regularly",
+    "finally",
+    "ironically",
+    "evenly",
+    "boldly",
+    "silently",
 ]
 
 PREPOSITIONS = [
-        'about', 'above', 'according to', 'across', 'after', 'against', 'along', 'alongside of',
-        'among', 'around', 'at', 'atop', 'before', 'behind', 'beneath', 'beside', 'besides',
-        'between', 'beyond', 'by', 'despite', 'during', 'except', 'for', 'from', 'in place of',
-        'inside', 'instead of', 'into', 'near', 'of', 'on', 'outside', 'over', 'past', 'since',
-        'through', 'throughout', 'to', 'toward', 'under', 'until', 'up', 'upon', 'without', 'with',
-        'within'
+    "about",
+    "above",
+    "according to",
+    "across",
+    "after",
+    "against",
+    "along",
+    "alongside of",
+    "among",
+    "around",
+    "at",
+    "atop",
+    "before",
+    "behind",
+    "beneath",
+    "beside",
+    "besides",
+    "between",
+    "beyond",
+    "by",
+    "despite",
+    "during",
+    "except",
+    "for",
+    "from",
+    "in place of",
+    "inside",
+    "instead of",
+    "into",
+    "near",
+    "of",
+    "on",
+    "outside",
+    "over",
+    "past",
+    "since",
+    "through",
+    "throughout",
+    "to",
+    "toward",
+    "under",
+    "until",
+    "up",
+    "upon",
+    "without",
+    "with",
+    "within",
 ]
 
-TERMINATORS = ['.', ';', ':', '?', '!', '--']
+TERMINATORS = [".", ";", ":", "?", "!", "--"]
 
 AUXILIARIES = [
-        'do', 'may', 'might', 'shall', 'will', 'would', 'can', 'could', 'should', 'ought to',
-        'must', 'will have to', 'shall have to', 'could have to', 'should have to', 'must have to',
-        'need to', 'try to'
+    "do",
+    "may",
+    "might",
+    "shall",
+    "will",
+    "would",
+    "can",
+    "could",
+    "should",
+    "ought to",
+    "must",
+    "will have to",
+    "shall have to",
+    "could have to",
+    "should have to",
+    "must have to",
+    "need to",
+    "try to",
 ]
 
 
@@ -139,7 +311,10 @@ class Random:
         elif A == 8191:
             C = self.C_8191
 
-        return (((self.rng.randint(0, A + 1) | self.rng.randint(x, y + 1)) + C) % (y - x + 1)) + x
+        return (
+            ((self.rng.randint(0, A + 1) | self.rng.randint(x, y + 1)) + C)
+            % (y - x + 1)
+        ) + x
 
     def decision(self, frac):
         return self.rng.random() < frac
@@ -170,28 +345,28 @@ class TPCCText:
         part_c = NAMES[num % 10]
         return part_a + part_b + part_c
 
-    def string(self, length, prefix=''):
-        return prefix + ''.join(self.random.from_list(ALPHA, length))
+    def string(self, length, prefix=""):
+        return prefix + "".join(self.random.from_list(ALPHA, length))
 
-    def numstring(self, length, prefix=''):
-        return prefix + ''.join(self.random.from_list(NUM, length))
+    def numstring(self, length, prefix=""):
+        return prefix + "".join(self.random.from_list(NUM, length))
 
-    def alnumstring(self, length, prefix=''):
-        return prefix + ''.join(self.random.from_list(ALPHANUM, length))
+    def alnumstring(self, length, prefix=""):
+        return prefix + "".join(self.random.from_list(ALPHANUM, length))
 
-    def alnum64string(self, length, prefix=''):
-        return prefix + ''.join(self.random.from_list(ALPHANUM64, length))
+    def alnum64string(self, length, prefix=""):
+        return prefix + "".join(self.random.from_list(ALPHANUM64, length))
 
     def data(self, min_length, max_length):
         length = self.random.randint_inclusive(min_length, max_length)
         return self.alnum64string(length)
 
     def data_original(self, min_length, max_length):
-        original = 'ORIGINAL'
+        original = "ORIGINAL"
         length = self.random.randint_inclusive(min_length, max_length - len(original))
         alphanum64 = self.alnum64string(length)
         l1 = self.random.randint_inclusive(0, length - len(original))
-        return '{}{}{}'.format(alphanum64[0:l1], original, alphanum64[l1:length])
+        return "{}{}{}".format(alphanum64[0:l1], original, alphanum64[l1:length])
 
     def state(self):
         return self.alnumstring(2).upper()
@@ -226,62 +401,66 @@ class TPCHText:
         if self.random.decision(1 / 4):
             return self.random_noun()
         elif self.random.decision(1 / 4):
-            return f'{self.random_adjective()} {self.random_noun()}'
+            return f"{self.random_adjective()} {self.random_noun()}"
         elif self.random.decision(1 / 4):
-            return f'{self.random_adjective()}, {self.random_adjective()} {self.random_noun()}'
+            return f"{self.random_adjective()}, {self.random_adjective()} {self.random_noun()}"
         else:
-            return f'{self.random_adverb()} {self.random_adjective()} {self.random_noun()}'
+            return (
+                f"{self.random_adverb()} {self.random_adjective()} {self.random_noun()}"
+            )
 
     def random_verb_phrase(self):
         if self.random.decision(1 / 4):
             return self.random_verb()
         elif self.random.decision(1 / 4):
-            return f'{self.random_auxiliary()} {self.random_verb()}'
+            return f"{self.random_auxiliary()} {self.random_verb()}"
         elif self.random.decision(1 / 4):
-            return f'{self.random_verb()} {self.random_adverb()}'
+            return f"{self.random_verb()} {self.random_adverb()}"
         else:
-            return f'{self.random_auxiliary()} {self.random_verb()} {self.random_adverb()}'
+            return (
+                f"{self.random_auxiliary()} {self.random_verb()} {self.random_adverb()}"
+            )
 
     def random_prepositional_phrase(self):
-        return f'{self.random_preposition()} the {self.random_noun_phrase()}'
+        return f"{self.random_preposition()} the {self.random_noun_phrase()}"
 
     def random_sentence(self):
         if self.random.decision(1 / 5):
             return (
-                    f'{self.random_verb_phrase()} {self.random_noun_phrase()} '
-                    f'{self.random_terminator()}'
+                f"{self.random_verb_phrase()} {self.random_noun_phrase()} "
+                f"{self.random_terminator()}"
             )
         elif self.random.decision(1 / 5):
             return (
-                    f'{self.random_noun_phrase()} {self.random_verb_phrase()} '
-                    f'{self.random_prepositional_phrase()} {self.random_terminator()}'
+                f"{self.random_noun_phrase()} {self.random_verb_phrase()} "
+                f"{self.random_prepositional_phrase()} {self.random_terminator()}"
             )
         elif self.random.decision(1 / 5):
             return (
-                    f'{self.random_noun_phrase()} {self.random_verb_phrase()} '
-                    f'{self.random_noun_phrase()} {self.random_terminator()}'
+                f"{self.random_noun_phrase()} {self.random_verb_phrase()} "
+                f"{self.random_noun_phrase()} {self.random_terminator()}"
             )
         elif self.random.decision(1 / 5):
             return (
-                    f'{self.random_noun_phrase()} {self.random_prepositional_phrase()} '
-                    f'{self.random_verb_phrase()} {self.random_noun_phrase()}'
-                    f'{self.random_terminator()}'
+                f"{self.random_noun_phrase()} {self.random_prepositional_phrase()} "
+                f"{self.random_verb_phrase()} {self.random_noun_phrase()}"
+                f"{self.random_terminator()}"
             )
         else:
             return (
-                    f'{self.random_noun_phrase()} {self.random_prepositional_phrase()} '
-                    f'{self.random_verb_phrase()} {self.random_prepositional_phrase()}'
-                    f'{self.random_terminator()}'
+                f"{self.random_noun_phrase()} {self.random_prepositional_phrase()} "
+                f"{self.random_verb_phrase()} {self.random_prepositional_phrase()}"
+                f"{self.random_terminator()}"
             )
 
     def random_text(self, length):
-        text = ''
+        text = ""
         for i in range(25):
             if i != 0:
-                text += ':'
+                text += ":"
             text += self.random_sentence()
         pos = self.random.randint_inclusive(0, len(text) - length)
-        return text[pos:pos + length]
+        return text[pos : pos + length]
 
     def random_length_text(self, min_length, max_length):
         random_length = self.random.randint_inclusive(min_length, max_length)
@@ -292,8 +471,8 @@ class TPCHText:
         l1 = self.random.randint_inclusive(0, total_length - 8 - len(action))
         l2 = self.random.randint_inclusive(0, total_length - l1 - 8 - len(action))
         l3 = total_length - l1 - l2 - 8 - len(action)
-        return '{}Customer{}{}{}'.format(
-                self.random_text(l1), self.random_text(l2), action, self.random_text(l3)
+        return "{}Customer{}{}{}".format(
+            self.random_text(l1), self.random_text(l2), action, self.random_text(l3)
         )
 
     def random_phone_number(self, key):
@@ -301,11 +480,11 @@ class TPCHText:
         local1 = self.random.randint_inclusive(100, 999)
         local2 = self.random.randint_inclusive(100, 999)
         local3 = self.random.randint_inclusive(1000, 9999)
-        return '{}-{}-{}-{}'.format(country, local1, local2, local3)
+        return "{}-{}-{}-{}".format(country, local1, local2, local3)
 
 
 class TimestampGenerator:
-    def __init__(self, start_date, random, scalar = 1.0):
+    def __init__(self, start_date, random, scalar=1.0):
         # use the start date as value directly so that we can easily use shared counters
         # as well by simply feeding in the right type
         self.current = start_date
@@ -322,10 +501,14 @@ class TimestampGenerator:
             return self.current
         elif isinstance(self.current, multiprocessing.sharedctypes.Synchronized):
             with self.current.get_lock():
-                self.current.value += self.increment.total_seconds() * self.random.gaussian(mean=1, variance=0.05)
+                self.current.value += (
+                    self.increment.total_seconds()
+                    * self.random.gaussian(mean=1, variance=0.05)
+                )
                 return datetime.fromtimestamp(self.current.value)
         else:
             raise ValueError("Unsupported datatype for TimestampGenerator")
+
 
 # Taken from CPython 3.7 for compatibility with Python 3.6
 class nullcontext(AbstractContextManager):
@@ -346,11 +529,12 @@ class nullcontext(AbstractContextManager):
     def __exit__(self, *excinfo):
         pass
 
+
 # from https://hakibenita.com/fast-load-data-python-postgresql
 class StringIteratorIO(io.TextIOBase):
     def __init__(self, iter: Iterator[str]):
         self._iter = iter
-        self._buff = ''
+        self._buff = ""
 
     def readable(self) -> bool:
         return True
@@ -362,7 +546,7 @@ class StringIteratorIO(io.TextIOBase):
             except StopIteration:
                 break
         ret = self._buff[:n]
-        self._buff = self._buff[len(ret):]
+        self._buff = self._buff[len(ret) :]
         return ret
 
     def read(self, n: Optional[int] = None) -> str:
@@ -380,4 +564,4 @@ class StringIteratorIO(io.TextIOBase):
                     break
                 n -= len(m)
                 line.append(m)
-        return ''.join(line)
+        return "".join(line)

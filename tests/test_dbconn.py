@@ -1,4 +1,3 @@
-
 import time
 
 import psycopg2
@@ -6,7 +5,7 @@ import pytest
 
 from s64da_benchmark_toolkit import dbconn
 
-DSN = 'postgresql://postgres@nowhere/foodb'
+DSN = "postgresql://postgres@nowhere/foodb"
 
 
 @pytest.fixture
@@ -14,11 +13,11 @@ def nosleep(monkeypatch):
     def sleep(seconds):
         pass
 
-    monkeypatch.setattr(time, 'sleep', sleep)
+    monkeypatch.setattr(time, "sleep", sleep)
 
 
 def test_dbconn_connect_success(nosleep, mocker):
-    psycopg2_connect = mocker.patch('psycopg2.connect')
+    psycopg2_connect = mocker.patch("psycopg2.connect")
     mock_conn = psycopg2_connect.return_value
     mock_cursor = mock_conn.cursor.return_value
 
@@ -32,8 +31,9 @@ def test_dbconn_connect_success(nosleep, mocker):
 
 
 def test_dbconn_connect_fail(nosleep, mocker):
-    psycopg2_connect = mocker.patch('psycopg2.connect',
-                                    side_effect=psycopg2.Error('Just an error...'))
+    psycopg2_connect = mocker.patch(
+        "psycopg2.connect", side_effect=psycopg2.Error("Just an error...")
+    )
 
     num_retries = 10
     with pytest.raises(AssertionError):

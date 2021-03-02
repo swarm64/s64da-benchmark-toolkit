@@ -1,4 +1,3 @@
-
 import pytest
 import pandas
 
@@ -9,7 +8,7 @@ from s64da_benchmark_toolkit.correctness import Correctness, ResultDetail
 
 # Acceptance test for correctness checking
 
-CSV_BASE = '''cnt,state,value
+CSV_BASE = """cnt,state,value
 20,HI,1.0
 45,RI,100000000000000000.0
 59,CT,123
@@ -23,10 +22,10 @@ CSV_BASE = '''cnt,state,value
 ,MO,NaN
 1055,KS,
 2420,TX,1024
--1,FOO,9999999999.139413000000000000000000000000001'''
+-1,FOO,9999999999.139413000000000000000000000000001"""
 
-CSV_ERRORS_IDX = [3, 4, 8] # after sorting
-CSV_ERRORS = '''cnt,state,value
+CSV_ERRORS_IDX = [3, 4, 8]  # after sorting
+CSV_ERRORS = """cnt,state,value
 20,HI,1.0
 45,RI,
 101,NH,451
@@ -40,10 +39,10 @@ CSV_ERRORS = '''cnt,state,value
 ,MO,
 1055,KS,
 2420,TX,1024
--1,FOO,9999999999.139413000000000000000000000000001'''
+-1,FOO,9999999999.139413000000000000000000000000001"""
 
 CSV_ERRORS_PRECISION_IDX = [9]
-CSV_ERRORS_PRECISION = '''cnt,state,value
+CSV_ERRORS_PRECISION = """cnt,state,value
 20,HI,1.0
 45,RI,100000000000000000.0
 59,CT,123
@@ -57,9 +56,9 @@ CSV_ERRORS_PRECISION = '''cnt,state,value
 ,MO,
 1055,KS,
 2420,TX,1024
--1,FOO,9999999999.139413000000000000000000000000001'''
+-1,FOO,9999999999.139413000000000000000000000000001"""
 
-CSV_WITHIN_PRECISION = '''cnt,state,value
+CSV_WITHIN_PRECISION = """cnt,state,value
 20,HI,1.0
 45,RI,100000000000000000.0
 59,CT,123
@@ -73,16 +72,16 @@ CSV_WITHIN_PRECISION = '''cnt,state,value
 ,MO,
 1055,KS,
 2420,TX,1024
--1,FOO,9999999999.141413000000000000000000000000001'''
+-1,FOO,9999999999.141413000000000000000000000000001"""
 
 
 ROWS_TO_DROP = [6, 8]
-COLUMNS_TO_DROP = ['state']
+COLUMNS_TO_DROP = ["state"]
 
 
 @pytest.fixture()
 def correctness():
-    benchmark = 'tpch'
+    benchmark = "tpch"
     scale_factor = 1000
 
     return Correctness(scale_factor, benchmark)
@@ -90,7 +89,7 @@ def correctness():
 
 def get_dataframe(source):
     source_io = StringIO(source)
-    return pandas.read_csv(source_io, sep=',')
+    return pandas.read_csv(source_io, sep=",")
 
 
 def test_correctness_truth_empty(correctness):
@@ -120,7 +119,7 @@ def test_correctness_full_equal(correctness):
 
 def test_correctness_full_equal_column_swapped(correctness):
     truth = get_dataframe(CSV_BASE)
-    result = get_dataframe(CSV_BASE).reindex(columns=['state', 'cnt', 'value'])
+    result = get_dataframe(CSV_BASE).reindex(columns=["state", "cnt", "value"])
 
     result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
     assert result_detail == ResultDetail.OK
@@ -128,14 +127,14 @@ def test_correctness_full_equal_column_swapped(correctness):
 
 
 def test_correctness_precision(correctness):
-    CSV_PRECISION_A = '''id,value
+    CSV_PRECISION_A = """id,value
     1,9999999999.1349
-    2,9999999999.1399'''
+    2,9999999999.1399"""
     truth = get_dataframe(CSV_PRECISION_A)
 
-    CSV_PRECISION_B = '''id,value
+    CSV_PRECISION_B = """id,value
     1,9999999999.1449
-    2,9999999999.1448'''
+    2,9999999999.1448"""
     result = get_dataframe(CSV_PRECISION_B)
 
     result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
@@ -150,6 +149,7 @@ def test_tpch_precision(correctness):
     result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
     assert result_detail == ResultDetail.OK
     assert mismatch_idx == None
+
 
 def test_tpch_precision_big_numbers(correctness):
     truth = pandas.DataFrame([[326663512979.5298]])
@@ -189,9 +189,11 @@ def test_correctness_full_equal_randomized_columns(correctness):
 
 def test_correctness_full_equal_randomized_full(correctness):
     truth = get_dataframe(CSV_BASE)
-    result = get_dataframe(CSV_BASE) \
-        .sample(frac=1, random_state=1) \
+    result = (
+        get_dataframe(CSV_BASE)
+        .sample(frac=1, random_state=1)
         .sample(frac=1, random_state=1, axis=1)
+    )
 
     result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
     assert result_detail == ResultDetail.OK
@@ -263,9 +265,11 @@ def test_correctness_not_equal_randomized_columns(correctness):
 
 def test_correctness_not_equal_randomized_full(correctness):
     truth = get_dataframe(CSV_BASE)
-    result = get_dataframe(CSV_ERRORS) \
-        .sample(frac=1, random_state=1) \
+    result = (
+        get_dataframe(CSV_ERRORS)
+        .sample(frac=1, random_state=1)
         .sample(frac=1, random_state=1, axis=1)
+    )
 
     result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
     assert result_detail == ResultDetail.VALUE_MISMATCH
@@ -300,7 +304,7 @@ def test_value_swap_columns(correctness):
 
 
 def test_correctness_full_equal_text_shuffled(correctness):
-    CSV_TEXT = '''s_store_name,i_item_desc,revenue,i_current_price,i_wholesale_cost,i_brand
+    CSV_TEXT = """s_store_name,i_item_desc,revenue,i_current_price,i_wholesale_cost,i_brand
     able,A,5.93,8.61,3.61,exportiedu pack #2
     able,A,5.44,5.33,3.09,edu packimporto #1
     able,A,8.07,2.97,1.18,edu packamalg #2
@@ -400,7 +404,7 @@ def test_correctness_full_equal_text_shuffled(correctness):
     able,About frie,4.37,5.87,3.99,edu packexporti #2
     able,"About good rates might not consider forward for a texts. English, genetic rights can make. Clear, additional police would not provide thick workers. Qu",1.10,1.04,0.48,brandmaxi #11
     able,"About good rates might not consider forward for a texts. English, genetic rights can make. Clear, additional police would not provide thick workers. Qu",3.92,1.04,0.48,brandmaxi #11
-    able,About great boys will not eliminate too,1.15,5.22,3.75,amalgimporto #1'''
+    able,About great boys will not eliminate too,1.15,5.22,3.75,amalgimporto #1"""
 
     truth = get_dataframe(CSV_TEXT)
     result = get_dataframe(CSV_TEXT).sample(frac=1, random_state=1)
@@ -412,20 +416,19 @@ def test_correctness_full_equal_text_shuffled(correctness):
 
 def test_tpch_trailing_zeros(correctness):
     # result has a number with trailing zeros: 5579227.675000000000
-    resultstr = '''i_category,d_year,d_moy,avg_monthly_sales,sum_sales,psum,nsum
+    resultstr = """i_category,d_year,d_moy,avg_monthly_sales,sum_sales,psum,nsum
 Women,2001,2,5579227.675000000000,2986084.99,3556172.43,3192346.92
-    '''
+    """
 
     # truth hasn't trailing zeros: 5579227.675
-    truthstr = '''avg_monthly_sales,d_moy,d_year,i_category,nsum,psum,sum_sales
+    truthstr = """avg_monthly_sales,d_moy,d_year,i_category,nsum,psum,sum_sales
 5579227.675,2,2001,Women,3192346.92,3556172.43,2986084.99
-    '''
+    """
 
     truth = pandas.read_csv(StringIO(truthstr))
     # with float_precision='round_trip' option test passes
-    result = pandas.read_csv(StringIO(resultstr), float_precision='round_trip')
+    result = pandas.read_csv(StringIO(resultstr), float_precision="round_trip")
     result_detail, mismatch_idx = correctness._check_correctness_impl(truth, result)
 
     assert result_detail == ResultDetail.OK
     assert mismatch_idx == None
-
