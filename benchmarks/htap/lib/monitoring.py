@@ -136,7 +136,7 @@ class Stats:
         return self.data['tpch'][stream_id]
 
     def filter_last_1s(self, stats):
-        ts = stats[-1]['timestamp'] - 1
+        ts = max(stat['timestamp'] for stat in stats) - 1
         return list(filter(lambda x: x['timestamp'] >= ts, stats))
 
     def tpcc_tps(self, query):
@@ -167,6 +167,9 @@ class Stats:
             return (0, 0, 0, 0)
 
         stats = self.data['tpcc'][query]
+        if len(stats) == 0:
+            return (0, 0, 0, 0)
+
         lat = list(map(lambda x: math.ceil(x['runtime']*1000), stats))
         lat_1s = list(map(lambda x: math.ceil(x['runtime']*1000), self.filter_last_1s(stats)))
         return (int(sum(lat_1s)/len(lat_1s)),
