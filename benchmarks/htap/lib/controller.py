@@ -71,6 +71,13 @@ class HTAPController:
         while True:
             queries.run_next_query()
 
+    def analyze_worker(self):
+        tables = ['customer', 'district', 'history', 'item', 'nation', 'new_orders', 'order_line', 'orders', 'region', 'stock', 'supplier', 'warehouse']
+        with DBConn(self.args.dsn) as conn:
+            for table in tables:
+                conn.cursor.execute(f'ANALYZE {table}')
+            time.sleep(60*10)
+
     def _sql_error(self, msg):
         import sys
         print(f'ERROR: {msg} Did you run `prepare_benchmark`?')
@@ -126,11 +133,12 @@ class HTAPController:
         def worker_init():
             signal.signal(signal.SIGINT, signal.SIG_IGN)
 
-        num_total_workers = self.args.oltp_workers + self.args.olap_workers
+        num_total_workers = self.args.oltp_workers + self.args.olap_workers + 1
         with stats_conn_holder as stats_conn:
             with Pool(num_total_workers, worker_init) as pool:
                 oltp_workers = pool.map_async(self.oltp_worker, range(self.args.oltp_workers))
                 olap_workers = pool.map_async(self.olap_worker, range(self.args.olap_workers))
+                analyze_worker = pool.apply_async(self.analyze_worker)
 
                 try:
                     display_interval = timedelta(seconds=self.args.monitoring_interval)
@@ -143,6 +151,8 @@ class HTAPController:
                             oltp_workers.get()
                         if self.args.olap_workers > 0 and olap_workers.ready():
                             olap_workers.get()
+                        if analyze_worker.ready():
+                            analyze_worker.get()
 
                         while datetime.now() < next_display:
                             self.stats.process_queue(self.stats_queue)
