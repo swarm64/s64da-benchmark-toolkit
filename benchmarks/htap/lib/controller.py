@@ -72,7 +72,8 @@ class HTAPController:
             queries.run_next_query()
 
     def analyze_worker(self):
-        tables = ['customer', 'district', 'history', 'item', 'nation', 'new_orders', 'order_line', 'orders', 'region', 'stock', 'supplier', 'warehouse']
+        tables = ['customer', 'district', 'history', 'item', 'nation', 'new_orders',
+                  'order_line', 'orders', 'region', 'stock', 'supplier', 'warehouse']
         with DBConn(self.args.dsn) as conn:
             for table in tables:
                 conn.cursor.execute(f'ANALYZE {table}')
