@@ -304,7 +304,7 @@ class Monitor:
         date_range = relativedelta(latest_time, self.min_timestamp)
 
         self.current_line = 0
-        data_warning = "(not enough for OLAP queries)" if date_range.years < 7 else ""
+        data_warning = "(not enough for consistent OLAP queries)" if date_range.years < 7 else ""
 
         self._add_display_line(f'Data range: {self.min_timestamp} - {latest_time} = {date_range.years} years, {date_range.months} months and {date_range.days} days {data_warning}')
         self._add_display_line(f'DB size: {self.stats.db_size()}')
