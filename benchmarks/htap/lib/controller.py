@@ -33,8 +33,8 @@ class HTAPController:
 
         # update the shared value to the actual last ingested timestamp
         self.latest_timestamp.value = self.range_delivery_date[1].timestamp()
-
-        self.stats = Stats(self.args.dsn, self.args.oltp_workers, self.args.olap_workers, self.args.csv_interval)
+        self.csv_interval = args.csv_interval if 'csv' in args.output else None
+        self.stats = Stats(self.args.dsn, self.args.oltp_workers, self.args.olap_workers, self.csv_interval)
         self.monitor = Monitor(
                 self.stats, self.args.oltp_workers, self.args.olap_workers, self.scale_factor,
                 self.range_delivery_date[0]
@@ -142,8 +142,10 @@ class HTAPController:
                 analyze_worker = pool.apply_async(self.analyze_worker)
 
                 try:
+                    update_interval = timedelta(seconds=min(self.args.monitoring_interval, self.args.csv_interval))
                     display_interval = timedelta(seconds=self.args.monitoring_interval)
                     next_display = datetime.now() + display_interval
+                    next_update  = datetime.now() + update_interval
                     while True:
                         # the workers are not supposed to ever stop.
                         # so test for errors by testing for ready() and if so propagate them
@@ -155,19 +157,23 @@ class HTAPController:
                         if analyze_worker.ready():
                             analyze_worker.get()
 
-                        while datetime.now() < next_display:
+                        while datetime.now() < next_update:
                             self.stats.process_queue(self.stats_queue)
                             time.sleep(0.1)
 
-                        next_display += display_interval
                         time_now = datetime.now()
                         elapsed = time_now - begin
                         if elapsed.total_seconds() >= self.args.duration:
                             break
+
                         self.stats.update()
-                        self.monitor.update_display(elapsed.total_seconds(), time_now, stats_conn,
-                            datetime.fromtimestamp(self.latest_timestamp.value))
+                        next_update = time_now + update_interval
+                        if 'print' in self.args.output and next_display <= time_now:
+                            next_display += display_interval
+                            self.monitor.update_display(elapsed.total_seconds(), time_now, stats_conn,
+                                datetime.fromtimestamp(self.latest_timestamp.value))
                 except KeyboardInterrupt:
                     pass
                 finally:
                     self.monitor.display_summary(elapsed)
+                    self.stats.write_summary(self.args.csv_file, elapsed)

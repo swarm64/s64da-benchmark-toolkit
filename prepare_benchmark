@@ -49,7 +49,7 @@ if __name__ == '__main__':
     ))
 
     scale_factor_required = any(x in ''.join(sys.argv) for x in ('tpcds', 'tpch', 'ssb', 'htap'))
-    args_to_parse.add_argument('--scale-factor', '--warehouses', type=int, default=None,
+    args_to_parse.add_argument('--scale-factor', type=int, default=None,
                                required=scale_factor_required, help=(
         'Scale factor for specific benchmarks (e.g. TPC-DS/H, SSB).'
     ))
