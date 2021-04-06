@@ -48,6 +48,15 @@ def add_parser(subparsers):
         required=False, help=('Use server-side cursors for executing the queries')
     )
 
+    parser.add_argument('--dont-wait-until-enough-data', default=False, action='store_true',
+        required=False, help=('Do NOT wait until there is enough data for OLAP queries to run with a constant dataset size')
+    )
+    
+    parser.add_argument('--olap-dsns', nargs='+',
+        required=False, help=('Use separate olap servers')
+    )
+
+
 def run(args):
     controller = HTAPController(args)
     controller.run()

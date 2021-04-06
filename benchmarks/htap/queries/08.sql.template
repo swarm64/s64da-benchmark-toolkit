@@ -3,7 +3,7 @@
 select
     extract(year from o_entry_d) as l_year,
     sum(case when n2.n_name = 'Germany' then ol_amount else 0 end)
-        / sum(ol_amount) as mkt_share
+        / (0.0000001+sum(ol_amount)) as mkt_share
 from
     item,
     supplier,

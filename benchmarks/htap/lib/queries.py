@@ -54,6 +54,10 @@ class Queries:
         self.latest_timestamp = latest_timestamp
         self.stats_queue = stats_queue
         self.args = args
+        if hasattr(args, "olap_dsns") and args.olap_dsns != None:
+            self.dsn = args.olap_dsns[stream_id % len(args.olap_dsns)]
+        else:
+            self.dsn = args.dsn
 
     @staticmethod
     def query_ids():
@@ -135,7 +139,8 @@ class Queries:
         query_id = next(self.next_query_it)
         sql = self.get_query(query_id)
 
-        self.wait_until_enough_data(query_id)
+        if not self.args.dont_wait_until_enough_data:
+            self.wait_until_enough_data(query_id)
 
         self.stats_queue.put(('tpch', {
             'query': query_id,
@@ -144,13 +149,17 @@ class Queries:
         }))
 
         if not self.args.dry_run:
-            db = DB(self.args.dsn)
-            timing, _, plan = DB(self.args.dsn).run_query(
+            db = DB(self.dsn)
+            timing, _, plan = DB(self.dsn).run_query(
                     sql, self.args.olap_timeout*1000,
                     self.args.explain_analyze, self.args.use_server_side_cursors)
 
             # sum up rows processed
-            planned_rows, processed_rows = self.parse_plan(json.loads(plan)[0]["Plan"])
+            try:
+                planned_rows, processed_rows = self.parse_plan(json.loads(plan)[0]["Plan"])
+            except json.decoder.JSONDecodeError:
+                planned_rows = 0
+                processed_rows = 0
 
             self.stats_queue.put(('tpch', {
                 'query': query_id,
