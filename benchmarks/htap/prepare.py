@@ -42,7 +42,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
                 func = getattr(loader, func_name)
                 return [(func, dsn)]
             elif table == 'warehouse':
-                warehouses = range(1, self.args.scale_factor + 1)
+                warehouses = range(1, self.args.scale_factor*20 + 1)
                 return [(loader.load_warehouse, dsn, w_id, start_date)
                         for w_id in warehouses]
 

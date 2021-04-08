@@ -79,6 +79,8 @@ class Stats:
 
         if stats['status'] == 'Waiting' or stats['status'] == 'Running':
             # only overwrite status so we keep the last runtime
+            self.data['tpch'][stream_id]['queries'][query_id]['last-status'] = \
+                self.data['tpch'][stream_id]['queries'][query_id]['status']
             self.data['tpch'][stream_id]['queries'][query_id]['status'] = stats['status']
             return
 
@@ -128,7 +130,7 @@ class Stats:
         self.updates += 1
         if self.updates % 10 == 0:
             self._update_cached_stats()
-        if self.updates % self.csv_interval == 0:
+        if self.csv_interval and self.updates % self.csv_interval == 0:
             self.write_tpcc_stats()
             self.write_dbstats()
 
@@ -191,10 +193,10 @@ class Stats:
         result = []
         for row in self.cached_columnstore_stats:
             table_name = row['table_name']
-            table_size = row['relation_blocks']*8/1024/1024;
-            index_size = row['compressed_blocks']*8/1024/1024;
+            table_size = max(1, row['relation_blocks']*8/1024/1024);
+            index_size = max(1, row['compressed_blocks']*8/1024/1024);
             compression_ratio = table_size * 1.0 / index_size
-            cached = row['cache_pages_usable'] * 1.0 / row['relation_blocks'] * 100
+            cached = row['cache_pages_usable'] * 1.0 / (max(1, row['relation_blocks']) * 100)
             result.append([table_name, table_size, index_size, compression_ratio, cached])
         return result
 
@@ -209,6 +211,40 @@ class Stats:
             self.csv_dbstats.write(', '.join(map(str, row)) + "\n")
         self.csv_dbstats.flush()
 
+    def write_summary(self, csv_file, elapsed):
+        row_nr = 0
+        with open(csv_file, 'w') as csv:
+            csv.write(';stream_id;query_id;timestamp_start;timestamp_stop;runtime;status;correctness_check\n')
+            # oltp stream = stream 0
+            stream_id = 0
+            fake_date = datetime.now()
+            elapsed_seconds = elapsed.total_seconds()
+            for query_type in QUERY_TYPES:
+                total = self.tpcc_total(query_type)
+                tps = self.tpcc_tps(query_type)[2]
+                latency = self.tpcc_latency(query_type)[2]
+                csv.write(f'{row_nr};{stream_id};{query_type}_total;{fake_date};{fake_date};{total};OK;OK\n')
+                row_nr += 1
+                csv.write(f'{row_nr};{stream_id};{query_type}_tps;{fake_date};{fake_date};{tps};OK;OK\n')
+                row_nr += 1
+                csv.write(f'{row_nr};{stream_id};{query_type}_latency;{fake_date};{fake_date};{latency};OK;OK\n')
+                row_nr += 1
+ 
+            # now all olap streams
+            for stream_idx, stream in enumerate(self.data['tpch']):
+                for query_id, stats in stream['queries'].items():
+                    stream_id = stream_idx + 1 # so that the oltp stream can be 0
+                    status = stats["status"].upper()
+                    runtime = stats["runtime"]
+                    if status == "RUNNING" and "last-status" in stats:
+                        # query is currently running, take the last status
+                        status = stats["last-status"].upper()
+                    if not status in ["OK", "ERROR", "TIMEOUT"]:
+                        # anything that has not run (yet) we just set to timeout as
+                        # there was apparently no time to run it
+                        status = "TIMEOUT"
+                    csv.write(f'{row_nr};{stream_id};{query_id};{fake_date};{fake_date};{runtime};{status};{status}\n')
+                    row_nr += 1
 
 class Monitor:
     def __init__(self, stats, num_oltp_workers, num_olap_workers, scale_factor, min_timestamp):

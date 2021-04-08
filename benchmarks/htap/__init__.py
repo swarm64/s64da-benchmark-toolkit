@@ -20,8 +20,8 @@ def add_parser(subparsers):
         'How many seconds the benchmark should run for, default: 60.'))
 
     parser.add_argument(
-        '--olap-timeout', default=900, type=int, help=(
-        'Timeout for OLAP queries in seconds, default: 900'))
+        '--olap-timeout', default='5min', help=(
+        'Timeout for OLAP queries, default: 5 minutes'))
 
     parser.add_argument(
         '--csv-interval', default=10, type=int, help=(
@@ -56,6 +56,15 @@ def add_parser(subparsers):
         required=False, help=('Use separate olap servers')
     )
 
+    parser.add_argument('--output', choices=['csv', 'print'], default='print',
+        nargs='+', help=('How the results output should look like. '
+        'Multiple options possible, separated by space'
+    ))
+
+    parser.add_argument('--csv-file', default='results.csv', help=(
+        'Where to save the summary csv file, if csv output is selected. '
+        'The default is results.csv in the current directory.'
+    ))
 
 def run(args):
     controller = HTAPController(args)

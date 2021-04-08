@@ -151,7 +151,7 @@ class Queries:
         if not self.args.dry_run:
             db = DB(self.dsn)
             timing, _, plan = DB(self.dsn).run_query(
-                    sql, self.args.olap_timeout*1000,
+                    sql, self.args.olap_timeout,
                     self.args.explain_analyze, self.args.use_server_side_cursors)
 
             # sum up rows processed
