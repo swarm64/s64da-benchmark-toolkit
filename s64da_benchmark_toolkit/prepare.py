@@ -232,8 +232,11 @@ class PrepareBenchmarkFactory:
             print('Swarm64 DA CLUSTER')
             self.cluster()
 
+        self.update_all_columnstores()
+
         print('VACUUM-ANALYZE')
         self.vacuum_analyze()
+
         optimize_duration = time.time() - start_optimize
 
         with open("prepare_metrics.csv", "w") as prepare_metrics_file:
@@ -361,3 +364,11 @@ class PrepareBenchmarkFactory:
                 self.psql_exec_cmd(f"SELECT swarm64da.cluster('{table}', '{colspec}')")
                 for table, colspec in PrepareBenchmarkFactory.CLUSTER_SPEC.items()]
         self._run_tasks_parallel(cluster_tasks)
+
+
+    def update_all_columnstores(self):
+        version = self.swarm64da_version
+        if version and version >= Version('5.5'):
+            print('Fully updating all columnstores')
+            tasks = [self.psql_exec_cmd('SELECT swarm64da.columnstore_update_full()')]
+            self._run_tasks_parallel(tasks)
