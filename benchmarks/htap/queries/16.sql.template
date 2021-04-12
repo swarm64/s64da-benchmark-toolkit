@@ -24,4 +24,5 @@ group by
     substr(i_data, 1, 3),
     i_price
 order by
-    supplier_cnt desc;
+    supplier_cnt desc
+limit 1000;

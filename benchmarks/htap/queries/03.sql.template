@@ -30,4 +30,5 @@ group by
     o_entry_d
 order by
     revenue desc,
-    o_entry_d;
+    o_entry_d
+limit 1000;
