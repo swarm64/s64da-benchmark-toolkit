@@ -31,4 +31,5 @@ group by
     c_phone,
     n_name
 order by
-    revenue desc;
+    revenue desc
+limit 1000;

@@ -196,7 +196,7 @@ class Stats:
             table_size = max(1, row['relation_blocks']*8/1024/1024);
             index_size = max(1, row['compressed_blocks']*8/1024/1024);
             compression_ratio = table_size * 1.0 / index_size
-            cached = row['cache_pages_usable'] * 1.0 / (max(1, row['relation_blocks']) * 100)
+            cached = row['cache_pages_usable'] * 1.0 / max(1, row['relation_blocks']) * 100
             result.append([table_name, table_size, index_size, compression_ratio, cached])
         return result
 
