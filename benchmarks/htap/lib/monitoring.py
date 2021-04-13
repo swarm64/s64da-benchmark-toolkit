@@ -270,7 +270,7 @@ class Monitor:
         self.lines = []
 
     def display_summary(self, elapsed):
-        elapsed_seconds = elapsed.total_seconds()
+        elapsed_seconds = max(1, elapsed.total_seconds())
         tps = self.stats.tpcc_total('ok')    / elapsed_seconds
         eps = self.stats.tpcc_total('error') / elapsed_seconds
         tpmc = trunc((self.stats.tpcc_total('new_order') / elapsed_seconds) * 60)
