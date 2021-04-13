@@ -157,7 +157,7 @@ class Queries:
             # sum up rows processed
             try:
                 planned_rows, processed_rows = self.parse_plan(json.loads(plan)[0]["Plan"])
-            except json.decoder.JSONDecodeError:
+            except:
                 planned_rows = 0
                 processed_rows = 0
 
