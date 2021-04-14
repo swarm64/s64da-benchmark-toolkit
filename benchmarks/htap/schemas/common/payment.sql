@@ -46,7 +46,6 @@ CREATE FUNCTION payment(
 DECLARE
   w_record RECORD;
   d_record RECORD;
-  c_record RECORD;
   namecount BIGINT;
 BEGIN
 
@@ -105,35 +104,13 @@ BEGIN
     LIMIT 1;
   END IF;
 
-  SELECT
-      c_first
-    , c_middle
-    , c_last
-    , c_street_1
-    , c_street_2
-    , c_city
-    , c_state
-    , c_zip
-    , c_phone
-    , c_credit
-    , c_credit_lim
-    , c_discount
-    , c_balance
-    , c_since
-    , c_ytd_payment
-  FROM customer
-  INTO c_record
-  WHERE c_w_id = in_c_w_id
-    AND c_d_id = in_c_d_id
-    AND c_id = in_c_id
-  FOR UPDATE;
-
-  IF c_record.c_credit = 'BC' THEN
-    UPDATE customer
-    SET c_balance = c_record.c_balance - in_h_amount
-      , c_ytd_payment = c_record.c_ytd_payment + in_h_amount
-      , c_data = (
-          SELECT substr(
+  UPDATE customer
+  SET c_balance = c_balance - in_h_amount
+    , c_ytd_payment = c_ytd_payment + in_h_amount
+    , c_data =
+      CASE
+        WHEN c_credit = 'BC' THEN
+          substr(
             format('| %4s %2s %4s %2s %4s $%s %12s %24s',
                 c_id
               , c_d_id
@@ -145,22 +122,11 @@ BEGIN
               , c_data
             ), 1, 500
           )
-          FROM customer
-          WHERE c_w_id = in_c_w_id
-            AND c_d_id = in_c_d_id
-            AND c_id = in_c_id
-        )
-    WHERE c_w_id = in_c_w_id
-      AND c_d_id = in_c_d_id
-      AND c_id = in_c_id;
-  ELSE
-    UPDATE customer
-    SET c_balance = c_record.c_balance - in_h_amount
-      , c_ytd_payment = c_record.c_ytd_payment + in_h_amount
-    WHERE c_w_id = in_c_w_id
-      AND c_d_id = in_c_d_id
-      AND c_id = in_c_id;
-  END IF;
+        ELSE c_data
+      END
+  WHERE c_w_id = in_c_w_id
+    AND c_d_id = in_c_d_id
+    AND c_id = in_c_id;
 
   INSERT INTO history(
       h_c_d_id
