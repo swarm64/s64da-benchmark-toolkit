@@ -58,19 +58,11 @@ BEGIN
     AND c_d_id = in_d_id
     AND c_id = in_c_id;
 
-  SELECT
-      d_next_o_id
-    , d_tax
-  INTO b
-  FROM district
+  UPDATE district
+  SET d_next_o_id = d_next_o_id + 1
   WHERE d_id = in_d_id
     AND d_w_id = in_w_id
-  FOR UPDATE;
-
-  UPDATE district
-  SET d_next_o_id = b.d_next_o_id + 1
-  WHERE d_id = in_d_id
-    AND d_w_id = in_w_id;
+  RETURNING d_next_o_id, d_tax INTO b;
 
   INSERT INTO orders(
       o_id
@@ -106,10 +98,23 @@ BEGIN
     END IF;
 
     ol_supply_w_id = in_supware[ol_number];
-    SELECT
-        s_quantity
-      , s_data
-      , CASE
+    ol_quantity = in_qty[ol_number];
+
+    UPDATE stock
+    SET s_quantity = CASE
+          WHEN s_quantity > ol_quantity THEN s_quantity - ol_quantity
+          ELSE s_quantity - ol_quantity + 91
+        END
+      , s_order_cnt = s_order_cnt + 1
+      , s_remote_cnt = CASE
+                         WHEN ol_supply_w_id <> in_w_id THEN s_remote_cnt + 1
+                         ELSE s_remote_cnt
+                       END
+    WHERE s_i_id = ol_i_id
+      AND s_w_id = ol_supply_w_id
+    RETURNING
+        s_data, s_quantity,
+        CASE
           WHEN in_d_id = 1 THEN s_dist_01
           WHEN in_d_id = 2 THEN s_dist_02
           WHEN in_d_id = 3 THEN s_dist_03
@@ -121,28 +126,7 @@ BEGIN
           WHEN in_d_id = 9 THEN s_dist_09
           WHEN in_d_id = 10 THEN s_dist_10
         END AS ol_dist_info
-    INTO stock_record
-    FROM stock
-    WHERE s_i_id = ol_i_id
-      AND s_w_id = ol_supply_w_id
-    FOR UPDATE;
-
-    ol_quantity = in_qty[ol_number];
-    IF stock_record.s_quantity > ol_quantity THEN
-      stock_record.s_quantity = stock_record.s_quantity - ol_quantity;
-    ELSE
-      stock_record.s_quantity = stock_record.s_quantity - ol_quantity + 91;
-    END IF;
-
-    UPDATE stock
-    SET s_quantity = stock_record.s_quantity
-      , s_order_cnt = s_order_cnt + 1
-      , s_remote_cnt = CASE
-                         WHEN ol_supply_w_id <> in_w_id THEN s_remote_cnt + 1
-                         ELSE s_remote_cnt
-                       END
-    WHERE s_i_id = ol_i_id
-      AND s_w_id = ol_supply_w_id;
+    INTO stock_record;
 
     ol_amount = ol_quantity * item_record.i_price * (1 + a.w_tax + b.d_tax) * (1 - a.c_discount);
 
