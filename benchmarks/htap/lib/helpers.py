@@ -122,6 +122,8 @@ AUXILIARIES = [
         'need to', 'try to'
 ]
 
+WAREHOUSES_SF_RATIO = 20
+
 
 class Random:
     def __init__(self, seed):

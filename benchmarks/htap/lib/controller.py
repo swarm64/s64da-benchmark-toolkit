@@ -9,7 +9,7 @@ from multiprocessing import Manager, Pool, Value, Queue
 
 from psycopg2.errors import DuplicateDatabase, DuplicateTable, ProgrammingError
 
-from benchmarks.htap.lib.helpers import nullcontext
+from benchmarks.htap.lib.helpers import nullcontext, WAREHOUSES_SF_RATIO
 from benchmarks.htap.lib.monitoring import Stats, Monitor
 from benchmarks.htap.lib.queries import Queries
 from benchmarks.htap.lib.transactions import Transactions
@@ -28,7 +28,7 @@ class HTAPController:
         self.args = args
         self.next_tsx_timestamp.value = time.time()
         self.tsx_timestamp_increment = 1.0 / self.args.target_tps if self.args.target_tps is not None else 0
-        self.scale_factor = self._query_num_warehouses()
+        self.scale_factor = self._query_num_warehouses() // WAREHOUSES_SF_RATIO
         self.range_delivery_date = self._query_range_delivery_date()
 
         # update the shared value to the actual last ingested timestamp

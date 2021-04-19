@@ -4,6 +4,7 @@ from glob import glob
 
 from s64da_benchmark_toolkit.prepare import PrepareBenchmarkFactory, TableGroup
 from benchmarks.htap import htap_loader as loader
+from benchmarks.htap.lib.helpers import WAREHOUSES_SF_RATIO
 
 
 class PrepareBenchmark(PrepareBenchmarkFactory):
@@ -42,7 +43,7 @@ class PrepareBenchmark(PrepareBenchmarkFactory):
                 func = getattr(loader, func_name)
                 return [(func, dsn)]
             elif table == 'warehouse':
-                warehouses = range(1, self.args.scale_factor*20 + 1)
+                warehouses = range(1, self.args.scale_factor*WAREHOUSES_SF_RATIO + 1)
                 return [(loader.load_warehouse, dsn, w_id, start_date)
                         for w_id in warehouses]
 
