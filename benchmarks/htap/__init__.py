@@ -66,6 +66,10 @@ def add_parser(subparsers):
         'The default is results.csv in the current directory.'
     ))
 
+    parser.add_argument('--ignored-queries', required=False, nargs='+', default=[], help=(
+        'Optional list of ignored queries.'
+    ))
+
 def run(args):
     controller = HTAPController(args)
     controller.run()
