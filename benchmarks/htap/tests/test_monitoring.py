@@ -103,22 +103,22 @@ def test_storage():
             'queries': {1: {'query': 1, 'runtime': 2.3, 'status': 'OK', 'stream': 0}, 
                         7: {'query': 7, 'runtime': 7.0, 'status': 'OK', 'stream': 0},
                        },
-            'ok_count': 3, 'error_count': 0, 'timeout_count': 1
+            'ok_count': 3, 'error_count': 0, 'timeout_count': 1, 'ignored_count': 0
     }
     assert fixture.tpch_stats_for_stream_id(0) == fill_waiting_queries(expected)
     expected = {
             'queries': {3: {'query': 3, 'runtime': 0.1, 'status': 'ERROR', 'stream': 1}},
-            'ok_count': 0, 'error_count': 1, 'timeout_count': 0
+            'ok_count': 0, 'error_count': 1, 'timeout_count': 0, 'ignored_count': 0
     }
     assert fixture.tpch_stats_for_stream_id(1) == fill_waiting_queries(expected)
     expected = {
             'queries': {9: {'query': 9, 'runtime': 13.5, 'status': 'TIMEOUT', 'stream': 2}},
-            'ok_count': 0, 'error_count': 0, 'timeout_count': 1
+            'ok_count': 0, 'error_count': 0, 'timeout_count': 1, 'ignored_count': 0
     }
     assert fixture.tpch_stats_for_stream_id(2) == fill_waiting_queries(expected)
     expected = {
             'queries': {1: {'query': 1, 'runtime': 0.2, 'status': 'ERROR', 'stream': 3}},
-            'ok_count': 0, 'error_count': 1, 'timeout_count': 0
+            'ok_count': 0, 'error_count': 1, 'timeout_count': 0, 'ignored_count': 0
     }
     assert fixture.tpch_stats_for_stream_id(3) == fill_waiting_queries(expected)
     # yapf: enable
