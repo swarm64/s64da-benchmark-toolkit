@@ -49,7 +49,8 @@ class Stats:
                 'queries': {query: {'status': 'Waiting', 'runtime': 0} for query in Queries.query_ids()},
                 'ok_count': 0,
                 'timeout_count': 0,
-                'error_count': 0
+                'error_count': 0,
+                'ignored_count': 0
         } for _ in range(num_olap_slots)]
         self.uuid = uuid4()
         self.num_oltp_slots = num_oltp_slots
@@ -77,7 +78,7 @@ class Stats:
         stream_id = stats['stream']
         query_id = stats['query']
 
-        if stats['status'] == 'Waiting' or stats['status'] == 'Running':
+        if stats['status'] == 'Waiting' or stats['status'] == 'Running' or stats['status'] == 'IGNORED':
             # only overwrite status so we keep the last runtime
             self.data['tpch'][stream_id]['queries'][query_id]['last-status'] = \
                 self.data['tpch'][stream_id]['queries'][query_id]['status']

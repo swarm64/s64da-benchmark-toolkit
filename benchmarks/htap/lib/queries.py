@@ -137,6 +137,13 @@ class Queries:
 
     def run_next_query(self):
         query_id = next(self.next_query_it)
+        if str(query_id) in self.args.ignored_queries:
+            self.stats_queue.put(('tpch', {
+                'query': query_id,
+                'stream': self.stream_id,
+                'status': 'IGNORED'
+            }))
+            return
         sql = self.get_query(query_id)
 
         if not self.args.dont_wait_until_enough_data:
