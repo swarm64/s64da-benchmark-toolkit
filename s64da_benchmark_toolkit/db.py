@@ -97,7 +97,7 @@ class DB:
     @staticmethod
     def auto_explain_on(conn):
         auto_explain_config = {
-            'auto_explain.log_min_duration': 500,
+            'auto_explain.log_min_duration': 0,
             'auto_explain.log_analyze': 'on',
             'auto_explain.log_verbose': 'on',
             'auto_explain.log_buffers': 'off',
