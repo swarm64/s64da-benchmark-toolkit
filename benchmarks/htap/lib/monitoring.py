@@ -14,6 +14,7 @@ from urllib.parse import urlparse
 from psycopg2.extras import register_uuid
 
 from .queries import Queries
+from benchmarks.htap.lib.helpers import WAREHOUSES_SF_RATIO
 from s64da_benchmark_toolkit.dbconn import DBConn
 
 register_uuid()
@@ -280,7 +281,7 @@ class Monitor:
         print()
         summary = 'Summary'
         print(f'{summary}\n' + len(summary) * '-')
-        print(f'Scale Factor: {self.scale_factor}')
+        print(f'Scale Factor: {self.scale_factor // WAREHOUSES_SF_RATIO }')
         print(f'Streams: {self.num_oltp_workers} OLTP, {self.num_olap_workers} OLAP')
         print(f'Total time: {elapsed_seconds:.2f} seconds')
         print(f'TPC-C AVG Transactions per second (TPS): {tps:.2f}')
