@@ -9,7 +9,7 @@ from multiprocessing import Manager, Pool, Value, Queue
 
 from psycopg2.errors import DuplicateDatabase, DuplicateTable, ProgrammingError
 
-from benchmarks.htap.lib.helpers import nullcontext, WAREHOUSES_SF_RATIO
+from benchmarks.htap.lib.helpers import nullcontext
 from benchmarks.htap.lib.monitoring import Stats, Monitor
 from benchmarks.htap.lib.queries import Queries
 from benchmarks.htap.lib.transactions import Transactions
@@ -28,7 +28,7 @@ class HTAPController:
         self.args = args
         self.next_tsx_timestamp.value = time.time()
         self.tsx_timestamp_increment = 1.0 / self.args.target_tps if self.args.target_tps is not None else 0
-        self.scale_factor = self._query_num_warehouses() // WAREHOUSES_SF_RATIO
+        self.num_warehouses = self._query_num_warehouses()
         self.range_delivery_date = self._query_range_delivery_date()
 
         # update the shared value to the actual last ingested timestamp
@@ -36,11 +36,11 @@ class HTAPController:
         self.csv_interval = args.csv_interval if 'csv' in args.output else None
         self.stats = Stats(self.args.dsn, self.args.oltp_workers, self.args.olap_workers, self.csv_interval)
         self.monitor = Monitor(
-                self.stats, self.args.oltp_workers, self.args.olap_workers, self.scale_factor,
+                self.stats, self.args.oltp_workers, self.args.olap_workers, self.num_warehouses,
                 self.range_delivery_date[0]
         )
 
-        print(f'Warehouses: {self.scale_factor}')
+        print(f'Warehouses: {self.num_warehouses}')
 
     def oltp_sleep(self):
         with self.next_tsx_timestamp.get_lock():
@@ -54,7 +54,7 @@ class HTAPController:
         # do NOT introduce timeouts for the tpcc queries! this will make that
         # the workload gets inbalanaced and eventually the whole benchmark stalls
         with DBConn(self.args.dsn) as conn:
-            tpcc_worker = Transactions(worker_id, self.scale_factor, self.latest_timestamp, conn, self.args.dry_run)
+            tpcc_worker = Transactions(worker_id, self.num_warehouses, self.latest_timestamp, conn, self.args.dry_run)
             next_reporting_time = time.time() + 0.1
             while True:
                 self.oltp_sleep()

@@ -14,6 +14,7 @@ from urllib.parse import urlparse
 from psycopg2.extras import register_uuid
 
 from .queries import Queries
+from benchmarks.htap.lib.helpers import WAREHOUSES_SF_RATIO
 from s64da_benchmark_toolkit.dbconn import DBConn
 
 register_uuid()
@@ -248,11 +249,11 @@ class Stats:
                     row_nr += 1
 
 class Monitor:
-    def __init__(self, stats, num_oltp_workers, num_olap_workers, scale_factor, min_timestamp):
+    def __init__(self, stats, num_oltp_workers, num_olap_workers, num_warehouses, min_timestamp):
         self.stats = stats
         self.num_oltp_workers = num_oltp_workers
         self.num_olap_workers = num_olap_workers
-        self.scale_factor = scale_factor
+        self.num_warehouses = num_warehouses
         self.output = None
         self.current_line = 0
         self.total_lines = 0
@@ -280,7 +281,7 @@ class Monitor:
         print()
         summary = 'Summary'
         print(f'{summary}\n' + len(summary) * '-')
-        print(f'Scale Factor: {self.scale_factor}')
+        print(f'Scale Factor: {self.num_warehouses // WAREHOUSES_SF_RATIO }')
         print(f'Streams: {self.num_oltp_workers} OLTP, {self.num_olap_workers} OLAP')
         print(f'Total time: {elapsed_seconds:.2f} seconds')
         print(f'TPC-C AVG Transactions per second (TPS): {tps:.2f}')

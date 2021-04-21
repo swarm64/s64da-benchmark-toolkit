@@ -7,19 +7,19 @@ from .helpers import Random, TPCCText, TimestampGenerator
 from .helpers import MAX_ITEMS, DIST_PER_WARE, CUST_PER_DIST, NUM_ORDERS, STOCKS, NAMES
 
 class Transactions:
-    def __init__(self, seed, scale_factor, latest_timestamp, conn, dry_run):
+    def __init__(self, seed, num_warehouses, latest_timestamp, conn, dry_run):
         self.conn = conn
         self.random = Random(seed)
         self.tpcc_text = TPCCText(self.random)
-        self.scale_factor = scale_factor
+        self.num_warehouses = num_warehouses
         self.dry_run = dry_run
 
         # the loader only generates timestamps for the orders table, and
         # generates a timestamp stream per warehouse.
         # here we generate a tsx for any warehouse and therefore have to scale
-        # for both: 10/23 and scale_factor. the 10/23 comes from next_transaction
+        # for both: 10/23 and warehouse-count. the 10/23 comes from next_transaction
         # and is the ratio between calls to new_order() and timestamp_generator.next()
-        timestamp_scalar = (10/23.0) / self.scale_factor
+        timestamp_scalar = (10/23.0) / self.num_warehouses
 
         self.timestamp_generator = TimestampGenerator(
                 latest_timestamp, self.random, timestamp_scalar
@@ -41,11 +41,11 @@ class Transactions:
         return query_stats
 
     def other_ware(self, home_ware):
-        if self.scale_factor == 1:
+        if self.num_warehouses == 1:
             return home_ware
 
         while True:
-            tmp = self.random.randint_inclusive(1, self.scale_factor)
+            tmp = self.random.randint_inclusive(1, self.num_warehouses)
             if tmp != home_ware:
                 return tmp
 
@@ -67,7 +67,7 @@ class Transactions:
                 raise
 
     def new_order(self, timestamp):
-        w_id = self.random.randint_inclusive(1, self.scale_factor)
+        w_id = self.random.randint_inclusive(1, self.num_warehouses)
         d_id = self.random.randint_inclusive(1, DIST_PER_WARE)
         c_id = self.random.nurand(1023, 1, CUST_PER_DIST)
         order_line_count = self.random.randint_inclusive(5, 15)
@@ -97,7 +97,7 @@ class Transactions:
         self.execute_sql(sql, args, 'new_order')
 
     def payment(self, timestamp):
-        w_id = self.random.randint_inclusive(1, self.scale_factor)
+        w_id = self.random.randint_inclusive(1, self.num_warehouses)
         d_id = self.random.randint_inclusive(1, DIST_PER_WARE)
         c_id = self.random.nurand(1023, 1, CUST_PER_DIST)
         h_amount = self.random.randint_inclusive(1, 5000)
@@ -116,7 +116,7 @@ class Transactions:
         self.execute_sql(sql, args, 'payment')
 
     def order_status(self):
-        w_id = self.random.randint_inclusive(1, self.scale_factor)
+        w_id = self.random.randint_inclusive(1, self.num_warehouses)
         d_id = self.random.randint_inclusive(1, DIST_PER_WARE)
         c_id = self.random.nurand(1023, 1, CUST_PER_DIST)
         c_last = self.tpcc_text.lastname(self.random.nurand(255, 0, 999))
@@ -127,7 +127,7 @@ class Transactions:
         self.execute_sql(sql, args, 'order_status')
 
     def delivery(self, timestamp):
-        w_id = self.random.randint_inclusive(1, self.scale_factor)
+        w_id = self.random.randint_inclusive(1, self.num_warehouses)
         o_carrier_id = self.random.randint_inclusive(1, 10)
 
         sql = 'SELECT * FROM delivery(%s, %s, %s, %s)'
@@ -135,7 +135,7 @@ class Transactions:
         self.execute_sql(sql, args, 'delivery')
 
     def stock_level(self):
-        w_id = self.random.randint_inclusive(1, self.scale_factor)
+        w_id = self.random.randint_inclusive(1, self.num_warehouses)
         d_id = self.random.randint_inclusive(1, DIST_PER_WARE)
         level = self.random.randint_inclusive(10, 20)
 
