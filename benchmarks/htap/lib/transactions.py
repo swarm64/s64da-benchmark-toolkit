@@ -53,29 +53,30 @@ class Transactions:
         if self.dry_run:
             return
         start = time.time()
-        try:
-            self.conn.cursor.execute(sql, args)
-            self.add_stats(query_type, 'ok', start)
         # do not catch timeouts because we want that to stop the benchmark.
         # if we get timeouts the benchmark gets inbalanced and we eventually get
         # to a complete halt.
-        except psycopg2.errors.RaiseException as err:
-            if 'Item record is null' in err.pgerror:
-                self.add_stats(query_type, 'error', start)
-                pass
-            else:
-                raise
+        self.conn.cursor.execute(sql, args)
+        self.add_stats(query_type, 'ok', start)
 
     def execute_sql_new_order(self, sql, args):
         if self.dry_run:
             return
+        old_autocommit = self.conn.conn.autocommit
+        self.conn.conn.autocommit = False
         start = time.time()
+        # do not catch timeouts because we want that to stop the benchmark.
+        # if we get timeouts the benchmark gets inbalanced and we eventually get
+        # to a complete halt.
         self.conn.cursor.execute(sql, args)
         result = self.conn.cursor.fetchone()
-        if result == True:
+        if result[0] == True:
+            self.conn.conn.commit()
             self.add_stats('new_order', 'ok', start)
         else:
+            self.conn.conn.rollback()
             self.add_stats('new_order', 'error', start)
+        self.conn.conn.autocommit = old_autocommit
 
     def new_order(self, timestamp):
         w_id = self.random.randint_inclusive(1, self.num_warehouses)
