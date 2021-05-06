@@ -9,28 +9,8 @@ CREATE FUNCTION new_order(
   , in_supware INT[]
   , in_qty INT[]
   , in_timestamp TIMESTAMPTZ
-) RETURNS TABLE(
-    out_w_id INT
-  , out_d_id INT
-  , out_c_id INT
-  , out_c_last CHARACTER VARYING(16)
-  , out_c_credit CHARACTER(2)
-  , out_c_discount NUMERIC(4,2)
-  , out_w_tax NUMERIC(4,2)
-  , out_d_tax NUMERIC(4,2)
-  , out_o_ol_cnt INT
-  , out_o_id INT
-  , out_o_entry_d TIMESTAMPTZ
-  , out_total_amount NUMERIC(13,2)
-  , out_ol_supply_w_id INT
-  , out_ol_i_id INT
-  , out_i_name CHARACTER VARYING(24)
-  , out_ol_quantity INT
-  , out_s_quantity SMALLINT
-  , out_brand_generic CHARACTER
-  , out_i_price NUMERIC(5,2)
-  , out_ol_amount NUMERIC(6,2)
-) AS $$
+) RETURNS BOOLEAN
+AS $$
 DECLARE
   a RECORD;
   b RECORD;
@@ -94,7 +74,7 @@ BEGIN
     WHERE i_id = ol_i_id;
 
     IF item_record IS NULL THEN
-      RAISE EXCEPTION 'Item record is null';
+      RETURN FALSE;
     END IF;
 
     ol_supply_w_id = in_supware[ol_number];
@@ -152,33 +132,8 @@ BEGIN
       , stock_record.ol_dist_info
     );
 
-    RETURN QUERY SELECT
-        in_w_id
-      , in_d_id
-      , in_c_id
-      , a.c_last
-      , a.c_credit
-      , a.c_discount
-      , a.w_tax
-      , b.d_tax
-      , in_ol_cnt
-      , b.d_next_o_id
-      , in_timestamp
-      , ROUND(
-          SUM(ol_amount) * (1 - a.c_discount) * (1 + a.w_tax + b.d_tax), 2
-        ) AS amount
-      , ol_supply_w_id
-      , ol_i_id
-      , item_record.i_name
-      , ol_quantity
-      , stock_record.s_quantity
-      , CASE WHEN item_record.i_data LIKE '%ORIGINAL%'
-              AND stock_record.s_data LIKE '%ORIGINAL%' THEN 'B'::CHAR ELSE 'G'::CHAR END
-      , item_record.i_price
-      , ol_amount
-    ;
   END LOOP;
 
-  RETURN;
+  RETURN TRUE;
 END
 $$ LANGUAGE PLPGSQL PARALLEL SAFE;
