@@ -62,8 +62,7 @@ class DB:
                 rows = cursor.fetchall()
 
                 if use_server_side_cursors:
-                    conn.conn.rollback()
-                    conn.conn.autocommit = True
+                    conn.autocommit = True
 
                 if rows is not None:
                     query_result_columns = [colname[0] for colname in cursor.description]
