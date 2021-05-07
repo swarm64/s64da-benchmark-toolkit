@@ -105,11 +105,14 @@ class Reporting:
                 self._check_correctness()
 
             sub_df = self.df[self.df['status'] != 'IGNORED']
-            total_runtime = sub_df['timestamp_stop'].max() - sub_df['timestamp_start'].min()
+            query_runtime = (sub_df['timestamp_stop'] - sub_df['timestamp_start']).sum()
+            total_runtime = (self.df['timestamp_stop'] - self.df['timestamp_start']).sum()
+            self.query_runtime_seconds = query_runtime.total_seconds()
             self.total_runtime_seconds = total_runtime.total_seconds()
             self._print_results()
 
-            print(f'\nTotal runtime (OK + ERR): {total_runtime} ({self.total_runtime_seconds:.2f}s)')
+            print(f'\nQuery runtime (OK + ERR): {query_runtime} ({self.query_runtime_seconds:.2f}s)')
+            print(f'Total benchmark time    : {total_runtime} ({self.total_runtime_seconds:.2f}s)')
         else:
             LOG.warning("The reporting queue was found empty, which indicates that no queries were ran")
 
