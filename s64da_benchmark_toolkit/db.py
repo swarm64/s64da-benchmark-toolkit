@@ -50,7 +50,7 @@ class DB:
                 if auto_explain:
                     DB.auto_explain_on(conn)
 
-                cursor = conn.cursor;
+                cursor = conn.cursor
                 if use_server_side_cursors:
                     # See https://github.com/psycopg/psycopg2/issues/941 for why
                     # starting a new connection is so weird.
@@ -62,7 +62,8 @@ class DB:
                 rows = cursor.fetchall()
 
                 if use_server_side_cursors:
-                    conn.autocommit = True
+                    conn.conn.rollback()
+                    conn.conn.autocommit = True
 
                 if rows is not None:
                     query_result_columns = [colname[0] for colname in cursor.description]

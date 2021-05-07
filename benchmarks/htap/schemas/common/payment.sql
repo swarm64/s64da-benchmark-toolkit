@@ -9,40 +9,7 @@ CREATE FUNCTION payment(
   , in_byname BOOL
   , in_c_last CHARACTER VARYING(16)
   , in_timestamp TIMESTAMPTZ
-) RETURNS TABLE(
-    out_w_id INT
-  , out_d_id INT
-  , out_c_id INT
-  , out_c_d_id INT
-  , out_c_w_id INT
-  , out_h_amount NUMERIC(12,2)
-  , out_h_date TIMESTAMP WITH TIME ZONE
-  , out_w_street1 CHARACTER VARYING(20)
-  , out_w_street2 CHARACTER VARYING(20)
-  , out_w_city CHARACTER VARYING(20)
-  , out_w_state CHARACTER(2)
-  , out_w_zip CHARACTER(9)
-  , out_d_street1 CHARACTER VARYING(20)
-  , out_d_street2 CHARACTER VARYING(20)
-  , out_d_city CHARACTER VARYING(20)
-  , out_d_state CHARACTER(2)
-  , out_d_zip CHARACTER(9)
-  , out_c_first character varying(16)
-  , out_c_middle character(2)
-  , out_c_last character varying(16)
-  , out_c_street_1 character varying(20)
-  , out_c_street_2 character varying(20)
-  , out_c_city character varying(20)
-  , out_c_state character(2)
-  , out_c_zip character(9)
-  , out_c_phone character(16)
-  , out_c_since timestamp without time zone
-  , out_c_credit character(2)
-  , out_c_credit_lim bigint
-  , out_c_discount numeric(4,2)
-  , out_c_balance numeric(12,2)
-  , out_c_data text
-) AS $$
+) RETURNS VOID AS $$
 DECLARE
   w_record RECORD;
   d_record RECORD;
@@ -147,45 +114,6 @@ BEGIN
     , in_h_amount
     , format('%10s %10s    ', w_record.w_name, d_record.d_name)
   );
-
-  RETURN QUERY SELECT
-      in_w_id
-    , in_d_id
-    , in_c_id
-    , in_c_d_id
-    , in_c_w_id
-    , in_h_amount
-    , in_timestamp
-    , w_record.w_street_1
-    , w_record.w_street_2
-    , w_record.w_city
-    , w_record.w_state
-    , w_record.w_zip
-    , d_record.d_street_1
-    , d_record.d_street_2
-    , d_record.d_city
-    , d_record.d_state
-    , d_record.d_zip
-    , c_first
-    , c_middle
-    , c_last
-    , c_street_1
-    , c_street_2
-    , c_city
-    , c_state
-    , c_zip
-    , c_phone
-    , c_since
-    , c_credit
-    , c_credit_lim
-    , c_discount
-    , c_balance
-    , CASE WHEN c_credit = 'BC' THEN c_data ELSE NULL END
-  FROM customer
-  WHERE c_w_id = in_c_w_id
-    AND c_d_id = in_c_d_id
-    AND c_id = in_c_id
-  ;
 END
 $$
 LANGUAGE plpgsql PARALLEL SAFE;
