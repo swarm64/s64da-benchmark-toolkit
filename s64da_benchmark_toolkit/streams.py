@@ -133,6 +133,7 @@ class Streams:
     def _run_stream(self, reporting_queue, stream_id):
         sequence = self.get_stream_sequence(stream_id)
         num_queries = len(sequence)
+        timeout = Streams.parse_timeout(self.config.get('timeout', 0))
         for idx, query_id in enumerate(sequence):
             num_query = idx + 1
             pretext = f'{num_query:2}/{num_queries:2}: query {query_id:2} of stream {stream_id:2}'
@@ -143,7 +144,7 @@ class Streams:
                     stream_id=stream_id,
                     query_id=query_id,
                     timestamp_start=time.time(),
-                    timestamp_stop=time.time() + Streams.parse_timeout(self.config.get('timeout', 0)),
+                    timestamp_stop=time.time() + timeout,
                     status="IGNORED",
                     result=None,
                     plan=None
@@ -152,14 +153,16 @@ class Streams:
                 LOG.info(f'running  {pretext}.')
                 timing, query_result, plan = self._run_query(stream_id, query_id)
 
+                timestamp_stop = timing.stop if timing.status.name == 'OK' else timing.start + timeout
                 runtime = timing.stop - timing.start
+
                 LOG.info(f'finished {pretext}: {runtime:.2f}s {timing.status.name}')
 
                 reporting_queue.put(QueryMetric(
                     stream_id=stream_id,
                     query_id=query_id,
                     timestamp_start=timing.start,
-                    timestamp_stop=timing.stop,
+                    timestamp_stop=timestamp_stop,
                     status=timing.status.name,
                     result=query_result,
                     plan=plan
