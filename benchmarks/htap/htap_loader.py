@@ -6,20 +6,20 @@ from psycopg2.extras import execute_values
 from s64da_benchmark_toolkit.dbconn import DBConn
 
 from benchmarks.htap.lib.helpers import (
-        Random, TPCCText, TPCHText, NATIONS, REGIONS, TimestampGenerator, StringIteratorIO,
+        Random, OLTPText, OLAPText, NATIONS, REGIONS, TimestampGenerator, StringIteratorIO,
         DIST_PER_WARE, CUST_PER_DIST, NUM_ORDERS, MAX_ITEMS, STOCKS,
         NUM_SUPPLIERS, NUM_NATIONS, NUM_REGIONS, FIRST_UNPROCESSED_O_ID, TPCH_DATE_RANGE
 )
 
 COPY_SIZE=16384
 
-class TPCCLoader():
+class Loader():
     def __init__(self, dsn, warehouse_id = 0, start_date=None):
         self.dsn = dsn
         self.warehouse_id = warehouse_id
         self.random = Random(seed=warehouse_id)
-        self.tpcc_text = TPCCText(self.random)
-        self.tpch_text = TPCHText(self.random)
+        self.oltp_text = OLTPText(self.random)
+        self.olap_text = OLAPText(self.random)
         self.start_date = start_date or datetime.now()
         self.timestamp_generator = TimestampGenerator(self.start_date, self.random)
 
@@ -43,7 +43,7 @@ class TPCCLoader():
         with DBConn(self.dsn) as conn:
             for i in range(NUM_REGIONS):
                 region_key, name = REGIONS[i]
-                self.insert_data('region', [[region_key, name, self.tpch_text.random_length_text(31, 115)]])
+                self.insert_data('region', [[region_key, name, self.olap_text.random_length_text(31, 115)]])
 
     def load_nation(self):
         print('Loading nation')
@@ -51,7 +51,7 @@ class TPCCLoader():
         with DBConn(self.dsn) as conn:
             for i in range(NUM_NATIONS):
                 nation_key, name, region_key = NATIONS[i]
-                self.insert_data('nation', [[nation_key, name, region_key, self.tpch_text.random_length_text(31, 114)]])
+                self.insert_data('nation', [[nation_key, name, region_key, self.olap_text.random_length_text(31, 114)]])
 
     def load_warehouse(self):
         print(f'Loading warehouse ({self.warehouse_id})')
@@ -59,12 +59,12 @@ class TPCCLoader():
                 'warehouse', [
                         [
                                 self.warehouse_id,
-                                self.tpcc_text.string(5, prefix='name-'),
-                                self.tpcc_text.string(10, prefix='street1-'),
-                                self.tpcc_text.string(10, prefix='street2-'),
-                                self.tpcc_text.string(10, prefix='city-'),
-                                self.tpcc_text.state(),
-                                self.tpcc_text.numstring(5, prefix='zip-'),
+                                self.oltp_text.string(5, prefix='name-'),
+                                self.oltp_text.string(10, prefix='street1-'),
+                                self.oltp_text.string(10, prefix='street2-'),
+                                self.oltp_text.string(10, prefix='city-'),
+                                self.oltp_text.state(),
+                                self.oltp_text.numstring(5, prefix='zip-'),
                                 self.random.sample() * 0.2,
                                 300000,
                         ],
@@ -75,12 +75,12 @@ class TPCCLoader():
         return self.row_for_copy([
             d_id,
             self.warehouse_id,
-            self.tpcc_text.string(5, prefix='name-'),
-            self.tpcc_text.string(10, prefix='street1-'),
-            self.tpcc_text.string(10, prefix='street2-'),
-            self.tpcc_text.string(10, prefix='city-'),
-            self.tpcc_text.state(),
-            self.tpcc_text.numstring(5, prefix='zip-'),
+            self.oltp_text.string(5, prefix='name-'),
+            self.oltp_text.string(10, prefix='street1-'),
+            self.oltp_text.string(10, prefix='street2-'),
+            self.oltp_text.string(10, prefix='city-'),
+            self.oltp_text.state(),
+            self.oltp_text.numstring(5, prefix='zip-'),
             self.random.sample() * 0.2,
             30000,
             NUM_ORDERS + 1,
@@ -97,25 +97,25 @@ class TPCCLoader():
 
 
     def generate_customer(self, d_id, c_id):
-        c_last = self.tpcc_text.lastname(c_id - 1) if c_id < 1000 else \
-            self.tpcc_text.lastname(self.random.nurand(255, 0, 999))
+        c_last = self.oltp_text.lastname(c_id - 1) if c_id < 1000 else \
+            self.oltp_text.lastname(self.random.nurand(255, 0, 999))
 
-        state = self.tpcc_text.state()
+        state = self.oltp_text.state()
 
         return self.row_for_copy([
             c_id, d_id, self.warehouse_id,
             ord(state[0]),
-            self.tpcc_text.string(self.random.randint_inclusive(2, 10), prefix='first-'),
+            self.oltp_text.string(self.random.randint_inclusive(2, 10), prefix='first-'),
             'OE', c_last,
-            self.tpcc_text.string(10, prefix='street1-'),
-            self.tpcc_text.string(10, prefix='street2-'),
-            self.tpcc_text.string(10, prefix='city-'),
+            self.oltp_text.string(10, prefix='street1-'),
+            self.oltp_text.string(10, prefix='street2-'),
+            self.oltp_text.string(10, prefix='city-'),
             state,
-            self.tpcc_text.numstring(5, prefix='zip-'),
-            self.tpcc_text.numstring(16), self.start_date,
+            self.oltp_text.numstring(5, prefix='zip-'),
+            self.oltp_text.numstring(16), self.start_date,
             'GC' if self.random.randint_inclusive(1, 100) > 10 else 'BC', 50000,
             self.random.sample() * 0.5, -10, 10, 1, 0,
-            self.tpcc_text.string(self.random.randint_inclusive(300, 500))
+            self.oltp_text.string(self.random.randint_inclusive(300, 500))
         ])
 
     def load_customer(self):
@@ -131,7 +131,7 @@ class TPCCLoader():
     def generate_history(self, d_id, c_id):
         return self.row_for_copy([
             c_id, d_id, self.warehouse_id, d_id, self.warehouse_id, self.start_date, 10,
-            self.tpcc_text.string(self.random.randint_inclusive(12, 24))
+            self.oltp_text.string(self.random.randint_inclusive(12, 24))
         ])
 
     def load_history(self):
@@ -150,17 +150,17 @@ class TPCCLoader():
         return self.row_for_copy([
             s_id, self.warehouse_id,
             self.random.randint_inclusive(10, 100),
-            self.tpcc_text.string(24),
-            self.tpcc_text.string(24),
-            self.tpcc_text.string(24),
-            self.tpcc_text.string(24),
-            self.tpcc_text.string(24),
-            self.tpcc_text.string(24),
-            self.tpcc_text.string(24),
-            self.tpcc_text.string(24),
-            self.tpcc_text.string(24),
-            self.tpcc_text.string(24), 0, 0, 0,
-            self.tpcc_text.string(self.random.randint_inclusive(26, 50))
+            self.oltp_text.string(24),
+            self.oltp_text.string(24),
+            self.oltp_text.string(24),
+            self.oltp_text.string(24),
+            self.oltp_text.string(24),
+            self.oltp_text.string(24),
+            self.oltp_text.string(24),
+            self.oltp_text.string(24),
+            self.oltp_text.string(24),
+            self.oltp_text.string(24), 0, 0, 0,
+            self.oltp_text.string(self.random.randint_inclusive(26, 50))
         ])
 
     def load_stock(self):
@@ -193,7 +193,7 @@ class TPCCLoader():
                 (entry_date + self.delivery_offset) if o_id < FIRST_UNPROCESSED_O_ID else None,
                 5,
                 0 if o_id < FIRST_UNPROCESSED_O_ID else self.random.sample() * 9999.99,
-                self.tpcc_text.string(24)
+                self.oltp_text.string(24)
             ])
         return rows
 
@@ -234,13 +234,13 @@ class TPCCLoader():
         i_im_id = self.random.randint_inclusive(1, 10000)
         i_price = self.random.sample() * 100 + 1
 
-        i_name_suffix = self.tpcc_text.string(5)
+        i_name_suffix = self.oltp_text.string(5)
         i_name = f'item-{i_im_id}-{i_price}-{i_name_suffix}'
 
         if self.random.decision(1 / 10):
-            i_data = self.tpcc_text.data_original(26, 50)
+            i_data = self.oltp_text.data_original(26, 50)
         else:
-            i_data = self.tpcc_text.data(26, 50)
+            i_data = self.oltp_text.data(26, 50)
 
         return self.row_for_copy([i_id, i_im_id, i_name[0:24], i_price, i_data])
 
@@ -255,18 +255,18 @@ class TPCCLoader():
             conn.cursor.copy_from(it, 'item', null='None', size=COPY_SIZE)
 
     def generate_supplier(self, su_id):
-        nation_key = ord(self.tpcc_text.alnumstring(1))
+        nation_key = ord(self.oltp_text.alnumstring(1))
         if (su_id + 7) % 1893 == 0:
-            comment = self.tpch_text.random_customer_text(25, 100, 'Complaints')
+            comment = self.olap_text.random_customer_text(25, 100, 'Complaints')
         elif (su_id + 13) % 1893 == 0:
-            comment = self.tpch_text.random_customer_text(25, 100, 'Recommends')
+            comment = self.olap_text.random_customer_text(25, 100, 'Recommends')
         else:
-            comment = self.tpch_text.random_length_text(25, 100)
+            comment = self.olap_text.random_length_text(25, 100)
 
         return self.row_for_copy([
             su_id, 'supplier-{:09d}'.format(su_id),
-            self.tpcc_text.string(self.random.randint_inclusive(2, 32), prefix='address-'),
-            nation_key, self.tpch_text.random_phone_number(su_id),
+            self.oltp_text.string(self.random.randint_inclusive(2, 32), prefix='address-'),
+            nation_key, self.olap_text.random_phone_number(su_id),
             self.random.randint_inclusive(-99999, 999999) / 100, comment
         ])
 
@@ -282,7 +282,7 @@ class TPCCLoader():
 
 
 def load_warehouse(dsn, warehouse_id, start_date):
-    loader = TPCCLoader(dsn, warehouse_id, start_date)
+    loader = Loader(dsn, warehouse_id, start_date)
     loader.load_customer()
     loader.load_district()
     loader.load_history()
@@ -292,20 +292,20 @@ def load_warehouse(dsn, warehouse_id, start_date):
 
 
 def load_item(dsn):
-    loader = TPCCLoader(dsn)
+    loader = Loader(dsn)
     loader.load_item()
 
 
 def load_region(dsn):
-    loader = TPCCLoader(dsn)
+    loader = Loader(dsn)
     loader.load_region()
 
 
 def load_nation(dsn):
-    loader = TPCCLoader(dsn)
+    loader = Loader(dsn)
     loader.load_nation()
 
 
 def load_supplier(dsn):
-    loader = TPCCLoader(dsn)
+    loader = Loader(dsn)
     loader.load_supplier()
