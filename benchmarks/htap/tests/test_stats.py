@@ -2,7 +2,7 @@ import pytest
 
 from datetime import datetime
 
-from benchmarks.htap.lib.monitoring import Stats
+from benchmarks.htap.lib.stats import Stats
 
 
 class MockQueue:

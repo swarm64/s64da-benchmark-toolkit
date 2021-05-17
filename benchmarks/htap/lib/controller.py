@@ -10,7 +10,8 @@ from multiprocessing import Manager, Pool, Value, Queue
 from psycopg2.errors import DuplicateDatabase, DuplicateTable, ProgrammingError
 
 from benchmarks.htap.lib.helpers import nullcontext
-from benchmarks.htap.lib.monitoring import Stats, Monitor
+from benchmarks.htap.lib.monitoring import Monitor
+from benchmarks.htap.lib.stats import Stats
 from benchmarks.htap.lib.analytical import AnalyticalStream
 from benchmarks.htap.lib.transactional import TransactionalWorker
 
