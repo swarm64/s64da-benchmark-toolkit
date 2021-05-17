@@ -2,7 +2,7 @@ import pytest
 
 from dateutil.parser import isoparse
 
-from benchmarks.htap.lib.helpers import Random, TPCCText, TimestampGenerator
+from benchmarks.htap.lib.helpers import Random, OLTPText, TimestampGenerator
 
 
 def is_alpha(c):
@@ -23,7 +23,7 @@ def test_random():
 
 
 def test_tpcc_text():
-    fixture = TPCCText(Random(0))
+    fixture = OLTPText(Random(0))
     assert all([is_alpha(c) for c in fixture.string(100)])
     assert all([c.isdigit() for c in fixture.numstring(100)])
     assert all([is_alpha(c) or c.isdigit() for c in fixture.alnumstring(100)])
