@@ -43,7 +43,9 @@ QUERY_TEMPLATES = {
     22: Template(open(path.join(TEMPLATE_DIR, '22.sql.template'), 'r').read()),
 }
 
-class Queries:
+QUERY_IDS = sorted(QUERY_TEMPLATES.keys())
+
+class AnalyticalStream:
     def __init__(self, stream_id, args, min_timestamp, latest_timestamp, stats_queue):
         self.random = Random(stream_id)
         self.stream_id = stream_id
@@ -58,10 +60,6 @@ class Queries:
             self.dsn = args.olap_dsns[stream_id % len(args.olap_dsns)]
         else:
             self.dsn = args.dsn
-
-    @staticmethod
-    def query_ids():
-        return sorted(QUERY_TEMPLATES.keys())
 
     def tpch_date_to_benchmark_date(self, tpch_date):
         current_date = datetime.fromtimestamp(self.latest_timestamp.value)

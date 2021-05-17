@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 
 from psycopg2.extras import register_uuid
 
-from .queries import Queries
+from benchmarks.htap.lib.analytical import QUERY_IDS
 from benchmarks.htap.lib.helpers import WAREHOUSES_SF_RATIO
 from s64da_benchmark_toolkit.dbconn import DBConn
 
@@ -47,7 +47,7 @@ class Stats:
         self.data['oltp'] = defaultdict(list)
         self.data['oltp_totals'] = defaultdict(int)
         self.data['olap'] = [{
-                'queries': {query: {'status': 'Waiting', 'runtime': 0} for query in Queries.query_ids()},
+                'queries': {query: {'status': 'Waiting', 'runtime': 0} for query in QUERY_IDS},
                 'ok_count': 0,
                 'timeout_count': 0,
                 'error_count': 0,
@@ -330,7 +330,7 @@ class Monitor:
         row = f'SUM      |'
         for stream_id in range(self.num_olap_workers):
             stats = self.stats.olap_stats_for_stream_id(stream_id)
-            stream_sum = sum(stats['queries'][query_id]['runtime'] for query_id in Queries.query_ids())
+            stream_sum = sum(stats['queries'][query_id]['runtime'] for query_id in QUERY_IDS)
             row += f' {stream_sum:9.2f} |'
         return row
 
@@ -367,7 +367,7 @@ class Monitor:
             self._add_display_line(olap_header)
             self._add_display_line('-' * len(olap_header))
 
-            for query_id in Queries.query_ids():
+            for query_id in QUERY_IDS:
                 self._add_display_line(self.get_olap_row(query_id))
             self._add_display_line(self.get_olap_sum())
 

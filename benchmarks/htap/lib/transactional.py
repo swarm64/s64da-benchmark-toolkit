@@ -6,7 +6,7 @@ from collections import deque
 from .helpers import Random, OLTPText, TimestampGenerator
 from .helpers import MAX_ITEMS, DIST_PER_WARE, CUST_PER_DIST, NUM_ORDERS, STOCKS, NAMES
 
-class Transactions:
+class TransactionalWorker:
     def __init__(self, seed, num_warehouses, latest_timestamp, conn, dry_run):
         self.conn = conn
         self.random = Random(seed)
