@@ -10,9 +10,10 @@ from multiprocessing import Manager, Pool, Value, Queue
 from psycopg2.errors import DuplicateDatabase, DuplicateTable, ProgrammingError
 
 from benchmarks.htap.lib.helpers import nullcontext
-from benchmarks.htap.lib.monitoring import Stats, Monitor
-from benchmarks.htap.lib.queries import Queries
-from benchmarks.htap.lib.transactions import Transactions
+from benchmarks.htap.lib.monitoring import Monitor
+from benchmarks.htap.lib.stats import Stats
+from benchmarks.htap.lib.analytical import AnalyticalStream
+from benchmarks.htap.lib.transactional import TransactionalWorker
 
 from s64da_benchmark_toolkit.dbconn import DBConn
 
@@ -21,7 +22,7 @@ class HTAPController:
     # inheritance scheme doesn't work. we want these primitives so we can use
     # "simple" synchronized primitives.
     latest_timestamp = Value('d', 0) # database record timestamp
-    next_tsx_timestamp = Value('d', 0) # rtc time at which we can do the next tpcc tsx
+    next_tsx_timestamp = Value('d', 0) # rtc time at which we can do the next oltp tsx
     stats_queue = Queue() # queue for communicating statistics
 
     def __init__(self, args):
@@ -34,7 +35,7 @@ class HTAPController:
         # update the shared value to the actual last ingested timestamp
         self.latest_timestamp.value = self.range_delivery_date[1].timestamp()
         self.csv_interval = args.csv_interval if 'csv' in args.output else None
-        self.stats = Stats(self.args.dsn, self.args.oltp_workers, self.args.olap_workers, self.csv_interval)
+        self.stats = Stats(self.args.dsn, self.args.oltp_workers, self.args.olap_workers, self.csv_interval, self.args.ignored_queries)
         self.monitor = Monitor(
                 self.stats, self.args.oltp_workers, self.args.olap_workers, self.num_warehouses,
                 self.range_delivery_date[0]
@@ -51,25 +52,25 @@ class HTAPController:
             time.sleep(sleep_until - time_now)
 
     def oltp_worker(self, worker_id):
-        # do NOT introduce timeouts for the tpcc queries! this will make that
+        # do NOT introduce timeouts for the oltp queries! this will make that
         # the workload gets inbalanaced and eventually the whole benchmark stalls
         with DBConn(self.args.dsn) as conn:
-            tpcc_worker = Transactions(worker_id, self.num_warehouses, self.latest_timestamp, conn, self.args.dry_run)
+            oltp_worker = TransactionalWorker(worker_id, self.num_warehouses, self.latest_timestamp, conn, self.args.dry_run)
             next_reporting_time = time.time() + 0.1
             while True:
                 self.oltp_sleep()
-                tpcc_worker.next_transaction()
+                oltp_worker.next_transaction()
                 if next_reporting_time <= time.time():
                     # its beneficial to send in chunks so try to batch the stats by accumulating 0.1s of samples
-                    self.stats_queue.put(('tpcc', tpcc_worker.stats()))
+                    self.stats_queue.put(('oltp', oltp_worker.stats()))
                     next_reporting_time += 0.1
 
 
     def olap_worker(self, worker_id):
-        queries = Queries(worker_id, self.args, self.range_delivery_date[0],
+        stream = AnalyticalStream(worker_id, self.args, self.range_delivery_date[0],
                           self.latest_timestamp, self.stats_queue)
         while True:
-            queries.run_next_query()
+            stream.run_next_query()
 
     def analyze_worker(self):
         tables = ['customer', 'district', 'history', 'item', 'nation', 'new_orders',

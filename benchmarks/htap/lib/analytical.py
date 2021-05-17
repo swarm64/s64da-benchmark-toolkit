@@ -43,7 +43,13 @@ QUERY_TEMPLATES = {
     22: Template(open(path.join(TEMPLATE_DIR, '22.sql.template'), 'r').read()),
 }
 
-class Queries:
+QUERY_IDS = sorted(QUERY_TEMPLATES.keys())
+
+def is_ignored_query(ignored_queries, query_id):
+    return (str(query_id) in ignored_queries)
+
+
+class AnalyticalStream:
     def __init__(self, stream_id, args, min_timestamp, latest_timestamp, stats_queue):
         self.random = Random(stream_id)
         self.stream_id = stream_id
@@ -58,10 +64,6 @@ class Queries:
             self.dsn = args.olap_dsns[stream_id % len(args.olap_dsns)]
         else:
             self.dsn = args.dsn
-
-    @staticmethod
-    def query_ids():
-        return sorted(QUERY_TEMPLATES.keys())
 
     def tpch_date_to_benchmark_date(self, tpch_date):
         current_date = datetime.fromtimestamp(self.latest_timestamp.value)
@@ -115,10 +117,10 @@ class Queries:
         while True:
             available_data = datetime.fromtimestamp(self.latest_timestamp.value) - self.min_timestamp
             if available_data < wanted_range:
-                self.stats_queue.put(('tpch', {
+                self.stats_queue.put(('olap', {
                     'query': query_id,
                     'stream': self.stream_id,
-                    'status': 'Waiting'
+                    'status': 'IGNORED' if is_ignored_query(self.args.ignored_queries, query_id) else 'Waiting'
                 }))
                 time.sleep(1)
             else:
@@ -137,8 +139,8 @@ class Queries:
 
     def run_next_query(self):
         query_id = next(self.next_query_it)
-        if str(query_id) in self.args.ignored_queries:
-            self.stats_queue.put(('tpch', {
+        if is_ignored_query(self.args.ignored_queries, query_id):
+            self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
                 'status': 'IGNORED'
@@ -149,7 +151,7 @@ class Queries:
         if not self.args.dont_wait_until_enough_data:
             self.wait_until_enough_data(query_id)
 
-        self.stats_queue.put(('tpch', {
+        self.stats_queue.put(('olap', {
             'query': query_id,
             'stream': self.stream_id,
             'status': 'Running'
@@ -168,7 +170,7 @@ class Queries:
                 planned_rows = 0
                 processed_rows = 0
 
-            self.stats_queue.put(('tpch', {
+            self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
                 'status': timing.status.name,
@@ -186,7 +188,7 @@ class Queries:
         else:
             # Artificially slow down queries in dry-run mode to allow monitoring to keep up
             time.sleep(0.01)
-            self.stats_queue.put(('tpch', {
+            self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
                 'status': 'OK',

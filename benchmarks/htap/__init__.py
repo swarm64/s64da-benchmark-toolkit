@@ -5,15 +5,15 @@ def add_parser(subparsers):
     parser = subparsers.add_parser('htap')
     parser.add_argument(
         '--oltp-workers', default=32, type=int, help=(
-        'The number of OLTP workers executing TPC-C transactions (i.e. simulated clients), default: 32.'))
+        'The number of OLTP workers executing TPC-C-like transactions (i.e. simulated clients), default: 32.'))
 
     parser.add_argument(
         '--olap-workers', default=1, type=int, help=(
-        'The number of OLAP workers running TPC-H-like queries, default: 1.'))
+        'The number of OLAP workers (streams) running TPC-H-like queries, default: 1.'))
 
     parser.add_argument(
         '--target-tps', default=None, type=int, help=(
-        'The target TPS for the otlp queries, default: unlimited.'))
+        'The target TPS for the OLTP workload, default: unlimited.'))
 
     parser.add_argument(
         '--duration', default=60, type=int, help=(
@@ -29,7 +29,7 @@ def add_parser(subparsers):
 
     parser.add_argument(
         '--dry-run', action='store_true', help=(
-        "Only generate transactions and queries but don't send them to the DB. "
+        "Only generate transactions and analytical queries but don't send them to the database. "
         "Can be useful for measuring script throughput."))
 
     parser.add_argument(
@@ -67,7 +67,7 @@ def add_parser(subparsers):
     ))
 
     parser.add_argument('--ignored-queries', required=False, nargs='+', default=[], help=(
-        'Optional list of ignored queries.'
+        'Optional list of ignored queries for the OLAP workload.'
     ))
 
 def run(args):
