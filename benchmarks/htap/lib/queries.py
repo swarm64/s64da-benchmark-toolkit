@@ -115,7 +115,7 @@ class Queries:
         while True:
             available_data = datetime.fromtimestamp(self.latest_timestamp.value) - self.min_timestamp
             if available_data < wanted_range:
-                self.stats_queue.put(('tpch', {
+                self.stats_queue.put(('olap', {
                     'query': query_id,
                     'stream': self.stream_id,
                     'status': 'Waiting'
@@ -138,7 +138,7 @@ class Queries:
     def run_next_query(self):
         query_id = next(self.next_query_it)
         if str(query_id) in self.args.ignored_queries:
-            self.stats_queue.put(('tpch', {
+            self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
                 'status': 'IGNORED'
@@ -149,7 +149,7 @@ class Queries:
         if not self.args.dont_wait_until_enough_data:
             self.wait_until_enough_data(query_id)
 
-        self.stats_queue.put(('tpch', {
+        self.stats_queue.put(('olap', {
             'query': query_id,
             'stream': self.stream_id,
             'status': 'Running'
@@ -168,7 +168,7 @@ class Queries:
                 planned_rows = 0
                 processed_rows = 0
 
-            self.stats_queue.put(('tpch', {
+            self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
                 'status': timing.status.name,
@@ -186,7 +186,7 @@ class Queries:
         else:
             # Artificially slow down queries in dry-run mode to allow monitoring to keep up
             time.sleep(0.01)
-            self.stats_queue.put(('tpch', {
+            self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
                 'status': 'OK',

@@ -8,9 +8,7 @@ import io
 from datetime import datetime
 import multiprocessing
 
-# see section 4.2.2.12, page 81 of http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v2.17.2.pdf
-TPCH_DATE_RANGE = [isoparse('1992-01-01'), isoparse('1998-12-31')]
-
+# OLTP constants
 # see http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-c_v5.11.0.pdf page 62
 # and to check resulting sizes after ingest, use figure 1.2.1 on page 11
 # WARNING: most of the counts like CUST_PER_DIST and NUM_ORDERS are scaled with
@@ -22,7 +20,10 @@ MAX_ITEMS = 100000
 STOCKS = 100000
 # see 3.3.2.11 in tpc-c spec.
 FIRST_UNPROCESSED_O_ID = 2101
-# tpch constants
+
+# OLAP constants
+# see section 4.2.2.12, page 81 of http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v2.17.2.pdf
+TPCH_DATE_RANGE = [isoparse('1992-01-01'), isoparse('1998-12-31')]
 NUM_SUPPLIERS = 10000
 NUM_NATIONS = 62
 NUM_REGIONS = 5
@@ -162,7 +163,7 @@ class Random:
         return self.rng.choices(l, k=length)
 
 
-class TPCCText:
+class OLTPText:
     def __init__(self, random):
         self.random = random
 
@@ -199,7 +200,7 @@ class TPCCText:
         return self.alnumstring(2).upper()
 
 
-class TPCHText:
+class OLAPText:
     def __init__(self, random):
         self.random = random
 

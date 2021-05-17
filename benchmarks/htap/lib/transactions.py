@@ -3,14 +3,14 @@ import time
 from datetime import datetime
 from collections import deque
 
-from .helpers import Random, TPCCText, TimestampGenerator
+from .helpers import Random, OLTPText, TimestampGenerator
 from .helpers import MAX_ITEMS, DIST_PER_WARE, CUST_PER_DIST, NUM_ORDERS, STOCKS, NAMES
 
 class Transactions:
     def __init__(self, seed, num_warehouses, latest_timestamp, conn, dry_run):
         self.conn = conn
         self.random = Random(seed)
-        self.tpcc_text = TPCCText(self.random)
+        self.oltp_text = OLTPText(self.random)
         self.num_warehouses = num_warehouses
         self.dry_run = dry_run
 
@@ -113,7 +113,7 @@ class Transactions:
         d_id = self.random.randint_inclusive(1, DIST_PER_WARE)
         c_id = self.random.nurand(1023, 1, CUST_PER_DIST)
         h_amount = self.random.randint_inclusive(1, 5000)
-        c_last = self.tpcc_text.lastname(self.random.nurand(255, 0, 999))
+        c_last = self.oltp_text.lastname(self.random.nurand(255, 0, 999))
 
         byname = self.random.randint_inclusive(1, 100) <= 60
         if self.random.randint_inclusive(1, 100) <= 85:
@@ -131,7 +131,7 @@ class Transactions:
         w_id = self.random.randint_inclusive(1, self.num_warehouses)
         d_id = self.random.randint_inclusive(1, DIST_PER_WARE)
         c_id = self.random.nurand(1023, 1, CUST_PER_DIST)
-        c_last = self.tpcc_text.lastname(self.random.nurand(255, 0, 999))
+        c_last = self.oltp_text.lastname(self.random.nurand(255, 0, 999))
         byname = self.random.randint_inclusive(1, 100) <= 60
 
         sql = 'SELECT * FROM order_status(%s, %s, %s, %s, %s)'

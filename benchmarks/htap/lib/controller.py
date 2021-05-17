@@ -21,7 +21,7 @@ class HTAPController:
     # inheritance scheme doesn't work. we want these primitives so we can use
     # "simple" synchronized primitives.
     latest_timestamp = Value('d', 0) # database record timestamp
-    next_tsx_timestamp = Value('d', 0) # rtc time at which we can do the next tpcc tsx
+    next_tsx_timestamp = Value('d', 0) # rtc time at which we can do the next oltp tsx
     stats_queue = Queue() # queue for communicating statistics
 
     def __init__(self, args):
@@ -51,17 +51,17 @@ class HTAPController:
             time.sleep(sleep_until - time_now)
 
     def oltp_worker(self, worker_id):
-        # do NOT introduce timeouts for the tpcc queries! this will make that
+        # do NOT introduce timeouts for the oltp queries! this will make that
         # the workload gets inbalanaced and eventually the whole benchmark stalls
         with DBConn(self.args.dsn) as conn:
-            tpcc_worker = Transactions(worker_id, self.num_warehouses, self.latest_timestamp, conn, self.args.dry_run)
+            oltp_worker = Transactions(worker_id, self.num_warehouses, self.latest_timestamp, conn, self.args.dry_run)
             next_reporting_time = time.time() + 0.1
             while True:
                 self.oltp_sleep()
-                tpcc_worker.next_transaction()
+                oltp_worker.next_transaction()
                 if next_reporting_time <= time.time():
                     # its beneficial to send in chunks so try to batch the stats by accumulating 0.1s of samples
-                    self.stats_queue.put(('tpcc', tpcc_worker.stats()))
+                    self.stats_queue.put(('oltp', oltp_worker.stats()))
                     next_reporting_time += 0.1
 
 

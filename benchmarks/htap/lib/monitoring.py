@@ -24,12 +24,12 @@ HISTORY_LENGTH = 10
 
 class Stats:
     """
-    A stats collector for TPC-C and TPC-H stats.
-    The way TPC-C and TPC-H report their stats are quite different.
+    A stats collector for OLTP and OLAP stats.
+    The way OLTP and OLAP workloads report their stats are quite different.
 
-    TPC-C
+    OLTP
     -----
-    Since TPC-C has a very high througput (thousands per second) only
+    Since OLTP has a very high througput (thousands per second) only
     the end state of a transaction is sent through the queue. Per reporting interval
     all accumulated events are sent, which contain the timestamp, query id and runtime
     for each transaction.
@@ -37,16 +37,16 @@ class Stats:
     When we want to report the actual statistics we then simply aggregate the results
     based on the raw, possibly filtered, samples.
 
-    TPC-H
+    OLAP
     -----
-    For TPC-H the status of each individual query (Running, Ok, Error,
+    For OLAP the status of each individual query (Running, Ok, Error, Ignored
     Timeout) is put into the monitoring queue, regardless of monitoring interval.
     """
     def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval):
         self.data = {}
-        self.data['tpcc'] = defaultdict(list)
-        self.data['tpcc_totals'] = defaultdict(int)
-        self.data['tpch'] = [{
+        self.data['oltp'] = defaultdict(list)
+        self.data['oltp_totals'] = defaultdict(int)
+        self.data['olap'] = [{
                 'queries': {query: {'status': 'Waiting', 'runtime': 0} for query in Queries.query_ids()},
                 'ok_count': 0,
                 'timeout_count': 0,
@@ -59,45 +59,45 @@ class Stats:
         self.csv_interval = csv_interval
         self.dsn = dsn
         self.database = urlparse(self.dsn).path[1:]
-        self.csv_tpch = None
-        self.csv_tpcc = None
+        self.csv_olap = None
+        self.csv_oltp = None
         self.csv_dbstats = None
         self.conn = None
         
-    def _update_tpcc_stats(self, stats):
+    def _update_oltp_stats(self, stats):
         for stat in stats:
-            self.data['tpcc'][stat['query']].append(stat)
-            self.data['tpcc_totals'][stat['query']] += 1
+            self.data['oltp'][stat['query']].append(stat)
+            self.data['oltp_totals'][stat['query']] += 1
 
-    def cleanup_tpcc_stats(self, time_now):
+    def cleanup_oltp_stats(self, time_now):
         cutoff = int(time_now - HISTORY_LENGTH)
-        for query_type in self.data['tpcc'].keys():
-            # keep one minute of history
-            self.data['tpcc'][query_type] = list(filter(lambda x: x['timestamp'] >= cutoff, self.data['tpcc'][query_type]))
+        for query_type in self.data['oltp'].keys():
+            # keep HISTORY_LENGTH of history
+            self.data['oltp'][query_type] = list(filter(lambda x: x['timestamp'] >= cutoff, self.data['oltp'][query_type]))
 
-    def _update_tpch_stats(self, stats):
+    def _update_olap_stats(self, stats):
         stream_id = stats['stream']
         query_id = stats['query']
 
         if stats['status'] == 'Waiting' or stats['status'] == 'Running' or stats['status'] == 'IGNORED':
             # only overwrite status so we keep the last runtime
-            self.data['tpch'][stream_id]['queries'][query_id]['last-status'] = \
-                self.data['tpch'][stream_id]['queries'][query_id]['status']
-            self.data['tpch'][stream_id]['queries'][query_id]['status'] = stats['status']
+            self.data['olap'][stream_id]['queries'][query_id]['last-status'] = \
+                self.data['olap'][stream_id]['queries'][query_id]['status']
+            self.data['olap'][stream_id]['queries'][query_id]['status'] = stats['status']
             return
 
-        self.data['tpch'][stream_id]['queries'][query_id] = stats
-        if self.csv_tpch:
-            self.csv_tpch.write(f'{stream_id}, {query_id}, {stats["status"]}, {stats["runtime"]}\n')
-            self.csv_tpch.flush()
+        self.data['olap'][stream_id]['queries'][query_id] = stats
+        if self.csv_olap:
+            self.csv_olap.write(f'{stream_id}, {query_id}, {stats["status"]}, {stats["runtime"]}\n')
+            self.csv_olap.flush()
         status_count = stats['status'].lower() + '_count'
-        self.data['tpch'][stream_id][status_count] += 1
+        self.data['olap'][stream_id][status_count] += 1
 
     def _process_queue(self, src, item):
-        if src == 'tpcc':
-            self._update_tpcc_stats(item)
-        elif src == 'tpch':
-            self._update_tpch_stats(item)
+        if src == 'oltp':
+            self._update_oltp_stats(item)
+        elif src == 'olap':
+            self._update_olap_stats(item)
 
     def _update_cached_stats(self):
         with self.conn as conn:
@@ -117,37 +117,37 @@ class Stats:
     def update(self):
         # open the files and connections lazily to avoid serialization problems when forking
         os.makedirs('results', exist_ok=True)
-        if not self.csv_tpcc:
-            self.csv_tpcc = open('results/tpcc.csv', 'w')
-        if not self.csv_tpch:
-            self.csv_tpch = open('results/tpch.csv', 'w')
+        if not self.csv_oltp:
+            self.csv_oltp = open('results/oltp.csv', 'w')
+        if not self.csv_olap:
+            self.csv_olap = open('results/olap.csv', 'w')
         if not self.csv_dbstats:
             self.csv_dbstats = open('results/dbstats.csv', 'w')
         if not self.conn:
             self.conn = DBConn(self.dsn, use_dict_cursor = True)
             self._update_cached_stats()
 
-        self.cleanup_tpcc_stats(time.time())
+        self.cleanup_oltp_stats(time.time())
 
         self.updates += 1
         if self.updates % 10 == 0:
             self._update_cached_stats()
         if self.csv_interval and self.updates % self.csv_interval == 0:
-            self.write_tpcc_stats()
+            self.write_oltp_stats()
             self.write_dbstats()
 
-    def tpch_stats_for_stream_id(self, stream_id):
-        return self.data['tpch'][stream_id]
+    def olap_stats_for_stream_id(self, stream_id):
+        return self.data['olap'][stream_id]
 
     def filter_last_1s(self, stats):
         ts = max(stat['timestamp'] for stat in stats) - 1
         return list(filter(lambda x: x['timestamp'] >= ts, stats))
 
-    def tpcc_tps(self, query):
-        if not query in self.data['tpcc']:
+    def oltp_tps(self, query):
+        if not query in self.data['oltp']:
             return (0, 0, 0, 0)
 
-        stats = self.data['tpcc'][query]
+        stats = self.data['oltp'][query]
         per_sec = defaultdict(int)
 
         time_now = int(time.time())
@@ -166,11 +166,11 @@ class Stats:
         tps.pop(-1)
         return (tps[-1], min(tps), int(sum(tps)/len(tps)), max(tps))
 
-    def tpcc_latency(self, query):
-        if not query in self.data['tpcc']:
+    def oltp_latency(self, query):
+        if not query in self.data['oltp']:
             return (0, 0, 0, 0)
 
-        stats = self.data['tpcc'][query]
+        stats = self.data['oltp'][query]
         if len(stats) == 0:
             return (0, 0, 0, 0)
 
@@ -181,11 +181,11 @@ class Stats:
                 int(sum(lat)/len(lat)),
                 max(lat))
 
-    def tpcc_total(self, query_type):
-        return self.data['tpcc_totals'][query_type]
+    def oltp_total(self, query_type):
+        return self.data['oltp_totals'][query_type]
 
-    def tpch_totals(self):
-        return tuple(sum(slot[slot_type] for slot in self.data['tpch'])
+    def olap_totals(self):
+        return tuple(sum(slot[slot_type] for slot in self.data['olap'])
                 for slot_type in ['ok_count', 'error_count', 'timeout_count'])
 
     def db_size(self):
@@ -202,11 +202,11 @@ class Stats:
             result.append([table_name, table_size, index_size, compression_ratio, cached])
         return result
 
-    def write_tpcc_stats(self):
+    def write_oltp_stats(self):
         for query_type in QUERY_TYPES:
-            row = [datetime.now(), query_type, self.tpcc_total(query_type), *self.tpcc_tps(query_type), *self.tpcc_latency(query_type)]
-            self.csv_tpcc.write(', '.join(map(str, row)) + "\n")
-        self.csv_tpcc.flush()
+            row = [datetime.now(), query_type, self.oltp_total(query_type), *self.oltp_tps(query_type), *self.oltp_latency(query_type)]
+            self.csv_oltp.write(', '.join(map(str, row)) + "\n")
+        self.csv_oltp.flush()
 
     def write_dbstats(self):
         for row in self.columnstore_stats():
@@ -222,9 +222,9 @@ class Stats:
             fake_date = datetime.now()
             elapsed_seconds = elapsed.total_seconds()
             for query_type in QUERY_TYPES:
-                total = self.tpcc_total(query_type)
-                tps = self.tpcc_tps(query_type)[2]
-                latency = self.tpcc_latency(query_type)[2]
+                total = self.oltp_total(query_type)
+                tps = self.oltp_tps(query_type)[2]
+                latency = self.oltp_latency(query_type)[2]
                 csv.write(f'{row_nr};{stream_id};{query_type}_total;{fake_date};{fake_date};{total};OK;OK\n')
                 row_nr += 1
                 csv.write(f'{row_nr};{stream_id};{query_type}_tps;{fake_date};{fake_date};{tps};OK;OK\n')
@@ -233,7 +233,7 @@ class Stats:
                 row_nr += 1
  
             # now all olap streams
-            for stream_idx, stream in enumerate(self.data['tpch']):
+            for stream_idx, stream in enumerate(self.data['olap']):
                 for query_id, stats in stream['queries'].items():
                     stream_id = stream_idx + 1 # so that the oltp stream can be 0
                     status = stats["status"].upper()
@@ -273,10 +273,10 @@ class Monitor:
 
     def display_summary(self, elapsed):
         elapsed_seconds = max(1, elapsed.total_seconds())
-        tps = self.stats.tpcc_total('ok')    / elapsed_seconds
-        eps = self.stats.tpcc_total('error') / elapsed_seconds
-        tpmc = trunc((self.stats.tpcc_total('new_order') / elapsed_seconds) * 60)
-        num_queries, num_errors, num_timeouts = self.stats.tpch_totals()
+        tps = self.stats.oltp_total('ok')    / elapsed_seconds
+        eps = self.stats.oltp_total('error') / elapsed_seconds
+        tpmc = trunc((self.stats.oltp_total('new_order') / elapsed_seconds) * 60)
+        num_queries, num_errors, num_timeouts = self.stats.olap_totals()
         throughput = num_queries * 3600 / elapsed_seconds
         print()
         summary = 'Summary'
@@ -284,20 +284,20 @@ class Monitor:
         print(f'Scale Factor: {self.num_warehouses // WAREHOUSES_SF_RATIO }')
         print(f'Streams: {self.num_oltp_workers} OLTP, {self.num_olap_workers} OLAP')
         print(f'Total time: {elapsed_seconds:.2f} seconds')
-        print(f'TPC-C AVG Transactions per second (TPS): {tps:.2f}')
-        print(f'TPC-C AVG Errors per second: {eps:.2f}')
-        print(f'TPC-C New-Order transactions per minute (tpmC): {tpmc:.0f}')
-        print(f'TPC-H Throughput (queries per hour): {throughput:.1f}')
-        print(f'TPC-H Errors {num_errors:}, Timeouts: {num_timeouts:}')
+        print(f'OLTP AVG Transactions per second (TPS): {tps:.2f}')
+        print(f'OLTP AVG Errors per second: {eps:.2f}')
+        print(f'OLTP New-Order transactions per minute (tpmC): {tpmc:.0f}')
+        print(f'OLAP Throughput (queries per hour): {throughput:.1f}')
+        print(f'OLAP Errors {num_errors:}, Timeouts: {num_timeouts:}')
 
     def get_elapsed_row(self, elapsed_seconds):
         unit = 'second' if elapsed_seconds < 2 else 'seconds'
         return f'Elapsed: {elapsed_seconds:.0f} {unit}'
 
-    def get_tpcc_row(self, query_type):
-        total = self.stats.tpcc_total(query_type)
-        tps     = '{:5} | {:5} | {:5} | {:5}'.format(*self.stats.tpcc_tps(query_type))
-        latency = '{:5} | {:5} | {:5} | {:5}'.format(*self.stats.tpcc_latency(query_type))
+    def get_oltp_row(self, query_type):
+        total = self.stats.oltp_total(query_type)
+        tps     = '{:5} | {:5} | {:5} | {:5}'.format(*self.stats.oltp_tps(query_type))
+        latency = '{:5} | {:5} | {:5} | {:5}'.format(*self.stats.oltp_latency(query_type))
         return f'| {query_type:^12} | {total:8} | {tps} | {latency} |'
 
     def get_olap_header(self):
@@ -311,7 +311,7 @@ class Monitor:
         max_planned = 0
         max_processed = 0
         for stream_id in range(self.num_olap_workers):
-            stats = self.stats.tpch_stats_for_stream_id(stream_id).get('queries').get(query_id)
+            stats = self.stats.olap_stats_for_stream_id(stream_id).get('queries').get(query_id)
             if stats and stats['runtime'] > 0:
                 # output last result
                 max_planned = max(max_planned, int(stats['planned_rows']/1000))
@@ -329,7 +329,7 @@ class Monitor:
     def get_olap_sum(self):
         row = f'SUM      |'
         for stream_id in range(self.num_olap_workers):
-            stats = self.stats.tpch_stats_for_stream_id(stream_id)
+            stats = self.stats.olap_stats_for_stream_id(stream_id)
             stream_sum = sum(stats['queries'][query_id]['runtime'] for query_id in Queries.query_ids())
             row += f' {stream_sum:9.2f} |'
         return row
@@ -358,7 +358,7 @@ class Monitor:
         self._add_display_line('|              |          |  CURR |  MIN  |  AVG  |  MAX  |  CURR |  MIN  |  AVG  |  MAX  |')
         self._add_display_line('|------------------------------------------------------------------------------------------')
         for query_type in QUERY_TYPES:
-            self._add_display_line(self.get_tpcc_row(query_type))
+            self._add_display_line(self.get_oltp_row(query_type))
         self._add_display_line('|------------------------------------------------------------------------------------------')
 
         if self.num_olap_workers > 0:
