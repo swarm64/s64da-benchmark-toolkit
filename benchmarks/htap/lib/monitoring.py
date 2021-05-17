@@ -286,8 +286,8 @@ class Monitor:
         print()
         summary = 'Summary'
         print(f'{summary}\n' + len(summary) * '-')
-        print(f'Scale Factor: {self.num_warehouses // WAREHOUSES_SF_RATIO }')
-        print(f'Streams: {self.num_oltp_workers} OLTP, {self.num_olap_workers} OLAP')
+        print(f'Scale factor: {self.num_warehouses // WAREHOUSES_SF_RATIO }')
+        print(f'Workers: {self.num_oltp_workers} OLTP, {self.num_olap_workers} OLAP')
         print(f'Total time: {elapsed_seconds:.2f} seconds')
         print(f'OLTP AVG Transactions per second (TPS): {tps:.2f}')
         print(f'OLTP AVG Errors per second: {eps:.2f}')
