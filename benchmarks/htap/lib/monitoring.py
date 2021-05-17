@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 
 from psycopg2.extras import register_uuid
 
-from benchmarks.htap.lib.analytical import QUERY_IDS
+from benchmarks.htap.lib.analytical import QUERY_IDS, is_ignored_query
 from benchmarks.htap.lib.helpers import WAREHOUSES_SF_RATIO
 from s64da_benchmark_toolkit.dbconn import DBConn
 
@@ -42,12 +42,17 @@ class Stats:
     For OLAP the status of each individual query (Running, Ok, Error, Ignored
     Timeout) is put into the monitoring queue, regardless of monitoring interval.
     """
-    def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval):
+    def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval, ignored_queries = []):
         self.data = {}
         self.data['oltp'] = defaultdict(list)
         self.data['oltp_totals'] = defaultdict(int)
         self.data['olap'] = [{
-                'queries': {query: {'status': 'Waiting', 'runtime': 0} for query in QUERY_IDS},
+                'queries': {
+                    query: {
+                        'runtime': 0,
+                        'status': 'IGNORED' if is_ignored_query(ignored_queries, query) else 'Waiting'
+                        } for query in QUERY_IDS
+                    },
                 'ok_count': 0,
                 'timeout_count': 0,
                 'error_count': 0,

@@ -45,6 +45,10 @@ QUERY_TEMPLATES = {
 
 QUERY_IDS = sorted(QUERY_TEMPLATES.keys())
 
+def is_ignored_query(ignored_queries, query_id):
+    return (str(query_id) in ignored_queries)
+
+
 class AnalyticalStream:
     def __init__(self, stream_id, args, min_timestamp, latest_timestamp, stats_queue):
         self.random = Random(stream_id)
@@ -116,7 +120,7 @@ class AnalyticalStream:
                 self.stats_queue.put(('olap', {
                     'query': query_id,
                     'stream': self.stream_id,
-                    'status': 'Waiting'
+                    'status': 'IGNORED' if is_ignored_query(self.args.ignored_queries, query_id) else 'Waiting'
                 }))
                 time.sleep(1)
             else:
@@ -135,7 +139,7 @@ class AnalyticalStream:
 
     def run_next_query(self):
         query_id = next(self.next_query_it)
-        if str(query_id) in self.args.ignored_queries:
+        if is_ignored_query(self.args.ignored_queries, query_id):
             self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
