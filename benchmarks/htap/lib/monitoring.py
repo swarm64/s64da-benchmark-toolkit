@@ -1,5 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from math import trunc
+from tabulate import tabulate
 
 from benchmarks.htap.lib.analytical import QUERY_IDS
 from benchmarks.htap.lib.helpers import WAREHOUSES_SF_RATIO
@@ -40,12 +41,14 @@ class Monitor:
         # TODO output time after burn-in step
 
         print('')
-        print(f'OLTP Average transactions per second (TPS)')
-        _, tps, _ = self.stats.oltp_total()
-        print(f'Total: {tps[2]:.2f}')
+        print(f'OLTP')
+        rows = []
+        _, tps, latency = self.stats.oltp_total()
+        rows.append(['All', f'{tps[2]:.2f}', f'{latency[2]:.2f}'])
         for query_type in QUERY_TYPES:
-            _, tps, _ = self.stats.oltp_total(query_type)
-            print(f'{query_type} : {tps[2]:.2f}')
+            _, tps, latency = self.stats.oltp_total(query_type)
+            rows.append([query_type, f'{tps[2]:.2f}', f'{latency[2]:.2f}'])
+        print(tabulate(rows, headers=['', 'Average transactions per second',  'Average latency (ms)']))
 
         print('')
         num_ok, num_errors, num_timeouts = self.stats.olap_totals()
