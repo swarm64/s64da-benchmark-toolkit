@@ -29,25 +29,16 @@ def test_storage():
     # yapf: disable
     data = [
             # this will be not be kept
-            ('oltp', [{ 'timestamp': 0, 'query': 1, 'runtime': 0.01 }]),
-            ('oltp', [{ 'timestamp': 0, 'query': 'ok', 'runtime': 0.01 }]),
+            ('oltp', [{ 'timestamp': 0, 'query': 0, 'status':'ok', 'runtime': 0.01 }]),
             # from here on we have a 10s window
-            ('oltp', [{ 'timestamp': 1.1, 'query': 1, 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 1.1, 'query': 'ok', 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 2, 'query': 2, 'runtime': 0.02 }]),
-            ('oltp', [{ 'timestamp': 2, 'query': 'ok', 'runtime': 0.02 }]),
-            ('oltp', [{ 'timestamp': 2, 'query': 3, 'runtime': 0.03 }]),
-            ('oltp', [{ 'timestamp': 2, 'query': 'ok', 'runtime': 0.03 }]),
-            ('oltp', [{ 'timestamp': 2, 'query': 4, 'runtime': 0.04 }]),
-            ('oltp', [{ 'timestamp': 2, 'query': 'error', 'runtime': 0.04 }]),
-            ('oltp', [{ 'timestamp': 2.1, 'query': 1, 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 2.1, 'query': 'ok', 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 3.1, 'query': 1, 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 3.1, 'query': 'ok', 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 3.2, 'query': 1, 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 3.2, 'query': 'ok', 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 11, 'query': 1, 'runtime': 1 }]),
-            ('oltp', [{ 'timestamp': 11, 'query': 'ok', 'runtime': 1 }]),
+            ('oltp', [{ 'timestamp': 1.1, 'query': 0, 'status':'ok', 'runtime': 0.1 }]),
+            ('oltp', [{ 'timestamp': 2, 'query': 1, 'status':'ok', 'runtime': 0.02 }]),
+            ('oltp', [{ 'timestamp': 2, 'query': 2, 'status':'ok', 'runtime': 0.03 }]),
+            ('oltp', [{ 'timestamp': 2, 'query': 3, 'status':'error', 'runtime': 0.04 }]),
+            ('oltp', [{ 'timestamp': 2.1, 'query': 0, 'status':'ok', 'runtime': 0.1 }]),
+            ('oltp', [{ 'timestamp': 3.1, 'query': 0, 'status':'ok', 'runtime': 0.1 }]),
+            ('oltp', [{ 'timestamp': 3.2, 'query': 0, 'status':'ok', 'runtime': 0.1 }]),
+            ('oltp', [{ 'timestamp': 11, 'query': 0, 'status':'ok', 'runtime': 1 }]),
                 ]
     # yapf: enable
     queue = MockQueue(data.copy())
@@ -55,26 +46,30 @@ def test_storage():
     fixture.cleanup_oltp_stats(11.1)
 
     # test:
+    res = [fixture.oltp_total(i) for i in range(4)]
+    res_all = fixture.oltp_total()
+
     # - all samples up to 10s are kept
     # - tps needs at least 3 seconds and all stats are properly computed
     # - latencies are in ms and all stats are properly computed
-    assert fixture.oltp_tps(2) == (0, 0, 0, 0)
-    assert fixture.oltp_tps(3) == (0, 0, 0, 0)
-    assert fixture.oltp_tps(4) == (0, 0, 0, 0)
-    # 1 surviving sample with 1tps and 1 with 2 tps, avg floored is therefore 1
-    assert fixture.oltp_tps(1) == (2, 0, 0, 2)
-    # 3 tps @ 11s, 2tps @ 12
-    assert fixture.oltp_tps('ok') == (2, 0, 0, 3)
 
-    assert fixture.oltp_latency(2) == (20, 20, 20, 20)
-    assert fixture.oltp_latency(3) == (30, 30, 30, 30)
-    assert fixture.oltp_latency(4) == (40, 40, 40, 40)
-    assert fixture.oltp_latency(1) == (1000, 100, int((100+100+100+100+1000)/5), 1000)
-    assert fixture.oltp_latency('ok') == (1000, 20, int((100+20+30+100+100+100+1000)/7), 1000)
+    assert res[1][1] == (0, 0, 0, 0)
+    assert res[2][1] == (0, 0, 0, 0)
+    assert res[3][1] == (0, 0, 0, 0)
+    # 1 surviving sample with 1tps and 1 with 2 tps, avg floored is therefore 1
+    assert res[0][1] == (2, 0, 0, 2)
+    # 3 tps @ 11s, 2tps @ 12
+    assert res_all[1] == (2, 0, 0, 3)
+
+    assert res[0][2] == (1000, 100, int((100+100+100+100+1000)/5), 1000)
+    assert res[1][2] == (20, 20, 20, 20)
+    assert res[2][2] == (30, 30, 30, 30)
+    assert res[3][2] == (0, 0, 0, 0)
+    assert res_all[2] == (1000, 20, int((100+20+30+100+100+100+1000)/7), 1000)
     
-    assert fixture.oltp_total('ok') == 8
-    assert fixture.oltp_total(1) == 6
-    assert fixture.oltp_total('error') == 1
+    assert res_all[0][0] == 8
+    assert res[0][0][0] == 5
+    assert res[3][0][2] == 1
 
     # yapf: disable
     data = [

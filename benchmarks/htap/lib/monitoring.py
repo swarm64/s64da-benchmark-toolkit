@@ -29,33 +29,44 @@ class Monitor:
         self.lines = []
 
     def display_summary(self, elapsed):
-        elapsed_seconds = max(1, elapsed.total_seconds())
-        tps = self.stats.oltp_total('ok')    / elapsed_seconds
-        eps = self.stats.oltp_total('error') / elapsed_seconds
-        tpmc = trunc((self.stats.oltp_total('new_order') / elapsed_seconds) * 60)
-        num_queries, num_errors, num_timeouts = self.stats.olap_totals()
-        throughput = num_queries * 3600 / elapsed_seconds
         print()
         summary = 'Summary'
         print(f'{summary}\n' + len(summary) * '-')
         print(f'Scale factor: {self.num_warehouses // WAREHOUSES_SF_RATIO }')
         print(f'Workers: {self.num_oltp_workers} OLTP, {self.num_olap_workers} OLAP')
+
+        elapsed_seconds = max(1, elapsed.total_seconds())
         print(f'Total time: {elapsed_seconds:.2f} seconds')
-        print(f'OLTP AVG Transactions per second (TPS): {tps:.2f}')
-        print(f'OLTP AVG Errors per second: {eps:.2f}')
-        print(f'OLTP New-Order transactions per minute (tpmC): {tpmc:.0f}')
-        print(f'OLAP Throughput (queries per hour): {throughput:.1f}')
-        print(f'OLAP Errors {num_errors:}, Timeouts: {num_timeouts:}')
+        # TODO output time after burn-in step
+
+        print('')
+        print(f'OLTP Average transactions per second (TPS)')
+        _, tps, _ = self.stats.oltp_total()
+        print(f'Total: {tps[2]:.2f}')
+        for query_type in QUERY_TYPES:
+            _, tps, _ = self.stats.oltp_total(query_type)
+            print(f'{query_type} : {tps[2]:.2f}')
+
+        print('')
+        num_ok, num_errors, num_timeouts = self.stats.olap_totals()
+        print(f'OLAP Queries')
+        print(f'Completed: {num_ok:}')
+        print(f'Errors: {num_errors:}')
+        print(f'Timeouts: {num_timeouts:}')
+        # TODO output average query runtime per query type
+        # TODO output average stream runtime
 
     def get_elapsed_row(self, elapsed_seconds):
         unit = 'second' if elapsed_seconds < 2 else 'seconds'
         return f'Elapsed: {elapsed_seconds:.0f} {unit}'
 
-    def get_oltp_row(self, query_type):
-        total = self.stats.oltp_total(query_type)
-        tps     = '{:5} | {:5} | {:5} | {:5}'.format(*self.stats.oltp_tps(query_type))
-        latency = '{:5} | {:5} | {:5} | {:5}'.format(*self.stats.oltp_latency(query_type))
-        return f'| {query_type:^12} | {total:8} | {tps} | {latency} |'
+    def get_oltp_row(self, query_type = None):
+        counters, tps, latency = self.stats.oltp_total(query_type)
+        issued, ok , err = counters
+        tps     = '{:5} | {:5} | {:5} | {:5}'.format(*tps)
+        latency = '{:5} | {:5} | {:5} | {:5}'.format(*latency)
+        name = 'All types' if query_type == None else query_type
+        return f'| {name:^12} | {issued:8} | {ok:10} | {err:6} | {tps} | {latency} |'
 
     def get_olap_header(self):
         olap_header = f'{"Stream":<8} |'
@@ -84,7 +95,7 @@ class Monitor:
         return row
 
     def get_olap_sum(self):
-        row = f'SUM      |'
+        row = f'Total    |'
         for stream_id in range(self.num_olap_workers):
             stats = self.stats.olap_stats_for_stream_id(stream_id)
             stream_sum = sum(stats['queries'][query_id]['runtime'] for query_id in QUERY_IDS)
@@ -104,29 +115,39 @@ class Monitor:
         self._add_display_line(f'Data range: {self.min_timestamp} - {latest_time} = {date_range.years} years, {date_range.months} months and {date_range.days} days {data_warning}')
         self._add_display_line(f'DB size: {self.stats.db_size()}')
         if self.stats.columnstore_stats():
+            self._add_display_line('')
+            self._add_display_line('Table size and S64 DA columnstore status')
             self._add_display_line('-----------------------------------------------------------')
             self._add_display_line('|    table     | heap size |  colstore |  ratio  | cached |')
-            self._add_display_line('-----------------------------------------------------------')
+            self._add_display_line('|---------------------------------------------------------|')
             for row in self.stats.columnstore_stats():
                 self._add_display_line(self.get_columnstore_row(row))
-
-        self._add_display_line('-------------------------------------------------------------------------------------------')
-        self._add_display_line('|     TYPE     |  TOTALS  |         TPS (last {}s)        |   LATENCY (last {}s, in ms)   |'.format(HISTORY_LENGTH, HISTORY_LENGTH))
-        self._add_display_line('|              |          |  CURR |  MIN  |  AVG  |  MAX  |  CURR |  MIN  |  AVG  |  MAX  |')
-        self._add_display_line('|------------------------------------------------------------------------------------------')
+            self._add_display_line('-----------------------------------------------------------')
+        self._add_display_line('')
+        self._add_display_line('OLTP workload status')
+        self._add_display_line('-----------------------------------------------------------------------------------------------------------------')
+        self._add_display_line('|     TYPE     |  ISSUED  |  COMPLETED | ERRORS |         TPS (last {}s)        |   LATENCY (last {}s, in ms)   |'.format(HISTORY_LENGTH, HISTORY_LENGTH))
+        self._add_display_line('|              |          |            |        |  CURR |  MIN  |  AVG  |  MAX  |  CURR |  MIN  |  AVG  |  MAX  |')
+        self._add_display_line('|---------------------------------------------------------------------------------------------------------------|')
         for query_type in QUERY_TYPES:
             self._add_display_line(self.get_oltp_row(query_type))
-        self._add_display_line('|------------------------------------------------------------------------------------------')
+        self._add_display_line('|---------------------------------------------------------------------------------------------------------------|')
+        self._add_display_line(self.get_oltp_row())
+        self._add_display_line('-----------------------------------------------------------------------------------------------------------------')
 
         if self.num_olap_workers > 0:
             self._add_display_line('')
+            self._add_display_line('OLAP workload status')
             olap_header = self.get_olap_header()
+            self._add_display_line('-' * len(olap_header))
             self._add_display_line(olap_header)
             self._add_display_line('-' * len(olap_header))
 
             for query_id in QUERY_IDS:
                 self._add_display_line(self.get_olap_row(query_id))
+            self._add_display_line('-' * len(olap_header))
             self._add_display_line(self.get_olap_sum())
+            self._add_display_line('-' * len(olap_header))
 
         self._add_display_line('')
         self._add_display_line(self.get_elapsed_row(time_elapsed))

@@ -14,7 +14,7 @@ from s64da_benchmark_toolkit.dbconn import DBConn
 
 register_uuid()
 
-QUERY_TYPES = ['ok', 'error', 'new_order', 'payment', 'order_status', 'delivery', 'stock_level']
+QUERY_TYPES = ['new_order', 'payment', 'order_status', 'delivery', 'stock_level']
 HISTORY_LENGTH = 10
 
 class Stats:
@@ -26,7 +26,7 @@ class Stats:
     -----
     Since OLTP has a very high througput (thousands per second) only
     the end state of a transaction is sent through the queue. Per reporting interval
-    all accumulated events are sent, which contain the timestamp, query id and runtime
+    all accumulated events are sent, which contain the timestamp, query id, status, and runtime
     for each transaction.
     This is kept in a list where the last HISTORY_LENGTH seconds of samples are stored.
     When we want to report the actual statistics we then simply aggregate the results
@@ -40,7 +40,6 @@ class Stats:
     def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval, ignored_queries = []):
         self.data = {}
         self.data['oltp'] = defaultdict(list)
-        self.data['oltp_totals'] = defaultdict(int)
         self.data['olap'] = [{
                 'queries': {
                     query: {
@@ -67,13 +66,12 @@ class Stats:
     def _update_oltp_stats(self, stats):
         for stat in stats:
             self.data['oltp'][stat['query']].append(stat)
-            self.data['oltp_totals'][stat['query']] += 1
 
     def cleanup_oltp_stats(self, time_now):
         cutoff = int(time_now - HISTORY_LENGTH)
         for query_type in self.data['oltp'].keys():
             # keep HISTORY_LENGTH of history
-            self.data['oltp'][query_type] = list(filter(lambda x: x['timestamp'] >= cutoff, self.data['oltp'][query_type]))
+            self.data['oltp'][query_type] = [s for s in self.data['oltp'][query_type] if s['timestamp'] >= cutoff]
 
     def _update_olap_stats(self, stats):
         stream_id = stats['stream']
@@ -140,14 +138,10 @@ class Stats:
         return self.data['olap'][stream_id]
 
     def filter_last_1s(self, stats):
-        ts = max(stat['timestamp'] for stat in stats) - 1
-        return list(filter(lambda x: x['timestamp'] >= ts, stats))
+        ts = max(s['timestamp'] for s in stats) - 1
+        return [s for s in stats if s['timestamp'] >= ts]
 
-    def oltp_tps(self, query):
-        if not query in self.data['oltp']:
-            return (0, 0, 0, 0)
-
-        stats = self.data['oltp'][query]
+    def _oltp_tps(self, stats):
         per_sec = defaultdict(int)
 
         time_now = int(time.time())
@@ -166,23 +160,29 @@ class Stats:
         tps.pop(-1)
         return (tps[-1], min(tps), int(sum(tps)/len(tps)), max(tps))
 
-    def oltp_latency(self, query):
-        if not query in self.data['oltp']:
-            return (0, 0, 0, 0)
-
-        stats = self.data['oltp'][query]
+    def _oltp_latency(self, stats):
         if len(stats) == 0:
             return (0, 0, 0, 0)
 
-        lat = list(map(lambda x: math.ceil(x['runtime']*1000), stats))
-        lat_1s = list(map(lambda x: math.ceil(x['runtime']*1000), self.filter_last_1s(stats)))
+        lat = [math.ceil(s['runtime']*1000) for s in stats]
+        lat_1s = [math.ceil(s['runtime']*1000) for s in self.filter_last_1s(stats)]
         return (int(sum(lat_1s)/len(lat_1s)),
                 min(lat),
                 int(sum(lat)/len(lat)),
                 max(lat))
 
-    def oltp_total(self, query_type):
-        return self.data['oltp_totals'][query_type]
+    def oltp_total(self, query_type = None):
+        data = self.data['oltp']
+        # If query_type is None, then flatten all records into a single list, otherwise just take the records of the
+        # requested type
+        stats = data[query_type] if query_type != None else [item for sublist in data.values() for item in sublist]
+        ok, err = [], []
+        for s in stats:
+            (ok if s['status'] == 'ok'  else err).append(s)
+        tps = self._oltp_tps(ok)
+        latency = self._oltp_latency(ok)
+        return ((len(stats), len(ok), len(err)), tps, latency)
+
 
     def olap_totals(self):
         return tuple(sum(slot[slot_type] for slot in self.data['olap'])
@@ -204,7 +204,8 @@ class Stats:
 
     def write_oltp_stats(self):
         for query_type in QUERY_TYPES:
-            row = [datetime.now(), query_type, self.oltp_total(query_type), *self.oltp_tps(query_type), *self.oltp_latency(query_type)]
+            counters, tps, latency = self.oltp_total(query_type)
+            row = [datetime.now(), query_type, *counters, *tps, *latency]
             self.csv_oltp.write(', '.join(map(str, row)) + "\n")
         self.csv_oltp.flush()
 
@@ -222,9 +223,8 @@ class Stats:
             fake_date = datetime.now()
             elapsed_seconds = elapsed.total_seconds()
             for query_type in QUERY_TYPES:
-                total = self.oltp_total(query_type)
-                tps = self.oltp_tps(query_type)[2]
-                latency = self.oltp_latency(query_type)[2]
+                counters, tps, latency = self.oltp_total(query_type)
+                total, ok , err = counters
                 csv.write(f'{row_nr};{stream_id};{query_type}_total;{fake_date};{fake_date};{total};OK;OK\n')
                 row_nr += 1
                 csv.write(f'{row_nr};{stream_id};{query_type}_tps;{fake_date};{fake_date};{tps};OK;OK\n')
