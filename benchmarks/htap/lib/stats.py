@@ -36,6 +36,8 @@ class Stats:
     -----
     For OLAP the status of each individual query (Running, Ok, Error, Ignored
     Timeout) is put into the monitoring queue, regardless of monitoring interval.
+
+    Also each completed OLAP stream is reported individually with its runtime.
     """
     def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval, ignored_queries = []):
         self.data = {}
@@ -52,6 +54,7 @@ class Stats:
                 'error_count': 0,
                 'ignored_count': 0
         } for _ in range(num_olap_slots)]
+        self.data['olap_stream'] = []
         self.uuid = uuid4()
         self.num_oltp_slots = num_oltp_slots
         self.updates = 0
@@ -91,11 +94,16 @@ class Stats:
         status_count = stats['status'].lower() + '_count'
         self.data['olap'][stream_id][status_count] += 1
 
+    def _update_olap_stream_stats(self, stats):
+        self.data['olap_stream'].append(stats)
+
     def _process_queue(self, src, item):
         if src == 'oltp':
             self._update_oltp_stats(item)
         elif src == 'olap':
             self._update_olap_stats(item)
+        elif src == 'olap_stream':
+            self._update_olap_stream_stats(item)
 
     def _update_cached_stats(self):
         with self.conn as conn:
@@ -187,6 +195,14 @@ class Stats:
     def olap_totals(self):
         return tuple(sum(slot[slot_type] for slot in self.data['olap'])
                 for slot_type in ['ok_count', 'error_count', 'timeout_count'])
+
+    def olap_stream_totals(self):
+        stats = self.data['olap_stream']
+        completed_iterations = len(stats)
+        if completed_iterations == 0:
+            return ('-', 0)
+        avg_runtime_it = sum(int(s['runtime']) for s in stats) // completed_iterations
+        return (avg_runtime_it, completed_iterations)
 
     def db_size(self):
         return "{:7.2f}GB".format(self.cached_database_size / (1024*1024*1024.0))

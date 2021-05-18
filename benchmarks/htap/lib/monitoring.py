@@ -51,13 +51,17 @@ class Monitor:
         print(tabulate(rows, headers=['', 'Average transactions per second',  'Average latency (ms)']))
 
         print('')
+        print(f'OLAP')
+        rows = []
+        avg_stream_runtime, n_streams = self.stats.olap_stream_totals()
+        rows.append(['Average stream runtime (ms)', avg_stream_runtime])
+        rows.append(['Completed stream iterations', n_streams])
         num_ok, num_errors, num_timeouts = self.stats.olap_totals()
-        print(f'OLAP Queries')
-        print(f'Completed: {num_ok:}')
-        print(f'Errors: {num_errors:}')
-        print(f'Timeouts: {num_timeouts:}')
+        rows.append(['Succesful queries', num_ok])
+        rows.append(['Queries with errors', num_errors])
+        rows.append(['Query timeouts', num_timeouts])
+        print(tabulate(rows))
         # TODO output average query runtime per query type
-        # TODO output average stream runtime
 
     def get_elapsed_row(self, elapsed_seconds):
         unit = 'second' if elapsed_seconds < 2 else 'seconds'

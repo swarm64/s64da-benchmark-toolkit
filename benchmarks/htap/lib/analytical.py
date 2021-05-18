@@ -55,8 +55,11 @@ class AnalyticalStream:
         self.stream_id = stream_id
         with open('benchmarks/htap/queries/streams.yaml', 'r') as streams_file:
             sequence = yaml.load(streams_file.read(), Loader=yaml.FullLoader)[stream_id]
+            self.stream_last_query = sequence[-1]
             self.next_query_it = cycle(sequence)
         self.min_timestamp = min_timestamp
+        # Keep a list of all stream iterations performed by this instance with their runtimes
+        self.stream_acc_time = [0]
         self.latest_timestamp = latest_timestamp
         self.stats_queue = stats_queue
         self.args = args
@@ -137,6 +140,16 @@ class AnalyticalStream:
 
 
     def run_next_query(self):
+
+        def _report_last_query():
+            if query_id == self.stream_last_query:
+                self.stats_queue.put(('olap_stream', {
+                    'stream': self.stream_id,
+                    'iteration': len(self.stream_acc_time),
+                    'runtime': self.stream_acc_time[-1]
+                }))
+                self.stream_acc_time.append(0)
+
         query_id = next(self.next_query_it)
         if is_ignored_query(self.args.ignored_queries, query_id):
             self.stats_queue.put(('olap', {
@@ -144,6 +157,7 @@ class AnalyticalStream:
                 'stream': self.stream_id,
                 'status': 'IGNORED'
             }))
+            _report_last_query()
             return
         sql = self.get_query(query_id)
 
@@ -161,7 +175,8 @@ class AnalyticalStream:
             timing, _, plan = DB(self.dsn).run_query(
                     sql, self.args.olap_timeout,
                     self.args.explain_analyze, self.args.use_server_side_cursors)
-
+            runtime = timing.stop - timing.start
+            self.stream_acc_time[-1] += runtime
             # sum up rows processed
             try:
                 planned_rows, processed_rows = self.parse_plan(json.loads(plan)[0]["Plan"])
@@ -173,10 +188,11 @@ class AnalyticalStream:
                 'query': query_id,
                 'stream': self.stream_id,
                 'status': timing.status.name,
-                'runtime': timing.stop - timing.start,
+                'runtime': runtime,
                 'planned_rows': planned_rows,
                 'processed_rows': processed_rows
             }))
+            _report_last_query()
 
             # save plan output
             plan_file =  f'{self.stream_id}_{query_id}.txt'
@@ -186,10 +202,13 @@ class AnalyticalStream:
                 f.write(plan)
         else:
             # Artificially slow down queries in dry-run mode to allow monitoring to keep up
-            time.sleep(0.01)
+            runtime = 0.01
+            time.sleep(runtime)
             self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
                 'status': 'OK',
-                'runtime': 0.001
+                'runtime': runtime
             }))
+            self.stream_acc_time[-1] += runtime
+            _report_last_query()
