@@ -24,6 +24,7 @@ FIRST_UNPROCESSED_O_ID = 2101
 # OLAP constants
 # see section 4.2.2.12, page 81 of http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v2.17.2.pdf
 TPCH_DATE_RANGE = [isoparse('1992-01-01'), isoparse('1998-12-31')]
+WANTED_RANGE = TPCH_DATE_RANGE[1] - TPCH_DATE_RANGE[0]
 NUM_SUPPLIERS = 10000
 NUM_NATIONS = 62
 NUM_REGIONS = 5

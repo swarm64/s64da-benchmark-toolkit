@@ -31,9 +31,7 @@ class TransactionalWorker:
 
     def add_stats(self, query, state, start):
         now = time.time()
-        self.query_stats.append({'timestamp': now, 'query': query, 'runtime': now - start})
-        # append the state as a query type too to ease showing it in the monitor
-        self.query_stats.append({'timestamp': now, 'query': state, 'runtime': now - start})
+        self.query_stats.append({'timestamp': now, 'query': query, 'status': state, 'runtime': now - start})
 
     def stats(self):
         query_stats = self.query_stats

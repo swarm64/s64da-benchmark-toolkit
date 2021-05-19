@@ -12,7 +12,7 @@ import psycopg2
 import yaml
 
 from .helpers import Random
-from .helpers import TPCH_DATE_RANGE
+from .helpers import TPCH_DATE_RANGE, WANTED_RANGE
 
 from s64da_benchmark_toolkit.db import Status, DB, Timing
 
@@ -113,10 +113,9 @@ class AnalyticalStream:
         return query_template.substitute(**query_args)
 
     def wait_until_enough_data(self, query_id):
-        wanted_range = TPCH_DATE_RANGE[1] - TPCH_DATE_RANGE[0]
         while True:
             available_data = datetime.fromtimestamp(self.latest_timestamp.value) - self.min_timestamp
-            if available_data < wanted_range:
+            if available_data < WANTED_RANGE:
                 self.stats_queue.put(('olap', {
                     'query': query_id,
                     'stream': self.stream_id,
