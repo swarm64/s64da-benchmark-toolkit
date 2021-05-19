@@ -29,16 +29,16 @@ class Monitor:
         self.total_lines = len(self.lines)
         self.lines = []
 
-    def display_summary(self, elapsed):
+    def display_summary(self, elapsed, burnin_duration):
         print()
         summary = 'Summary'
         print(f'{summary}\n' + len(summary) * '-')
         print(f'Scale factor: {self.num_warehouses // WAREHOUSES_SF_RATIO }')
         print(f'Workers: {self.num_oltp_workers} OLTP, {self.num_olap_workers} OLAP')
 
-        elapsed_seconds = max(1, elapsed.total_seconds())
-        print(f'Total time: {elapsed_seconds:.2f} seconds')
-        # TODO output time after burn-in step
+        htap_time = elapsed - burnin_duration
+        print(f'Burn-in time: {burnin_duration.total_seconds():.2f} seconds')
+        print(f'HTAP time: {htap_time.total_seconds():.2f} seconds')
 
         print('')
         print(f'OLTP')
@@ -62,10 +62,6 @@ class Monitor:
         rows.append(['Query timeouts', num_timeouts])
         print(tabulate(rows))
         # TODO output average query runtime per query type
-
-    def get_elapsed_row(self, elapsed_seconds):
-        unit = 'second' if elapsed_seconds < 2 else 'seconds'
-        return f'Elapsed: {elapsed_seconds:.0f} {unit}'
 
     def get_oltp_row(self, query_type = None):
         counters, tps, latency = self.stats.oltp_total(query_type)
@@ -112,27 +108,19 @@ class Monitor:
     def get_columnstore_row(self, row):
         return f'| {row[0]:^12} | {row[1]:7.2f}GB | {row[2]:7.2f}GB | {row[3]:6.2f}x | {row[4]:4.2f}% |'
 
-    def update_display(self, time_elapsed, time_now, stats_conn, latest_timestamp):
-        latest_time = latest_timestamp.date()
-        date_range = relativedelta(latest_time, self.min_timestamp)
-
+    def update_display(self, time_elapsed, in_burnin, time_now, stats_conn, latest_timestamp):
         self.current_line = 0
-        data_warning = "(not enough for consistent OLAP queries)" if date_range.years < 7 else ""
 
-        self._add_display_line(f'Data range: {self.min_timestamp} - {latest_time} = {date_range.years} years, {date_range.months} months and {date_range.days} days {data_warning}')
         self._add_display_line(f'DB size: {self.stats.db_size()}')
         if self.stats.columnstore_stats():
             self._add_display_line('')
             self._add_display_line('Table size and S64 DA columnstore status')
-            self._add_display_line('-----------------------------------------------------------')
             self._add_display_line('|    table     | heap size |  colstore |  ratio  | cached |')
             self._add_display_line('|---------------------------------------------------------|')
             for row in self.stats.columnstore_stats():
                 self._add_display_line(self.get_columnstore_row(row))
-            self._add_display_line('-----------------------------------------------------------')
         self._add_display_line('')
         self._add_display_line('OLTP workload status')
-        self._add_display_line('-----------------------------------------------------------------------------------------------------------------')
         self._add_display_line('|     TYPE     |  ISSUED  |  COMPLETED | ERRORS |         TPS (last {}s)        |   LATENCY (last {}s, in ms)   |'.format(HISTORY_LENGTH, HISTORY_LENGTH))
         self._add_display_line('|              |          |            |        |  CURR |  MIN  |  AVG  |  MAX  |  CURR |  MIN  |  AVG  |  MAX  |')
         self._add_display_line('|---------------------------------------------------------------------------------------------------------------|')
@@ -140,13 +128,11 @@ class Monitor:
             self._add_display_line(self.get_oltp_row(query_type))
         self._add_display_line('|---------------------------------------------------------------------------------------------------------------|')
         self._add_display_line(self.get_oltp_row())
-        self._add_display_line('-----------------------------------------------------------------------------------------------------------------')
 
         if self.num_olap_workers > 0:
             self._add_display_line('')
             self._add_display_line('OLAP workload status')
             olap_header = self.get_olap_header()
-            self._add_display_line('-' * len(olap_header))
             self._add_display_line(olap_header)
             self._add_display_line('-' * len(olap_header))
 
@@ -154,8 +140,13 @@ class Monitor:
                 self._add_display_line(self.get_olap_row(query_id))
             self._add_display_line('-' * len(olap_header))
             self._add_display_line(self.get_olap_sum())
-            self._add_display_line('-' * len(olap_header))
 
         self._add_display_line('')
-        self._add_display_line(self.get_elapsed_row(time_elapsed))
+        phase = 'burn-in (only OLTP workload)' if in_burnin else 'HTAP (OLTP and OLAP workloads)'
+        latest_time = latest_timestamp.date()
+        date_range = relativedelta(latest_time, self.min_timestamp)
+        data_warning = "(not enough for consistent OLAP queries)" if date_range.years < 7 else ""
+        self._add_display_line(f'Phase: {phase} | Data range: {self.min_timestamp} - {latest_time} = {date_range.years} years, {date_range.months} months and {date_range.days} days {data_warning}')
+        unit = 'second' if time_elapsed < 2 else 'seconds'
+        self._add_display_line(f'Time elapsed: {time_elapsed:.0f} {unit}')
         self._print()

@@ -11,8 +11,7 @@ from string import Template
 import psycopg2
 import yaml
 
-from .helpers import Random
-from .helpers import TPCH_DATE_RANGE, WANTED_RANGE
+from benchmarks.htap.lib.helpers import Random, TPCH_DATE_RANGE, WANTED_RANGE
 
 from s64da_benchmark_toolkit.db import Status, DB, Timing
 

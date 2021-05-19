@@ -9,7 +9,7 @@ from multiprocessing import Manager, Pool, Value, Queue
 
 from psycopg2.errors import DuplicateDatabase, DuplicateTable, ProgrammingError
 
-from benchmarks.htap.lib.helpers import nullcontext
+from benchmarks.htap.lib.helpers import nullcontext, WANTED_RANGE
 from benchmarks.htap.lib.monitoring import Monitor
 from benchmarks.htap.lib.stats import Stats
 from benchmarks.htap.lib.analytical import AnalyticalStream
@@ -123,6 +123,7 @@ class HTAPController:
     def run(self):
         begin = datetime.now()
         elapsed = timedelta()
+        burnin_duration = None if not self.args.dont_wait_until_enough_data else timedelta()
 
         if self.args.stats_dsn is not None:
             print(f"Statistics will be collected in '{self.args.stats_dsn}'.")
@@ -163,6 +164,10 @@ class HTAPController:
                             time.sleep(0.1)
 
                         time_now = datetime.now()
+                        available_data = datetime.fromtimestamp(self.latest_timestamp.value) - self.range_delivery_date[0]
+                        if burnin_duration == None and available_data >= WANTED_RANGE:
+                            burnin_duration = time_now - begin
+
                         elapsed = time_now - begin
                         if elapsed.total_seconds() >= self.args.duration:
                             break
@@ -171,10 +176,12 @@ class HTAPController:
                         next_update = time_now + update_interval
                         if 'print' in self.args.output and next_display <= time_now:
                             next_display += display_interval
-                            self.monitor.update_display(elapsed.total_seconds(), time_now, stats_conn,
+                            self.monitor.update_display(elapsed.total_seconds(), burnin_duration == None, time_now, stats_conn,
                                 datetime.fromtimestamp(self.latest_timestamp.value))
                 except KeyboardInterrupt:
                     pass
                 finally:
-                    self.monitor.display_summary(elapsed)
+                    if burnin_duration == None:
+                        burnin_duration = elapsed
+                    self.monitor.display_summary(elapsed, burnin_duration)
                     self.stats.write_summary(self.args.csv_file, elapsed)
