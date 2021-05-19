@@ -172,3 +172,22 @@ def test_olap_totals():
     queue = MockQueue(data)
     fixture.process_queue(queue)
     assert fixture.olap_totals() == (2, 2, 1)
+
+def test_olap_stream_totals():
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=1, csv_interval=1)
+    queue = MockQueue()
+    fixture.process_queue(queue)
+    assert fixture.olap_stream_totals() == ('-', 0)
+
+    # yapf: disable
+    data = [
+            ('olap_stream', {'stream': 0, 'iteration': 0, 'runtime': '1'}),
+            ('olap_stream', {'stream': 1, 'iteration': 0, 'runtime': '10'}),
+            ('olap_stream', {'stream': 2, 'iteration': 0, 'runtime': '20'}),
+            ('olap_stream', {'stream': 0, 'iteration': 1, 'runtime': '1'}),
+    ]
+    # yapf: enable
+    fixture = Stats(dsn, num_oltp_slots=0, num_olap_slots=3, csv_interval=1)
+    queue = MockQueue(data)
+    fixture.process_queue(queue)
+    assert fixture.olap_stream_totals() == (8, 4)
