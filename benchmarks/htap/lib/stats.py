@@ -230,6 +230,7 @@ class Stats:
             self.csv_dbstats.write(', '.join(map(str, row)) + "\n")
         self.csv_dbstats.flush()
 
+    # TODO rework this summary, the output summary is kind of useless, probably should be more inline with the stdout display
     def write_summary(self, csv_file, elapsed):
         row_nr = 0
         with open(csv_file, 'w') as csv:
