@@ -4,17 +4,15 @@ import time
 import traceback
 
 from datetime import datetime, timedelta
-from urllib.parse import urlparse
-from multiprocessing import Manager, Pool, Value, Queue
-
+from multiprocessing import Pool, Value, Queue
 from psycopg2.errors import DuplicateDatabase, DuplicateTable, ProgrammingError
+from urllib.parse import urlparse
 
+from benchmarks.htap.lib.analytical import AnalyticalStream
 from benchmarks.htap.lib.helpers import nullcontext, WANTED_RANGE
 from benchmarks.htap.lib.monitoring import Monitor
 from benchmarks.htap.lib.stats import Stats
-from benchmarks.htap.lib.analytical import AnalyticalStream
 from benchmarks.htap.lib.transactional import TransactionalWorker
-
 from s64da_benchmark_toolkit.dbconn import DBConn
 
 class HTAPController:

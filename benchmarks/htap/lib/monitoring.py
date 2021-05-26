@@ -43,10 +43,10 @@ class Monitor:
         print('')
         print(f'OLTP')
         rows = []
-        _, tps, latency = self.stats.oltp_total()
+        tps, latency = self.stats.oltp_total()
         rows.append(['All', f'{tps[2]:.2f}', f'{latency[2]:.2f}'])
         for query_type in QUERY_TYPES:
-            _, tps, latency = self.stats.oltp_total(query_type)
+            tps, latency = self.stats.oltp_total(query_type)
             rows.append([query_type, f'{tps[2]:.2f}', f'{latency[2]:.2f}'])
         print(tabulate(rows, headers=['', 'Average transactions per second',  'Average latency (ms)']))
 
@@ -64,12 +64,12 @@ class Monitor:
         # TODO output average query runtime per query type
 
     def get_oltp_row(self, query_type = None):
-        counters, tps, latency = self.stats.oltp_total(query_type)
-        issued, ok , err = counters
+        ok, err = self.stats.oltp_counts(query_type)
+        tps, latency = self.stats.oltp_total(query_type)
         tps     = '{:5} | {:5} | {:5} | {:5}'.format(*tps)
         latency = '{:5} | {:5} | {:5} | {:5}'.format(*latency)
         name = 'All types' if query_type == None else query_type
-        return f'| {name:^12} | {issued:8} | {ok:10} | {err:6} | {tps} | {latency} |'
+        return f'| {name:^12} | {ok+err:8} | {ok:10} | {err:6} | {tps} | {latency} |'
 
     def get_olap_header(self):
         olap_header = f'{"Stream":<8} |'

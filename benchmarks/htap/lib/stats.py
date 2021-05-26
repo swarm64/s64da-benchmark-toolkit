@@ -1,13 +1,12 @@
-import time
 import math
 import os
+import time
 
-from datetime import datetime
-from uuid import uuid4
 from collections import defaultdict
-from urllib.parse import urlparse
-
+from datetime import datetime
 from psycopg2.extras import register_uuid
+from urllib.parse import urlparse
+from uuid import uuid4
 
 from benchmarks.htap.lib.analytical import QUERY_IDS, is_ignored_query
 from s64da_benchmark_toolkit.dbconn import DBConn
@@ -31,6 +30,8 @@ class Stats:
     This is kept in a list where the last HISTORY_LENGTH seconds of samples are stored.
     When we want to report the actual statistics we then simply aggregate the results
     based on the raw, possibly filtered, samples.
+    Additionally a set of counters per query type is kept for the whole execution, where the
+    number of transactions that succeed and error out are accumulated.
 
     OLAP
     -----
@@ -42,6 +43,8 @@ class Stats:
     def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval, ignored_queries = []):
         self.data = {}
         self.data['oltp'] = defaultdict(list)
+        # Bind to the copy method so it can be pickled, otherwise we need to use a lambda that cannot be serialized
+        self.data['oltp_counts'] = defaultdict(defaultdict(int).copy)
         self.data['olap'] = [{
                 'queries': {
                     query: {
@@ -65,10 +68,12 @@ class Stats:
         self.csv_oltp = None
         self.csv_dbstats = None
         self.conn = None
-        
+
     def _update_oltp_stats(self, stats):
         for stat in stats:
             self.data['oltp'][stat['query']].append(stat)
+            self.data['oltp_counts'][stat['query']][stat['status']] += 1
+
 
     def cleanup_oltp_stats(self, time_now):
         cutoff = int(time_now - HISTORY_LENGTH)
@@ -179,6 +184,15 @@ class Stats:
                 int(sum(lat)/len(lat)),
                 max(lat))
 
+    def oltp_counts(self, query_type = None):
+        data = self.data['oltp_counts']
+        ok , err = 0, 0
+        stats = [data[query_type]] if query_type != None else data.values()
+        for s in stats:
+            ok += s['ok']
+            err += s['error']
+        return (ok, err)
+
     def oltp_total(self, query_type = None):
         data = self.data['oltp']
         # If query_type is None, then flatten all records into a single list, otherwise just take the records of the
@@ -189,8 +203,7 @@ class Stats:
             (ok if s['status'] == 'ok'  else err).append(s)
         tps = self._oltp_tps(ok)
         latency = self._oltp_latency(ok)
-        return ((len(stats), len(ok), len(err)), tps, latency)
-
+        return (tps, latency)
 
     def olap_totals(self):
         return tuple(sum(slot[slot_type] for slot in self.data['olap'])
@@ -220,8 +233,9 @@ class Stats:
 
     def write_oltp_stats(self):
         for query_type in QUERY_TYPES:
-            counters, tps, latency = self.oltp_total(query_type)
-            row = [datetime.now(), query_type, *counters, *tps, *latency]
+            counters = self.oltp_counts(query_type)
+            tps, latency = self.oltp_total(query_type)
+            row = [datetime.now(), query_type, counters[0] + counters[1] , *counters, *tps, *latency]
             self.csv_oltp.write(', '.join(map(str, row)) + "\n")
         self.csv_oltp.flush()
 
@@ -240,9 +254,10 @@ class Stats:
             fake_date = datetime.now()
             elapsed_seconds = elapsed.total_seconds()
             for query_type in QUERY_TYPES:
-                counters, tps, latency = self.oltp_total(query_type)
-                total, ok , err = counters
-                csv.write(f'{row_nr};{stream_id};{query_type}_total;{fake_date};{fake_date};{total};OK;OK\n')
+                counters = self.oltp_counts(query_type)
+                tps, latency = self.oltp_total(query_type)
+                ok , err = counters
+                csv.write(f'{row_nr};{stream_id};{query_type}_total;{fake_date};{fake_date};{ok + err};OK;OK\n')
                 row_nr += 1
                 csv.write(f'{row_nr};{stream_id};{query_type}_tps;{fake_date};{fake_date};{tps};OK;OK\n')
                 row_nr += 1

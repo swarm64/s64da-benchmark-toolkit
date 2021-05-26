@@ -46,31 +46,38 @@ def test_storage():
     fixture.cleanup_oltp_stats(11.1)
 
     # test:
-    res = [fixture.oltp_total(i) for i in range(4)]
-    res_all = fixture.oltp_total()
 
     # - all samples up to 10s are kept
     # - tps needs at least 3 seconds and all stats are properly computed
     # - latencies are in ms and all stats are properly computed
 
-    assert res[1][1] == (0, 0, 0, 0)
-    assert res[2][1] == (0, 0, 0, 0)
+    # check counters
+    res = [fixture.oltp_counts(i) for i in range(4)]
+    res_all = fixture.oltp_counts()
+    assert res[0] == (6, 0)
+    assert res[1] == (1, 0)
+    assert res[2] == (1, 0)
+    assert res[3] == (0, 1)
+    assert res_all == (8, 1)
+
+    # check tps and latency
+    res = [fixture.oltp_total(i) for i in range(4)]
+    res_all = fixture.oltp_total()
+
+    # tps
+    assert res[0][0] == (2, 0, 0, 2)
+    assert res[1][0] == (0, 0, 0, 0)
+    assert res[2][0] == (0, 0, 0, 0)
+    assert res[3][0] == (0, 0, 0, 0)
+    assert res_all[0] == (2, 0, 0, 3)
+
+    # latencies
+    assert res[0][1] == (1000, 100, int((100+100+100+100+1000)/5), 1000)
+    assert res[1][1] == (20, 20, 20, 20)
+    assert res[2][1] == (30, 30, 30, 30)
     assert res[3][1] == (0, 0, 0, 0)
-    # 1 surviving sample with 1tps and 1 with 2 tps, avg floored is therefore 1
-    assert res[0][1] == (2, 0, 0, 2)
-    # 3 tps @ 11s, 2tps @ 12
-    assert res_all[1] == (2, 0, 0, 3)
-
-    assert res[0][2] == (1000, 100, int((100+100+100+100+1000)/5), 1000)
-    assert res[1][2] == (20, 20, 20, 20)
-    assert res[2][2] == (30, 30, 30, 30)
-    assert res[3][2] == (0, 0, 0, 0)
-    assert res_all[2] == (1000, 20, int((100+20+30+100+100+100+1000)/7), 1000)
+    assert res_all[1] == (1000, 20, int((100+20+30+100+100+100+1000)/7), 1000)
     
-    assert res_all[0][0] == 8
-    assert res[0][0][0] == 5
-    assert res[3][0][2] == 1
-
     # yapf: disable
     data = [
             ('olap', {'stream': 0, 'query': 1, 'status': 'Running'}),
