@@ -67,7 +67,7 @@ class Stats:
 
     Also each completed OLAP stream is reported individually with its runtime.
     """
-    def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval, ignored_queries = [], history_length = 300, initial_sec = int(time.time())):
+    def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval, ignored_queries = [], history_length = 600, initial_sec = int(time.time())):
         self.data = {}
         self.data['oltp'] = deque([(initial_sec, {k:OLTPBucketStats() for k in QUERY_TYPES})], maxlen = history_length)
         # Bind to the copy method so it can be pickled, otherwise we need to use a lambda that cannot be serialized
@@ -199,7 +199,6 @@ class Stats:
 
     def oltp_total(self, query_type = None):
         oltp = self.data['oltp']
-        # If query_type is None, then flatten all records into a single list, otherwise just take the records of the requested type
         tps = []
         latency = []
         total_txs = 0
@@ -208,6 +207,7 @@ class Stats:
         max_runtime = 0
         avg_latency_last_bucket = 0
         for bucket in oltp:
+            # If query_type is None, then aggregate the stats of all query types
             bucket_stats = [bucket[1][query_type]] if query_type != None else bucket[1].values()
 
             bucket_ok_txs = 0
