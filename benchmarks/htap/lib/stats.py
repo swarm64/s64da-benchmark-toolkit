@@ -201,12 +201,12 @@ class Stats:
         oltp = self.data['oltp']
         # If query_type is None, then flatten all records into a single list, otherwise just take the records of the requested type
         tps = []
+        latency = []
         total_txs = 0
         total_acc_runtime = 0
         min_runtime = float('inf')
         max_runtime = 0
         avg_latency_last_bucket = 0
-        # TODO ignore first and last 10% in the history
         for bucket in oltp:
             bucket_stats = [bucket[1][query_type]] if query_type != None else bucket[1].values()
 
@@ -223,15 +223,16 @@ class Stats:
                 max_runtime = max(max_runtime, runtimes[1])
                 total_acc_runtime += runtimes[2]
                 bucket_total_acc_runtime += runtimes[2]
+
                 num_txs = s.get_total_transactions()
                 total_txs += num_txs
                 bucket_total_txs += num_txs
 
             tps.append(bucket_ok_txs)
-            last_avg_latency = int(bucket_total_acc_runtime/bucket_total_txs) if bucket_total_txs != 0 else 0
+            latency.append(int(bucket_total_acc_runtime/bucket_total_txs) if bucket_total_txs != 0 else 0)
 
-        tps_res = (tps[-1], min(tps),int(sum(tps)/len(tps)),max(tps))
-        latency_res = (int(last_avg_latency), int(min_runtime), int(total_acc_runtime/total_txs), int(max_runtime)) if total_txs!=0 else (0,0,0,0)
+        tps_res = (tps[-2] if len(tps) > 1 else 0, min(tps),int(sum(tps)/len(tps)),max(tps))
+        latency_res = (latency[-2] if len(latency) > 1 else 0, int(min_runtime), int(total_acc_runtime/total_txs), int(max_runtime)) if total_txs!=0 else (0,0,0,0)
 
         return tps_res, latency_res
 

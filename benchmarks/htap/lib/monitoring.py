@@ -123,7 +123,7 @@ class Monitor:
         self._add_display_line('OLTP workload status')
         history_length = self.stats.get_history_length()
         self._add_display_line('|     TYPE     |  ISSUED  |  COMPLETED | ERRORS |         TPS (last {}s)        |   LATENCY (last {}s, in ms)   |'.format(history_length, history_length))
-        self._add_display_line('|              |          |            |        |  CURR |  MIN  |  AVG  |  MAX  |  CURR |  MIN  |  AVG  |  MAX  |')
+        self._add_display_line('|              |          |            |        |  LAST |  MIN  |  AVG  |  MAX  |  LAST |  MIN  |  AVG  |  MAX  |')
         self._add_display_line('|---------------------------------------------------------------------------------------------------------------|')
         for query_type in QUERY_TYPES:
             self._add_display_line(self.get_oltp_row(query_type))

@@ -60,18 +60,18 @@ def test_storage():
     res_all = fixture.oltp_total()
 
     # tps
-    assert res[0][0] == (1, 0, 0, 2)
+    assert res[0][0] == (0, 0, 0, 2)
     assert res[1][0] == (0, 0, 0, 1)
     assert res[2][0] == (0, 0, 0, 1)
     assert res[3][0] == (0, 0, 0, 0)
-    assert res_all[0] == (1, 0, 0, 3)
+    assert res_all[0] == (0, 0, 0, 3)
 
     # latencies
-    assert res[0][1] == (1000, 100, int((100+100+100+1000)/4), 1000)
+    assert res[0][1] == (0, 100, int((100+100+100+1000)/4), 1000)
     assert res[1][1] == (0, 20, 20, 20)
     assert res[2][1] == (0, 30, 30, 30)
     assert res[3][1] == (0, 40, 40, 40)
-    assert res_all[1] == (1000, 20, int((20+30+40+100+100+100+1000)/7), 1000)
+    assert res_all[1] == (0, 20, int((20+30+40+100+100+100+1000)/7), 1000)
     
     # yapf: disable
     data = [
