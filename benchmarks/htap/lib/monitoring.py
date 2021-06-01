@@ -4,7 +4,7 @@ from tabulate import tabulate
 
 from benchmarks.htap.lib.analytical import QUERY_IDS
 from benchmarks.htap.lib.helpers import WAREHOUSES_SF_RATIO
-from benchmarks.htap.lib.stats import QUERY_TYPES, HISTORY_LENGTH
+from benchmarks.htap.lib.stats import QUERY_TYPES
 
 class Monitor:
     def __init__(self, stats, num_oltp_workers, num_olap_workers, num_warehouses, min_timestamp):
@@ -121,8 +121,9 @@ class Monitor:
                 self._add_display_line(self.get_columnstore_row(row))
         self._add_display_line('')
         self._add_display_line('OLTP workload status')
-        self._add_display_line('|     TYPE     |  ISSUED  |  COMPLETED | ERRORS |         TPS (last {}s)        |   LATENCY (last {}s, in ms)   |'.format(HISTORY_LENGTH, HISTORY_LENGTH))
-        self._add_display_line('|              |          |            |        |  CURR |  MIN  |  AVG  |  MAX  |  CURR |  MIN  |  AVG  |  MAX  |')
+        history_length = self.stats.get_history_length()
+        self._add_display_line('|     TYPE     |  ISSUED  |  COMPLETED | ERRORS |         TPS (last {}s)        |   LATENCY (last {}s, in ms)   |'.format(history_length, history_length))
+        self._add_display_line('|              |          |            |        |  LAST |  MIN  |  AVG  |  MAX  |  LAST |  MIN  |  AVG  |  MAX  |')
         self._add_display_line('|---------------------------------------------------------------------------------------------------------------|')
         for query_type in QUERY_TYPES:
             self._add_display_line(self.get_oltp_row(query_type))

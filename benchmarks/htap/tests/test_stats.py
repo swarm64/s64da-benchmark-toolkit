@@ -2,7 +2,7 @@ import pytest
 
 from datetime import datetime
 
-from benchmarks.htap.lib.stats import Stats
+from benchmarks.htap.lib.stats import Stats, QUERY_TYPES
 
 
 class MockQueue:
@@ -24,35 +24,30 @@ def fill_waiting_queries(stats):
     return stats
 
 def test_storage():
-    fixture = Stats(dsn, num_oltp_slots=4, num_olap_slots=0, csv_interval=1)
+    fixture = Stats(dsn, num_oltp_slots=4, num_olap_slots=0, csv_interval=1, history_length = 10, initial_sec = 0)
 
     # yapf: disable
     data = [
             # this will be not be kept
-            ('oltp', [{ 'timestamp': 0, 'query': 0, 'status':'ok', 'runtime': 0.01 }]),
+            ('oltp', [{ 'timestamp': 0, 'query': QUERY_TYPES[0], 'status':'ok', 'runtime': 0.01 }]),
             # from here on we have a 10s window
-            ('oltp', [{ 'timestamp': 1.1, 'query': 0, 'status':'ok', 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 2, 'query': 1, 'status':'ok', 'runtime': 0.02 }]),
-            ('oltp', [{ 'timestamp': 2, 'query': 2, 'status':'ok', 'runtime': 0.03 }]),
-            ('oltp', [{ 'timestamp': 2, 'query': 3, 'status':'error', 'runtime': 0.04 }]),
-            ('oltp', [{ 'timestamp': 2.1, 'query': 0, 'status':'ok', 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 3.1, 'query': 0, 'status':'ok', 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 3.2, 'query': 0, 'status':'ok', 'runtime': 0.1 }]),
-            ('oltp', [{ 'timestamp': 11, 'query': 0, 'status':'ok', 'runtime': 1 }]),
+            ('oltp', [{ 'timestamp': 1.1, 'query': QUERY_TYPES[0], 'status':'ok', 'runtime': 0.1 }]),
+            ('oltp', [{ 'timestamp': 2, 'query': QUERY_TYPES[1], 'status':'ok', 'runtime': 0.02 }]),
+            ('oltp', [{ 'timestamp': 2, 'query': QUERY_TYPES[2], 'status':'ok', 'runtime': 0.03 }]),
+            ('oltp', [{ 'timestamp': 2, 'query': QUERY_TYPES[3], 'status':'error', 'runtime': 0.04 }]),
+            ('oltp', [{ 'timestamp': 2.1, 'query': QUERY_TYPES[0], 'status':'ok', 'runtime': 0.1 }]),
+            ('oltp', [{ 'timestamp': 3.1, 'query': QUERY_TYPES[0], 'status':'ok', 'runtime': 0.1 }]),
+            ('oltp', [{ 'timestamp': 3.2, 'query': QUERY_TYPES[0], 'status':'ok', 'runtime': 0.1 }]),
+            ('oltp', [{ 'timestamp': 11, 'query': QUERY_TYPES[0], 'status':'ok', 'runtime': 1 }]),
                 ]
     # yapf: enable
     queue = MockQueue(data.copy())
     fixture.process_queue(queue)
-    fixture.cleanup_oltp_stats(11.1)
 
     # test:
 
-    # - all samples up to 10s are kept
-    # - tps needs at least 3 seconds and all stats are properly computed
-    # - latencies are in ms and all stats are properly computed
-
     # check counters
-    res = [fixture.oltp_counts(i) for i in range(4)]
+    res = [fixture.oltp_counts(i) for i in QUERY_TYPES]
     res_all = fixture.oltp_counts()
     assert res[0] == (6, 0)
     assert res[1] == (1, 0)
@@ -61,22 +56,22 @@ def test_storage():
     assert res_all == (8, 1)
 
     # check tps and latency
-    res = [fixture.oltp_total(i) for i in range(4)]
+    res = [fixture.oltp_total(i) for i in QUERY_TYPES]
     res_all = fixture.oltp_total()
 
     # tps
-    assert res[0][0] == (2, 0, 0, 2)
-    assert res[1][0] == (0, 0, 0, 0)
-    assert res[2][0] == (0, 0, 0, 0)
+    assert res[0][0] == (0, 0, 0, 2)
+    assert res[1][0] == (0, 0, 0, 1)
+    assert res[2][0] == (0, 0, 0, 1)
     assert res[3][0] == (0, 0, 0, 0)
-    assert res_all[0] == (2, 0, 0, 3)
+    assert res_all[0] == (0, 0, 0, 3)
 
     # latencies
-    assert res[0][1] == (1000, 100, int((100+100+100+100+1000)/5), 1000)
-    assert res[1][1] == (20, 20, 20, 20)
-    assert res[2][1] == (30, 30, 30, 30)
-    assert res[3][1] == (0, 0, 0, 0)
-    assert res_all[1] == (1000, 20, int((100+20+30+100+100+100+1000)/7), 1000)
+    assert res[0][1] == (0, 100, int((100+100+100+1000)/4), 1000)
+    assert res[1][1] == (0, 20, 20, 20)
+    assert res[2][1] == (0, 30, 30, 30)
+    assert res[3][1] == (0, 40, 40, 40)
+    assert res_all[1] == (0, 20, int((20+30+40+100+100+100+1000)/7), 1000)
     
     # yapf: disable
     data = [

@@ -1,8 +1,9 @@
+import logging
 import math
 import os
 import time
 
-from collections import defaultdict
+from collections import defaultdict, deque
 from datetime import datetime
 from psycopg2.extras import register_uuid
 from urllib.parse import urlparse
@@ -11,10 +12,38 @@ from uuid import uuid4
 from benchmarks.htap.lib.analytical import QUERY_IDS, is_ignored_query
 from s64da_benchmark_toolkit.dbconn import DBConn
 
+LOG = logging.getLogger()
 register_uuid()
 
 QUERY_TYPES = ['new_order', 'payment', 'order_status', 'delivery', 'stock_level']
-HISTORY_LENGTH = 10
+
+class OLTPBucketStats:
+    def __init__(self):
+        self.ok_transactions = 0
+        self.err_transactions = 0
+        self.min_runtime = float('inf')
+        self.max_runtime = 0
+        self.acc_runtime = 0
+
+    def add_sample(self, status, runtime):
+        if status == 'ok':
+            self.ok_transactions += 1
+        else:
+            self.err_transactions += 1
+
+        runtime = runtime * 1000
+        self.min_runtime = min(self.min_runtime, runtime)
+        self.max_runtime = max(self.max_runtime, runtime)
+        self.acc_runtime += runtime
+
+    def get_runtimes(self):
+        return self.min_runtime, self.max_runtime, self.acc_runtime
+
+    def get_ok_transactions(self):
+        return self.ok_transactions
+
+    def get_total_transactions(self):
+        return self.ok_transactions + self.err_transactions
 
 class Stats:
     """
@@ -27,9 +56,7 @@ class Stats:
     the end state of a transaction is sent through the queue. Per reporting interval
     all accumulated events are sent, which contain the timestamp, query id, status, and runtime
     for each transaction.
-    This is kept in a list where the last HISTORY_LENGTH seconds of samples are stored.
-    When we want to report the actual statistics we then simply aggregate the results
-    based on the raw, possibly filtered, samples.
+    This is kept in a list where the last history_length seconds of aggregated values are stored.
     Additionally a set of counters per query type is kept for the whole execution, where the
     number of transactions that succeed and error out are accumulated.
 
@@ -40,9 +67,9 @@ class Stats:
 
     Also each completed OLAP stream is reported individually with its runtime.
     """
-    def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval, ignored_queries = []):
+    def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval, ignored_queries = [], history_length = 600, initial_sec = int(time.time())):
         self.data = {}
-        self.data['oltp'] = defaultdict(list)
+        self.data['oltp'] = deque([(initial_sec, {k:OLTPBucketStats() for k in QUERY_TYPES})], maxlen = history_length)
         # Bind to the copy method so it can be pickled, otherwise we need to use a lambda that cannot be serialized
         self.data['oltp_counts'] = defaultdict(defaultdict(int).copy)
         self.data['olap'] = [{
@@ -68,18 +95,31 @@ class Stats:
         self.csv_oltp = None
         self.csv_dbstats = None
         self.conn = None
+        self.history_length = history_length
+
+    def get_history_length(self):
+        return len(self.data['oltp'])
 
     def _update_oltp_stats(self, stats):
         for stat in stats:
-            self.data['oltp'][stat['query']].append(stat)
             self.data['oltp_counts'][stat['query']][stat['status']] += 1
 
+            oltp = self.data['oltp']
+            second = int(stat['timestamp'])
+            if second < oltp[0][0]:
+                # Too old sample, discard it
+                LOG.warning('too old OLTP sample arrived, discarding it: ' + stat)
+                continue
+            if second > oltp[-1][0]:
+                # Sample goes beyond the horizon, expand the bucket list to accomodate all these seconds
+                # As the struct is a deque, older buckets in the left side are automatically removed when we go beyond the maximum history size
+                base = oltp[-1][0]
+                oltp.extend((base + i, {k:OLTPBucketStats() for k in QUERY_TYPES} ) for i in range(1, 1 + second - base))
 
-    def cleanup_oltp_stats(self, time_now):
-        cutoff = int(time_now - HISTORY_LENGTH)
-        for query_type in self.data['oltp'].keys():
-            # keep HISTORY_LENGTH of history
-            self.data['oltp'][query_type] = [s for s in self.data['oltp'][query_type] if s['timestamp'] >= cutoff]
+            # Now it is garanteed that we have a bucket for the second of this sample
+            bucket = oltp[second - oltp[0][0]]
+            assert(bucket[0] == second)
+            bucket[1][stat['query']].add_sample(stat['status'], stat['runtime'])
 
     def _update_olap_stats(self, stats):
         stream_id = stats['stream']
@@ -138,8 +178,6 @@ class Stats:
             self.conn = DBConn(self.dsn, use_dict_cursor = True)
             self._update_cached_stats()
 
-        self.cleanup_oltp_stats(time.time())
-
         self.updates += 1
         if self.updates % 10 == 0:
             self._update_cached_stats()
@@ -149,40 +187,6 @@ class Stats:
 
     def olap_stats_for_stream_id(self, stream_id):
         return self.data['olap'][stream_id]
-
-    def filter_last_1s(self, stats):
-        ts = max(s['timestamp'] for s in stats) - 1
-        return [s for s in stats if s['timestamp'] >= ts]
-
-    def _oltp_tps(self, stats):
-        per_sec = defaultdict(int)
-
-        time_now = int(time.time())
-        # fill up the whole timestamp range, but not the first and last second
-        for timestamp in range(time_now-HISTORY_LENGTH+1, time_now-1):
-            per_sec[timestamp] = 0
-        for stat in stats:
-            bucket = int(stat['timestamp'])
-            per_sec[bucket] += 1
-        tps = list(per_sec.values())
-        if len(tps) <= 2:
-            return (0, 0, 0, 0)
-
-        # first and last second will not be complete so ignore those
-        tps.pop(0)
-        tps.pop(-1)
-        return (tps[-1], min(tps), int(sum(tps)/len(tps)), max(tps))
-
-    def _oltp_latency(self, stats):
-        if len(stats) == 0:
-            return (0, 0, 0, 0)
-
-        lat = [math.ceil(s['runtime']*1000) for s in stats]
-        lat_1s = [math.ceil(s['runtime']*1000) for s in self.filter_last_1s(stats)]
-        return (int(sum(lat_1s)/len(lat_1s)),
-                min(lat),
-                int(sum(lat)/len(lat)),
-                max(lat))
 
     def oltp_counts(self, query_type = None):
         data = self.data['oltp_counts']
@@ -194,16 +198,43 @@ class Stats:
         return (ok, err)
 
     def oltp_total(self, query_type = None):
-        data = self.data['oltp']
-        # If query_type is None, then flatten all records into a single list, otherwise just take the records of the
-        # requested type
-        stats = data[query_type] if query_type != None else [item for sublist in data.values() for item in sublist]
-        ok, err = [], []
-        for s in stats:
-            (ok if s['status'] == 'ok'  else err).append(s)
-        tps = self._oltp_tps(ok)
-        latency = self._oltp_latency(ok)
-        return (tps, latency)
+        oltp = self.data['oltp']
+        tps = []
+        latency = []
+        total_txs = 0
+        total_acc_runtime = 0
+        min_runtime = float('inf')
+        max_runtime = 0
+        avg_latency_last_bucket = 0
+        for bucket in oltp:
+            # If query_type is None, then aggregate the stats of all query types
+            bucket_stats = [bucket[1][query_type]] if query_type != None else bucket[1].values()
+
+            bucket_ok_txs = 0
+            bucket_total_txs = 0
+            bucket_total_acc_runtime = 0
+            for s in bucket_stats:
+                # For TPS:
+                bucket_ok_txs += s.get_ok_transactions()
+
+                # For latencies
+                runtimes = s.get_runtimes()
+                min_runtime = min(min_runtime, runtimes[0])
+                max_runtime = max(max_runtime, runtimes[1])
+                total_acc_runtime += runtimes[2]
+                bucket_total_acc_runtime += runtimes[2]
+
+                num_txs = s.get_total_transactions()
+                total_txs += num_txs
+                bucket_total_txs += num_txs
+
+            tps.append(bucket_ok_txs)
+            latency.append(int(bucket_total_acc_runtime/bucket_total_txs) if bucket_total_txs != 0 else 0)
+
+        tps_res = (tps[-2] if len(tps) > 1 else 0, min(tps),int(sum(tps)/len(tps)),max(tps))
+        latency_res = (latency[-2] if len(latency) > 1 else 0, int(min_runtime), int(total_acc_runtime/total_txs), int(max_runtime)) if total_txs!=0 else (0,0,0,0)
+
+        return tps_res, latency_res
 
     def olap_totals(self):
         return tuple(sum(slot[slot_type] for slot in self.data['olap'])
