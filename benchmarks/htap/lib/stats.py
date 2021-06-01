@@ -1,8 +1,9 @@
+import logging
 import math
 import os
 import time
 
-from collections import defaultdict
+from collections import defaultdict, deque
 from datetime import datetime
 from psycopg2.extras import register_uuid
 from urllib.parse import urlparse
@@ -11,6 +12,7 @@ from uuid import uuid4
 from benchmarks.htap.lib.analytical import QUERY_IDS, is_ignored_query
 from s64da_benchmark_toolkit.dbconn import DBConn
 
+LOG = logging.getLogger()
 register_uuid()
 
 QUERY_TYPES = ['new_order', 'payment', 'order_status', 'delivery', 'stock_level']
@@ -29,7 +31,7 @@ class OLTPBucketStats:
         else:
             self.err_transactions += 1
 
-        runtime = math.ceil(runtime * 1000)
+        runtime = runtime * 1000
         self.min_runtime = min(self.min_runtime, runtime)
         self.max_runtime = max(self.max_runtime, runtime)
         self.acc_runtime += runtime
@@ -54,7 +56,7 @@ class Stats:
     the end state of a transaction is sent through the queue. Per reporting interval
     all accumulated events are sent, which contain the timestamp, query id, status, and runtime
     for each transaction.
-    This is kept in a list where the last history_length seconds of samples are stored.
+    This is kept in a list where the last history_length seconds of aggregated values are stored.
     Additionally a set of counters per query type is kept for the whole execution, where the
     number of transactions that succeed and error out are accumulated.
 
@@ -67,10 +69,7 @@ class Stats:
     """
     def __init__(self, dsn, num_oltp_slots, num_olap_slots, csv_interval, ignored_queries = [], history_length = 300, initial_sec = int(time.time())):
         self.data = {}
-        self.data['oltp'] = {
-                'max_history' : history_length,
-                'history' : [(initial_sec, {k:OLTPBucketStats() for k in QUERY_TYPES})]
-                }
+        self.data['oltp'] = deque([(initial_sec, {k:OLTPBucketStats() for k in QUERY_TYPES})], maxlen = history_length)
         # Bind to the copy method so it can be pickled, otherwise we need to use a lambda that cannot be serialized
         self.data['oltp_counts'] = defaultdict(defaultdict(int).copy)
         self.data['olap'] = [{
@@ -99,7 +98,7 @@ class Stats:
         self.history_length = history_length
 
     def get_history_length(self):
-        return len(self.data['oltp']['history'])
+        return len(self.data['oltp'])
 
     def _update_oltp_stats(self, stats):
         for stat in stats:
@@ -107,21 +106,18 @@ class Stats:
 
             oltp = self.data['oltp']
             second = int(stat['timestamp'])
-            if second < oltp['history'][0][0]:
+            if second < oltp[0][0]:
                 # Too old sample, discard it
+                LOG.warning('too old OLTP sample arrived, discarding it: ' + stat)
                 continue
-            if second > oltp['history'][-1][0]:
+            if second > oltp[-1][0]:
                 # Sample goes beyond the horizon, expand the bucket list to accomodate all these seconds
-                base = oltp['history'][-1][0]
-                oltp['history'].extend((base + i, {k:OLTPBucketStats() for k in QUERY_TYPES} ) for i in range(1, 1 + second - base))
-
-                # Remove older buckets if we go beyond the maximum history size
-                excess = len(oltp['history']) - oltp['max_history']
-                if excess > 0:
-                    oltp['history'] = oltp['history'][excess:]
+                # As the struct is a deque, older buckets in the left side are automatically removed when we go beyond the maximum history size
+                base = oltp[-1][0]
+                oltp.extend((base + i, {k:OLTPBucketStats() for k in QUERY_TYPES} ) for i in range(1, 1 + second - base))
 
             # Now it is garanteed that we have a bucket for the second of this sample
-            bucket = oltp['history'][second - oltp['history'][0][0]]
+            bucket = oltp[second - oltp[0][0]]
             assert(bucket[0] == second)
             bucket[1][stat['query']].add_sample(stat['status'], stat['runtime'])
 
@@ -211,7 +207,7 @@ class Stats:
         max_runtime = 0
         avg_latency_last_bucket = 0
         # TODO ignore first and last 10% in the history
-        for bucket in oltp['history']:
+        for bucket in oltp:
             bucket_stats = [bucket[1][query_type]] if query_type != None else bucket[1].values()
 
             bucket_ok_txs = 0
