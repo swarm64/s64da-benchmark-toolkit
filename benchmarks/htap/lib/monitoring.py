@@ -108,7 +108,7 @@ class Monitor:
     def get_columnstore_row(self, row):
         return f'| {row[0]:^12} | {row[1]:7.2f}GB | {row[2]:7.2f}GB | {row[3]:6.2f}x | {row[4]:4.2f}% |'
 
-    def update_display(self, time_elapsed, in_burnin, time_now, stats_conn, latest_timestamp):
+    def update_display(self, elapsed, burnin_duration, time_now, stats_conn, latest_timestamp):
         self.current_line = 0
 
         self._add_display_line(f'DB size: {self.stats.db_size()}')
@@ -143,11 +143,16 @@ class Monitor:
             self._add_display_line(self.get_olap_sum())
 
         self._add_display_line('')
-        phase = 'burn-in (only OLTP workload)' if in_burnin else 'HTAP (OLTP and OLAP workloads)'
+        phase = 'burn-in (only OLTP workload)' if burnin_duration == None else 'HTAP (OLTP and OLAP workloads)'
         latest_time = latest_timestamp.date()
         date_range = relativedelta(latest_time, self.min_timestamp)
         data_warning = "(not enough for consistent OLAP queries)" if date_range.years < 7 else ""
         self._add_display_line(f'Phase: {phase} | Data range: {self.min_timestamp} - {latest_time} = {date_range.years} years, {date_range.months} months and {date_range.days} days {data_warning}')
-        unit = 'second' if time_elapsed < 2 else 'seconds'
-        self._add_display_line(f'Time elapsed: {time_elapsed:.0f} {unit}')
+
+        htap_time = 0
+        if burnin_duration == None:
+            burnin_duration = elapsed
+        else:
+            htap_time = (elapsed - burnin_duration).total_seconds()
+        self._add_display_line(f'Time elapsed: {elapsed.total_seconds():.0f}s | Burn-in: {burnin_duration.total_seconds():.0f}s | HTAP: {htap_time:.0f}s')
         self._print()

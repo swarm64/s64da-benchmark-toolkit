@@ -174,7 +174,7 @@ class HTAPController:
                         next_update = time_now + update_interval
                         if 'print' in self.args.output and next_display <= time_now:
                             next_display += display_interval
-                            self.monitor.update_display(elapsed.total_seconds(), burnin_duration == None, time_now, stats_conn,
+                            self.monitor.update_display(elapsed, burnin_duration, time_now, stats_conn,
                                 datetime.fromtimestamp(self.latest_timestamp.value))
                 except KeyboardInterrupt:
                     pass
