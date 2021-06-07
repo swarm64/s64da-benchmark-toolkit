@@ -140,7 +140,7 @@ class AnalyticalStream:
 
     def run_next_query(self):
 
-        def _report_last_query():
+        def _report_if_last_query():
             if query_id == self.stream_last_query:
                 self.stats_queue.put(('olap_stream', {
                     'stream': self.stream_id,
@@ -156,7 +156,7 @@ class AnalyticalStream:
                 'stream': self.stream_id,
                 'status': 'IGNORED'
             }))
-            _report_last_query()
+            _report_if_last_query()
             return
         sql = self.get_query(query_id)
 
@@ -175,7 +175,6 @@ class AnalyticalStream:
                     sql, self.args.olap_timeout,
                     self.args.explain_analyze, self.args.use_server_side_cursors)
             runtime = timing.stop - timing.start
-            self.stream_acc_time[-1] += runtime
             # sum up rows processed
             try:
                 planned_rows, processed_rows = self.parse_plan(json.loads(plan)[0]["Plan"])
@@ -191,7 +190,8 @@ class AnalyticalStream:
                 'planned_rows': planned_rows,
                 'processed_rows': processed_rows
             }))
-            _report_last_query()
+            self.stream_acc_time[-1] += runtime
+            _report_if_last_query()
 
             # save plan output
             plan_file =  f'{self.stream_id}_{query_id}.txt'
@@ -210,4 +210,4 @@ class AnalyticalStream:
                 'runtime': runtime
             }))
             self.stream_acc_time[-1] += runtime
-            _report_last_query()
+            _report_if_last_query()
