@@ -48,13 +48,13 @@ class Monitor:
         for query_type in QUERY_TYPES:
             tps, latency = self.stats.oltp_total(query_type)
             rows.append([query_type, f'{tps[2]:.2f}', f'{latency[2]:.2f}'])
-        print(tabulate(rows, headers=['', 'Average transactions per second',  'Average latency (ms)']))
-
+        history_length = self.stats.get_history_length()
+        print(tabulate(rows, headers=['', f'Average transactions per second (last {history_length}s)',  f'Average latency (last {history_length}s, in ms)']))
         print('')
         print(f'OLAP')
         rows = []
         avg_stream_runtime, n_streams = self.stats.olap_stream_totals()
-        rows.append(['Average stream runtime (ms)', avg_stream_runtime])
+        rows.append(['Average stream runtime (s)', avg_stream_runtime],)
         rows.append(['Completed stream iterations', n_streams])
         num_ok, num_errors, num_timeouts = self.stats.olap_totals()
         rows.append(['Succesful queries', num_ok])
