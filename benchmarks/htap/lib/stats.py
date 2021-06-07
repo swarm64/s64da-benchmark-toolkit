@@ -245,8 +245,8 @@ class Stats:
         completed_iterations = len(stats)
         if completed_iterations == 0:
             return ('-', 0)
-        avg_runtime_it = sum(int(s['runtime']) for s in stats) // completed_iterations
-        return (avg_runtime_it, completed_iterations)
+        avg_runtime_it = sum(s['runtime'] for s in stats) / completed_iterations
+        return (int(avg_runtime_it), completed_iterations)
 
     def db_size(self):
         return "{:7.2f}GB".format(self.cached_database_size / (1024*1024*1024.0))
