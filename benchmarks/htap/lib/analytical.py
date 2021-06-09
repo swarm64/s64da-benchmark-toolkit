@@ -154,6 +154,7 @@ class AnalyticalStream:
             self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
+                'iteration': len(self.stream_acc_time),
                 'status': 'IGNORED'
             }))
             _report_if_last_query()
@@ -166,6 +167,7 @@ class AnalyticalStream:
         self.stats_queue.put(('olap', {
             'query': query_id,
             'stream': self.stream_id,
+            'iteration': len(self.stream_acc_time),
             'status': 'Running'
         }))
 
@@ -185,6 +187,7 @@ class AnalyticalStream:
             self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
+                'iteration': len(self.stream_acc_time),
                 'status': timing.status.name,
                 'runtime': runtime,
                 'planned_rows': planned_rows,
@@ -206,6 +209,7 @@ class AnalyticalStream:
             self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
+                'iteration': len(self.stream_acc_time),
                 'status': 'OK',
                 'runtime': runtime
             }))

@@ -92,6 +92,7 @@ class Stats:
         self.dsn = dsn
         self.database = urlparse(self.dsn).path[1:]
         self.csv_olap = None
+        self.csv_olap_stream = None
         self.csv_oltp = None
         self.csv_dbstats = None
         self.conn = None
@@ -121,26 +122,23 @@ class Stats:
             assert(bucket[0] == second)
             bucket[1][stat['query']].add_sample(stat['status'], stat['runtime'])
 
-    def _update_olap_stats(self, stats):
-        stream_id = stats['stream']
-        query_id = stats['query']
+    def _update_olap_stats(self, stat):
+        stream_id = stat['stream']
+        query_id = stat['query']
 
-        if stats['status'] == 'Waiting' or stats['status'] == 'Running' or stats['status'] == 'IGNORED':
+        if stat['status'] == 'Waiting' or stat['status'] == 'Running' or stat['status'] == 'IGNORED':
             # only overwrite status so we keep the last runtime
             self.data['olap'][stream_id]['queries'][query_id]['last-status'] = \
                 self.data['olap'][stream_id]['queries'][query_id]['status']
-            self.data['olap'][stream_id]['queries'][query_id]['status'] = stats['status']
-            return
+            self.data['olap'][stream_id]['queries'][query_id]['status'] = stat['status']
+        else:
+            self.data['olap'][stream_id]['queries'][query_id] = stat
+            self.data['olap'][stream_id][stat['status'].lower() + '_count'] += 1
+            self._write_olap_stat(stat)
 
-        self.data['olap'][stream_id]['queries'][query_id] = stats
-        if self.csv_olap:
-            self.csv_olap.write(f'{stream_id}, {query_id}, {stats["status"]}, {stats["runtime"]}\n')
-            self.csv_olap.flush()
-        status_count = stats['status'].lower() + '_count'
-        self.data['olap'][stream_id][status_count] += 1
-
-    def _update_olap_stream_stats(self, stats):
-        self.data['olap_stream'].append(stats)
+    def _update_olap_stream_stats(self, stat):
+        self.data['olap_stream'].append(stat)
+        self._write_olap_stream_stat(stat)
 
     def _process_queue(self, src, item):
         if src == 'oltp':
@@ -172,6 +170,8 @@ class Stats:
             self.csv_oltp = open('results/oltp.csv', 'w')
         if not self.csv_olap:
             self.csv_olap = open('results/olap.csv', 'w')
+        if not self.csv_olap_stream:
+            self.csv_olap_stream = open('results/olap_stream.csv', 'w')
         if not self.csv_dbstats:
             self.csv_dbstats = open('results/dbstats.csv', 'w')
         if not self.conn:
@@ -182,8 +182,8 @@ class Stats:
         if self.updates % 10 == 0:
             self._update_cached_stats()
         if self.csv_interval and self.updates % self.csv_interval == 0:
-            self.write_oltp_stats()
-            self.write_dbstats()
+            self._write_oltp_stats()
+            self._write_dbstats()
 
     def olap_stats_for_stream_id(self, stream_id):
         return self.data['olap'][stream_id]
@@ -245,8 +245,8 @@ class Stats:
         completed_iterations = len(stats)
         if completed_iterations == 0:
             return ('-', 0)
-        avg_runtime_it = sum(int(s['runtime']) for s in stats) // completed_iterations
-        return (avg_runtime_it, completed_iterations)
+        avg_runtime_it = sum(s['runtime'] for s in stats) / completed_iterations
+        return (int(avg_runtime_it), completed_iterations)
 
     def db_size(self):
         return "{:7.2f}GB".format(self.cached_database_size / (1024*1024*1024.0))
@@ -262,15 +262,26 @@ class Stats:
             result.append([table_name, table_size, index_size, compression_ratio, cached])
         return result
 
-    def write_oltp_stats(self):
-        for query_type in QUERY_TYPES:
+    def _write_olap_stat(self, stat):
+        if self.csv_olap:
+            self.csv_olap.write(f'{datetime.now()}, {stat["stream"]}, {stat["iteration"]}, {stat["query"]}, {stat["status"]}, {stat["runtime"]:.2f}\n')
+            self.csv_olap.flush()
+
+    def _write_olap_stream_stat(self, stat):
+        if self.csv_olap_stream:
+            self.csv_olap_stream.write(f'{datetime.now()}, {stat["stream"]}, {stat["iteration"]}, {stat["runtime"]:.2f}\n')
+            self.csv_olap_stream.flush()
+
+    def _write_oltp_stats(self):
+        for query_type in QUERY_TYPES + [None]:
             counters = self.oltp_counts(query_type)
             tps, latency = self.oltp_total(query_type)
-            row = [datetime.now(), query_type, counters[0] + counters[1] , *counters, *tps, *latency]
+            name = 'All types' if query_type == None else query_type
+            row = [datetime.now(), name, counters[0] + counters[1] , *counters, *tps, *latency]
             self.csv_oltp.write(', '.join(map(str, row)) + "\n")
         self.csv_oltp.flush()
 
-    def write_dbstats(self):
+    def _write_dbstats(self):
         for row in self.columnstore_stats():
             self.csv_dbstats.write(', '.join(map(str, row)) + "\n")
         self.csv_dbstats.flush()
