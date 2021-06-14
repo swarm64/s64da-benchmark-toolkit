@@ -73,10 +73,18 @@ class HTAPController:
     def analyze_worker(self):
         tables = ['customer', 'district', 'history', 'item', 'nation', 'new_orders',
                   'order_line', 'orders', 'region', 'stock', 'supplier', 'warehouse']
-        with DBConn(self.args.dsn) as conn:
-            for table in tables:
-                conn.cursor.execute(f'ANALYZE {table}')
-            time.sleep(60*10)
+
+        os.makedirs('results', exist_ok=True)
+        with open('results/analyze.csv', 'w+') as csv:
+            with DBConn(self.args.dsn) as conn:
+                while True:
+                    for table in tables:
+                        start = time.time()
+                        conn.cursor.execute(f'ANALYZE {table}')
+                        runtime = time.time() - start
+                        csv.write(f'{datetime.now()}, {table}, {runtime:.2f}\n')
+                        csv.flush()
+                    time.sleep(600)
 
     def _sql_error(self, msg):
         import sys
