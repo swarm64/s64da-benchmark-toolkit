@@ -283,7 +283,7 @@ class Stats:
 
     def _write_dbstats(self):
         for row in self.columnstore_stats():
-            self.csv_dbstats.write(', '.join(map(str, row)) + "\n")
+            self.csv_dbstats.write(f'{datetime.now()},'+ ', '.join(map(str, row)) + '\n')
         self.csv_dbstats.flush()
 
     # TODO rework this summary, the output summary is kind of useless, probably should be more inline with the stdout display
