@@ -184,10 +184,11 @@ class AnalyticalStream:
                 planned_rows = 0
                 processed_rows = 0
 
+            iteration = len(self.stream_acc_time)
             self.stats_queue.put(('olap', {
                 'query': query_id,
                 'stream': self.stream_id,
-                'iteration': len(self.stream_acc_time),
+                'iteration': iteration,
                 'status': timing.status.name,
                 'runtime': runtime,
                 'planned_rows': planned_rows,
@@ -197,7 +198,7 @@ class AnalyticalStream:
             _report_if_last_query()
 
             # save plan output
-            plan_file =  f'{self.stream_id}_{query_id}.txt'
+            plan_file =  f'{self.stream_id}_{iteration}_{query_id}.txt'
             plan_dir = f'results/query_plans'
             os.makedirs(plan_dir, exist_ok=True)
             with open(f'{plan_dir}/{plan_file}', 'w') as f:
