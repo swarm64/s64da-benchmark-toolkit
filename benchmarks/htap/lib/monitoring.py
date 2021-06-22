@@ -57,7 +57,7 @@ class Monitor:
         rows.append(['Average stream runtime (s)', avg_stream_runtime],)
         rows.append(['Completed stream iterations', n_streams])
         num_ok, num_errors, num_timeouts = self.stats.olap_totals()
-        rows.append(['Succesful queries', num_ok])
+        rows.append(['Successful queries', num_ok])
         rows.append(['Queries with errors', num_errors])
         rows.append(['Query timeouts', num_timeouts])
         print(tabulate(rows))
