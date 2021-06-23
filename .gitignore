@@ -5,3 +5,5 @@ results
 results.csv
 .cache
 env
+applied_schema.sql
+prepare_metrics.csv
