@@ -68,7 +68,7 @@ class PrepareBenchmarkFactory:
                 conn.cursor.execute('SELECT swarm64da.get_version()')
                 result = conn.cursor.fetchone()[0]
 
-            s64da_version_string = re.findall(r'[0-9]+\.[0-9]+\.[0-9]+', result)[0]
+            s64da_version_string = re.findall(r'[0-9]*\.*[0-9]+\.[0-9]+', result)[0]
             return Version(s64da_version_string)
 
         except ProgrammingError:
