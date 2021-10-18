@@ -74,26 +74,6 @@ class PrepareBenchmarkFactory:
         except ProgrammingError:
             return None
 
-    @property
-    def supports_cluster(self):
-        version = self.swarm64da_version
-        if not version:
-            return False
-
-        if self.num_partitions:
-            print('Swarm64 DA CLUSTER not supported for partitioned schemas at the moment. Skipping')
-            return False
-
-        # Clustering not supported in S64 DA on native tables
-        if "native" in self.schema_dir:
-            print('Swarm64 DA CLUSTER not supported for S64 DA with Native Tables. Skipping')
-            return False
-
-        if version < Version('4.1') or version >= Version('5.0'):
-            print('Swarm64 DA version does not support clustering. Skipping')
-            return False
-
-        return True
 
     def psql_exec_file(self, filename):
         return f'psql {self.args.dsn} -f {filename}'
@@ -228,10 +208,7 @@ class PrepareBenchmarkFactory:
         print('Adding common')
         self.add_common()
 
-        if self.supports_cluster:
-            print('Swarm64 DA CLUSTER')
-            self.cluster()
-
+        print('Updating all columnstore indexes')
         self.update_all_columnstores()
 
         print('VACUUM-ANALYZE')
@@ -253,38 +230,7 @@ class PrepareBenchmarkFactory:
             with open(pre_schema_path, 'r') as pre_schema_file:
                 conn.cursor.execute(pre_schema_file.read())
 
-    def _load_license(self, conn):
-        license_loaded = True
-
-        try:
-            conn.cursor.execute(f'select swarm64da.show_license()')
-        except errors.UndefinedFunction as err:
-            print('License check function not found. Skipping, presumably on AWS.')
-            return
-        except errors.InternalError:
-            license_loaded = False
-
-        if not license_loaded:
-            try:
-                license_path = self.args.s64da_license_path
-                print(f'Loading license from: {license_path}')
-                conn.cursor.execute(f'select swarm64da.load_license(\'{license_path}\')')
-            except errors.InternalError:
-                print(f'Could not load S64 DA license file or file is invalid: {license_path}\n'
-                      f'Make sure the --s64da-license-path argument points to a valid license file.')
-                raise
-            except IndexError as err:
-                print(f'S64 DA licensing error: {err}')
-                raise
-
-        try:
-            conn.cursor.execute(f'select swarm64da.show_license()')
-            license_status = conn.cursor.fetchall()[0]
-            print(f'S64 DA license status: {license_status}')
-        except Exception as err:
-            print(f'Error reading S64 DA license: {err}')
-            raise
-
+    
     def _load_schema(self, conn, applied_schema_path):
         print(f'Loading schema {applied_schema_path}')
         with open(applied_schema_path, 'r') as schema:
@@ -317,10 +263,6 @@ class PrepareBenchmarkFactory:
                 conn.cursor.execute(common_sql.read())
 
             self._load_pre_schema(conn)
-
-            if self.swarm64da_version:
-                self._load_license(conn)
-
             self._load_schema(conn, applied_schema_path)
 
     def get_ingest_tasks(self, table):
@@ -358,12 +300,6 @@ class PrepareBenchmarkFactory:
         # WARNING: do NOT run vacuum and analyze at the same time because analyze stops as soon as it cannot take the lock...
         self._run_tasks_parallel(vacuum_tasks)
         self._run_tasks_parallel(analyze_tasks)
-
-    def cluster(self):
-        cluster_tasks = [
-                self.psql_exec_cmd(f"SELECT swarm64da.cluster('{table}', '{colspec}')")
-                for table, colspec in PrepareBenchmarkFactory.CLUSTER_SPEC.items()]
-        self._run_tasks_parallel(cluster_tasks)
 
 
     def update_all_columnstores(self):

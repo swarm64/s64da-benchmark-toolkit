@@ -70,7 +70,6 @@ Parameter                      | Description
 `chunks`                       | Chunk large tables into smaller pieces during ingestion. Default: `10`
 `max-jobs`                     | Limit the overall loading parallelism to this amount of jobs. Default: `8`
 `check-diskspace-of-directory` | If flag is present, a disk space check on the passed storage directory will be performed prior to ingestion
-`s64da-license-path`           | The path to the S64 DA license. Default: `/s64da.license`
 `data-dir`                     | The directory holding the data files to ingest from. Default: none
 `num-partitions`               | The number of partitions for partitioned schemas. Default: none
 `start-date`                   | The data start date for HTAP benchmark
