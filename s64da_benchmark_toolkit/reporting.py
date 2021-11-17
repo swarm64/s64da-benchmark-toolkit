@@ -84,8 +84,7 @@ class Reporting:
         while not reporting_queue.empty():
             query_metric = reporting_queue.get()
 
-            if self.explain_analyze:
-                self._save_explain_plan(query_metric)
+            self._save_explain_plan(query_metric)
 
             if self.scale_factor:
                 self._save_query_output(query_metric)
@@ -128,7 +127,7 @@ class Reporting:
 
     def _save_prepare_metrics(self):
         if not os.path.exists(self.results_root_dir):
-            os.mkdir(self.results_root_dir) 
+            os.mkdir(self.results_root_dir)
         copyfile(self.prepare_metrics_filename, os.path.join(self.results_root_dir, self.prepare_metrics_filename))
 
     def _save_query_output(self, query_metric):
