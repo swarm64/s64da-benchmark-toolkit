@@ -151,7 +151,7 @@ class Stats:
     def _update_cached_stats(self):
         with self.conn as conn:
             try:
-                conn.cursor.execute("select table_name,relation_blocks,compressed_blocks,cache_pages_usable from swarm64da.stat_all_column_store_indexes")
+                conn.cursor.execute("select DISTINCT table_name,relation_blocks,compressed_blocks,cache_pages_usable from swarm64da.stat_all_column_store_indexes")
                 self.cached_columnstore_stats = conn.cursor.fetchall()
             except:
                 self.cached_columnstore_stats = []
