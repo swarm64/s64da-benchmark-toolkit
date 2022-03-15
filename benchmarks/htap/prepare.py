@@ -8,7 +8,6 @@ from benchmarks.htap.lib.helpers import WAREHOUSES_SF_RATIO
 
 
 class PrepareBenchmark(PrepareBenchmarkFactory):
-    PrepareBenchmarkFactory.PYTHON_LOADER = True
     PrepareBenchmarkFactory.DO_SHUFFLE = True
 
     PrepareBenchmarkFactory.TABLES = (TableGroup(
