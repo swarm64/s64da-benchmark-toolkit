@@ -1,6 +1,6 @@
+/*+ Set(swarm64da.enable_fast_num_groups_estimation off) */
 -- using 1512813808 as a seed to the RNG
 -- EXPLAIN (FORMAT JSON)
-/*+ Set(swarm64da.enable_fast_num_groups_estimation off) */
 select
     nation,
     o_year,
